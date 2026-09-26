@@ -59,7 +59,7 @@ export const PETS = [
     id: 'spaceship-alien', name: 'Spaceship Alien', rarity: 'Exclusive', bestPct: 65,
     source: 'Exclusive Pet', hatchChance: '1 in 33',
     description: 'Exclusive Spaceship Alien pet.',
-    image: 'assets/pets/spaceship-alien-v30.png', value: 85,
+    image: 'assets/pets/spaceship-alien-v30.png', value: 100,
   },
   {
     id: 'fallen-angel', name: 'Fallen Angel', rarity: 'Exclusive', bestPct: 60,
