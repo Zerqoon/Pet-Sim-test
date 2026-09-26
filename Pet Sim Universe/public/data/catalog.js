@@ -21,7 +21,7 @@ export const PETS = [
     id: 'caaaaat', name: 'Caaaaat', rarity: 'Exclusive', bestPct: 85,
     source: 'Basic Egg', map: 'The Overworld', hatchChance: '???',
     description: 'Exclusive pet from the Basic Egg.',
-    image: 'assets/pets/caaaaat-v30.png', value: 3500,
+    image: 'assets/pets/caaaaat-v30.png', value: 3150,
   },
   {
     id: 'exquisite-cat', name: 'Exquisite Cat', rarity: 'Exclusive', bestPct: 85,
@@ -34,7 +34,7 @@ export const PETS = [
     id: 'happy-cupcake', name: 'Happy Cupcake', rarity: 'Exclusive', bestPct: 85,
     source: 'PlayTime Rewards', hatchChance: '1 in 10K',
     description: 'Exclusive pet from PlayTime Rewards.',
-    image: 'assets/pets/happy-cupcake.png', value: 1200,
+    image: 'assets/pets/happy-cupcake.png', value: 1400,
     dropSources: [SOURCE_PRESETS.playtimeRewards],
   },
   {
@@ -59,7 +59,7 @@ export const PETS = [
     id: 'spaceship-alien', name: 'Spaceship Alien', rarity: 'Exclusive', bestPct: 65,
     source: 'Exclusive Pet', hatchChance: '1 in 33',
     description: 'Exclusive Spaceship Alien pet.',
-    image: 'assets/pets/spaceship-alien-v30.png', value: 100,
+    image: 'assets/pets/spaceship-alien-v30.png', value: 85,
   },
   {
     id: 'fallen-angel', name: 'Fallen Angel', rarity: 'Exclusive', bestPct: 60,
@@ -115,7 +115,7 @@ export const PETS = [
   },
   {
     id: 'mossy-mushroom', name: 'Mossy Mushroom', rarity: 'Secret', source: 'Secret Pet',
-    description: 'Increase Egg Luck by 5%.', map: 'Enchanted Grove [World 6]', hatchChance: '1 in 10m',
+    description: map: 'Enchanted Grove [World 6]', hatchChance: '1 in 10m',
     supportsVariants: true,
     variantImages: {
       normal: 'assets/pets/mossy-mushroom-normal.png',
@@ -155,7 +155,7 @@ export const PETS = [
       golden: 'assets/pets/shadow-dominus-golden-v30.png',
       diamond: 'assets/pets/shadow-dominus-diamond-v30.png',
     },
-    values: { normal: null, golden: null, diamond: null },
+    values: { normal: 15, golden: null, diamond: null },
   },
 ];
 
@@ -192,9 +192,9 @@ export const CODES = [
 
 export const ITEMS = [
   { id:'vip-voucher', name:'VIP Voucher', rarity:'Exclusive', source:'Utility Item', description:'VIP Voucher.', image:'assets/items/vip-voucher.png', value:30, dropSources:[SOURCE_PRESETS.moonChest, SOURCE_PRESETS.vipChest, SOURCE_PRESETS.playtimeRewards] },
-  { id:'universe-shard', name:'Universe Shard', rarity:'Mythical', source:'Utility Item', description:'Universe Shard.', image:'assets/items/universe-shard-v30.png', value:100, dropSources:[SOURCE_PRESETS.moonChest, SOURCE_PRESETS.vipChest] },
+  { id:'universe-shard', name:'Universe Shard', rarity:'Mythical', source:'Utility Item', description:'Universe Shard.', image:'assets/items/universe-shard-v30.png', value:80, dropSources:[SOURCE_PRESETS.moonChest, SOURCE_PRESETS.vipChest] },
   { id:'vip-key', name:'VIP Key', rarity:'Legendary', source:'Utility Item', description:'VIP Key.', image:'assets/items/vip-key.png', value:0.5 },
-  { id:'globe', name:'Globe', rarity:'Legendary', source:'Utility Item', description:'Globe item.', image:'assets/items/globe-v30.png', value:250, dropSources:[SOURCE_PRESETS.moonChest, SOURCE_PRESETS.playtimeRewards] },
+  { id:'globe', name:'Globe', rarity:'Legendary', source:'Utility Item', description:'Globe item.', image:'assets/items/globe-v30.png', value:115, dropSources:[SOURCE_PRESETS.moonChest, SOURCE_PRESETS.playtimeRewards] },
   { id:'ball', name:'Ball', rarity:'Epic', source:'Toy Item', description:'+10% Egg Luck while equipped on Unique Pet!', image:'assets/items/ball-v30.png', value:5, dropSources:[SOURCE_PRESETS.vipChest, SOURCE_PRESETS.moonChest, SOURCE_PRESETS.playtimeRewards] },
   { id:'squeaky', name:'Squeaky', rarity:'Epic', source:'Toy Item', description:'Squeaky toy item.', image:'assets/items/squeaky-v30.png', value:5, dropSources:[SOURCE_PRESETS.vipChest, SOURCE_PRESETS.moonChest, SOURCE_PRESETS.playtimeRewards] },
   { id:'cookie', name:'Cookie', rarity:'Rare', source:'Toy Item', description:'Cookie item.', image:'assets/items/cookie-v30.png', value:5, dropSources:[SOURCE_PRESETS.vipChest, SOURCE_PRESETS.moonChest, SOURCE_PRESETS.playtimeRewards] },
