@@ -1,0 +1,202 @@
+/* v43 — fixed W/L logic presentation, compact theme controls, bright rarity labels, trend-colored history */
+
+/* --------------------------------------------------------------------------
+   Compact theme / motion controls — remove the giant vertical sidebar bars.
+   -------------------------------------------------------------------------- */
+body[data-view='home'] .appearance-tools{display:none!important}
+body[data-view='values'] .appearance-tools,
+body[data-view='calculator'] .appearance-tools{
+  position:fixed!important;
+  right:22px!important;
+  bottom:20px!important;
+  z-index:90!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:6px!important;
+  width:auto!important;
+  max-width:none!important;
+  padding:6px!important;
+  border-radius:999px!important;
+  background:rgba(10,8,13,.88)!important;
+  border:1px solid rgba(255,158,70,.16)!important;
+  box-shadow:0 14px 32px rgba(0,0,0,.36),inset 0 1px 0 rgba(255,255,255,.05)!important;
+  backdrop-filter:blur(16px)!important;
+}
+body[data-view='values'] .appearance-tools .theme-toggle,
+body[data-view='calculator'] .appearance-tools .theme-toggle{
+  width:auto!important;
+  min-width:118px!important;
+  min-height:38px!important;
+  padding:0 13px!important;
+  border-radius:999px!important;
+  font-size:.74rem!important;
+  background:rgba(255,255,255,.035)!important;
+}
+body[data-view='values'] .appearance-tools .motion-toggle,
+body[data-view='calculator'] .appearance-tools .motion-toggle{
+  width:38px!important;
+  min-width:38px!important;
+  min-height:38px!important;
+  height:38px!important;
+  padding:0!important;
+  border-radius:50%!important;
+  background:rgba(255,255,255,.035)!important;
+  font-size:15px!important;
+}
+
+/* Calculator/sidebar no stretching. */
+body[data-view='calculator'] .sidebar,
+body[data-view='values'] .sidebar{
+  grid-auto-rows:max-content!important;
+  align-content:start!important;
+}
+body[data-view='calculator'] .side-footer,
+body[data-view='values'] .side-footer{margin-top:0!important;height:auto!important;min-height:0!important}
+
+/* --------------------------------------------------------------------------
+   Rarity text — ONE bright readable color per rarity. Animated borders remain.
+   -------------------------------------------------------------------------- */
+.value-card[data-rarity='exclusive'] .rarity-text,
+.detail-modal[data-rarity='exclusive'] .rarity-text,
+.calc-picker-card[data-rarity='exclusive'] .rarity-text{
+  background:none!important;
+  color:#efc7ff!important;
+  -webkit-text-fill-color:#efc7ff!important;
+  filter:drop-shadow(0 0 5px rgba(224,135,255,.46))!important;
+}
+.value-card[data-rarity='mythical'] .rarity-text,
+.detail-modal[data-rarity='mythical'] .rarity-text,
+.calc-picker-card[data-rarity='mythical'] .rarity-text{
+  background:none!important;
+  color:#ffd36b!important;
+  -webkit-text-fill-color:#ffd36b!important;
+  filter:drop-shadow(0 0 5px rgba(255,155,42,.42))!important;
+}
+.value-card[data-rarity='secret'] .rarity-text,
+.detail-modal[data-rarity='secret'] .rarity-text,
+.calc-picker-card[data-rarity='secret'] .rarity-text{
+  background:none!important;
+  color:#f0f0f2!important;
+  -webkit-text-fill-color:#f0f0f2!important;
+  filter:drop-shadow(0 0 5px rgba(255,255,255,.34))!important;
+}
+.value-card[data-rarity='exclusive'] .rarity-text,
+.value-card[data-rarity='mythical'] .rarity-text,
+.value-card[data-rarity='secret'] .rarity-text,
+.detail-modal[data-rarity='exclusive'] .rarity-text,
+.detail-modal[data-rarity='mythical'] .rarity-text,
+.detail-modal[data-rarity='secret'] .rarity-text{
+  -webkit-text-stroke:1.35px rgba(15,12,18,.92)!important;
+  paint-order:stroke fill!important;
+  text-shadow:0 2px 0 rgba(0,0,0,.36)!important;
+}
+
+/* Keep section headings readable and separate Exclusive vs Stat Pets. */
+.rarity-section-exclusive .rarity-section-head h2{
+  background:none!important;
+  color:#efc7ff!important;
+  -webkit-text-fill-color:#efc7ff!important;
+  filter:drop-shadow(0 0 5px rgba(224,135,255,.3))!important;
+}
+.rarity-section-stat .rarity-section-head h2{
+  background:none!important;
+  color:#ffd36b!important;
+  -webkit-text-fill-color:#ffd36b!important;
+  filter:drop-shadow(0 0 5px rgba(255,155,42,.25))!important;
+}
+
+/* --------------------------------------------------------------------------
+   Calculator result semantics and visual hierarchy.
+   My Offer > Other Offer = L. Other Offer > My Offer = W.
+   -------------------------------------------------------------------------- */
+.trade-v40-side-head h2{font-size:2rem!important}
+.trade-v40-side-head .tool-label{color:#e2d5ce!important}
+.trade-v40-diff{
+  border-color:rgba(255,255,255,.075)!important;
+  box-shadow:0 18px 40px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.035)!important;
+}
+.trade-v42-diff-value{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:9px!important;
+  margin-top:10px!important;
+}
+.trade-v42-diff-value img{width:24px!important;height:24px!important;object-fit:contain!important}
+.trade-v42-diff-value strong{margin:0!important;font-size:2.15rem!important}
+.trade-v40-diff small.is-win,
+.calculator-v40-verdict.is-win{
+  color:#5ff39b!important;
+  text-shadow:0 0 12px rgba(95,243,155,.16)!important;
+}
+.trade-v40-diff small.is-lose,
+.calculator-v40-verdict.is-lose{
+  color:#ff6c78!important;
+  text-shadow:0 0 12px rgba(255,108,120,.14)!important;
+}
+
+/* --------------------------------------------------------------------------
+   Value History — actual trend color controls line, points and info.
+   -------------------------------------------------------------------------- */
+.history-line.is-up{
+  stroke:#42e889!important;
+  filter:drop-shadow(0 0 8px rgba(66,232,137,.30))!important;
+}
+.history-line.is-down{
+  stroke:#ff5967!important;
+  filter:drop-shadow(0 0 8px rgba(255,89,103,.27))!important;
+}
+.history-line.is-neutral{
+  stroke:#c18aff!important;
+}
+.history-point.is-up{
+  fill:#101514!important;
+  stroke:#42e889!important;
+  filter:drop-shadow(0 0 5px rgba(66,232,137,.34))!important;
+}
+.history-point.is-down{
+  fill:#171011!important;
+  stroke:#ff5967!important;
+  filter:drop-shadow(0 0 5px rgba(255,89,103,.3))!important;
+}
+.history-point.is-last.is-up,
+.history-focus-dot.is-up{
+  fill:#42e889!important;
+  stroke:#f4fff8!important;
+  filter:drop-shadow(0 0 9px rgba(66,232,137,.55))!important;
+}
+.history-point.is-last.is-down,
+.history-focus-dot.is-down{
+  fill:#ff5967!important;
+  stroke:#fff4f4!important;
+  filter:drop-shadow(0 0 9px rgba(255,89,103,.5))!important;
+}
+.history-area.is-up{opacity:.96!important}
+.history-area.is-down{opacity:.96!important}
+#historyChange.is-up,#historyChangeAmount.is-up{color:#52ee96!important}
+#historyChange.is-down,#historyChangeAmount.is-down{color:#ff6775!important}
+.history-status.is-up{color:#52ee96!important;border-color:rgba(82,238,150,.22)!important;background:rgba(30,104,65,.13)!important}
+.history-status.is-down{color:#ff6775!important;border-color:rgba(255,103,117,.22)!important;background:rgba(112,35,45,.13)!important}
+
+/* Better history stat cards. */
+.market-summary-v35 .history-stat{
+  min-height:78px!important;
+  border-radius:14px!important;
+  padding:12px 13px!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.042),rgba(255,255,255,.018))!important;
+}
+.market-summary-v35 .history-stat:nth-child(2){
+  border-color:rgba(255,255,255,.08)!important;
+}
+.history-stat strong{font-size:1.05rem!important}
+.history-stat small{font-size:.66rem!important;line-height:1.3!important}
+.history-head h3{font-size:1.18rem!important}
+.history-subtitle{font-size:.72rem!important}
+
+/* responsive compact utility */
+@media(max-width:900px){
+  body[data-view='values'] .appearance-tools,
+  body[data-view='calculator'] .appearance-tools{right:12px!important;bottom:12px!important}
+  body[data-view='values'] .appearance-tools .theme-toggle,
+  body[data-view='calculator'] .appearance-tools .theme-toggle{min-width:102px!important}
+}
