@@ -1,7 +1,7 @@
 /* Pet Universe Values v35 — game-matched rarity palettes + D1 market panel */
 
 :root{
-  --rarity-exclusive:linear-gradient(120deg,#930fff 0%,#feddff 17%,#930fff 34%,#de22ff 50%,#9823ff 66%,#edc2ff 83%,#930fff 100%);
+  --rarity-exclusive:linear-gradient(120deg,#930fff 100%);
   --rarity-mythical:linear-gradient(120deg,#ff00ae 0%,#ff0097 11%,#ff7dd2 22%,#ff0f3b 34%,#ffcfb9 46%,#ff8e0c 58%,#ffce78 70%,#fafbdd 81%,#f6fcb7 91%,#fff582 100%);
   --rarity-secret:linear-gradient(120deg,#ffffff 0%,#c1c1c1 14%,#747474 29%,#b1b1b1 43%,#ffffff 57%,#6f6f6f 71%,#f1f1f1 86%,#a7a7a7 100%);
 }
