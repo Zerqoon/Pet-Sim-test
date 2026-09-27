@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#0b0709" />
+  <meta name="description" content="Pet Universe Values — community value list for pets, charms, eggs and items." />
+  <title>Pet Universe Values</title>
+  <link rel="icon" type="image/png" href="assets/ui/category-pets.png" />
+  <link rel="stylesheet" href="./styles.css" />
+  <link rel="stylesheet" href="./refinements.css" />
+  <link rel="stylesheet" href="./v35.css" />
+  <link rel="stylesheet" href="./v36.css" />
+  <link rel="stylesheet" href="./v37.css" />
+  <link rel="stylesheet" href="./v38.css" />
+</head>
+<body>
+  <div class="world-bg" aria-hidden="true">
+    <div class="world-image"></div>
+    <div class="world-overlay"></div>
+    <div class="lava-orb lava-orb-a"></div>
+    <div class="lava-orb lava-orb-b"></div>
+    <div class="star-layer star-layer-a"></div>
+    <div class="star-layer star-layer-b"></div>
+    <div class="ember-layer ember-layer-a"></div>
+    <div class="ember-layer ember-layer-b"></div>
+  </div>
+
+  <div class="app-layout">
+    <aside class="sidebar" aria-label="Pet Universe navigation">
+      <a class="side-card brand-card" href="#top">
+        <span class="brand-icon"><img src="assets/ui/category-pets.png" alt="" /></span>
+        <span class="brand-copy">
+          <strong>Pet Universe</strong>
+          <small>VALUES</small>
+        </span>
+      </a>
+
+      <nav class="side-nav" aria-label="Catalog categories">
+        <button class="side-card nav-btn active" data-category="pets" type="button">
+          <span class="nav-icon"><img src="assets/ui/category-pets.png" alt="" /></span>
+          <strong class="nav-label">Pets</strong>
+        </button>
+        <button class="side-card nav-btn" data-category="charms" type="button">
+          <span class="nav-icon"><img src="assets/ui/category-charms.png" alt="" /></span>
+          <strong class="nav-label">Charms</strong>
+        </button>
+        <button class="side-card nav-btn" data-category="eggs" type="button">
+          <span class="nav-icon"><img src="assets/ui/category-eggs.png" alt="" /></span>
+          <strong class="nav-label">Eggs</strong>
+        </button>
+        <button class="side-card nav-btn" data-category="items" type="button">
+          <span class="nav-icon"><img src="assets/ui/category-items.png" alt="" /></span>
+          <strong class="nav-label">Items</strong>
+        </button>
+        <button class="side-card nav-btn" data-category="codes" type="button">
+          <span class="nav-icon"><img src="assets/ui/category-codes.png" alt="" /></span>
+          <strong class="nav-label">Codes</strong>
+        </button>
+      </nav>
+
+      <div class="appearance-tools">
+      <button class="side-card theme-toggle" id="themeToggle" type="button">
+        <span class="theme-flare">✦</span>
+        <strong id="themeLabel">Dark mode</strong>
+      </button>
+      <button class="side-card motion-toggle" id="motionToggle" type="button" aria-label="Pause animations" aria-pressed="false" title="Pause animations">Ⅱ</button>
+      </div>
+
+      <div class="side-card side-footer">
+        <strong>By Zerqoon | B3sttiee</strong>
+        <a href="https://discord.gg/lipbuilds" target="_blank" rel="noreferrer">discord.gg/lipbuilds</a>
+      </div>
+    </aside>
+
+    <main class="main" id="top">
+      <header class="page-header">
+        <div class="page-title-wrap">
+          <span class="eyebrow" id="sectionKicker">PET COLLECTION</span>
+          <h1 id="sectionTitle">Pets</h1>
+        </div>
+
+        <div class="page-tools">
+          <label class="search-box" for="searchInput">
+            <span>⌕</span>
+            <input id="searchInput" type="search" placeholder="Search pets..." aria-label="Search collection" autocomplete="off" />
+          </label>
+
+          <div class="custom-sort" id="customSort">
+            <button class="sort-trigger" id="sortTrigger" type="button" aria-haspopup="listbox" aria-expanded="false">
+              <span id="sortLabel">Featured</span>
+              <span class="sort-chevron">⌄</span>
+            </button>
+            <div class="sort-popover" id="sortPopover" role="listbox" hidden>
+              <button class="sort-option active" type="button" data-sort="featured" role="option" aria-selected="true">Featured</button>
+              <button class="sort-option" type="button" data-sort="name" role="option">Name A-Z</button>
+              <button class="sort-option" type="button" data-sort="best-desc" role="option">Best % high-low</button>
+              <button class="sort-option" type="button" data-sort="best-asc" role="option">Best % low-high</button>
+              <button class="sort-option" type="button" data-sort="rarity" role="option">Rarity</button>
+            </div>
+          </div>
+
+          <div class="pet-variant-tools" id="variantTools">
+            <span class="tool-label">Pet Variant</span>
+            <div class="variant-switch">
+              <button class="variant-btn active" data-variant="normal" type="button"><i></i>Normal</button>
+              <button class="variant-btn golden" data-variant="golden" type="button"><i></i>Golden</button>
+              <button class="variant-btn diamond" data-variant="diamond" type="button"><i></i>Diamond</button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <section class="content-card catalog-card">
+        <div class="catalog-meta">
+          <div>
+            <span class="catalog-label" id="catalogLabel">Exclusive Best Pets</span>
+          </div>
+          <span class="result-count" id="resultCount" aria-live="polite">0 results</span>
+        </div>
+
+        <div id="cardsGrid" class="cards-grid"></div>
+
+
+      </section>
+    </main>
+  </div>
+
+  <dialog id="detailModal" class="detail-modal" aria-labelledby="modalTitle">
+    <button class="modal-close" type="button" data-close-modal aria-label="Close details">×</button>
+
+    <div class="modal-grid">
+      <section class="modal-visual">
+        <div class="modal-volcano-glow"></div>
+        <div class="modal-particles" aria-hidden="true"></div>
+        <div class="modal-badges-left">
+          <span id="modalRarity" class="modal-rarity">Item</span>
+          <span id="modalBest" class="modal-best"></span>
+        </div>
+        <button type="button" class="modal-art-shell" id="modalArtShell" aria-label="Animate pet" title="Click to animate">
+          <div class="modal-art-ring"></div>
+          <img id="modalImage" class="modal-image" alt="" />
+          <div id="modalAnimatedArt" class="modal-animated-art" hidden>
+            <img class="pop-frame normal" src="assets/pets/pop-cat-normal-v30.png" alt="Pop Cat normal" />
+            <img class="pop-frame scream" src="assets/pets/pop-cat-scream-v30.png" alt="Pop Cat animation frame" />
+          </div>
+        </button>
+        <span id="modalAnimatedBadge" class="animated-badge" hidden>▶ Animated</span>
+      </section>
+
+      <section class="modal-info">
+        <span class="modal-kicker" id="modalKicker">PET DETAILS</span>
+        <h2 id="modalTitle"></h2>
+        <p id="modalDescription"></p>
+
+        <div class="detail-grid">
+          <div class="detail-box"><span>Source</span><strong id="modalSource">—</strong></div>
+          <div class="detail-box" id="modalMapRow"><span>Map</span><strong id="modalMap">—</strong></div>
+          <div class="detail-box" id="modalChanceRow"><span>Egg Chance</span><strong id="modalChance">—</strong></div>
+          <div class="detail-box" id="modalExistsRow"><span>Exists</span><strong id="modalExists">—</strong></div>
+        </div>
+
+        <section id="modalDropArea" class="detail-section" hidden>
+          <span class="tool-label">Drop Sources</span>
+          <div id="modalSourceGallery" class="drop-source-grid"></div>
+        </section>
+
+        <section id="modalVariantArea" class="detail-section" hidden>
+          <span class="tool-label">Variant</span>
+          <div id="modalVariantButtons" class="variant-switch"></div>
+        </section>
+
+        <section class="value-panel">
+          <span id="modalValueLabel">Value</span>
+          <div><img id="modalValueIcon" src="assets/items/value-ticket.png" alt="Ticket" /><strong id="modalValue">Set value</strong></div>
+        </section>
+
+        <section id="modalHistoryArea" class="history-panel market-panel-v35" aria-labelledby="historyTitle">
+          <div class="history-head market-head-v35">
+            <div>
+              <span class="tool-label">Market tracking</span>
+              <h3 id="historyTitle">Value History</h3>
+              <p class="history-subtitle">Real snapshots saved in Cloudflare D1 when values change.</p>
+            </div>
+            <span id="historyStatus" class="history-status is-loading">Loading</span>
+          </div>
+
+          <div class="history-summary market-summary-v35" aria-live="polite">
+            <div class="history-stat history-stat-current">
+              <span>Current</span>
+              <strong id="historyCurrent">—</strong>
+              <small id="historyCurrentMeta">Current catalog value</small>
+            </div>
+            <div class="history-stat">
+              <span>Change</span>
+              <strong id="historyChange" class="is-neutral">—</strong>
+              <small id="historyChangeAmount">—</small>
+            </div>
+            <div class="history-stat">
+              <span>High</span>
+              <strong id="historyHigh">—</strong>
+              <small>Selected range</small>
+            </div>
+            <div class="history-stat">
+              <span>Low</span>
+              <strong id="historyLow">—</strong>
+              <small>Selected range</small>
+            </div>
+          </div>
+
+          <div class="history-toolbar-v35">
+            <div class="history-range" id="historyRange" role="group" aria-label="Value history range">
+              <button type="button" data-history-range="1h">1H</button>
+              <button type="button" data-history-range="6h">6H</button>
+              <button type="button" data-history-range="24h" class="active" aria-pressed="true">24H</button>
+              <button type="button" data-history-range="7d">7D</button>
+              <button type="button" data-history-range="30d">30D</button>
+              <button type="button" data-history-range="all">ALL</button>
+            </div>
+            <span id="historyLastUpdated" class="history-last-updated">No snapshots yet</span>
+          </div>
+
+          <div class="history-chart-shell market-chart-v35" id="historyChartShell">
+            <svg id="historyChart" class="history-chart" viewBox="0 0 640 260" role="img" aria-label="Value history chart"></svg>
+            <div id="historyEmpty" class="history-empty" hidden></div>
+            <div id="historyTooltip" class="history-tooltip-v35" hidden>
+              <strong id="historyTooltipValue">—</strong>
+              <span id="historyTooltipTime">—</span>
+            </div>
+          </div>
+          <div class="history-footer-v35">
+            <p id="historyHint" class="history-hint">History is recorded from your Cloudflare deployment.</p>
+            <span class="history-live-key"><i></i> D1 history</span>
+          </div>
+        </section>
+
+        <p id="modalNote" class="modal-note" hidden></p>
+      </section>
+    </div>
+  </dialog>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
