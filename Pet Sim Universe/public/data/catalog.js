@@ -155,7 +155,7 @@ export const PETS = [
       golden: 'assets/pets/shadow-dominus-golden-v30.png',
       diamond: 'assets/pets/shadow-dominus-diamond-v30.png',
     },
-    values: { normal: 15, golden: null, diamond: 'N/A' },
+    values: { normal: 15, golden: null, diamond: null},
   },
 ];
 
