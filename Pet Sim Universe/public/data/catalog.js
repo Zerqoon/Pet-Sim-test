@@ -15,7 +15,7 @@ export const PETS = [
     id: 'alien-emperor', name: 'Alien Emperor', rarity: 'Exclusive', bestPct: 95,
     source: 'Alien Egg', hatchChance: '1 / 1,000',
     description: 'Exclusive pet from the Alien Egg.',
-    image: 'assets/pets/alien-emperor.png', value: 4500,
+    image: 'assets/pets/alien-emperor.png', value: 4750,
   },
   {
     id: 'caaaaat', name: 'Caaaaat', rarity: 'Exclusive', bestPct: 85,
@@ -41,13 +41,13 @@ export const PETS = [
     id: 'six-seven', name: 'Six Seven!', rarity: 'Exclusive', bestPct: 85,
     source: 'Party Egg', hatchChance: '1 / 15,000',
     description: 'Exclusive pet from the Party Egg.',
-    image: 'assets/pets/six-seven.png', value: 1800,
+    image: 'assets/pets/six-seven.png', value: 1950,
   },
   {
     id: 'void-owl', name: 'Void Owl', rarity: 'Exclusive', bestPct: 75,
     source: 'Exclusive Shop • Galaxy Egg', hatchChance: '1.7%',
     description: 'Exclusive pet from the Galaxy Egg in the Exclusive Shop.',
-    image: 'assets/pets/void-owl-v30.png', value: null,
+    image: 'assets/pets/void-owl-v30.png', value: 350,
   },
   {
     id: 'sun-deer', name: 'Sun Deer', rarity: 'Exclusive', bestPct: 65,
@@ -59,7 +59,7 @@ export const PETS = [
     id: 'spaceship-alien', name: 'Spaceship Alien', rarity: 'Exclusive', bestPct: 65,
     source: 'Exclusive Pet', hatchChance: '1 in 33',
     description: 'Exclusive Spaceship Alien pet.',
-    image: 'assets/pets/spaceship-alien-v30.png', value: 100,
+    image: 'assets/pets/spaceship-alien-v30.png', value: 85,
   },
   {
     id: 'fallen-angel', name: 'Fallen Angel', rarity: 'Exclusive', bestPct: 60,
@@ -100,7 +100,7 @@ export const PETS = [
       golden: 'assets/pets/queen-bee-golden.png',
       diamond: 'assets/pets/queen-bee-diamond.png',
     },
-    values: { normal: 385, golden: null, diamond: null },
+    values: { normal: 350, golden: null, diamond: null },
   },
   {
     id: 'blaze-phoenix', name: 'Blaze Phoenix', rarity: 'Secret', source: 'Secret Pet',
@@ -111,7 +111,7 @@ export const PETS = [
       golden: 'assets/pets/blaze-phoenix-golden.png',
       diamond: 'assets/pets/blaze-phoenix-diamond.png',
     },
-    values: { normal: 650, golden: null, diamond: null },
+    values: { normal: 575, golden: null, diamond: null },
   },
   {
     id: 'mossy-mushroom', name: 'Mossy Mushroom', rarity: 'Secret', source: 'Secret Pet',
@@ -122,7 +122,7 @@ export const PETS = [
       golden: 'assets/pets/mossy-mushroom-gold.png',
       diamond: 'assets/pets/mossy-mushroom-diamond.png',
     },
-    values: { normal: 350, golden: null, diamond: null },
+    values: { normal: 325, golden: null, diamond: null },
   },
   {
     id: 'throne-dragon', name: 'Throne Dragon', rarity: 'Secret', source: 'Secret Pet',
@@ -133,7 +133,7 @@ export const PETS = [
       golden: 'assets/pets/throne-dragon-gold.png',
       diamond: 'assets/pets/throne-dragon-diamond.png',
     },
-    values: { normal: 250, golden: null, diamond: null },
+    values: { normal: 215, golden: null, diamond: null },
   },
   {
     id: 'ember-monster', name: 'Ember Monster', rarity: 'Mythical', source: 'Mythical Pet',
@@ -144,7 +144,7 @@ export const PETS = [
       golden: 'assets/pets/ember-monster-golden.png',
       diamond: 'assets/pets/ember-monster-diamond.png',
     },
-    values: { normal: 35, golden: null, diamond: null },
+    values: { normal: 25, golden: 100, diamond: 450 },
   },
   {
     id: 'shadow-dominus', name: 'Shadow Dominus', rarity: 'Mythical', source: 'Mythical Pet',
