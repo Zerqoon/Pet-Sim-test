@@ -15,7 +15,7 @@ export const PETS = [
     id: 'alien-emperor', name: 'Alien Emperor', rarity: 'Exclusive', bestPct: 95,
     source: 'Alien Egg', hatchChance: '1 / 1,000',
     description: 'Exclusive pet from the Alien Egg.',
-    image: 'assets/pets/alien-emperor.png', value: 4750,
+    image: 'assets/pets/alien-emperor.png', value: 4500,
   },
   {
     id: 'caaaaat', name: 'Caaaaat', rarity: 'Exclusive', bestPct: 85,
@@ -53,13 +53,13 @@ export const PETS = [
     id: 'sun-deer', name: 'Sun Deer', rarity: 'Exclusive', bestPct: 65,
     source: 'Exclusive Shop • Galaxy Egg', hatchChance: '3%',
     description: 'Exclusive pet from the Galaxy Egg in the Exclusive Shop.',
-    image: 'assets/pets/sun-deer-v30.png', value: null,
+    image: 'assets/pets/sun-deer-v30.png', value: 120,
   },
   {
     id: 'spaceship-alien', name: 'Spaceship Alien', rarity: 'Exclusive', bestPct: 65,
     source: 'Exclusive Pet', hatchChance: '1 in 33',
     description: 'Exclusive Spaceship Alien pet.',
-    image: 'assets/pets/spaceship-alien-v30.png', value: 85,
+    image: 'assets/pets/spaceship-alien-v30.png', value: 80,
   },
   {
     id: 'fallen-angel', name: 'Fallen Angel', rarity: 'Exclusive', bestPct: 60,
@@ -100,7 +100,7 @@ export const PETS = [
       golden: 'assets/pets/queen-bee-golden.png',
       diamond: 'assets/pets/queen-bee-diamond.png',
     },
-    values: { normal: 350, golden: null, diamond: null },
+    values: { normal: 400, golden: null, diamond: null },
   },
   {
     id: 'blaze-phoenix', name: 'Blaze Phoenix', rarity: 'Secret', source: 'Secret Pet',
@@ -111,7 +111,7 @@ export const PETS = [
       golden: 'assets/pets/blaze-phoenix-golden.png',
       diamond: 'assets/pets/blaze-phoenix-diamond.png',
     },
-    values: { normal: 575, golden: null, diamond: null },
+    values: { normal: 600, golden: null, diamond: null },
   },
   {
     id: 'mossy-mushroom', name: 'Mossy Mushroom', rarity: 'Secret', source: 'Secret Pet',
@@ -122,7 +122,7 @@ export const PETS = [
       golden: 'assets/pets/mossy-mushroom-gold.png',
       diamond: 'assets/pets/mossy-mushroom-diamond.png',
     },
-    values: { normal: 315, golden: null, diamond: null },
+    values: { normal: 315, golden: 1400, diamond: null },
   },
   {
     id: 'throne-dragon', name: 'Throne Dragon', rarity: 'Secret', source: 'Secret Pet',
@@ -133,7 +133,7 @@ export const PETS = [
       golden: 'assets/pets/throne-dragon-gold.png',
       diamond: 'assets/pets/throne-dragon-diamond.png',
     },
-    values: { normal: 195, golden: null, diamond: null },
+    values: { normal: 175, golden: 485, diamond: null },
   },
   {
     id: 'ember-monster', name: 'Ember Monster', rarity: 'Mythical', source: 'Mythical Pet',
@@ -144,7 +144,7 @@ export const PETS = [
       golden: 'assets/pets/ember-monster-golden.png',
       diamond: 'assets/pets/ember-monster-diamond.png',
     },
-    values: { normal: 25, golden: 350, diamond: 'N/A'},
+    values: { normal: 25, golden: 350, diamond: 1300},
   },
   {
     id: 'shadow-dominus', name: 'Shadow Dominus', rarity: 'Mythical', source: 'Mythical Pet',
@@ -191,7 +191,7 @@ export const CODES = [
 ];
 
 export const ITEMS = [
-  { id:'vip-voucher', name:'VIP Voucher', rarity:'Exclusive', source:'Utility Item', description:'VIP Voucher.', image:'assets/items/vip-voucher.png', value:30, dropSources:[SOURCE_PRESETS.moonChest, SOURCE_PRESETS.vipChest, SOURCE_PRESETS.playtimeRewards] },
+  { id:'vip-voucher', name:'VIP Voucher', rarity:'Exclusive', source:'Utility Item', description:'VIP Voucher.', image:'assets/items/vip-voucher.png', value:20, dropSources:[SOURCE_PRESETS.moonChest, SOURCE_PRESETS.vipChest, SOURCE_PRESETS.playtimeRewards] },
   { id:'universe-shard', name:'Universe Shard', rarity:'Mythical', source:'Utility Item', description:'Universe Shard.', image:'assets/items/universe-shard-v30.png', value:50, dropSources:[SOURCE_PRESETS.moonChest, SOURCE_PRESETS.vipChest] },
   { id:'vip-key', name:'VIP Key', rarity:'Legendary', source:'Utility Item', description:'VIP Key.', image:'assets/items/vip-key.png', value:0.5 },
   { id:'globe', name:'Globe', rarity:'Legendary', source:'Utility Item', description:'Globe item.', image:'assets/items/globe-v30.png', value:40, dropSources:[SOURCE_PRESETS.moonChest, SOURCE_PRESETS.playtimeRewards] },
