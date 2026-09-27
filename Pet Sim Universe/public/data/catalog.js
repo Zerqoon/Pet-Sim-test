@@ -77,7 +77,7 @@ export const PETS = [
     id: 'galaxy-bunny', name: 'Galaxy Bunny', rarity: 'Exclusive', bestPct: 50,
     source: 'Exclusive Shop • Galaxy Egg', hatchChance: '30%',
     description: 'Exclusive pet from the Galaxy Egg in the Exclusive Shop.',
-    image: 'assets/pets/galaxy-bunny.png', value: 15,
+    image: 'assets/pets/galaxy-bunny.png', value: 20q,
   },
   {
     id: 'galaxy-cat', name: 'Galaxy Cat', rarity: 'Exclusive', bestPct: 40,
@@ -122,7 +122,7 @@ export const PETS = [
       golden: 'assets/pets/mossy-mushroom-gold.png',
       diamond: 'assets/pets/mossy-mushroom-diamond.png',
     },
-    values: { normal: 325, golden: null, diamond: null },
+    values: { normal: 315, golden: null, diamond: null },
   },
   {
     id: 'throne-dragon', name: 'Throne Dragon', rarity: 'Secret', source: 'Secret Pet',
@@ -133,7 +133,7 @@ export const PETS = [
       golden: 'assets/pets/throne-dragon-gold.png',
       diamond: 'assets/pets/throne-dragon-diamond.png',
     },
-    values: { normal: 215, golden: null, diamond: null },
+    values: { normal: 195, golden: null, diamond: null },
   },
   {
     id: 'ember-monster', name: 'Ember Monster', rarity: 'Mythical', source: 'Mythical Pet',
@@ -155,7 +155,7 @@ export const PETS = [
       golden: 'assets/pets/shadow-dominus-golden-v30.png',
       diamond: 'assets/pets/shadow-dominus-diamond-v30.png',
     },
-    values: { normal: 15, golden: null, diamond: null },
+    values: { normal: 15, golden: null, diamond: 'N/A' },
   },
 ];
 
@@ -178,7 +178,7 @@ export const CHARMS = [
 export const EGGS = [
   { id:'alien-egg', name:'Alien Egg', rarity:'Exclusive', source:'Alien Invasion [Event]', description:'Alien Invasion event egg.', image:'assets/eggs/alien-egg.png', value:10 },
   { id:'party-egg', name:'Party Egg', rarity:'Exclusive', source:'PlayTime Egg', description:'PlayTime Egg reward.', image:'assets/eggs/party-egg.png', value:3 },
-  { id:'galaxy-egg', name:'Galaxy Egg', rarity:'Exclusive', source:'Galaxy Collection', description:'Galaxy Egg.', image:'assets/eggs/galaxy-egg.png', value:185 },
+  { id:'galaxy-egg', name:'Galaxy Egg', rarity:'Exclusive', source:'Galaxy Collection', description:'Galaxy Egg.', image:'assets/eggs/galaxy-egg.png', value:125 },
 ];
 
 export const CODES = [
@@ -192,9 +192,9 @@ export const CODES = [
 
 export const ITEMS = [
   { id:'vip-voucher', name:'VIP Voucher', rarity:'Exclusive', source:'Utility Item', description:'VIP Voucher.', image:'assets/items/vip-voucher.png', value:30, dropSources:[SOURCE_PRESETS.moonChest, SOURCE_PRESETS.vipChest, SOURCE_PRESETS.playtimeRewards] },
-  { id:'universe-shard', name:'Universe Shard', rarity:'Mythical', source:'Utility Item', description:'Universe Shard.', image:'assets/items/universe-shard-v30.png', value:80, dropSources:[SOURCE_PRESETS.moonChest, SOURCE_PRESETS.vipChest] },
+  { id:'universe-shard', name:'Universe Shard', rarity:'Mythical', source:'Utility Item', description:'Universe Shard.', image:'assets/items/universe-shard-v30.png', value:50, dropSources:[SOURCE_PRESETS.moonChest, SOURCE_PRESETS.vipChest] },
   { id:'vip-key', name:'VIP Key', rarity:'Legendary', source:'Utility Item', description:'VIP Key.', image:'assets/items/vip-key.png', value:0.5 },
-  { id:'globe', name:'Globe', rarity:'Legendary', source:'Utility Item', description:'Globe item.', image:'assets/items/globe-v30.png', value:115, dropSources:[SOURCE_PRESETS.moonChest, SOURCE_PRESETS.playtimeRewards] },
+  { id:'globe', name:'Globe', rarity:'Legendary', source:'Utility Item', description:'Globe item.', image:'assets/items/globe-v30.png', value:40, dropSources:[SOURCE_PRESETS.moonChest, SOURCE_PRESETS.playtimeRewards] },
   { id:'ball', name:'Ball', rarity:'Epic', source:'Toy Item', description:'+10% Egg Luck while equipped on Unique Pet!', image:'assets/items/ball-v30.png', value:5, dropSources:[SOURCE_PRESETS.vipChest, SOURCE_PRESETS.moonChest, SOURCE_PRESETS.playtimeRewards] },
   { id:'squeaky', name:'Squeaky', rarity:'Epic', source:'Toy Item', description:'Squeaky toy item.', image:'assets/items/squeaky-v30.png', value:5, dropSources:[SOURCE_PRESETS.vipChest, SOURCE_PRESETS.moonChest, SOURCE_PRESETS.playtimeRewards] },
   { id:'cookie', name:'Cookie', rarity:'Rare', source:'Toy Item', description:'Cookie item.', image:'assets/items/cookie-v30.png', value:5, dropSources:[SOURCE_PRESETS.vipChest, SOURCE_PRESETS.moonChest, SOURCE_PRESETS.playtimeRewards] },
