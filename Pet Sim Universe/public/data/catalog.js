@@ -17,7 +17,7 @@ export const PETS = [
     id: 'alien-emperor', name: 'Alien Emperor', rarity: 'Exclusive', bestPct: 95,
     source: 'Alien Egg', hatchChance: '1 / 1,000',
     description: 'Exclusive pet from the Alien Egg.',
-    image: 'assets/pets/alien-emperor.png', value: 4500,
+    image: 'assets/pets/alien-emperor.png', value: 4250,
   },
   {
     id: 'caaaaat', name: 'Caaaaat', rarity: 'Exclusive', bestPct: 85,
@@ -29,14 +29,14 @@ export const PETS = [
     id: 'exquisite-cat', name: 'Exquisite Cat', rarity: 'Exclusive', bestPct: 85,
     source: 'VIP Chest', hatchChance: '1 in 10,000',
     description: 'Exclusive pet available from the VIP Chest.',
-    image: 'assets/pets/exquisite-cat.png', value: 1200,
+    image: 'assets/pets/exquisite-cat.png', value: 1400,
     dropSources: [SOURCE_PRESETS.vipChest],
   },
   {
     id: 'happy-cupcake', name: 'Happy Cupcake', rarity: 'Exclusive', bestPct: 85,
     source: 'PlayTime Rewards', hatchChance: '1 in 10K',
     description: 'Exclusive pet from PlayTime Rewards.',
-    image: 'assets/pets/happy-cupcake.png', value: 1400,
+    image: 'assets/pets/happy-cupcake.png', value: 1500,
     dropSources: [SOURCE_PRESETS.playtimeRewards],
   },
   {
