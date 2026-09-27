@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#0b0709" />
+  <meta name="description" content="Pet Universe Values — community value list for pets, charms, eggs and items." />
+  <title>Pet Universe Values</title>
+  <link rel="icon" type="image/png" href="assets/ui/category-pets.png" />
+  <link rel="stylesheet" href="./styles.css" />
+  <link rel="stylesheet" href="./refinements.css" />
+  <link rel="stylesheet" href="./v35.css" />
+  <link rel="stylesheet" href="./v36.css" />
+  <link rel="stylesheet" href="./v37.css" />
+  <link rel="stylesheet" href="./v38.css" />
+  <link rel="stylesheet" href="./v39.css" />
+</head>
+<body>
+  <div class="world-bg" aria-hidden="true">
+    <div class="world-image"></div>
+    <div class="world-overlay"></div>
+    <div class="lava-orb lava-orb-a"></div>
+    <div class="lava-orb lava-orb-b"></div>
+    <div class="star-layer star-layer-a"></div>
+    <div class="star-layer star-layer-b"></div>
+    <div class="ember-layer ember-layer-a"></div>
+    <div class="ember-layer ember-layer-b"></div>
+  </div>
+
+  <div class="app-layout">
+    <aside class="sidebar" aria-label="Pet Universe navigation">
+      <a class="side-card brand-card" href="#top">
+        <span class="brand-icon"><img src="assets/ui/category-pets.png" alt="" /></span>
+        <span class="brand-copy">
+          <strong>Pet Universe</strong>
+          <small>VALUES</small>
+        </span>
+      </a>
+
+      <nav class="side-nav app-nav" aria-label="Main navigation">
+        <button class="side-card view-btn active" data-view="home" type="button">
+          <span class="nav-icon"><img src="assets/ui/category-pets.png" alt="" /></span>
+          <strong class="nav-label">Home</strong>
+        </button>
+        <button class="side-card view-btn" data-view="values" type="button">
+          <span class="nav-icon"><img src="assets/items/value-ticket.png" alt="" /></span>
+          <strong class="nav-label">Values</strong>
+        </button>
+        <button class="side-card view-btn" data-view="calculator" type="button">
+          <span class="nav-icon"><img src="assets/ui/category-items.png" alt="" /></span>
+          <strong class="nav-label">Calculator</strong>
+        </button>
+      </nav>
+
+      <nav class="side-nav category-nav" id="categoryNav" aria-label="Catalog categories">
+        <button class="side-card nav-btn active" data-category="pets" type="button">
+          <span class="nav-icon"><img src="assets/ui/category-pets.png" alt="" /></span>
+          <strong class="nav-label">Pet Values</strong>
+        </button>
+        <button class="side-card nav-btn" data-category="charms" type="button">
+          <span class="nav-icon"><img src="assets/ui/category-charms.png" alt="" /></span>
+          <strong class="nav-label">Charm Values</strong>
+        </button>
+        <button class="side-card nav-btn" data-category="eggs" type="button">
+          <span class="nav-icon"><img src="assets/ui/category-eggs.png" alt="" /></span>
+          <strong class="nav-label">Egg Values</strong>
+        </button>
+        <button class="side-card nav-btn" data-category="items" type="button">
+          <span class="nav-icon"><img src="assets/ui/category-items.png" alt="" /></span>
+          <strong class="nav-label">Item Values</strong>
+        </button>
+        <button class="side-card nav-btn" data-category="codes" type="button">
+          <span class="nav-icon"><img src="assets/ui/category-codes.png" alt="" /></span>
+          <strong class="nav-label">Code Values</strong>
+        </button>
+      </nav>
+
+      <div class="appearance-tools">
+      <button class="side-card theme-toggle" id="themeToggle" type="button">
+        <span class="theme-flare">✦</span>
+        <strong id="themeLabel">Dark mode</strong>
+      </button>
+      <button class="side-card motion-toggle" id="motionToggle" type="button" aria-label="Pause animations" aria-pressed="false" title="Pause animations">Ⅱ</button>
+      </div>
+
+      <div class="side-card side-footer">
+        <strong>By Zerqoon | B3sttiee</strong>
+        <a href="https://discord.gg/lipbuilds" target="_blank" rel="noreferrer">discord.gg/lipbuilds</a>
+      </div>
+    </aside>
+
+    <main class="main" id="top">
+      <section id="homeView" class="home-view page-view">
+        <div class="home-hero side-card">
+          <span class="home-kicker">Pet Universe Values</span>
+          <h1>Cosmic market hub for Values & Calculator</h1>
+          <p>Track the latest values, compare offers, and calculate W/L with tickets in one clean place.</p>
+          <div class="home-actions">
+            <button class="hero-action primary" type="button" data-view-target="values">Open Values</button>
+            <button class="hero-action secondary" type="button" data-view-target="calculator">Open Calculator</button>
+          </div>
+        </div>
+
+        <div class="home-grid">
+          <article class="content-card home-card">
+            <span class="tool-label">Values</span>
+            <h3>Browse Pet Universe Values</h3>
+            <p>Open the full value list with pets, charms, eggs, items and codes.</p>
+            <button class="hero-inline-btn" type="button" data-view-target="values">Go to Values</button>
+          </article>
+          <article class="content-card home-card">
+            <span class="tool-label">Calculator</span>
+            <h3>Compare two offers instantly</h3>
+            <p>Add pets, items and tickets. The calculator shows total value and whether left side is W or L.</p>
+            <button class="hero-inline-btn" type="button" data-view-target="calculator">Go to Calculator</button>
+          </article>
+        </div>
+      </section>
+
+      <section id="valuesView" class="page-view" hidden>
+        <header class="page-header">
+          <div class="page-title-wrap">
+            <span class="eyebrow" id="sectionKicker">PET COLLECTION</span>
+            <h1 id="sectionTitle">Value Pets</h1>
+          </div>
+
+          <div class="page-tools">
+            <label class="search-box" for="searchInput">
+              <span>⌕</span>
+              <input id="searchInput" type="search" placeholder="Search pets..." aria-label="Search collection" autocomplete="off" />
+            </label>
+
+            <div class="custom-sort" id="customSort">
+              <button class="sort-trigger" id="sortTrigger" type="button" aria-haspopup="listbox" aria-expanded="false">
+                <span id="sortLabel">Featured</span>
+                <span class="sort-chevron">⌄</span>
+              </button>
+              <div class="sort-popover" id="sortPopover" role="listbox" hidden>
+                <button class="sort-option active" type="button" data-sort="featured" role="option" aria-selected="true">Featured</button>
+                <button class="sort-option" type="button" data-sort="name" role="option">Name A-Z</button>
+                <button class="sort-option" type="button" data-sort="best-desc" role="option">Best % high-low</button>
+                <button class="sort-option" type="button" data-sort="best-asc" role="option">Best % low-high</button>
+                <button class="sort-option" type="button" data-sort="rarity" role="option">Rarity</button>
+              </div>
+            </div>
+
+            <div class="pet-variant-tools" id="variantTools">
+              <span class="tool-label">Pet Variant</span>
+              <div class="variant-switch">
+                <button class="variant-btn active" data-variant="normal" type="button"><i></i>Normal</button>
+                <button class="variant-btn golden" data-variant="golden" type="button"><i></i>Golden</button>
+                <button class="variant-btn diamond" data-variant="diamond" type="button"><i></i>Diamond</button>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <section class="content-card catalog-card">
+          <div class="catalog-meta">
+            <div>
+              <span class="catalog-label" id="catalogLabel">Stat Pets</span>
+            </div>
+            <span class="result-count" id="resultCount" aria-live="polite">0 results</span>
+          </div>
+
+          <div id="cardsGrid" class="cards-grid"></div>
+        </section>
+      </section>
+
+      <section id="calculatorView" class="page-view calculator-view" hidden>
+        <header class="page-header calculator-header">
+          <div class="page-title-wrap">
+            <h1>Trade Calculator</h1>
+          </div>
+          <div class="calculator-summary-pill" id="calcVerdict">Add pets, items or tickets to compare both sides.</div>
+        </header>
+
+        <section class="content-card calculator-panel">
+          <div class="calculator-builder">
+            <div class="calc-column">
+              <div class="calc-column-head">
+                <h3>Left Side</h3>
+                <span>Your offer</span>
+              </div>
+              <div class="calc-controls">
+                <select id="calcLeftCategory"></select>
+                <select id="calcLeftItem"></select>
+                <select id="calcLeftVariant"></select>
+                <input id="calcLeftQty" type="number" min="1" max="999" value="1" />
+                <button type="button" class="hero-inline-btn calc-add-btn" data-calc-add="left">Add</button>
+              </div>
+              <div class="ticket-row">
+                <label>Tickets</label>
+                <input id="calcLeftTickets" type="number" min="0" value="0" />
+              </div>
+              <div class="calc-list" id="calcLeftList"></div>
+              <div class="calc-total">Total: <strong id="calcLeftTotal">0</strong></div>
+            </div>
+
+            <div class="calc-center-status">
+              <div class="calc-balance-card">
+                <span>Difference</span>
+                <strong id="calcDifference">0</strong>
+                <small id="calcDifferenceLabel">Even trade</small>
+              </div>
+            </div>
+
+            <div class="calc-column">
+              <div class="calc-column-head">
+                <h3>Right Side</h3>
+                <span>Their offer</span>
+              </div>
+              <div class="calc-controls">
+                <select id="calcRightCategory"></select>
+                <select id="calcRightItem"></select>
+                <select id="calcRightVariant"></select>
+                <input id="calcRightQty" type="number" min="1" max="999" value="1" />
+                <button type="button" class="hero-inline-btn calc-add-btn" data-calc-add="right">Add</button>
+              </div>
+              <div class="ticket-row">
+                <label>Tickets</label>
+                <input id="calcRightTickets" type="number" min="0" value="0" />
+              </div>
+              <div class="calc-list" id="calcRightList"></div>
+              <div class="calc-total">Total: <strong id="calcRightTotal">0</strong></div>
+            </div>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="detailModal" class="detail-modal" aria-labelledby="modalTitle">
+    <button class="modal-close" type="button" data-close-modal aria-label="Close details">×</button>
+
+    <div class="modal-grid">
+      <section class="modal-visual">
+        <div class="modal-volcano-glow"></div>
+        <div class="modal-particles" aria-hidden="true"></div>
+        <div class="modal-badges-left">
+          <span id="modalRarity" class="modal-rarity">Item</span>
+          <span id="modalBest" class="modal-best"></span>
+        </div>
+        <button type="button" class="modal-art-shell" id="modalArtShell" aria-label="Animate pet" title="Click to animate">
+          <div class="modal-art-ring"></div>
+          <img id="modalImage" class="modal-image" alt="" />
+          <div id="modalAnimatedArt" class="modal-animated-art" hidden>
+            <img class="pop-frame normal" src="assets/pets/pop-cat-normal-v30.png" alt="Pop Cat normal" />
+            <img class="pop-frame scream" src="assets/pets/pop-cat-scream-v30.png" alt="Pop Cat animation frame" />
+          </div>
+        </button>
+        <span id="modalAnimatedBadge" class="animated-badge" hidden>▶ Animated</span>
+      </section>
+
+      <section class="modal-info">
+        <span class="modal-kicker" id="modalKicker">PET DETAILS</span>
+        <h2 id="modalTitle"></h2>
+        <p id="modalDescription"></p>
+
+        <div class="detail-grid">
+          <div class="detail-box"><span>Source</span><strong id="modalSource">—</strong></div>
+          <div class="detail-box" id="modalMapRow"><span>Map</span><strong id="modalMap">—</strong></div>
+          <div class="detail-box" id="modalChanceRow"><span>Egg Chance</span><strong id="modalChance">—</strong></div>
+          <div class="detail-box" id="modalExistsRow"><span>Exists</span><strong id="modalExists">—</strong></div>
+        </div>
+
+        <section id="modalDropArea" class="detail-section" hidden>
+          <span class="tool-label">Drop Sources</span>
+          <div id="modalSourceGallery" class="drop-source-grid"></div>
+        </section>
+
+        <section id="modalVariantArea" class="detail-section" hidden>
+          <span class="tool-label">Variant</span>
+          <div id="modalVariantButtons" class="variant-switch"></div>
+        </section>
+
+        <section class="value-panel">
+          <span id="modalValueLabel">Value</span>
+          <div><img id="modalValueIcon" src="assets/items/value-ticket.png" alt="Ticket" /><strong id="modalValue">Set value</strong></div>
+        </section>
+
+        <section id="modalHistoryArea" class="history-panel market-panel-v35" aria-labelledby="historyTitle">
+          <div class="history-head market-head-v35">
+            <div>
+              <span class="tool-label">Market tracking</span>
+              <h3 id="historyTitle">Value History</h3>
+              <p class="history-subtitle">Real snapshots saved in Cloudflare D1 when values change.</p>
+            </div>
+            <span id="historyStatus" class="history-status is-loading">Loading</span>
+          </div>
+
+          <div class="history-summary market-summary-v35" aria-live="polite">
+            <div class="history-stat history-stat-current">
+              <span>Current</span>
+              <strong id="historyCurrent">—</strong>
+              <small id="historyCurrentMeta">Current catalog value</small>
+            </div>
+            <div class="history-stat">
+              <span>Change</span>
+              <strong id="historyChange" class="is-neutral">—</strong>
+              <small id="historyChangeAmount">—</small>
+            </div>
+            <div class="history-stat">
+              <span>High</span>
+              <strong id="historyHigh">—</strong>
+              <small>Selected range</small>
+            </div>
+            <div class="history-stat">
+              <span>Low</span>
+              <strong id="historyLow">—</strong>
+              <small>Selected range</small>
+            </div>
+          </div>
+
+          <div class="history-toolbar-v35">
+            <div class="history-range" id="historyRange" role="group" aria-label="Value history range">
+              <button type="button" data-history-range="1h">1H</button>
+              <button type="button" data-history-range="6h">6H</button>
+              <button type="button" data-history-range="24h" class="active" aria-pressed="true">24H</button>
+              <button type="button" data-history-range="7d">7D</button>
+              <button type="button" data-history-range="30d">30D</button>
+              <button type="button" data-history-range="all">ALL</button>
+            </div>
+            <span id="historyLastUpdated" class="history-last-updated">No snapshots yet</span>
+          </div>
+
+          <div class="history-chart-shell market-chart-v35" id="historyChartShell">
+            <svg id="historyChart" class="history-chart" viewBox="0 0 640 260" role="img" aria-label="Value history chart"></svg>
+            <div id="historyEmpty" class="history-empty" hidden></div>
+            <div id="historyTooltip" class="history-tooltip-v35" hidden>
+              <strong id="historyTooltipValue">—</strong>
+              <span id="historyTooltipTime">—</span>
+            </div>
+          </div>
+          <div class="history-footer-v35">
+            <p id="historyHint" class="history-hint">History is recorded from your Cloudflare deployment.</p>
+            <span class="history-live-key"><i></i> D1 history</span>
+          </div>
+        </section>
+
+        <p id="modalNote" class="modal-note" hidden></p>
+      </section>
+    </div>
+  </dialog>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
