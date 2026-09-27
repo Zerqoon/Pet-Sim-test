@@ -77,7 +77,7 @@ export const PETS = [
     id: 'galaxy-bunny', name: 'Galaxy Bunny', rarity: 'Exclusive', bestPct: 50,
     source: 'Exclusive Shop • Galaxy Egg', hatchChance: '30%',
     description: 'Exclusive pet from the Galaxy Egg in the Exclusive Shop.',
-    image: 'assets/pets/galaxy-bunny.png', value: 20q,
+    image: 'assets/pets/galaxy-bunny.png', value: 20,
   },
   {
     id: 'galaxy-cat', name: 'Galaxy Cat', rarity: 'Exclusive', bestPct: 40,
