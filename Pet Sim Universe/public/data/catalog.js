@@ -222,7 +222,7 @@ export const CODES = [
   { id:'code-roksek', name:'Roksek', code:'Roksek', status:'active', source:'Reward Code', description:'Redeem this game code in Pet Universe.' },
   { id:'code-droverq', name:'DroverQ', code:'DroverQ', status:'active', source:'Reward Code', description:'Redeem this game code in Pet Universe.' },
   { id:'code-release', name:'Release', code:'Release', status:'active', source:'Reward Code', description:'Redeem this game code in Pet Universe.' },
-  { id:'code-darkrose', name:'DarkRose', code:'DarkRose', status:'active', source:'Reward Code', description:'Redeem this game code in Pet Universe.' },
+  { id:'code-darkrose', name:'DarkRose', code:'DarkRose', status:'expired', source:'Reward Code', description:'Redeem this game code in Pet Universe.' },
 ];
 
 export const ITEMS = [
