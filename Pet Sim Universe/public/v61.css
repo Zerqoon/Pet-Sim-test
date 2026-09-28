@@ -1,0 +1,230 @@
+/* v61 — old layout preserved, black crystal strong glass theme */
+:root{
+  --v61-glass-bg: linear-gradient(180deg, rgba(9,10,17,.88), rgba(5,6,11,.96));
+  --v61-glass-overlay: linear-gradient(135deg, rgba(255,255,255,.065), rgba(255,255,255,.012) 34%, rgba(117,75,255,.06) 78%, rgba(76,201,255,.045));
+  --v61-border: rgba(170,120,255,.20);
+  --v61-border-strong: rgba(207,161,255,.28);
+  --v61-shadow: 0 20px 44px rgba(0,0,0,.40);
+  --v61-inset: inset 0 1px 0 rgba(255,255,255,.055);
+}
+
+/* preserve layout, change only look */
+.sidebar,
+.side-card,
+.page-header,
+.catalog-card,
+.catalog-group,
+.search-box,
+.sort-trigger,
+.sort-popover,
+.variant-btn,
+.home-corner-btn,
+.content-card,
+.value-card,
+.code-card,
+.detail-modal,
+.modal-visual,
+.modal-info,
+.modal-rarity,
+.modal-best,
+.modal-note,
+.modal-meta-card,
+.drop-source-card,
+.history-panel,
+.calc-top-btn,
+.trade-status-switch,
+.trade-v55-side,
+.trade-v55-diff,
+.trade-v55-ticket,
+.trade-v55-items .trade-item-v40,
+.trade-v55-items .trade-add-v40,
+.calc-picker-card,
+.calc-picker-modal{
+  background: var(--v61-glass-overlay), var(--v61-glass-bg) !important;
+  border: 1px solid var(--v61-border) !important;
+  box-shadow: var(--v61-inset), var(--v61-shadow) !important;
+  backdrop-filter: blur(18px) saturate(135%) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(135%) !important;
+}
+
+.page-header,
+.catalog-card,
+.trade-v55-side,
+.trade-v55-diff,
+.trade-v55-ticket,
+.detail-modal,
+.home-v40-hero,
+.home-v40-card,
+.side-card,
+.calc-picker-card,
+.calc-picker-modal,
+.search-box,
+.sort-trigger,
+.variant-btn,
+.content-card,
+.value-card,
+.code-card,
+.history-panel,
+.modal-meta-card,
+.drop-source-card{
+  position: relative;
+  overflow: hidden;
+}
+
+.page-header::before,
+.catalog-card::before,
+.trade-v55-side::before,
+.trade-v55-diff::before,
+.detail-modal::before,
+.home-v40-hero::before,
+.home-v40-card::before,
+.side-card::before,
+.calc-picker-card::before,
+.calc-picker-modal::before,
+.content-card::before,
+.value-card::before,
+.code-card::before,
+.history-panel::before,
+.modal-meta-card::before,
+.drop-source-card::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(120deg, transparent 12%, rgba(255,255,255,.06) 30%, transparent 44%), radial-gradient(circle at 100% 0%, rgba(107,86,255,.12), transparent 28%);
+  opacity: .8;
+}
+
+/* more black / less brown */
+.world-overlay{
+  background: radial-gradient(circle at 50% 50%, rgba(4,8,18,.44), rgba(1,3,9,.70) 55%, rgba(0,0,0,.82));
+}
+
+/* cleaner values header and panels */
+.page-header,
+.calculator-v55-header,
+.home-v40-hero{
+  background: linear-gradient(135deg, rgba(8,9,16,.90), rgba(6,7,13,.96)) !important;
+  border-color: var(--v61-border-strong) !important;
+}
+
+.side-card.brand-card,
+.side-footer,
+.theme-toggle,
+.motion-toggle,
+.nav-btn,
+.calc-top-btn,
+.trade-swap-btn,
+.modal-close,
+.card-button{
+  background: linear-gradient(180deg, rgba(20,22,35,.94), rgba(8,9,15,.98)) !important;
+  border: 1px solid rgba(181,143,255,.22) !important;
+  box-shadow: var(--v61-inset), 0 14px 30px rgba(0,0,0,.28) !important;
+}
+.nav-btn.active,
+.variant-btn.active,
+.modal-variant-btn.active,
+.calc-top-btn.active,
+.trade-status-segment.active{
+  background: linear-gradient(180deg, rgba(30,20,43,.96), rgba(14,11,22,.98)) !important;
+  border-color: rgba(255,158,96,.48) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.07), 0 0 0 1px rgba(255,140,80,.12), 0 16px 30px rgba(0,0,0,.32) !important;
+}
+
+.nav-btn:hover,
+.side-card:hover,
+.home-v40-card:hover,
+.card-button:hover,
+.trade-v55-items .trade-item-v40:hover,
+.trade-v55-items .trade-add-v40:hover,
+.calc-top-btn:hover,
+.trade-swap-btn:hover,
+.calc-picker-card:hover{
+  transform: translateY(-2px);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.065), 0 22px 40px rgba(0,0,0,.36), 0 0 20px rgba(129,97,255,.10) !important;
+}
+
+/* stronger glass in calculator */
+.trade-v55-side,
+.trade-v55-diff,
+.trade-v55-ticket,
+.trade-v55-items .trade-item-v40,
+.trade-v55-items .trade-add-v40,
+.trade-ticket-input,
+.calc-picker-card,
+.calc-picker-modal{
+  border-color: rgba(170,127,255,.24) !important;
+  background: linear-gradient(180deg, rgba(17,18,28,.78), rgba(7,8,14,.96)) !important;
+}
+.trade-v55-diff{
+  background: linear-gradient(180deg, rgba(11,18,22,.88), rgba(5,9,14,.96)) !important;
+}
+.trade-v55-items .trade-item-art-v40,
+.calc-picker-art{
+  background: radial-gradient(circle at 50% 20%, rgba(156,112,255,.12), transparent 54%), linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.008)) !important;
+  border: 1px solid rgba(255,255,255,.035) !important;
+}
+.trade-v55-ticket .ticket-input,
+.trade-ticket-input,
+.search-box input,
+.sort-trigger select,
+.calc-picker-search input{
+  background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01)), linear-gradient(180deg, rgba(11,12,20,.92), rgba(7,8,14,.96)) !important;
+  border-color: rgba(180,140,255,.18) !important;
+}
+
+/* cards in values grid */
+.content-card,
+.value-card,
+.code-card,
+.card-image-wrap{
+  background: linear-gradient(180deg, rgba(18,18,29,.78), rgba(8,8,15,.95)) !important;
+}
+.card-art,
+.card-image-wrap{
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.045), inset 0 0 40px rgba(110,86,255,.07) !important;
+}
+
+/* modal stays same layout, only stronger crystal feel */
+.detail-modal{
+  background: linear-gradient(180deg, rgba(8,9,15,.88), rgba(4,5,11,.98)) !important;
+}
+.modal-visual{
+  background:
+    radial-gradient(circle at 50% 85%, rgba(255,94,0,.12), transparent 24%),
+    radial-gradient(circle at 75% 20%, rgba(131,95,255,.12), transparent 26%),
+    linear-gradient(180deg, rgba(16,12,22,.78), rgba(8,8,14,.96)) !important;
+  border-right: 1px solid rgba(183,137,255,.20) !important;
+}
+.modal-art-shell{perspective:1200px;transform-style:preserve-3d}
+.modal-image,.modal-animated-art{transform-style:preserve-3d;backface-visibility:visible}
+
+/* subtle crystal shine around images */
+.modal-image,
+.modal-animated-art,
+.card-image{
+  filter: drop-shadow(0 10px 18px rgba(0,0,0,.28));
+}
+
+/* keep rich readable */
+.home-updated,
+.side-footer .credit-copy,
+.caption,
+.muted,
+.modal-note,
+.history-subtitle{
+  color: #d4cce5 !important;
+}
+
+/* mobile keep layout untouched, only soften blur */
+@media (max-width: 900px){
+  .sidebar,
+  .side-card,
+  .page-header,
+  .catalog-card,
+  .trade-v55-side,
+  .trade-v55-diff,
+  .detail-modal,
+  .calc-picker-card,
+  .calc-picker-modal{backdrop-filter: blur(14px) saturate(126%) !important; -webkit-backdrop-filter: blur(14px) saturate(126%) !important;}
+}
