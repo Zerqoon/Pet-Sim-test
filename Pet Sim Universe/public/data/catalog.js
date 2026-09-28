@@ -23,7 +23,7 @@ export const PETS = [
     id: 'caaaaat', name: 'Caaaaat', rarity: 'Exclusive', bestPct: 85,
     source: 'Basic Egg', map: 'The Overworld', hatchChance: '???',
     description: 'Exclusive pet from the Basic Egg.',
-    image: 'assets/pets/caaaaat-v30.png', value: 3150,
+    image: 'assets/pets/caaaaat-v30.png', value: 2950,
   },
   {
     id: 'exquisite-cat', name: 'Exquisite Cat', rarity: 'Exclusive', bestPct: 85,
