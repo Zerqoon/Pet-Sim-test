@@ -1,8 +1,0 @@
-/index.html
-  Cache-Control: no-store, max-age=0
-
-/app.js
-  Cache-Control: no-store, max-age=0
-
-/data/catalog.js
-  Cache-Control: no-store, max-age=0
