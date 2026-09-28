@@ -11,7 +11,7 @@ export const PETS = [
     id: 'universe-capybara', name: 'Universe Capybara', rarity: 'Exclusive', bestPct: 100,
     source: 'Exclusive Shop • Galaxy Egg', hatchChance: '0.3%',
     description: 'Exclusive pet from the Galaxy Egg in the Exclusive Shop.',
-    image: 'assets/pets/universe-capybara.png', value: 25250,
+    image: 'assets/pets/universe-capybara.png', value: 24500,
   },
   {
     id: 'alien-emperor', name: 'Alien Emperor', rarity: 'Exclusive', bestPct: 95,
