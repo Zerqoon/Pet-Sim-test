@@ -1,0 +1,90 @@
+/* v44 — fix stretched calculator sidebar, exclusive/stat heading colors */
+
+/* Robust sidebar layout for Values and Calculator */
+body[data-view='values'] .sidebar,
+body[data-view='calculator'] .sidebar{
+  position:sticky!important;
+  top:14px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:stretch!important;
+  gap:12px!important;
+  height:calc(100vh - 28px)!important;
+  min-height:0!important;
+}
+body[data-view='values'] #categoryNav,
+body[data-view='calculator'] #categoryNav{
+  flex:0 0 auto!important;
+}
+body[data-view='values'] .appearance-tools,
+body[data-view='calculator'] .appearance-tools{
+  position:fixed!important;
+  right:22px!important;
+  bottom:20px!important;
+  z-index:90!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:6px!important;
+  width:auto!important;
+  max-width:none!important;
+  margin:0!important;
+  flex:none!important;
+}
+body[data-view='values'] .appearance-tools .theme-toggle,
+body[data-view='calculator'] .appearance-tools .theme-toggle,
+body[data-view='values'] .appearance-tools .motion-toggle,
+body[data-view='calculator'] .appearance-tools .motion-toggle{
+  flex:none!important;
+}
+body[data-view='values'] .side-footer,
+body[data-view='calculator'] .side-footer{
+  margin-top:auto!important;
+  height:auto!important;
+  min-height:0!important;
+  flex:0 0 auto!important;
+  align-self:stretch!important;
+  padding:14px 16px!important;
+}
+body[data-view='values'] .side-footer-links,
+body[data-view='calculator'] .side-footer-links{
+  display:none!important;
+}
+
+/* Section heading colors */
+.rarity-section-exclusive .rarity-section-head h2{
+  background:none!important;
+  color:#efc7ff!important;
+  -webkit-text-fill-color:#efc7ff!important;
+  -webkit-text-stroke:1px rgba(18,14,22,.85)!important;
+  text-shadow:0 0 10px rgba(224,135,255,.20)!important;
+}
+.rarity-section-stat .rarity-section-head h2{
+  background:none!important;
+  color:#ffffff!important;
+  -webkit-text-fill-color:#ffffff!important;
+  -webkit-text-stroke:1px rgba(18,14,22,.85)!important;
+  text-shadow:0 0 10px rgba(255,255,255,.14)!important;
+}
+
+/* Slightly clearer collection title */
+#catalogLabel{color:#ffffff!important; text-shadow:0 0 10px rgba(255,255,255,.10)!important}
+
+/* Make calculator verdict semantics extra clear */
+.trade-v40-diff small.is-win,
+.trade-v40-diff small.is-lose{
+  display:block!important;
+  line-height:1.35!important;
+}
+
+@media(max-width:900px){
+  body[data-view='values'] .sidebar,
+  body[data-view='calculator'] .sidebar{
+    position:static!important;
+    height:auto!important;
+  }
+  body[data-view='values'] .appearance-tools,
+  body[data-view='calculator'] .appearance-tools{
+    right:12px!important;
+    bottom:12px!important;
+  }
+}
