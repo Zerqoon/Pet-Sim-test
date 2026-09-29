@@ -12,7 +12,7 @@ export const PETS = [
     source: 'Release PACK',
     description: '250 Exist Only, Release PACK.',
     note: '250 Exist Only.', exists: 250,
-    image: 'assets/pets/rich-bee.png', value: 2000, displayValue: '2K',
+    image: 'assets/pets/rich-bee.png', value: 2000, displayValue: '3.5K',
   },
   {
     id: 'universe-capybara', name: 'Universe Capybara', rarity: 'Exclusive', bestPct: 100,
@@ -24,7 +24,7 @@ export const PETS = [
     id: 'alien-emperor', name: 'Alien Emperor', rarity: 'Exclusive', bestPct: 95,
     source: 'Alien Egg', hatchChance: '1 / 1,000',
     description: 'Exclusive pet from the Alien Egg.',
-    image: 'assets/pets/alien-emperor.png', value: '7.5',
+    image: 'assets/pets/alien-emperor.png', value: '7.5K',
   },
   {
     id: 'caaaaat', name: 'Caaaaat', rarity: 'Exclusive', bestPct: 85,
