@@ -33,15 +33,15 @@ const PETS = [
 
   {
 
-    id: 'ruby-nebula-star', name: 'Ruby Nebula Star', rarity: 'Exclusive', bestPct: 85,
+    id: 'ruby-nebula-star', name: 'Ruby Nebula Star', rarity: 'Exclusive', bestPct: 100,
 
-    source: '1M Event',
+    source: '1M Event | 1 in 150M',
 
     description: 'Exclusive pet from the 1M Event.',
 
     note: '1M EVENT.',
 
-    image: 'assets/pets/ruby-nebula-star.png', value: null,
+    image: 'assets/pets/ruby-nebula-star.png', value: 'O/C',
 
     eventBadge: '1M EVENT',
 
