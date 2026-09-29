@@ -1,0 +1,43 @@
+/* v81 — performance-only layer. No visual redesign. */
+
+/* Keep animated background layers composited instead of repeatedly promoting/demoting. */
+.world-image{
+  backface-visibility:hidden;
+  will-change:transform;
+}
+.star-layer::before,
+.star-layer::after,
+.ember-layer::before,
+.ember-layer::after{
+  backface-visibility:hidden;
+  will-change:transform,opacity;
+}
+
+/* Only hovered/touched interactive surfaces get promotion. */
+@media (hover:hover) and (pointer:fine){
+  .card-button:hover,
+  .home-link-btn:hover,
+  .home-v40-card:hover,
+  .nav-btn:hover,
+  .calc-picker-card:hover,
+  .trade-item-v40:hover{
+    will-change:transform;
+  }
+}
+
+/* Elements outside the viewport keep their exact look when visible, but do not spend cycles animating offscreen. */
+.perf-offscreen,
+.perf-offscreen *,
+.perf-offscreen::before,
+.perf-offscreen::after,
+.perf-offscreen *::before,
+.perf-offscreen *::after{
+  animation-play-state:paused!important;
+}
+
+/* A hidden browser tab should consume effectively no animation time. */
+html[data-page-hidden] *,
+html[data-page-hidden] *::before,
+html[data-page-hidden] *::after{
+  animation-play-state:paused!important;
+}
