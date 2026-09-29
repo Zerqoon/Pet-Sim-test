@@ -1,0 +1,77 @@
+/* v52 — home links, updated badge, cleaner chart arrows, non-sticky top bar */
+
+/* home */
+body[data-view='home'] #homeView{width:min(1060px,100%)!important}
+body[data-view='home'] .home-v40-hero{grid-template-columns:minmax(0,1fr) 240px!important;min-height:265px!important}
+body[data-view='home'] .home-v40-copy{gap:10px!important}
+body[data-view='home'] .home-updated{
+  margin:0!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  gap:8px!important;
+  padding:8px 14px!important;
+  border-radius:999px!important;
+  background:rgba(255,255,255,.035)!important;
+  border:1px solid rgba(255,255,255,.08)!important;
+  color:#e7d9f7!important;
+  font-size:.88rem!important;
+  font-weight:800!important;
+  letter-spacing:.01em!important;
+}
+body[data-view='home'] .home-updated::before{content:'•';color:#74f0a8;font-size:1rem;line-height:1}
+body[data-view='home'] .home-v52-links{margin-top:4px!important;gap:12px!important}
+body[data-view='home'] .home-link-btn{
+  gap:9px!important;
+  padding:0 16px!important;
+  min-height:42px!important;
+  background:linear-gradient(180deg,rgba(25,17,34,.96),rgba(13,10,21,.98))!important;
+  border:1px solid rgba(255,164,78,.15)!important;
+}
+body[data-view='home'] .home-link-btn img{width:20px;height:20px;object-fit:contain;flex:none}
+body[data-view='home'] .home-link-btn span{display:block;line-height:1}
+body[data-view='home'] .home-v40-card{min-height:118px!important}
+
+/* no sticky moving top bar */
+body[data-view='values'] .page-header,
+body[data-view='calculator'] .calculator-v40-header{position:static!important;top:auto!important}
+
+/* cleaner values spacing */
+body[data-view='values'] .page-view{gap:18px!important}
+body[data-view='values'] .page-header{margin-bottom:10px!important}
+body[data-view='values'] .catalog-card{padding:24px!important}
+body[data-view='values'] .cards-grid{gap:22px!important}
+
+/* calculator refinements */
+body[data-view='calculator'] .trade-v40-side-head{align-items:flex-start!important}
+body[data-view='calculator'] .trade-v40-items{grid-template-columns:repeat(auto-fit,minmax(188px,188px))!important;gap:18px!important}
+body[data-view='calculator'] .trade-item-v40,
+body[data-view='calculator'] .trade-add-v40{width:188px!important;min-height:248px!important}
+body[data-view='calculator'] .trade-item-art-v40{height:128px!important}
+body[data-view='calculator'] .trade-item-art-v40 img{width:106px!important;height:106px!important;max-width:106px!important;max-height:106px!important}
+.trade-oc-note{display:block;color:#ffcf86;font-size:.72rem;font-weight:800;letter-spacing:.02em;margin-top:5px}
+body[data-view='calculator'] .trade-v40-total strong{white-space:nowrap}
+body[data-view='calculator'] .trade-v40-diff{position:static!important}
+
+/* history chart improved */
+.history-chart-shell{overflow:hidden}
+.history-segment{fill:none;stroke-width:3.5;stroke-linecap:round;filter:drop-shadow(0 0 8px rgba(0,0,0,.22))}
+.history-segment.is-up{stroke:#59f09c!important;filter:drop-shadow(0 0 10px rgba(89,240,156,.34))}
+.history-segment.is-down{stroke:#ff677a!important;filter:drop-shadow(0 0 10px rgba(255,103,122,.30))}
+.history-segment.is-neutral{stroke:#b98cff!important;filter:drop-shadow(0 0 8px rgba(185,140,255,.24))}
+.history-arrow circle{stroke-width:1.6;transition:transform .15s ease, filter .15s ease}
+.history-arrow text{font-size:10px;font-weight:900;paint-order:stroke fill;stroke-width:0}
+.history-arrow.is-up circle{fill:rgba(19,28,23,.92);stroke:#59f09c;filter:drop-shadow(0 0 9px rgba(89,240,156,.28))}
+.history-arrow.is-up text{fill:#86ffb7}
+.history-arrow.is-down circle{fill:rgba(34,18,21,.92);stroke:#ff677a;filter:drop-shadow(0 0 9px rgba(255,103,122,.24))}
+.history-arrow.is-down text{fill:#ff9baa}
+.history-arrow.is-neutral circle{fill:rgba(22,18,33,.92);stroke:#b98cff;filter:drop-shadow(0 0 9px rgba(185,140,255,.24))}
+.history-arrow.is-neutral text{fill:#dbc0ff}
+.history-arrow.is-last circle{stroke:#fff;stroke-width:2}
+
+@media (max-width: 900px){
+  body[data-view='home'] .home-v40-hero{grid-template-columns:1fr!important;min-height:auto!important}
+  body[data-view='home'] .home-v52-links{justify-content:center!important}
+  body[data-view='calculator'] .trade-v40-items{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  body[data-view='calculator'] .trade-item-v40,
+  body[data-view='calculator'] .trade-add-v40{width:auto!important}
+}
