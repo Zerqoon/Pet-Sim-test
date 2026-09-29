@@ -1,0 +1,161 @@
+/* v76 — calculator picker polish + calculator credits strip */
+
+/* calculator bottom marquee */
+body[data-view='calculator'] .credits-marquee-calculator{
+  margin-top: 14px;
+  margin-bottom: 2px;
+}
+body[data-view='calculator'] .credits-marquee-calculator .credits-marquee-track{
+  animation-duration: 30s;
+}
+
+/* picker polish */
+.calc-picker-modal{
+  width:min(1320px,calc(100% - 26px))!important;
+  max-height:min(900px,calc(100vh - 20px))!important;
+  border-radius:30px!important;
+  border:1px solid rgba(160,102,255,.18)!important;
+  background:linear-gradient(180deg,rgba(9,8,16,.985),rgba(7,6,13,.985))!important;
+  box-shadow:0 34px 80px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.05)!important;
+  overflow:hidden!important;
+}
+.calc-picker-modal::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 18% 16%, rgba(168,94,255,.12), transparent 28%),
+    radial-gradient(circle at 82% 88%, rgba(255,131,58,.10), transparent 24%),
+    linear-gradient(180deg, rgba(255,255,255,.02), transparent 24%);
+}
+.calc-picker-modal::-webkit-scrollbar{width:10px}
+.calc-picker-modal::-webkit-scrollbar-track{background:rgba(255,255,255,.03)}
+.calc-picker-modal::-webkit-scrollbar-thumb{background:linear-gradient(180deg,rgba(152,92,255,.8),rgba(99,57,168,.9));border-radius:999px;border:2px solid rgba(10,8,18,.95)}
+.calc-picker-close{
+  width:46px!important;height:46px!important;border-radius:16px!important;
+  background:rgba(255,255,255,.05)!important;border-color:rgba(255,255,255,.08)!important;
+  backdrop-filter:blur(10px);
+}
+.calc-picker-head{
+  padding:28px 76px 10px 28px!important;
+  grid-template-columns:minmax(0,1fr) minmax(340px,430px)!important;
+  gap:18px!important;
+  align-items:center!important;
+}
+.calc-picker-head > div{display:grid;gap:6px}
+.calc-picker-head .tool-label{letter-spacing:.22em!important}
+.calc-picker-head h2{margin:0!important;font-size:2.15rem!important;line-height:.96!important}
+.calc-picker-search{
+  min-height:52px!important;border-radius:16px!important;padding:0 14px!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.02))!important;
+  border:1px solid rgba(255,255,255,.08)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.04), 0 12px 28px rgba(0,0,0,.16)!important;
+}
+.calc-picker-search input{font-size:.98rem!important}
+.calc-picker-tabs{padding:10px 28px 16px!important;gap:10px!important}
+.calc-picker-tabs button{
+  min-height:42px!important;padding:0 16px!important;border-radius:13px!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.015))!important;
+  border:1px solid rgba(255,255,255,.07)!important;color:#d5cad8!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
+}
+.calc-picker-tabs button.active{
+  color:#fff!important;
+  background:linear-gradient(180deg,rgba(143,83,224,.36),rgba(88,47,152,.32))!important;
+  border-color:rgba(187,128,255,.42)!important;
+  box-shadow:0 10px 24px rgba(122,67,214,.24), inset 0 1px 0 rgba(255,255,255,.09)!important;
+}
+.calc-picker-grid{
+  padding:0 28px 28px!important;
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:14px!important;
+  align-content:start;
+}
+.calc-picker-card{
+  min-width:0;display:grid;gap:10px!important;
+  padding:12px!important;border-radius:22px!important;
+  border:1px solid color-mix(in srgb,var(--picker-rarity) 44%,rgba(255,255,255,.08))!important;
+  background:linear-gradient(180deg,rgba(24,18,31,.98),rgba(11,9,16,.98))!important;
+  box-shadow:0 18px 36px rgba(0,0,0,.24), inset 0 1px 0 rgba(255,255,255,.045)!important;
+}
+.calc-picker-card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 24px 42px rgba(0,0,0,.28), 0 0 0 1px color-mix(in srgb,var(--picker-rarity) 40%, transparent), inset 0 1px 0 rgba(255,255,255,.06)!important;
+}
+.calc-picker-art{
+  height:120px!important;border-radius:16px!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.012))!important;
+  position:relative;overflow:hidden;
+}
+.calc-picker-art::before{
+  content:'';position:absolute;left:12px;right:12px;bottom:8px;height:18px;border-radius:999px;
+  background:radial-gradient(circle, color-mix(in srgb,var(--picker-rarity) 38%, transparent), transparent 72%);
+  filter:blur(8px);opacity:.9;
+}
+.calc-picker-art::after{
+  content:'PETUNIVERSE'!important;
+  right:8px!important; bottom:8px!important;
+  padding:2px 7px!important; border-radius:999px!important;
+  font-size:.54rem!important; letter-spacing:.11em!important;
+  color:rgba(255,255,255,.18)!important; background:rgba(8,8,12,.22)!important;
+  border:1px solid rgba(255,255,255,.05)!important;
+}
+.calc-picker-art img{width:98px!important;height:98px!important;position:relative;z-index:1;object-fit:contain}
+.calc-picker-body{display:grid;gap:7px;min-width:0}
+.calc-picker-name{display:block;color:#fff7ef;font-size:1rem;line-height:1.12;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.calc-picker-meta{display:grid;gap:7px;align-items:center}
+.calc-picker-rarity{display:inline-flex;max-width:max-content;padding:0}
+.calc-picker-rarity .rarity-text{font-size:.73rem!important;font-weight:900!important}
+.calc-picker-value{
+  display:inline-flex!important;align-items:center;gap:5px;max-width:max-content;
+  margin:0!important;padding:0!important;color:#ffd97a!important;font-weight:900!important;font-size:.95rem!important;
+}
+.calc-picker-value img{width:16px;height:16px}
+.calc-picker-variants{
+  display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px!important;margin-top:2px!important;
+}
+.calc-picker-variant{
+  min-height:34px!important;border-radius:10px!important;
+  border:1px solid rgba(255,255,255,.07)!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.038),rgba(255,255,255,.018))!important;
+  color:#fff!important;font-size:.66rem!important;font-weight:850!important;
+}
+.calc-picker-variant:hover{border-color:color-mix(in srgb,var(--picker-rarity) 56%, rgba(255,255,255,.15))!important;background:rgba(255,255,255,.06)!important}
+.calc-picker-empty{
+  grid-column:1/-1;min-height:240px;border-radius:22px;padding:30px;
+  border:1px dashed rgba(255,255,255,.12);background:rgba(255,255,255,.018);display:grid;place-items:center;
+  color:var(--muted);text-align:center;
+}
+
+@media (max-width: 1300px){
+  .calc-picker-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+}
+@media (max-width: 1100px){
+  .calc-picker-head{grid-template-columns:1fr!important}
+  .calc-picker-search{max-width:none!important}
+  .calc-picker-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+}
+@media (max-width: 768px){
+  body[data-view='calculator'] .credits-marquee-calculator{margin-top:10px!important;margin-bottom:0!important}
+  .calc-picker-modal{
+    width:min(100%,calc(100% - 14px))!important;max-height:calc(100dvh - 10px)!important;border-radius:22px!important;
+  }
+  .calc-picker-close{width:42px!important;height:42px!important;top:10px!important;margin:10px 10px 0 0!important}
+  .calc-picker-head{padding:18px 60px 8px 16px!important;gap:10px!important}
+  .calc-picker-head h2{font-size:1.7rem!important}
+  .calc-picker-search{min-height:48px!important;border-radius:14px!important}
+  .calc-picker-tabs{padding:10px 16px 14px!important;display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px!important}
+  .calc-picker-tabs button{min-height:40px!important;padding:0 8px!important;font-size:.74rem!important}
+  .calc-picker-grid{padding:0 16px 18px!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
+  .calc-picker-card{padding:10px!important;border-radius:18px!important;gap:8px!important}
+  .calc-picker-art{height:104px!important;border-radius:14px!important}
+  .calc-picker-art img{width:88px!important;height:88px!important}
+  .calc-picker-name{font-size:.92rem!important;white-space:normal!important;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+  .calc-picker-value{font-size:.88rem!important}
+  .calc-picker-variant{min-height:32px!important;font-size:.62rem!important}
+}
+@media (max-width: 430px){
+  .calc-picker-grid{grid-template-columns:1fr!important}
+}

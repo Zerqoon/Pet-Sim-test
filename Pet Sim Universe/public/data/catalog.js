@@ -1,4 +1,4 @@
-export const LAST_UPDATED = '2026-09-27T18:20:00Z';
+export const LAST_UPDATED = '2026-09-29T22:02:57Z';
 
 
 
@@ -34,7 +34,7 @@ export const PETS = [
 
     id: 'ruby-nebula-star', name: 'Ruby Nebula Star', rarity: 'Exclusive', bestPct: 100,
 
-    source: '1M Event 1 in 150M',
+    source: '1M Event',
 
     description: 'Exclusive pet from the 1M Event.',
 

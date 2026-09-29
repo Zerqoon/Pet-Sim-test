@@ -1,9 +1,14 @@
-# Pet Universe Values v82 — płynność z wyglądem v78
+# Pet Universe Values v83 — płynność z wyglądem v78
 
 Cały projekt jest gotowy do wgrania. Zachowano układ v78, oba motywy,
 grafiki, efekty szkła, wszystkie kategorie, warianty, animowanego Pop Cata,
-okna szczegółów, kalkulator i funkcje Cloudflare D1. Dane katalogu i backend
-są takie same jak w załączonym projekcie.
+okna szczegółów, kalkulator i funkcje Cloudflare D1.
+
+Badge „1M Event” ma jasny niebieski gradient z czytelnym granatowym tekstem
+na karcie i w szczegółach. Ruby Nebula Star ma 100% Best Pet oraz wartość O/C,
+również w kalkulatorze. Pozostałe dane katalogu i backend zachowano.
+Poprawiono też kontrast tekstu szczegółów w jasnym motywie i pozycję
+mobilnych przycisków motywu oraz animacji, żeby nie zasłaniały kart.
 
 ## Uruchomienie lokalne
 
@@ -38,6 +43,7 @@ oraz `schema.sql` pozostają w projekcie.
 - Struktura HTML: `src/index.html`.
 - Wygląd: zachowane arkusze CSS w `public`, w dotychczasowej kolejności.
   Poprawki płynności są w `public/v82.css`.
+  Poprawki kontrastu i mobilnych przycisków są w `public/v83.css`.
 
 Nowe obrazki PNG można dodawać do `public/assets` i wskazywać w katalogu.
 Jeśli zmienisz oryginalny PNG, build od razu użyje nowej grafiki i nowego

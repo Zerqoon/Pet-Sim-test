@@ -8,15 +8,15 @@
   min-height:28px;
   padding:6px 10px;
   border-radius:999px;
-  border:1px solid rgba(120,205,255,.34);
-  background:linear-gradient(180deg, rgba(97,202,255,.95), rgba(35,119,255,.85));
-  color:#f7fcff;
+  border:1px solid rgba(173,230,255,.9);
+  background:linear-gradient(135deg, #dff6ff 0%, #abdfff 48%, #72bfff 100%);
+  color:#08345b;
   font-weight:900;
   font-size:.65rem;
   letter-spacing:.08em;
   text-transform:uppercase;
-  box-shadow:0 8px 18px rgba(28,113,255,.24), inset 0 1px 0 rgba(255,255,255,.22);
-  text-shadow:0 1px 0 rgba(9,18,52,.34);
+  box-shadow:0 8px 18px rgba(54,155,255,.22), inset 0 1px 0 rgba(255,255,255,.65);
+  text-shadow:0 1px 0 rgba(255,255,255,.45);
   z-index:5;
 }
 .event-badge{
