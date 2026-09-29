@@ -1,0 +1,131 @@
+/* v80-performance — performance only; desktop visuals preserved. */
+
+/* Let the browser skip painting content that is far outside the viewport. */
+.value-card,
+.code-row,
+.calc-picker-card,
+.trade-item-v40 {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 310px;
+}
+
+/* Pause expensive animation work when an observed component is fully offscreen. */
+.perf-offscreen,
+.perf-offscreen *,
+html[data-page-hidden] *,
+html[data-page-hidden] *::before,
+html[data-page-hidden] *::after {
+  animation-play-state: paused !important;
+}
+
+/* Keep composition on transforms/opacity so high-refresh screens can run at native refresh. */
+.home-orbit-ring,
+.credits-marquee-track,
+.card-image,
+.modal-image,
+.market-v69-glow,
+.value-card .card-button {
+  backface-visibility: hidden;
+}
+
+/* Only promote actively interactive cards, instead of pinning every card to a GPU layer. */
+.value-card .card-button:hover,
+.value-card .card-button:focus-visible {
+  will-change: transform;
+}
+
+/* Phone: explicit 3-column request, retaining the v78 visual language. */
+@media (max-width: 768px) {
+  body[data-view='values'] .cards-grid,
+  body[data-view='values'] .card-grid,
+  body[data-view='values'] .compact-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 7px !important;
+  }
+  body[data-view='values'] .catalog-card {
+    padding: 7px !important;
+  }
+  body[data-view='values'] .rarity-section {
+    padding: 7px !important;
+  }
+  body[data-view='values'] .value-card .card-button {
+    min-height: 0 !important;
+    grid-template-rows: 112px auto !important;
+    border-radius: 15px !important;
+  }
+  body[data-view='values'] .card-art {
+    min-height: 112px !important;
+  }
+  body[data-view='values'] .card-image,
+  body[data-view='values'] .animated-pop-card .pop-frame {
+    width: min(86%, 92px) !important;
+    height: 92px !important;
+  }
+  body[data-view='values'] .card-bottom {
+    padding: 7px !important;
+    gap: 7px !important;
+  }
+  body[data-view='values'] .card-title {
+    font-size: .68rem !important;
+    line-height: 1.08 !important;
+    min-height: 1.5em;
+  }
+  body[data-view='values'] .card-value-row {
+    gap: 4px !important;
+  }
+  body[data-view='values'] .card-value-row > span:first-child {
+    font-size: .47rem !important;
+  }
+  body[data-view='values'] .set-value {
+    min-height: 28px !important;
+    padding: 0 7px !important;
+    gap: 4px !important;
+    border-radius: 9px !important;
+    font-size: .65rem !important;
+  }
+  body[data-view='values'] .set-value img {
+    width: 13px !important;
+    height: 13px !important;
+  }
+  body[data-view='values'] .card-badges {
+    top: 6px !important;
+    left: 6px !important;
+    right: 6px !important;
+    gap: 4px !important;
+  }
+  body[data-view='values'] .rarity-badge,
+  body[data-view='values'] .best-badge,
+  body[data-view='values'] .event-badge,
+  body[data-view='values'] .exists-badge,
+  body[data-view='values'] .animated-badge {
+    font-size: .46rem !important;
+    min-height: 20px !important;
+    padding: 3px 5px !important;
+  }
+  body[data-view='values'] .event-badge {
+    top: 31px !important;
+    left: 6px !important;
+  }
+}
+
+@media (max-width: 430px) {
+  body[data-view='values'] .cards-grid,
+  body[data-view='values'] .card-grid,
+  body[data-view='values'] .compact-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+
+/* Composite only the few continuously moving decorative layers. */
+.star-layer::before,
+.star-layer::after,
+.ember-layer::before,
+.ember-layer::after {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+.detail-modal[open] .market-panel-v69::before,
+.detail-modal[open] .market-panel-v69::after,
+.detail-modal[open] .market-v69-glow {
+  will-change: transform, opacity, background-position;
+}

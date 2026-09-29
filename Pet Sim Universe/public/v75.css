@@ -1,0 +1,137 @@
+/* v75 — polished Home link buttons, no corner arrows */
+
+body[data-view='home'] .home-links-v72{
+  width:min(900px,100%)!important;
+  gap:12px!important;
+}
+
+body[data-view='home'] .home-links-v72 .home-link-btn{
+  position:relative!important;
+  min-height:76px!important;
+  padding:11px 14px!important;
+  grid-template-columns:50px minmax(0,1fr)!important;
+  gap:12px!important;
+  border-radius:20px!important;
+  border:1px solid rgba(255,255,255,.13)!important;
+  background:
+    radial-gradient(circle at 14% 18%,rgba(142,91,255,.12),transparent 34%),
+    linear-gradient(145deg,rgba(24,20,31,.92),rgba(11,12,19,.94))!important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.075),
+    inset 0 -1px 0 rgba(0,0,0,.30),
+    0 14px 34px rgba(0,0,0,.22)!important;
+  overflow:hidden!important;
+}
+
+/* Remove the old ↗ corner glyph completely. */
+body[data-view='home'] .home-links-v72 .home-link-btn::after{
+  content:none!important;
+  display:none!important;
+}
+
+body[data-view='home'] .home-links-v72 .home-link-btn::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:linear-gradient(110deg,transparent 0 42%,rgba(255,255,255,.035) 50%,transparent 58% 100%);
+  opacity:.65;
+}
+
+body[data-view='home'] .home-links-v72 .home-link-btn img{
+  position:relative;
+  z-index:1;
+  width:48px!important;
+  height:48px!important;
+  box-sizing:border-box;
+  padding:5px;
+  border-radius:14px!important;
+  border:1px solid rgba(255,255,255,.12);
+  background:linear-gradient(145deg,rgba(255,255,255,.09),rgba(255,255,255,.025));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 8px 20px rgba(0,0,0,.24);
+  object-fit:contain!important;
+  filter:none!important;
+}
+
+body[data-view='home'] .home-links-v72 .home-link-btn span{
+  position:relative;
+  z-index:1;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+  gap:4px!important;
+  min-width:0!important;
+}
+
+body[data-view='home'] .home-links-v72 .home-link-btn small{
+  font-size:.56rem!important;
+  line-height:1!important;
+  letter-spacing:.12em!important;
+  font-weight:900!important;
+  color:rgba(255,255,255,.48)!important;
+}
+
+body[data-view='home'] .home-links-v72 .home-link-btn strong{
+  font-size:.86rem!important;
+  line-height:1.16!important;
+  font-weight:850!important;
+  letter-spacing:-.01em!important;
+  color:#fff!important;
+  text-wrap:balance;
+}
+
+body[data-view='home'] .home-links-v72 .home-link-discord{
+  border-color:rgba(151,103,255,.24)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.075),0 14px 34px rgba(112,73,210,.10)!important;
+}
+body[data-view='home'] .home-links-v72 .home-link-game-v72{
+  border-color:rgba(111,229,194,.19)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.075),0 14px 34px rgba(58,191,153,.08)!important;
+}
+body[data-view='home'] .home-links-v72 .home-link-group{
+  border-color:rgba(177,95,255,.22)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.075),0 14px 34px rgba(146,74,210,.09)!important;
+}
+
+@media (hover:hover) and (pointer:fine){
+  body[data-view='home'] .home-links-v72 .home-link-btn:hover{
+    border-color:rgba(255,255,255,.22)!important;
+    background:
+      radial-gradient(circle at 14% 18%,rgba(142,91,255,.16),transparent 36%),
+      linear-gradient(145deg,rgba(30,25,39,.95),rgba(13,14,22,.96))!important;
+  }
+}
+
+[data-theme='light'] body[data-view='home'] .home-links-v72 .home-link-btn{
+  border-color:rgba(50,35,68,.10)!important;
+  background:linear-gradient(145deg,rgba(255,255,255,.95),rgba(247,243,250,.86))!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.95),0 12px 30px rgba(45,30,65,.08)!important;
+}
+[data-theme='light'] body[data-view='home'] .home-links-v72 .home-link-btn strong{color:#241d2b!important}
+[data-theme='light'] body[data-view='home'] .home-links-v72 .home-link-btn small{color:rgba(36,29,43,.50)!important}
+[data-theme='light'] body[data-view='home'] .home-links-v72 .home-link-btn img{border-color:rgba(44,31,60,.10);background:rgba(255,255,255,.70)}
+
+@media (max-width:768px){
+  body[data-view='home'] .home-links-v72{
+    grid-template-columns:1fr!important;
+    width:100%!important;
+    gap:8px!important;
+  }
+  body[data-view='home'] .home-links-v72 .home-link-btn{
+    min-height:66px!important;
+    grid-template-columns:44px minmax(0,1fr)!important;
+    padding:9px 11px!important;
+    gap:10px!important;
+    border-radius:17px!important;
+    transition:none!important;
+  }
+  body[data-view='home'] .home-links-v72 .home-link-btn::before{display:none!important}
+  body[data-view='home'] .home-links-v72 .home-link-btn img{
+    width:42px!important;
+    height:42px!important;
+    padding:4px!important;
+    border-radius:12px!important;
+  }
+  body[data-view='home'] .home-links-v72 .home-link-btn strong{font-size:.82rem!important}
+  body[data-view='home'] .home-links-v72 .home-link-btn small{font-size:.53rem!important}
+}
