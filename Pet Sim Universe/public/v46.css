@@ -1,0 +1,105 @@
+/* v46 — final heading colors, calculator 6-up grid, segmented history lines */
+
+/* Values top header spacing / look */
+body[data-view='values'] #valuesView{gap:24px!important}
+body[data-view='values'] .page-header{
+  margin-bottom:2px!important;
+  padding:24px 28px!important;
+  border-radius:32px!important;
+  background:linear-gradient(180deg,rgba(9,7,14,.98),rgba(8,6,12,.95))!important;
+}
+body[data-view='values'] .page-title-wrap h1{font-size:clamp(2.5rem,4vw,3.6rem)!important}
+body[data-view='values'] .page-tools{align-items:center!important;gap:16px!important}
+body[data-view='values'] .search-box,
+body[data-view='values'] .custom-sort,
+body[data-view='values'] .variant-switch,
+body[data-view='values'] .home-corner-btn{
+  border-radius:18px!important;
+  min-height:56px!important;
+}
+body[data-view='values'] .catalog-card{
+  margin-top:0!important;
+  padding:22px!important;
+  border-radius:30px!important;
+}
+
+/* Force desired section heading colors */
+.rarity-section-head h2{font-family:'Lilita One','Arial Rounded MT Bold',system-ui,sans-serif!important}
+.rarity-section-exclusive .rarity-section-head h2{
+  color:#e8bbff!important;
+  -webkit-text-fill-color:#e8bbff!important;
+  background:none!important;
+  background-image:none!important;
+  text-shadow:0 0 10px rgba(173,91,255,.22),0 2px 0 rgba(0,0,0,.36)!important;
+  -webkit-text-stroke:1px rgba(16,12,22,.9)!important;
+}
+.rarity-section-stat .rarity-section-head h2{
+  color:#ffffff!important;
+  -webkit-text-fill-color:#ffffff!important;
+  background:none!important;
+  background-image:none!important;
+  text-shadow:0 0 8px rgba(255,255,255,.12),0 2px 0 rgba(0,0,0,.36)!important;
+  -webkit-text-stroke:1px rgba(16,12,22,.9)!important;
+}
+
+/* Calculator: 6 items per row on desktop, wrap cleanly */
+body[data-view='calculator'] .trade-v40-side{min-height:560px!important}
+body[data-view='calculator'] .trade-v40-items{
+  display:grid!important;
+  grid-template-columns:repeat(6,minmax(0,1fr))!important;
+  gap:12px!important;
+  min-height:0!important;
+  align-content:start!important;
+}
+body[data-view='calculator'] .trade-item-v40,
+body[data-view='calculator'] .trade-add-v40{
+  width:auto!important;
+  min-width:0!important;
+  min-height:215px!important;
+  border-radius:22px!important;
+}
+body[data-view='calculator'] .trade-item-art-v40{
+  height:112px!important;
+  border-radius:18px!important;
+}
+body[data-view='calculator'] .trade-item-art-v40 img{
+  max-width:86%!important;
+  max-height:86%!important;
+}
+body[data-view='calculator'] .trade-item-copy-v40 strong{font-size:1rem!important;line-height:1.1!important}
+body[data-view='calculator'] .trade-item-copy-v40 small{font-size:.84rem!important}
+body[data-view='calculator'] .trade-item-copy-v40 span{font-size:1rem!important}
+body[data-view='calculator'] .trade-item-remove-v40{width:28px!important;height:28px!important}
+body[data-view='calculator'] .trade-add-v40 span{width:60px!important;height:60px!important;font-size:2.35rem!important}
+body[data-view='calculator'] .trade-add-v40 strong{font-size:.96rem!important}
+
+/* History segmented line colors */
+.history-segment{
+  fill:none;
+  stroke-width:3.25;
+  stroke-linecap:round;
+  opacity:.98;
+  filter:drop-shadow(0 0 6px rgba(0,0,0,.14));
+}
+.history-segment.is-up{stroke:#43f08c}
+.history-segment.is-down{stroke:#ff4e72}
+.history-segment.is-neutral{stroke:#b9b0c8}
+.history-point.is-up{fill:#43f08c!important;stroke:#dfffea!important}
+.history-point.is-down{fill:#ff4e72!important;stroke:#ffe2e8!important}
+.history-point.is-neutral{fill:#b9b0c8!important;stroke:#ffffff!important}
+.history-point.is-last.is-up,.history-focus-dot.is-up{fill:#43f08c!important;stroke:#f6fff9!important}
+.history-point.is-last.is-down,.history-focus-dot.is-down{fill:#ff4e72!important;stroke:#fff2f5!important}
+.history-point.is-last.is-neutral,.history-focus-dot.is-neutral{fill:#b9b0c8!important;stroke:#ffffff!important}
+
+@media (max-width: 1700px){
+  body[data-view='calculator'] .trade-v40-items{grid-template-columns:repeat(5,minmax(0,1fr))!important}
+}
+@media (max-width: 1480px){
+  body[data-view='calculator'] .trade-v40-items{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+}
+@media (max-width: 1220px){
+  body[data-view='calculator'] .trade-v40-items{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+}
+@media (max-width: 800px){
+  body[data-view='calculator'] .trade-v40-items{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}

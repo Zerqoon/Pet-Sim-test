@@ -1,0 +1,14 @@
+{
+  "name": "pet-universe-values-v82",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/validate.mjs && node scripts/build.mjs",
+    "validate": "node scripts/validate.mjs",
+    "dev": "npm run build && node scripts/serve.mjs",
+    "preview": "node scripts/serve.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

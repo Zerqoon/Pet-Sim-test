@@ -1,0 +1,31 @@
+/* v47 — force section heading colors exactly as requested */
+
+body[data-view='values'] .catalog-card .rarity-section.rarity-section-exclusive .rarity-section-head h2,
+body[data-view='values'] .catalog-card .rarity-section.rarity-section-exclusive .rarity-section-head > h2,
+body[data-view='values'] .catalog-card .rarity-section[data-rarity='exclusive'] .rarity-section-head h2{
+  color:#efc9ff !important;
+  -webkit-text-fill-color:#efc9ff !important;
+  background:none !important;
+  background-image:none !important;
+  -webkit-background-clip:border-box !important;
+  background-clip:border-box !important;
+  text-shadow:0 0 10px rgba(205,122,255,.20), 0 2px 0 rgba(0,0,0,.34) !important;
+  -webkit-text-stroke:1px rgba(18,14,24,.92) !important;
+  filter:none !important;
+}
+
+body[data-view='values'] .catalog-card .rarity-section.rarity-section-stat .rarity-section-head h2,
+body[data-view='values'] .catalog-card .rarity-section.rarity-section-stat .rarity-section-head > h2,
+body[data-view='values'] .catalog-card .rarity-section.rarity-section-stat[data-rarity='mythical'] .rarity-section-head h2{
+  color:#ffffff !important;
+  -webkit-text-fill-color:#ffffff !important;
+  background:none !important;
+  background-image:none !important;
+  -webkit-background-clip:border-box !important;
+  background-clip:border-box !important;
+  text-shadow:0 0 8px rgba(255,255,255,.14), 0 2px 0 rgba(0,0,0,.34) !important;
+  -webkit-text-stroke:1px rgba(18,14,24,.92) !important;
+  filter:none !important;
+}
+
+/* do not alter any card or border styles */

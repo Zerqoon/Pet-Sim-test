@@ -1,0 +1,33 @@
+/* v74 — final home cleanup: marquee credits + restored link cards */
+
+body[data-view='home'] .credits-marquee-bottom{
+  margin-bottom:0!important;
+}
+
+/* Keep the v72 link cards clear and balanced. */
+body[data-view='home'] .home-links-v72{
+  width:min(820px,100%)!important;
+}
+body[data-view='home'] .home-links-v72 .home-link-btn{
+  min-height:72px!important;
+}
+body[data-view='home'] .home-links-v72 .home-link-btn img{
+  width:42px!important;
+  height:42px!important;
+}
+
+@media (max-width:768px){
+  body[data-view='home'] .home-links-v72{
+    grid-template-columns:1fr!important;
+    gap:8px!important;
+  }
+  body[data-view='home'] .home-links-v72 .home-link-btn{
+    min-height:62px!important;
+    grid-template-columns:40px minmax(0,1fr)!important;
+    padding:9px 12px!important;
+  }
+  body[data-view='home'] .home-links-v72 .home-link-btn img{
+    width:36px!important;
+    height:36px!important;
+  }
+}
