@@ -40,7 +40,7 @@ export const PETS = [
 
     note: '1M EVENT.',
 
-    image: 'assets/pets/ruby-nebula-star.png', value: 'O/C,
+    image: 'assets/pets/ruby-nebula-star.png', value: 'O/C',
 
     eventBadge: '1M EVENT',
 
