@@ -1,0 +1,195 @@
+/* v79 — performance pass, render containment and 3-column mobile value grid */
+
+/* Skip paint/layout work for catalog content outside the viewport while retaining its size. */
+.value-card,
+.calc-picker-card,
+.trade-item-v40,
+.rarity-section,
+.code-row{
+  content-visibility:auto;
+}
+.value-card{contain-intrinsic-size:auto 280px}
+.calc-picker-card{contain-intrinsic-size:auto 240px}
+.trade-item-v40{contain-intrinsic-size:auto 220px}
+.rarity-section{contain-intrinsic-size:auto 700px}
+.code-row{contain-intrinsic-size:auto 72px}
+
+/* Infinite effects do not burn GPU while their block is well outside the viewport. */
+.perf-offscreen,
+.perf-offscreen *,
+.perf-offscreen::before,
+.perf-offscreen::after{
+  animation-play-state:paused!important;
+}
+
+/* Low-power mode keeps the same glass palette/geometry while dropping expensive live blur/3D work. */
+html[data-performance='lite'] .world-bg .star-layer,
+html[data-performance='lite'] .world-bg .ember-layer,
+html[data-performance='lite'] .world-bg .lava-orb,
+html[data-performance='lite'] .home-orbit-ring,
+html[data-performance='lite'] .card-art::after,
+html[data-performance='lite'] .credits-marquee-track{
+  animation-play-state:paused!important;
+}
+html[data-performance='lite'] .page-header,
+html[data-performance='lite'] .catalog-card,
+html[data-performance='lite'] .sidebar .side-card,
+html[data-performance='lite'] .calculator-v55-header,
+html[data-performance='lite'] .calculator-v55-panel,
+html[data-performance='lite'] .trade-v55-diff,
+html[data-performance='lite'] .calc-picker-modal,
+html[data-performance='lite'] .detail-modal,
+html[data-performance='lite'] .rarity-badge,
+html[data-performance='lite'] .best-badge,
+html[data-performance='lite'] .event-badge,
+html[data-performance='lite'] .modal-event-badge{
+  -webkit-backdrop-filter:none!important;
+  backdrop-filter:none!important;
+}
+html[data-performance='lite'] .card-button,
+html[data-performance='lite'] .home-link-btn,
+html[data-performance='lite'] .home-v40-card,
+html[data-performance='lite'] .calc-picker-card,
+html[data-performance='lite'] .trade-item-v40{
+  will-change:auto!important;
+}
+
+/* Mobile: requested 3 cards per row, compact rather than a different visual language. */
+@media (max-width:768px){
+  body[data-view='values'] .cards-grid{
+    gap:7px!important;
+  }
+  body[data-view='values'] .rarity-section{
+    padding:7px!important;
+    border-radius:17px!important;
+  }
+  body[data-view='values'] .rarity-section .card-grid,
+  body[data-view='values'] .compact-grid,
+  body[data-view='values'] .cards-grid > .card-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:7px!important;
+  }
+  body[data-view='values'] .value-card{
+    min-width:0!important;
+  }
+  body[data-view='values'] .value-card .card-button{
+    min-height:196px!important;
+    height:100%!important;
+    grid-template-rows:112px minmax(76px,auto)!important;
+    border-radius:16px!important;
+    padding:5px!important;
+  }
+  body[data-view='values'] .value-card .card-art{
+    min-height:108px!important;
+    height:108px!important;
+    border-radius:13px!important;
+  }
+  body[data-view='values'] .value-card .card-image,
+  body[data-view='values'] .value-card[data-id*='egg'] .card-image,
+  body[data-view='values'] .value-card[data-id*='charm'] .card-image{
+    width:min(88%,96px)!important;
+    height:91px!important;
+    max-width:96px!important;
+    max-height:91px!important;
+  }
+  body[data-view='values'] .animated-pop-card .pop-frame{
+    width:min(88%,96px)!important;
+    height:91px!important;
+  }
+  body[data-view='values'] .card-bottom{
+    padding:5px 3px 3px!important;
+    gap:6px!important;
+    min-width:0!important;
+  }
+  body[data-view='values'] .card-title{
+    min-height:28px!important;
+    font-size:.66rem!important;
+    line-height:1.13!important;
+    display:-webkit-box!important;
+    -webkit-box-orient:vertical!important;
+    -webkit-line-clamp:2!important;
+    overflow:hidden!important;
+  }
+  body[data-view='values'] .card-value-row{
+    gap:3px!important;
+    min-width:0!important;
+  }
+  body[data-view='values'] .card-value-row>span:first-child{
+    font-size:.43rem!important;
+    letter-spacing:.10em!important;
+  }
+  body[data-view='values'] .set-value{
+    min-width:0!important;
+    min-height:29px!important;
+    padding:4px 6px!important;
+    gap:3px!important;
+    border-radius:9px!important;
+  }
+  body[data-view='values'] .set-value img{
+    width:13px!important;
+    height:13px!important;
+  }
+  body[data-view='values'] .set-value strong{
+    font-size:.67rem!important;
+    white-space:nowrap!important;
+  }
+  body[data-view='values'] .card-badges{
+    top:6px!important;
+    left:6px!important;
+    right:6px!important;
+    gap:3px!important;
+  }
+  body[data-view='values'] .rarity-badge,
+  body[data-view='values'] .best-badge,
+  body[data-view='values'] .event-badge,
+  body[data-view='values'] .exists-badge,
+  body[data-view='values'] .animated-badge{
+    min-height:19px!important;
+    padding:3px 5px!important;
+    font-size:.43rem!important;
+    line-height:1!important;
+    border-radius:999px!important;
+  }
+  body[data-view='values'] .event-badge{
+    top:29px!important;
+    left:6px!important;
+  }
+  body[data-view='values'] .exists-badge,
+  body[data-view='values'] .card-animated-badge{
+    right:6px!important;
+    bottom:6px!important;
+  }
+  body[data-view='values'] .card-art::after{
+    font-size:.48rem!important;
+    letter-spacing:.12em!important;
+  }
+}
+
+/* Keep three columns even on narrow phones; compress further instead of falling to one. */
+@media (max-width:430px){
+  body[data-view='values'] .rarity-section .card-grid,
+  body[data-view='values'] .compact-grid,
+  body[data-view='values'] .cards-grid > .card-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:5px!important;
+  }
+  body[data-view='values'] .rarity-section{padding:5px!important}
+  body[data-view='values'] .value-card .card-button{
+    min-height:184px!important;
+    grid-template-rows:104px minmax(72px,auto)!important;
+    padding:4px!important;
+  }
+  body[data-view='values'] .value-card .card-art{height:100px!important;min-height:100px!important}
+  body[data-view='values'] .value-card .card-image,
+  body[data-view='values'] .value-card[data-id*='egg'] .card-image,
+  body[data-view='values'] .value-card[data-id*='charm'] .card-image,
+  body[data-view='values'] .animated-pop-card .pop-frame{
+    width:min(90%,86px)!important;
+    height:84px!important;
+  }
+  body[data-view='values'] .card-title{font-size:.60rem!important;min-height:26px!important}
+  body[data-view='values'] .card-value-row>span:first-child{display:none!important}
+  body[data-view='values'] .set-value{margin-left:auto!important;padding:4px 5px!important}
+  body[data-view='values'] .set-value strong{font-size:.62rem!important}
+  body[data-view='values'] .best-badge{max-width:52px!important;overflow:hidden!important;text-overflow:ellipsis!important}
+}
