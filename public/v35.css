@@ -1,0 +1,242 @@
+/* Pet Universe Values v35 — game-matched rarity palettes + D1 market panel */
+
+:root{
+  --rarity-exclusive:linear-gradient(120deg,#930fff 0%,#feddff 17%,#930fff 34%,#de22ff 50%,#9823ff 66%,#edc2ff 83%,#930fff 100%);
+  --rarity-mythical:linear-gradient(120deg,#ff00ae 0%,#ff0097 11%,#ff7dd2 22%,#ff0f3b 34%,#ffcfb9 46%,#ff8e0c 58%,#ffce78 70%,#fafbdd 81%,#f6fcb7 91%,#fff582 100%);
+  --rarity-secret:linear-gradient(120deg,#ffffff 0%,#c1c1c1 14%,#747474 29%,#b1b1b1 43%,#ffffff 57%,#6f6f6f 71%,#f1f1f1 86%,#a7a7a7 100%);
+}
+
+/* Exact rarity color sequences supplied from the game. */
+.value-card[data-rarity='exclusive']{--rarity:#930fff;--rarity-gradient:var(--rarity-exclusive)!important}
+.value-card[data-rarity='mythical']{--rarity:#ff00ae;--rarity-gradient:var(--rarity-mythical)!important}
+.value-card[data-rarity='secret']{--rarity:#c1c1c1;--rarity-gradient:var(--rarity-secret)!important}
+
+.rarity-section[data-rarity='exclusive']{--section-color:#930fff;--section-gradient:var(--rarity-exclusive)!important}
+.rarity-section[data-rarity='mythical']{--section-color:#ff00ae;--section-gradient:var(--rarity-mythical)!important}
+.rarity-section[data-rarity='secret']{--section-color:#c1c1c1;--section-gradient:var(--rarity-secret)!important}
+
+.rarity-section[data-rarity='exclusive'],
+.rarity-section[data-rarity='mythical'],
+.rarity-section[data-rarity='secret']{
+  border:1px solid transparent!important;
+  background:
+    radial-gradient(circle at 88% 4%,color-mix(in srgb,var(--section-color) 10%,transparent),transparent 28%) padding-box,
+    linear-gradient(180deg,rgba(15,12,18,.80),rgba(9,8,12,.82)) padding-box,
+    var(--section-gradient) border-box!important;
+  box-shadow:0 18px 52px rgba(0,0,0,.16),inset 0 1px 0 rgba(255,255,255,.035)!important;
+}
+
+.value-card[data-rarity='exclusive'] .card-button,
+.value-card[data-rarity='mythical'] .card-button,
+.value-card[data-rarity='secret'] .card-button{
+  border:1px solid transparent!important;
+  background:
+    radial-gradient(circle at var(--mx,50%) var(--my,15%),rgba(255,255,255,.095),transparent 29%) padding-box,
+    linear-gradient(180deg,rgba(25,21,29,.96),rgba(12,10,15,.96)) padding-box,
+    var(--rarity-gradient) border-box!important;
+  box-shadow:0 16px 38px rgba(0,0,0,.28),0 0 24px color-mix(in srgb,var(--rarity) 7%,transparent),inset 0 1px 0 rgba(255,255,255,.055)!important;
+}
+.value-card[data-rarity='exclusive'] .card-button:hover,
+.value-card[data-rarity='mythical'] .card-button:hover,
+.value-card[data-rarity='secret'] .card-button:hover{
+  box-shadow:0 24px 52px rgba(0,0,0,.34),0 0 32px color-mix(in srgb,var(--rarity) 15%,transparent),inset 0 1px 0 rgba(255,255,255,.08)!important;
+}
+
+.value-card[data-rarity='exclusive'] .card-art{
+  background:radial-gradient(circle at 50% 24%,rgba(222,34,255,.22),transparent 42%),linear-gradient(180deg,rgba(147,15,255,.075),rgba(255,255,255,.018))!important;
+}
+.value-card[data-rarity='mythical'] .card-art{
+  background:radial-gradient(circle at 50% 24%,rgba(255,0,174,.20),transparent 40%),radial-gradient(circle at 70% 70%,rgba(255,142,12,.08),transparent 32%),linear-gradient(180deg,rgba(255,15,59,.055),rgba(255,255,255,.018))!important;
+}
+.value-card[data-rarity='secret'] .card-art{
+  background:radial-gradient(circle at 50% 24%,rgba(255,255,255,.16),transparent 40%),linear-gradient(180deg,rgba(177,177,177,.075),rgba(255,255,255,.016))!important;
+}
+
+.value-card[data-rarity='exclusive'] .rarity-badge,
+.value-card[data-rarity='mythical'] .rarity-badge,
+.value-card[data-rarity='secret'] .rarity-badge,
+.detail-modal[data-rarity='exclusive'] .modal-rarity,
+.detail-modal[data-rarity='mythical'] .modal-rarity,
+.detail-modal[data-rarity='secret'] .modal-rarity{
+  background:var(--rarity-gradient)!important;
+  border-color:rgba(255,255,255,.42)!important;
+  color:#fff!important;
+  text-shadow:0 1px 3px rgba(0,0,0,.78)!important;
+  box-shadow:0 9px 22px rgba(0,0,0,.24),0 0 18px color-mix(in srgb,var(--rarity) 18%,transparent)!important;
+}
+.value-card[data-rarity='secret'] .rarity-badge,
+.detail-modal[data-rarity='secret'] .modal-rarity{
+  color:#fff!important;
+  text-shadow:0 1px 2px #000,0 0 5px rgba(0,0,0,.7)!important;
+}
+
+.detail-modal[data-rarity='exclusive']{--modal-rarity:#930fff;--rarity-gradient:var(--rarity-exclusive)!important}
+.detail-modal[data-rarity='mythical']{--modal-rarity:#ff00ae;--rarity-gradient:var(--rarity-mythical)!important}
+.detail-modal[data-rarity='secret']{--modal-rarity:#c1c1c1;--rarity-gradient:var(--rarity-secret)!important}
+.detail-modal[data-rarity='exclusive'],
+.detail-modal[data-rarity='mythical'],
+.detail-modal[data-rarity='secret']{
+  border:1px solid transparent!important;
+  background:linear-gradient(#0d0b10,#0d0b10) padding-box,var(--rarity-gradient) border-box!important;
+  box-shadow:0 40px 110px rgba(0,0,0,.68),0 0 48px color-mix(in srgb,var(--modal-rarity) 14%,transparent)!important;
+}
+.detail-modal[data-rarity='exclusive'] .modal-visual{
+  background:radial-gradient(circle at 52% 58%,rgba(147,15,255,.29),transparent 30%),radial-gradient(circle at 18% 8%,rgba(254,221,255,.11),transparent 28%),linear-gradient(180deg,#170b1c,#0c0910 72%)!important;
+}
+.detail-modal[data-rarity='mythical'] .modal-visual{
+  background:radial-gradient(circle at 52% 58%,rgba(255,0,174,.22),transparent 30%),radial-gradient(circle at 70% 82%,rgba(255,142,12,.14),transparent 28%),linear-gradient(180deg,#1d0a14,#0c0910 72%)!important;
+}
+.detail-modal[data-rarity='secret'] .modal-visual{
+  background:radial-gradient(circle at 52% 58%,rgba(255,255,255,.13),transparent 30%),radial-gradient(circle at 18% 8%,rgba(193,193,193,.09),transparent 28%),linear-gradient(180deg,#171719,#0b0b0d 72%)!important;
+}
+
+/* v35 market history panel */
+.market-panel-v35{
+  gap:14px!important;
+  padding:17px!important;
+  border:1px solid transparent!important;
+  border-radius:20px!important;
+  background:
+    radial-gradient(circle at 92% 0%,color-mix(in srgb,var(--modal-rarity) 13%,transparent),transparent 37%) padding-box,
+    linear-gradient(165deg,rgba(255,255,255,.048),rgba(255,255,255,.018)) padding-box,
+    var(--rarity-gradient) border-box!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.045),0 18px 38px rgba(0,0,0,.12)!important;
+}
+.market-panel-v35::before{display:none!important}
+.market-head-v35{align-items:flex-start!important}
+.history-subtitle{margin:5px 0 0!important;color:var(--subtle)!important;font-size:.69rem!important;line-height:1.45!important}
+
+.market-summary-v35{gap:9px!important}
+.market-summary-v35 .history-stat{
+  min-height:72px!important;
+  padding:11px 12px!important;
+  border-radius:14px!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(0,0,0,.10))!important;
+  border:1px solid rgba(255,255,255,.055)!important;
+}
+.history-stat-current{
+  border-color:color-mix(in srgb,var(--modal-rarity) 18%,rgba(255,255,255,.05))!important;
+  background:radial-gradient(circle at 100% 0%,color-mix(in srgb,var(--modal-rarity) 11%,transparent),transparent 50%),linear-gradient(180deg,rgba(255,255,255,.05),rgba(0,0,0,.10))!important;
+}
+.market-summary-v35 .history-stat strong{font-size:1.04rem!important}
+.market-summary-v35 .history-stat small{font-size:.61rem!important}
+
+.history-toolbar-v35{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px}
+.history-toolbar-v35 .history-range{min-width:0}
+.history-last-updated{white-space:nowrap;color:var(--subtle);font-size:.64rem;font-weight:800;letter-spacing:.02em}
+
+.market-chart-v35{
+  min-height:238px!important;
+  overflow:hidden!important;
+  border-radius:17px!important;
+  border:1px solid rgba(255,255,255,.06)!important;
+  background:
+    radial-gradient(circle at 72% 16%,color-mix(in srgb,var(--modal-rarity) 7%,transparent),transparent 34%),
+    linear-gradient(180deg,rgba(255,255,255,.025),rgba(0,0,0,.14))!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.025)!important;
+}
+.market-chart-v35::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.014) 1px,transparent 1px);
+  background-size:32px 32px;
+  mask-image:linear-gradient(180deg,rgba(0,0,0,.62),transparent 95%);
+}
+.history-chart{position:relative;z-index:1;min-height:238px!important;touch-action:pan-y}
+.history-line{stroke-width:3.5!important;filter:drop-shadow(0 0 8px color-mix(in srgb,var(--modal-rarity) 30%,transparent))!important}
+.history-point{fill:#131118!important;stroke:var(--modal-rarity)!important;stroke-width:2!important}
+.history-point.is-last{fill:var(--modal-rarity)!important;stroke:#fff!important;stroke-width:2.4!important;filter:drop-shadow(0 0 8px color-mix(in srgb,var(--modal-rarity) 55%,transparent))!important}
+.history-crosshair{stroke:rgba(255,255,255,.28);stroke-width:1;stroke-dasharray:4 5;pointer-events:none}
+.history-focus-dot{fill:var(--modal-rarity);stroke:#fff;stroke-width:2.2;filter:drop-shadow(0 0 7px color-mix(in srgb,var(--modal-rarity) 55%,transparent));pointer-events:none}
+.history-first-snapshot rect{fill:rgba(12,10,15,.86);stroke:color-mix(in srgb,var(--modal-rarity) 38%,rgba(255,255,255,.08));stroke-width:1}
+.history-first-snapshot text{fill:#f6f4f7;font-size:10px;font-weight:900;letter-spacing:.01em}
+
+.history-empty{min-height:238px!important;position:relative;z-index:2}
+.history-empty-icon{width:42px;height:42px;margin:0 auto 4px;border-radius:14px;display:grid;place-items:center;background:color-mix(in srgb,var(--modal-rarity) 14%,rgba(255,255,255,.035));border:1px solid color-mix(in srgb,var(--modal-rarity) 22%,rgba(255,255,255,.05));font-size:1.4rem;color:var(--modal-rarity)}
+.history-empty code{font:inherit;color:var(--text);font-weight:850}
+
+.history-tooltip-v35{
+  position:absolute;
+  z-index:5;
+  min-width:130px;
+  padding:9px 11px;
+  border-radius:12px;
+  pointer-events:none;
+  background:rgba(10,9,13,.94);
+  border:1px solid color-mix(in srgb,var(--modal-rarity) 32%,rgba(255,255,255,.08));
+  box-shadow:0 12px 26px rgba(0,0,0,.36),0 0 18px color-mix(in srgb,var(--modal-rarity) 9%,transparent);
+  backdrop-filter:blur(12px);
+}
+.history-tooltip-v35 strong,.history-tooltip-v35 span{display:block}
+.history-tooltip-v35 strong{font-size:.92rem;color:#fff}
+.history-tooltip-v35 span{margin-top:2px;color:var(--muted);font-size:.62rem;font-weight:700}
+.history-tooltip-v35[hidden]{display:none!important}
+
+.history-footer-v35{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.history-footer-v35 .history-hint{flex:1;min-width:0}
+.history-live-key{flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;color:var(--subtle);font-size:.61rem;font-weight:800}
+.history-live-key i{width:6px;height:6px;border-radius:50%;background:#72e6a1;box-shadow:0 0 8px rgba(114,230,161,.6)}
+
+/* Prevent null values from visually looking like zero. */
+.history-status.is-offline{color:#b9bec8!important}
+
+html[data-theme='light'] .rarity-section[data-rarity='exclusive'],
+html[data-theme='light'] .rarity-section[data-rarity='mythical'],
+html[data-theme='light'] .rarity-section[data-rarity='secret']{
+  background:linear-gradient(180deg,rgba(255,255,255,.92),rgba(255,249,244,.84)) padding-box,var(--section-gradient) border-box!important;
+}
+html[data-theme='light'] .value-card[data-rarity='exclusive'] .card-button,
+html[data-theme='light'] .value-card[data-rarity='mythical'] .card-button,
+html[data-theme='light'] .value-card[data-rarity='secret'] .card-button{
+  background:radial-gradient(circle at var(--mx,50%) var(--my,15%),rgba(255,255,255,.86),transparent 32%) padding-box,linear-gradient(180deg,#fffaf6,#fff3e8) padding-box,var(--rarity-gradient) border-box!important;
+}
+html[data-theme='light'] .market-panel-v35{
+  background:radial-gradient(circle at 92% 0%,color-mix(in srgb,var(--modal-rarity) 8%,transparent),transparent 37%) padding-box,linear-gradient(165deg,rgba(255,255,255,.94),rgba(255,247,239,.82)) padding-box,var(--rarity-gradient) border-box!important;
+}
+html[data-theme='light'] .market-chart-v35{background:radial-gradient(circle at 72% 16%,color-mix(in srgb,var(--modal-rarity) 6%,transparent),transparent 34%),linear-gradient(180deg,#fff,#fff8f1)!important}
+html[data-theme='light'] .history-first-snapshot rect{fill:rgba(255,255,255,.95)}
+html[data-theme='light'] .history-first-snapshot text{fill:#2a1711}
+html[data-theme='light'] .history-tooltip-v35{background:rgba(255,250,246,.96)}
+html[data-theme='light'] .history-tooltip-v35 strong{color:#2a1711}
+
+@media(max-width:760px){
+  .history-toolbar-v35{grid-template-columns:1fr}
+  .history-last-updated{white-space:normal;padding-left:2px}
+  .history-footer-v35{align-items:flex-start;flex-direction:column}
+  .history-live-key{align-self:flex-end}
+}
+@media(max-width:650px){
+  .market-panel-v35{padding:13px!important}
+  .market-summary-v35{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .market-chart-v35,.history-chart,.history-empty{min-height:218px!important}
+  .history-tooltip-v35{min-width:116px;padding:8px 9px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .rarity-badge,.modal-rarity{background-size:100% 100%!important}
+}
+
+@keyframes rarityFlowV35{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+.value-card[data-rarity='exclusive'] .rarity-badge,
+.value-card[data-rarity='mythical'] .rarity-badge,
+.value-card[data-rarity='secret'] .rarity-badge,
+.detail-modal[data-rarity='exclusive'] .modal-rarity,
+.detail-modal[data-rarity='mythical'] .modal-rarity,
+.detail-modal[data-rarity='secret'] .modal-rarity{
+  background-size:240% 240%!important;
+  animation:rarityFlowV35 7s ease-in-out infinite!important;
+}
+html[data-motion='off'] .rarity-badge,
+html[data-motion='off'] .modal-rarity{
+  animation:none!important;
+  background-size:100% 100%!important;
+}
+@media(prefers-reduced-motion:reduce){
+  .rarity-badge,.modal-rarity{animation:none!important;background-size:100% 100%!important}
+}
