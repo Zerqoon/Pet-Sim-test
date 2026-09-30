@@ -178,7 +178,7 @@ export const PETS = [
 
     note: 'Only 700 exist.', exists: 700,
 
-    image: 'assets/pets/job-cat-v30.png', value: 180,
+    image: 'assets/pets/job-cat-v30.png', value: 'O/C',
 
   },
 
