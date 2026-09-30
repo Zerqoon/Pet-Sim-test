@@ -51,7 +51,7 @@
   <link rel="stylesheet" href="./v78.css" />
   <link rel="stylesheet" href="./v82.css" />
   <link rel="stylesheet" href="./v83.css" />
-  <link rel="stylesheet" href="./v86.css" />
+  <link rel="stylesheet" href="./v87.css" />
   <link rel="modulepreload" href="./data/catalog.js" />
   <link rel="modulepreload" href="./data/prices.js" />
 </head>
@@ -236,17 +236,17 @@
         <header class="calculator-v55-header">
           <div class="calculator-v55-title">
             <h1>Trade Calculator <span>⇄</span></h1>
-            <p>Compare trades and see the difference instantly.</p>
+            <p>Build both offers, compare their values, and save your trade as an image.</p>
           </div>
           <div class="calculator-v55-actions">
             <div class="trade-status-switch" id="tradeStatusSwitch" aria-label="Trade status">
-              <span class="trade-status-segment is-win" data-trade-status="win">W</span>
+              <span class="trade-status-segment is-win" data-trade-status="win">WIN</span>
               <span class="trade-status-segment is-fair active" data-trade-status="fair">FAIR</span>
-              <span class="trade-status-segment is-lose" data-trade-status="lose">L</span>
+              <span class="trade-status-segment is-lose" data-trade-status="lose">LOSS</span>
             </div>
             <button class="calc-top-btn" type="button" data-view-target="home"><span>Home</span></button>
-            <button class="calc-top-btn" type="button" id="shareTrade">Share Trade</button>
-            <button class="calc-top-btn calc-clear-btn" type="button" data-clear-trade><span>Clear Trade</span></button>
+            <button class="calc-top-btn" type="button" id="saveTradeImage">Save Trade Image</button>
+            <button class="calc-top-btn calc-clear-btn" type="button" data-clear-trade><span>Reset Offers</span></button>
           </div>
         </header>
 
@@ -255,9 +255,9 @@
             <section class="trade-v55-side" data-side="left">
               <div class="trade-v55-side-head">
                 <div>
-                  <span class="tool-label">MY OFFER</span>
+                  <span class="tool-label">YOU GIVE</span>
                   <h2>My Offer</h2>
-                  <small class="trade-oc-note" id="calcLeftOcNote" hidden>Includes O/C item</small>
+                  <small class="trade-oc-note" id="calcLeftOcNote" hidden>Includes O/C or unpriced items</small>
                 </div>
                 <span class="trade-v40-total"><img src="assets/items/value-ticket.png" alt="" /><strong id="calcLeftTotal">0</strong></span>
               </div>
@@ -274,15 +274,15 @@
                 <div class="trade-v42-diff-value"><img src="assets/items/value-ticket.png" alt="Ticket" /><b id="calcDifference">0</b></div>
                 <small id="calcDifferenceLabel">Even trade</small>
               </div>
-              <button type="button" class="trade-swap-btn" data-swap-trade>⇄ <span>Swap Offers</span></button>
+              <button type="button" class="trade-swap-btn" data-swap-trade>⇄ <span>Swap Sides</span></button>
             </aside>
 
             <section class="trade-v55-side" data-side="right">
               <div class="trade-v55-side-head">
                 <div>
-                  <span class="tool-label">OTHER OFFER</span>
-                  <h2>Other Offer</h2>
-                  <small class="trade-oc-note" id="calcRightOcNote" hidden>Includes O/C item</small>
+                  <span class="tool-label">YOU RECEIVE</span>
+                  <h2>Their Offer</h2>
+                  <small class="trade-oc-note" id="calcRightOcNote" hidden>Includes O/C or unpriced items</small>
                 </div>
                 <span class="trade-v40-total"><img src="assets/items/value-ticket.png" alt="" /><strong id="calcRightTotal">0</strong></span>
               </div>
@@ -357,7 +357,7 @@
 
         <section class="value-panel">
           <span id="modalValueLabel">Value</span>
-          <div><img id="modalValueIcon" src="assets/items/value-ticket.png" alt="Ticket" /><strong id="modalValue">Set value</strong></div>
+          <div><img id="modalValueIcon" src="assets/items/value-ticket.png" alt="Ticket" /><strong id="modalValue">Not priced</strong></div>
         </section>
 
         <section id="modalHistoryArea" class="history-panel market-panel-v68 market-panel-v69" aria-labelledby="historyTitle">
@@ -404,7 +404,6 @@
           </div>
         </section>
 
-        <button class="share-pet-btn" type="button" id="sharePet">Copy Pet Link</button>
         <p id="modalNote" class="modal-note" hidden></p>
       </section>
     </div>
@@ -427,6 +426,11 @@
   </dialog>
 
   <script type="module" src="./app.js"></script>
-<p id="shareLinkStatus" class="share-link-status" role="status" hidden></p>
+<p id="exportStatus" class="export-status" role="status" hidden></p>
+<dialog id="tradeExportDialog" class="trade-export-dialog" aria-labelledby="tradeExportTitle">
+  <div class="trade-export-heading"><div><h2 id="tradeExportTitle">Your Trade Snapshot</h2><p>Save the PNG and send it on Discord or anywhere you like.</p></div><button type="button" id="closeTradeExport" aria-label="Close image preview">×</button></div>
+  <div id="tradeExportDownloads" class="trade-export-downloads"></div>
+  <img id="tradeExportPreview" alt="Trade snapshot showing both offers and their listed values" />
+</dialog>
 </body>
 </html>
