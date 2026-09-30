@@ -29,7 +29,7 @@ export const PRICES = {
     // Fallen Angel
     "fallen-angel": 500,
     // Job Cat
-    "job-cat": "O/C",
+    "job-cat": 200,
     // Galaxy Bunny
     "galaxy-bunny": 20,
     // Galaxy Cat
