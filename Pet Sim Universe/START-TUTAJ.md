@@ -1,4 +1,4 @@
-# Pet Universe Values v85
+# Pet Universe Values v86
 
 ZIP zawiera gotowy folder **Pet Sim Universe**. W repozytorium umiesc ten folder z jego zawartoscia, zachowujac nazwe. Nie wgrywaj zawartosci public bezposrednio do glownego katalogu repozytorium.
 
@@ -31,3 +31,9 @@ Otworz PowerShell w folderze Pet Sim Universe i uruchom `npm run dev`. Wejdz na 
 ## Blad ze zdjecia
 
 `curl 56 GnuTLS recv error`, `early EOF` oraz `Failed ... fetching repository` oznaczaja przerwane pobieranie repozytorium przez Cloudflare przed buildem. Ponow wdrozenie. Zmiana plikow projektu nie naprawia tego bledu transferu.
+
+## Udostepnianie
+
+Copy Pet Link w szczegolach kopiuje link do przedmiotu i wariantu. Share Trade w kalkulatorze kopiuje obie oferty, ilosci, warianty i Tickets. Link dziala na Cloudflare Pages i w lokalnym podgladzie bez dodatkowej bazy. Ceny sa pobierane z aktualnego prices.js po otwarciu strony. Link nie zapisuje cen z dnia udostepnienia. Informacje Exist usunieto z danych, kart i szczegolow.
+
+Niepoprawne linki nie zmieniaja ofert. Limit udostepniania: 200 pozycji na strone, 10000 sztuk na pozycje, 10^15 Tickets.

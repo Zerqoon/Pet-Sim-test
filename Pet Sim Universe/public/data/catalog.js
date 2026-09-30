@@ -21,9 +21,7 @@ export const PETS = [
 
     source: 'Release PACK',
 
-    description: '250 Exist Only, Release PACK.',
-
-    note: '250 Exist Only.', exists: 250,
+    description: 'Exclusive pet from the Release PACK.',
 
     image: 'assets/pets/rich-bee.png', compactValue: true,
 
@@ -163,8 +161,6 @@ export const PETS = [
 
     source: 'Pack 1.0 Update', description: 'Limited Exclusive pet from Pack 1.0 Update.',
 
-    note: 'Only 500 exist.', exists: 500,
-
     image: 'assets/pets/fallen-angel.png',
 
   },
@@ -174,8 +170,6 @@ export const PETS = [
     id: 'job-cat', name: 'Job Cat', rarity: 'Exclusive', bestPct: 60,
 
     source: 'Pack 2.0 Update', description: '60% Best Pet from Pack 2.0 Update.',
-
-    note: 'Only 700 exist.', exists: 700,
 
     image: 'assets/pets/job-cat-v30.png',
 

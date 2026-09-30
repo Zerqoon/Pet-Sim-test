@@ -14,8 +14,8 @@
     } catch (_) {}
   </script>
   <link rel="icon" type="image/png" href="assets/ui/category-pets.png" />
-  <link rel="stylesheet" href="./bundle/styles-128c3bca93c007.css" />
-  <link rel="modulepreload" href="./bundle/app-1964fe40306478.js" />
+  <link rel="stylesheet" href="./bundle/styles-03ecd10e150739.css" />
+  <link rel="modulepreload" href="./bundle/app-836c30051b7a2e.js" />
   <link rel="modulepreload" href="./data/catalog.js" />
   <link rel="modulepreload" href="./data/prices.js" />
 </head>
@@ -209,6 +209,7 @@
               <span class="trade-status-segment is-lose" data-trade-status="lose">L</span>
             </div>
             <button class="calc-top-btn" type="button" data-view-target="home"><span>Home</span></button>
+            <button class="calc-top-btn" type="button" id="shareTrade">Share Trade</button>
             <button class="calc-top-btn calc-clear-btn" type="button" data-clear-trade><span>Clear Trade</span></button>
           </div>
         </header>
@@ -306,7 +307,6 @@
           <div class="detail-box"><span>Source</span><strong id="modalSource">—</strong></div>
           <div class="detail-box" id="modalMapRow"><span>Map</span><strong id="modalMap">—</strong></div>
           <div class="detail-box" id="modalChanceRow"><span>Egg Chance</span><strong id="modalChance">—</strong></div>
-          <div class="detail-box" id="modalExistsRow"><span>Exists</span><strong id="modalExists">—</strong></div>
         </div>
 
         <section id="modalDropArea" class="detail-section" hidden>
@@ -368,6 +368,7 @@
           </div>
         </section>
 
+        <button class="share-pet-btn" type="button" id="sharePet">Copy Pet Link</button>
         <p id="modalNote" class="modal-note" hidden></p>
       </section>
     </div>
@@ -389,6 +390,7 @@
     <div class="calc-picker-grid" id="calcPickerGrid"></div>
   </dialog>
 
-  <script type="module" src="./bundle/app-1964fe40306478.js"></script>
+  <script type="module" src="./bundle/app-836c30051b7a2e.js"></script>
+<p id="shareLinkStatus" class="share-link-status" role="status" hidden></p>
 </body>
 </html>

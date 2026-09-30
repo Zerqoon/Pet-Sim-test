@@ -1,3 +1,4 @@
+import { tradeHash, itemHash, readSharedRoute } from './data/share-links.js';
 import { PETS, CHARMS, EGGS, ITEMS, CODES, RARITY_ORDER, LAST_UPDATED } from './data/catalog.js';
 import { IMAGE_ASSETS } from './data/image-assets.js';
 
@@ -379,9 +380,6 @@ async function loadValueHistory() {
   }
 }
 
-function formatExists(exists) {
-  return exists == null ? '' : `${integerFormat.format(exists)} exist`;
-}
 
 function supportsVariant(item, variant) {
   if (variant === 'normal') return true;
@@ -471,7 +469,6 @@ function card(item, index = 0) {
         </div>
         ${item.eventBadge ? `<span class="event-badge">${item.eventBadge}</span>` : ''}
         ${isAnimated(item) ? '<span class="animated-badge card-animated-badge">▶ Animated</span>' : ''}
-        ${item.exists != null ? `<span class="exists-badge">${formatExists(item.exists)}</span>` : ''}
         ${art}
       </div>
       <div class="card-bottom">
@@ -997,8 +994,6 @@ function openModal(item) {
   $('#modalMap').textContent = item.map || '';
   $('#modalChanceRow').hidden = isCode || !item.hatchChance;
   $('#modalChance').textContent = item.hatchChance || '';
-  $('#modalExistsRow').hidden = isCode || item.exists == null;
-  $('#modalExists').textContent = item.exists != null ? new Intl.NumberFormat('en-US').format(item.exists) : '';
 
   $('#modalDropArea').hidden = isCode || !item.dropSources?.length;
   $('#modalSourceGallery').innerHTML = item.dropSources?.length ? dropSourcesMarkup(item.dropSources) : '';
@@ -1330,6 +1325,60 @@ syncTheme();
 refreshHomeUpdated();
 setInterval(refreshHomeUpdated, 60000);
 render();
+
+let shareMessageTimer;
+function showShareMessage(message) {
+  const status = $('#shareLinkStatus');
+  status.textContent = message;
+  status.hidden = false;
+  clearTimeout(shareMessageTimer);
+  shareMessageTimer = setTimeout(() => { status.hidden = true; }, 5000);
+}
+async function copySharedLink(button, hash) {
+  const url = new URL(window.location.href);
+  url.hash = hash;
+  const label = button.textContent;
+  if (await copyText(url.href)) {
+    button.textContent = 'Link copied!';
+    setTimeout(() => { button.textContent = label; }, 1800);
+  } else {
+    window.prompt('Copy this link:', url.href);
+  }
+}
+function restoreSharedLink() {
+  try {
+    const route = readSharedRoute(window.location.hash, catalogs);
+    if (!route) return;
+    if ($('#detailModal').open) closeModal();
+    if ($('#calcPickerModal').open) $('#calcPickerModal').close();
+    if (route.type === 'trade') {
+      state.calc = route.trade;
+      state.view = 'calculator';
+      render();
+      showShareMessage('Shared trade loaded. Values use current prices.');
+    } else {
+      state.view = 'values';
+      state.category = route.category;
+      state.variant = route.variant;
+      state.query = '';
+      $('#searchInput').value = '';
+      render();
+      openModal(route.item);
+    }
+  } catch (_) {
+    showShareMessage('This shared link is invalid or contains an unavailable item.');
+  }
+}
+$('#shareTrade').addEventListener('click', async event => {
+  try { await copySharedLink(event.currentTarget, tradeHash(state.calc, catalogs)); }
+  catch (_) { showShareMessage('Check the offer quantities and ticket amounts before sharing.'); }
+});
+$('#sharePet').addEventListener('click', event => {
+  if (state.modalItem) copySharedLink(event.currentTarget, itemHash(state.category, state.modalItem.id, state.modalVariant));
+});
+window.addEventListener('hashchange', restoreSharedLink);
+restoreSharedLink();
+
 fetch('/api/snapshot', { method: 'POST', headers: { accept: 'application/json' } }).catch(() => {});
 
 

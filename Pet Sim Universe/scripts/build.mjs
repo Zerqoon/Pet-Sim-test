@@ -32,6 +32,7 @@ const imageModule = `const IMAGE_ASSETS = ${JSON.stringify(assets)};`;
 // work even when Pages publishes the existing bundle without running a build.
 const app = (await readFile(path.join(publicRoot,'app.js'),'utf8'))
   .replace(/from (['"])\.\/data\/catalog\.js\1/g, "from '../data/catalog.js'")
+  .replace(/from (['"])\.\/data\/share-links\.js\1/g, "from '../data/share-links.js'")
   .replace(/^import .*? from (['"])\.\/data\/image-assets\.js\1;\s*$/gm, '');
 const javascript = `// Generated from data/image-assets.js and app.js; prices import ../data/catalog.js.\n${imageModule}\n${app}`;
 const cssName=`styles-${hash(css)}.css`;

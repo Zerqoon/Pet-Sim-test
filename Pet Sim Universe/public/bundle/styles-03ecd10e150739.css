@@ -9828,3 +9828,10 @@ html[data-theme='light'] #detailModal #modalNote {
     z-index: auto !important;
   }
 }
+
+.share-pet-btn { margin-top: 12px; padding: 10px 16px; border: 1px solid var(--modal-rarity, #a66bff); border-radius: 12px; background: rgba(166,107,255,.10); color: inherit; font: inherit; font-weight: 700; cursor: pointer; }
+.share-pet-btn:hover { background: rgba(166,107,255,.20); }
+.share-pet-btn:focus-visible { outline: 2px solid var(--modal-rarity, #a66bff); outline-offset: 3px; }
+.share-link-status { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 100; max-width: min(90vw, 520px); margin: 0; padding: 12px 18px; border: 1px solid #a66bff; border-radius: 12px; background: #171221; color: #fff; box-shadow: 0 8px 24px #0005; font-size: 14px; }
+.share-link-status[hidden] { display: none; }
+.calculator-v55-actions { flex-wrap: wrap; }
