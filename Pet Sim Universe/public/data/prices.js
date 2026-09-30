@@ -5,21 +5,21 @@ export const PRICES = {
 
   pets: {
     // RICH BEE
-    "rich-bee": 2000,
+    "rich-bee": "3.5k",
     // Ruby Nebula Star
     "ruby-nebula-star": "O/C",
     // Universe Capybara
     "universe-capybara": "O/C",
     // Alien Emperor
-    "alien-emperor": "7.5K",
+    "alien-emperor": "7K",
     // Caaaaat
-    "caaaaat": "3.5K",
+    "caaaaat": "3K",
     // Exquisite Cat
-    "exquisite-cat": "1.3K",
+    "exquisite-cat": "1.2K",
     // Happy Cupcake
-    "happy-cupcake": "1.4K",
+    "happy-cupcake": "1.3K",
     // Six Seven!
-    "six-seven": "1.5K",
+    "six-seven": "1.4K",
     // Void Owl
     "void-owl": 350,
     // Sun Deer
@@ -29,7 +29,7 @@ export const PRICES = {
     // Fallen Angel
     "fallen-angel": 500,
     // Job Cat
-    "job-cat": "O/C",
+    "job-cat": 150,
     // Galaxy Bunny
     "galaxy-bunny": 20,
     // Galaxy Cat
@@ -37,19 +37,19 @@ export const PRICES = {
     // Pop Cat
     "pop-cat": 25,
     // Queen Bee
-    "queen-bee": {"normal":350,"golden":null,"diamond":null},
+    "queen-bee": {"normal":400,"golden":"No Price","diamond":"No Price"},
     // Blaze Phoenix
-    "blaze-phoenix": {"normal":450,"golden":null,"diamond":null},
+    "blaze-phoenix": {"normal":350,"golden":900,"diamond":null},
     // Mossy Mushroom
-    "mossy-mushroom": {"normal":295,"golden":950,"diamond":null},
+    "mossy-mushroom": {"normal":250,"golden":850,"diamond":3500},
     // Throne Dragon
-    "throne-dragon": {"normal":150,"golden":null,"diamond":null},
+    "throne-dragon": {"normal":150,"golden":"No Price","diamond":"No Price"},
     // Ruby Majesty
-    "ruby-majesty": {"normal":null,"golden":null,"diamond":null},
+    "ruby-majesty": {"normal":40,"golden":195,"diamond":950},
     // Ember Monster
-    "ember-monster": {"normal":50,"golden":250,"diamond":900},
+    "ember-monster": {"normal":30,"golden":150,"diamond":750},
     // Shadow Dominus
-    "shadow-dominus": {"normal":15,"golden":75,"diamond":325},
+    "shadow-dominus": {"normal":15,"golden":75,"diamond":"No Price"},
     // Imp
     "imp": {"normal":5,"golden":25,"diamond":115},
     // Grove Seeker
@@ -68,13 +68,13 @@ export const PRICES = {
     // Rubies Charm IV
     "rubies-charm-iv": 325,
     // Hatch Charm IV
-    "hatch-charm-iv": 200,
+    "hatch-charm-iv": 175,
     // Critical Charm IV
-    "critical-charm-iv": 295,
+    "critical-charm-iv": 200,
     // Luck Charm IV
-    "luck-charm-iv": 300,
+    "luck-charm-iv": 225,
     // Coins Charm IV
-    "coins-charm-iv": 200,
+    "coins-charm-iv": 175,
     // Hatch Charm III
     "hatch-charm-iii": 20,
     // Critical Charm III
