@@ -1,0 +1,104 @@
+/* v82: same v78 layout, gradients and glass, less work per display frame. */
+
+/* The old custom-property spin no longer affected the final card background.
+   The new highlight rotates a painted layer instead of repainting gradients. */
+#cardsGrid .value-card .card-button,
+#calcPickerGrid .calc-picker-card {
+  animation: none !important;
+}
+#calcPickerGrid .calc-picker-card { position: relative; }
+.rarity-sheen {
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  border-radius: inherit;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 5;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+}
+.rarity-sheen::before {
+  content: '';
+  position: absolute;
+  inset: -70%;
+  background: conic-gradient(transparent 0 14%, rgba(255,255,255,.24) 20%, transparent 27% 64%, color-mix(in srgb,var(--rarity,var(--picker-rarity)) 36%,transparent) 70%, transparent 77% 100%);
+  animation: raritySheen82 8s linear infinite;
+}
+@keyframes raritySheen82 { to { transform: rotate(360deg); } }
+#calcPickerGrid .calc-picker-card:is([data-rarity='exclusive'],[data-rarity='mythical'],[data-rarity='secret']) .rarity-sheen::before {
+  background: var(--picker-conic);
+  animation-duration: 6s;
+}
+
+/* Completed entrances should release their compositor layers. */
+#cardsGrid .value-card {
+  opacity: 1;
+  animation-fill-mode: backwards;
+}
+
+/* Pause only continuous effects outside the screen. Every card and its layout
+   still exist; no content-visibility or paint clipping is used for the list. */
+.value-card[data-offscreen] .rarity-sheen::before,
+.value-card[data-offscreen] .card-art::after,
+.value-card[data-offscreen] .pop-frame,
+.calc-picker-card[data-offscreen] .rarity-sheen::before,
+.calc-picker-card[data-offscreen] .calc-picker-art::after {
+  animation-play-state: paused !important;
+}
+html[data-page-hidden] *,
+html[data-page-hidden] *::before,
+html[data-page-hidden] *::after { animation-play-state: paused !important; }
+
+/* Keep the same fade/slide without animating blur on the entire catalog. */
+@keyframes v29CatalogSwap {
+  from { opacity: .28; transform: translateY(14px) scale(.992); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Market Pulse retains its moving texture, rendered once and translated. */
+#modalHistoryArea::after {
+  background: linear-gradient(118deg,rgba(255,255,255,.065),transparent 20%,transparent 68%,color-mix(in srgb,var(--modal-rarity) 6%,transparent));
+  animation: none;
+}
+.market-scan {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+.market-scan::before {
+  content: '';
+  position: absolute;
+  inset: 0 -76px;
+  background: repeating-linear-gradient(90deg,transparent 0 36px,rgba(255,255,255,.012) 37px,transparent 38px);
+  animation: marketScan82 8s ease-in-out infinite alternate;
+}
+@keyframes marketScan82 {
+  from { transform: translateX(-38px); }
+  to { transform: translateX(38px); }
+}
+
+/* Promote the small moving layers, not every glass panel or full-size card. */
+.card-art::after,
+.star-layer::before,
+.star-layer::after,
+.ember-layer::before,
+.ember-layer::after,
+.market-scan::before { will-change: transform; }
+
+.card-ambient,
+.render-floor,
+.render-reflection { pointer-events: none; }
+
+@media (max-width: 768px) {
+  .rarity-sheen::before,
+  .market-scan::before { animation-play-state: paused; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rarity-sheen::before,
+  .market-scan::before { animation: none !important; }
+}
