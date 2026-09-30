@@ -1,4 +1,4 @@
-# Pet Universe Values v84 — aktualne ceny z GitHuba
+# Pet Universe Values v85 — aktualne ceny z GitHuba
 
 Cały projekt jest gotowy do wgrania. Zachowano układ v78, oba motywy,
 grafiki, efekty szkła, wszystkie kategorie, warianty, animowanego Pop Cata,
@@ -12,7 +12,7 @@ mobilnych przycisków motywu oraz animacji, żeby nie zasłaniały kart.
 
 ## Zmiana cen bezpośrednio na GitHubie
 
-Edytuj `Pet Sim Universe/public/data/catalog.js`, zapisz commit na gałęzi
+Edytuj `Pet Sim Universe/public/data/prices.js`, zapisz commit na gałęzi
 produkcyjnej i poczekaj na udane wdrożenie Cloudflare. Po zwykłym odświeżeniu
 strony nowe ceny pojawią się na kartach, w szczegółach i w kalkulatorze.
 Nie trzeba lokalnie przebudowywać projektu po zmianie samych cen.
@@ -23,11 +23,11 @@ Ta sama paczka JS działa z nowym katalogiem, także gdy Cloudflare pomija build
 Kod, style i zoptymalizowane obrazy nadal korzystają z długiego cache.
 Istniejąca otwarta karta pobierze nowe dane po jej odświeżeniu.
 
-- Pety bez wariantów, charms, eggs i items: pole `value`, np. `2500`, `'2.5K'`
+- Pety bez wariantów, charms, eggs i items: wartość przy identyfikatorze, np. `2500`, `'2.5K'`
   lub `'O/C'`.
-- Pety z wariantami: `values.normal`, `values.golden`, `values.diamond`.
-- `displayValue` nie zasłania już nowej ceny: skrócony zapis RICH BEE jest
-  obliczany z bieżącego `value`, więc wystarczy zmienić samą wartość.
+- Pety z wariantami: `normal`, `golden`, `diamond`.
+- Skrócony zapis RICH BEE jest
+  obliczany z bieżącej ceny, więc wystarczy zmienić samą wartość.
 
 ## Uruchomienie lokalne
 
@@ -57,7 +57,8 @@ oraz `schema.sql` pozostają w projekcie.
 
 ## Edycja cen i wyglądu
 
-- Ceny, pety, opisy i warianty: `public/data/catalog.js`.
+- Ceny: `public/data/prices.js`.
+- Pety, opisy, procenty i grafiki: `public/data/catalog.js`.
 - Kod działania: `public/app.js`.
 - Struktura HTML: `src/index.html`.
 - Wygląd: zachowane arkusze CSS w `public`, w dotychczasowej kolejności.
@@ -72,10 +73,10 @@ Po zmianie kodu, CSS, HTML lub oryginalnych grafik uruchom `npm run build`.
 Build waliduje dane i grafiki, a następnie tworzy jeden arkusz CSS i paczkę JS
 z kodem oraz mapą obrazów. Katalog pozostaje osobnym plikiem źródłowym.
 Nie edytuj plików w `public/bundle` ręcznie — powstają z plików źródłowych.
-Do zmiany samych cen wystarcza edycja `public/data/catalog.js` i wdrożenie.
+Do zmiany samych cen wystarcza edycja `public/data/prices.js` i wdrożenie.
 
 Zmiana kodu tworzy nową nazwę pliku JS; zmiana wyglądu tworzy nową nazwę CSS.
-Ceny mają stały adres `data/catalog.js` i są pobierane bez przechowywania
+Ceny mają stały adres `data/prices.js` i są pobierane bez przechowywania
 w cache przeglądarki. Dołączone `_headers` nadal pozwala buforować kod i grafiki
 długo, ale każe przeglądarce sprawdzać aktualny HTML. Po nowym deployu
 wystarcza zwykłe odświeżenie; Ctrl+Shift+R nie jest wymagane.
