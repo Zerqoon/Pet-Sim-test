@@ -21,21 +21,21 @@
   flex: 0 0 auto !important;
   min-height: 32px !important;
   height: auto !important;
-  padding: 7px 12px !important;
+  padding: 6px 11px !important;
   border: 1px solid rgba(255,255,255,.42) !important;
-  border-radius: 999px !important;
-  background: var(--badge-fill) !important;
+  border-radius: 7px !important;
+  background: linear-gradient(180deg,rgba(255,255,255,.32) 0%,rgba(255,255,255,.08) 46%,rgba(0,0,0,.035) 47%,rgba(0,0,0,.075) 100%), var(--badge-fill) !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
   color: var(--badge-ink) !important;
   -webkit-text-fill-color: var(--badge-ink) !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.35), 0 3px 10px rgba(0,0,0,.18) !important;
-  font-family: inherit !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.6), inset 0 -2px 0 rgba(0,0,0,.15), 0 2px 0 rgba(0,0,0,.22), 0 3px 7px rgba(0,0,0,.15) !important;
+  font-family: 'Segoe UI', system-ui, sans-serif !important;
   font-size: .78rem !important;
-  font-weight: 700 !important;
+  font-weight: 600 !important;
   line-height: 1.1 !important;
   letter-spacing: .01em !important;
-  text-transform: uppercase !important;
+  text-transform: none !important;
   white-space: nowrap !important;
   animation: none !important;
   filter: none !important;
@@ -188,4 +188,43 @@ html[data-mobile-scrolling] .credits-marquee-track { animation-play-state: pause
 @media(max-width:768px) {
  .event-badge,.modal-event-badge { font-size:.6rem !important; min-height:25px !important; padding:5px 8px !important; }
  .event-badge { top:40px !important; left:9px !important; }
+}
+
+/* v91: anniversary uses the same compact plaque construction. */
+.event-badge, .modal-event-badge {
+ border-radius:7px !important;
+ background:linear-gradient(180deg,#ddf5ff 0%,#a2ddff 46%,#83cefb 47%,#62bcef 100%) !important;
+ box-shadow:inset 0 1px 0 #ffffffb3,inset 0 -2px 0 #176a9b33,0 2px 0 #092c4840,0 3px 7px #05213b26 !important;
+ font-family:'Segoe UI',system-ui,sans-serif !important;
+ font-weight:600 !important; letter-spacing:.015em !important;
+ text-transform:none !important;
+}
+
+/* v92: local rounded game lettering; no synthetic bold or text distortion. */
+@font-face {
+ font-family:'Pet Badge';
+ src:url('./assets/fonts/fredoka-variable.ttf') format('truetype');
+ font-style:normal; font-weight:300 700; font-display:swap;
+}
+#cardsGrid .value-card[data-rarity] .rarity-badge,
+#calcPickerGrid .calc-picker-card[data-rarity] .calc-picker-rarity,
+#detailModal[data-rarity] .modal-rarity,
+.event-badge,.modal-event-badge {
+ font-family:'Pet Badge',system-ui,sans-serif !important;
+ font-weight:600 !important; font-synthesis:none !important;
+ font-size:.84rem !important; line-height:1.08 !important;
+ letter-spacing:.035em !important; text-transform:uppercase !important;
+ text-shadow:0 1px 0 rgba(255,255,255,.22) !important;
+ -webkit-text-stroke:0 !important; font-variation-settings:'wdth' 100 !important;
+}
+#cardsGrid .value-card[data-rarity] .rarity-badge .rarity-text,
+#calcPickerGrid .calc-picker-card[data-rarity] .calc-picker-rarity .rarity-text,
+#detailModal[data-rarity] .modal-rarity .rarity-text {
+ font-family:inherit !important; font-weight:inherit !important;
+ letter-spacing:inherit !important; text-shadow:inherit !important;
+}
+@media(max-width:768px) {
+ #cardsGrid .value-card[data-rarity] .rarity-badge,
+ #calcPickerGrid .calc-picker-card[data-rarity] .calc-picker-rarity {font-size:.71rem !important;}
+ .event-badge,.modal-event-badge {font-size:.66rem !important;}
 }
