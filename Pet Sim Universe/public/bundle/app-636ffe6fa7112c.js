@@ -536,19 +536,29 @@ function renderCompact(list) {
   return `<div class="card-grid compact-grid compact-grid-${state.category}">${list.map(card).join('')}</div>`;
 }
 
+function escapeCodeMarkup(value) {
+  return String(value ?? '').replace(/[&<>"']/g, character => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+  })[character]);
+}
+
 function renderCodes(list) {
   return `<div class="codes-list">${list.map((item, index) => {
     const status = String(item.status || 'active').toLowerCase();
     const expired = status === 'expired';
+    const code = escapeCodeMarkup(item.code);
     return `
-    <article class="code-row ${expired ? 'is-expired' : 'is-active'}" data-id="${item.id}" style="--delay:${Math.min(index, 12) * 34}ms;">
+    <article class="code-row ${expired ? 'is-expired' : 'is-active'}" data-id="${escapeCodeMarkup(item.id)}" style="--delay:${Math.min(index, 12) * 34}ms;">
+      <span class="code-row-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M4 5.5h16v4a2.5 2.5 0 0 0 0 5v4H4v-4a2.5 2.5 0 0 0 0-5v-4Z"/><path d="m9.5 9-3 3 3 3m5-6 3 3-3 3"/></svg>
+      </span>
       <div class="code-row-main">
-        <strong class="code-row-code">${item.code}</strong>
+        <strong class="code-row-code">${code}</strong>
+        <span class="code-row-status"><i aria-hidden="true"></i>${expired ? 'Expired' : 'Active'}</span>
       </div>
-      <span class="code-row-status"><i></i>${expired ? 'Expired' : 'Active'}</span>
-      <button class="code-copy-button copy-code-btn" type="button" data-code="${item.code}" aria-label="${expired ? 'Expired code' : `Copy ${item.code}`}" ${expired ? 'disabled' : ''}>
-        <span class="copy-icon">${expired ? '×' : '⧉'}</span>
-        <strong>${expired ? 'Expired' : 'Copy code'}</strong>
+      <button class="code-copy-button copy-code-btn" type="button" data-code="${code}" aria-label="${expired ? `Expired code ${code}` : `Copy ${code}`}" ${expired ? 'disabled' : ''}>
+        <svg class="copy-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="3"/><path d="M15 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h3"/></svg>
+        <strong aria-live="polite">${expired ? 'Expired' : 'Copy code'}</strong>
       </button>
     </article>`;
   }).join('')}</div>`;
@@ -636,7 +646,11 @@ function renderCatalog(list) {
   }
   const host = $('#cardsGrid');
   if (list.length) reconcileChildren(host, roots);
-  else host.replaceChildren(elementFromMarkup('<div class="empty-results"><strong>No matches found</strong><p>Try another name or pet variant.</p><button type="button" id="clearFilters">Clear filters</button></div>'));
+  else {
+    const hint = state.category === 'codes' ? 'Try another code.'
+      : state.category === 'pets' ? 'Try another name or pet variant.' : 'Try another item name.';
+    host.replaceChildren(elementFromMarkup(`<div class="empty-results"><strong>No matches found</strong><p>${hint}</p><button type="button" id="clearFilters">Clear filters</button></div>`));
+  }
   syncVisibleAnimations();
 }
 
@@ -644,6 +658,7 @@ function render() {
   document.body.dataset.view = state.view;
   const homeView = $('#homeView');
   const valuesView = $('#valuesView');
+  valuesView.dataset.category = state.category;
   const calculatorView = $('#calculatorView');
   const categoryNav = $('#categoryNav');
 
@@ -663,6 +678,15 @@ function render() {
   const list = filtered();
   const [kicker, title, placeholder] = categoryMeta[state.category];
   const petsMode = state.category === 'pets';
+  const codesMode = state.category === 'codes';
+
+  // Fit Items to complete rows; CSS selects the column count for the viewport.
+  if (state.category === 'items') {
+    const panel = $('.catalog-card', valuesView);
+    for (const columns of [2, 3, 6]) {
+      panel.style.setProperty(`--items-columns-${columns}`, Math.min(columns, list.length || columns));
+    }
+  }
 
   $('#sectionKicker').textContent = kicker;
   $('#sectionTitle').textContent = title;
@@ -672,11 +696,17 @@ function render() {
   const variantTools = $('#variantTools');
   variantTools.hidden = !petsMode;
   $('.page-tools').classList.toggle('no-variants', !petsMode);
+  $('#customSort').hidden = codesMode;
+  // Codes has a single search row; keep Home in the title corner.
+  const homeButton = $('.home-corner-btn', valuesView);
+  const homeHost = $(codesMode ? '.page-header' : '.page-tools', valuesView);
+  if (homeButton.parentElement !== homeHost) homeHost.append(homeButton);
 
   const catalogLabel = $('#catalogLabel');
-  catalogLabel.textContent = state.category === 'codes' ? '' : (petsMode ? 'Pet Collection' : title);
-  catalogLabel.hidden = state.category === 'codes';
-  $('.catalog-meta').classList.toggle('codes-meta', state.category === 'codes');
+  catalogLabel.textContent = codesMode ? 'Game codes' : (petsMode ? 'Pet Collection' : title);
+  catalogLabel.hidden = false;
+  $('#codesHint').hidden = !codesMode;
+  $('.catalog-meta').classList.toggle('codes-meta', codesMode);
 
   const petOnlySorts = new Set(['best-desc', 'best-asc']);
   $$('.sort-option').forEach(option => {
@@ -1127,6 +1157,7 @@ function toggleSortMenu(forceOpen = null) {
   trigger.setAttribute('aria-expanded', String(willOpen));
 }
 
+const copyFeedbackTimers = new WeakMap();
 document.addEventListener('click', event => {
   if (event.target.closest('#clearFilters')) {
     state.query = ''; state.variant = 'normal';
@@ -1136,12 +1167,20 @@ document.addEventListener('click', event => {
   if (copyButton) {
     event.preventDefault();
     event.stopPropagation();
+    if (copyButton.disabled || copyButton.dataset.copyState === 'pending') return;
+    clearTimeout(copyFeedbackTimers.get(copyButton));
+    copyButton.dataset.copyState = 'pending';
     copyText(copyButton.dataset.code || '').then(ok => {
       const strong = copyButton.querySelector('strong');
       if (!strong) return;
-      const previous = strong.textContent;
+      copyButton.dataset.copyState = ok ? 'copied' : 'failed';
       strong.textContent = ok ? 'Copied!' : 'Copy failed';
-      setTimeout(() => { strong.textContent = previous; }, 1200);
+      copyButton.setAttribute('aria-label', ok ? `Copied ${copyButton.dataset.code}` : 'Copy failed. Try again.');
+      copyFeedbackTimers.set(copyButton, setTimeout(() => {
+        delete copyButton.dataset.copyState;
+        strong.textContent = 'Copy code';
+        copyButton.setAttribute('aria-label', `Copy ${copyButton.dataset.code}`);
+      }, 1600));
     });
     return;
   }
