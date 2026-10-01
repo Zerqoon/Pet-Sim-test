@@ -98,11 +98,11 @@ try {
     // Seed the real production prices. There is no fake price-change message.
     try {
       const response = await fetch(workerUrl + '/check', { method: 'POST', headers: { authorization: `Bearer ${monitorKey}` }, signal: AbortSignal.timeout(20000) });
-      if (!response.ok) throw new Error('First check unavailable.');
+      if (!response.ok) throw new Error(`Pierwszy odczyt: HTTP ${response.status}. ${await response.text()}`);
       const status = await response.json();
       if (status.busy) console.log('Monitor jest juz uruchomiony przez cron.');
       else console.log(`Sprawdzono ${status.checked ?? 0} cen. Kolejka powiadomien: ${status.pending ?? 0}.`);
-    } catch { console.log('Worker wdrozony. Pierwszy odczyt wykona cron; sprawdz logi, jesli nie ruszy.'); }
+    } catch (error) { throw new Error(`Worker wdrozony, ale odczyt NIE zostal potwierdzony: ${error.message}`); }
     await writeFile(path.join(configDirectory, 'monitor-info.json'), JSON.stringify({ url: workerUrl, site: site.origin }, null, 2) + '\n');
   }
   console.log('GOTOWE: monitor jest wdrozony. Cron sprawdza ceny co minute.');

@@ -11,14 +11,18 @@ import { existsSync } from 'node:fs';
 // HTTP is replaced; these tests never send anything to a Discord channel.
 function d1() {
   const sql = new DatabaseSync(':memory:');
+  let queries = 0;
+  const count = args => { assert.ok(args.length <= 100, 'D1 bound parameter limit'); if (++queries > 50) throw new Error('D1 Free query limit exceeded'); };
   const db = {
+    resetBudget() { queries = 0; },
+    get queryCount() { return queries; },
     prepare(text) {
       let args = [];
       const statement = {
         bind(...values) { args = values; return statement; },
-        async run() { const result = sql.prepare(text).run(...args); return { success: true, meta: { changes: Number(result.changes) } }; },
-        async all() { return { results: sql.prepare(text).all(...args) }; },
-        async first() { return sql.prepare(text).get(...args) || null; },
+        async run() { count(args); const result = sql.prepare(text).run(...args); return { success: true, meta: { changes: Number(result.changes) } }; },
+        async all() { count(args); return { results: sql.prepare(text).all(...args) }; },
+        async first() { count(args); return sql.prepare(text).get(...args) || null; },
       };
       return statement;
     },
@@ -42,6 +46,7 @@ function fixture() {
   const env = { MONITOR_DB: d1(), DISCORD_WEBHOOK_URL: 'https://discord.com/api/webhooks/123456789012345678/test_token', MONITOR_KEY: 'test-secret-key', SITE_URL: 'https://petuniverse-values.pl' };
   const fetcher = async (url, options = {}) => {
     requests.push({ url, options });
+    assert.equal(options.redirect, 'manual', 'Workers supports manual or follow redirects');
     if (new URL(url).hostname === 'petuniverse-values.pl') {
       if (feedFailure) return new Response('Failure', { status: 503 });
       assert.equal(options.cache, 'no-store');
@@ -55,7 +60,7 @@ function fixture() {
     return Response.json({ id: 'message-id' });
   };
   return {
-    env, messages, requests, run: () => runMonitor(env, { fetcher, clock: () => time }),
+    env, messages, requests, run: () => { env.MONITOR_DB.resetBudget(); return runMonitor(env, { fetcher, clock: () => time }); },
     setRows: value => { rows = value; }, getRows: () => structuredClone(rows),
     price: value => { rows[0].value = value; }, failure: value => { failure = value; },
     failFeed: value => { feedFailure = value; }, advance: (ms = 60000) => { time += ms; }, close: () => env.MONITOR_DB.close(),
@@ -79,8 +84,10 @@ test('first check seeds prices; one actual change has image, 30K → 25K and War
     f.price('25K'); f.advance();
     assert.equal((await f.run()).sent, 1);
     const embed = f.messages[0].embeds[0];
-    assert.equal(embed.description, '**30K → 25K**');
-    assert.equal(embed.image.url, 'https://petuniverse-values.pl/assets/pets/job-cat-v30.png');
+    assert.match(embed.description, /\*\*30K → 25K\*\*/);
+    assert.equal(embed.image, undefined);
+    assert.equal(embed.fields[0].value, '**30K**');
+    assert.equal(embed.thumbnail.url, 'https://petuniverse-values.pl/assets/pets/job-cat-v30.png');
     assert.equal(embed.timestamp, '2026-10-01T12:31:00.000Z');
     assert.match(embed.fields.find(field => field.name.includes('Polska')).value, /14:31:00/);
     assert.deepEqual(f.messages[0].allowed_mentions, { parse: [] });
@@ -99,14 +106,14 @@ test('O/C ↔ numeric and unpriced transitions notify; variant uses its own imag
     const row = f.getRows()[0]; row.variant = 'diamond'; row.key = 'pets/job-cat/diamond'; row.image = 'assets/pets/imp-diamond.png'; row.value = 'O/C';
     f.setRows([row]); await f.run();
     f.price(30000); f.advance(); await f.run();
-    assert.equal(f.messages[0].embeds[0].description, '**O/C → 30K**');
-    assert.match(f.messages[0].embeds[0].image.url, /imp-diamond\.png$/);
+    assert.match(f.messages[0].embeds[0].description, /O\/C → 30K/);
+    assert.match(f.messages[0].embeds[0].thumbnail.url, /imp-diamond\.png$/);
     assert.match(f.messages[0].embeds[0].title, /Diamond/);
     f.price('No Price'); f.advance(); await f.run();
-    assert.equal(f.messages[1].embeds[0].description, '**30K → No Price**');
+    assert.match(f.messages[1].embeds[0].description, /30K → No Price/);
     f.price(null); f.advance(); assert.equal((await f.run()).changed, 0);
     f.price('O/C'); f.advance(); await f.run();
-    assert.equal(f.messages[2].embeds[0].description, '**No Price → O/C**');
+    assert.match(f.messages[2].embeds[0].description, /No Price → O\/C/);
   } finally { f.close(); }
 });
 
@@ -139,7 +146,7 @@ test('invalid or unavailable feed does not corrupt the baseline', async () => {
   const f = fixture();
   try {
     await f.run(); f.price(25000); f.failFeed(true); await assert.rejects(f.run);
-    f.failFeed(false); f.advance(); await f.run(); assert.equal(f.messages[0].embeds[0].description, '**30K → 25K**');
+    f.failFeed(false); f.advance(); await f.run(); assert.match(f.messages[0].embeds[0].description, /\*\*30K → 25K\*\*/);
     const row = f.getRows()[0];
     f.setRows([]); await assert.rejects(f.run); assert.equal(f.messages.length, 1);
     assert.throws(() => validateFeed({ version: 1, rows: [{ ...row, image: 'https://other.example/image.png' }] }, f.env.SITE_URL), /image/);
@@ -221,6 +228,37 @@ test('failed transaction keeps the previous price and does not create a partial 
     assert.equal((await f.env.MONITOR_DB.prepare('SELECT COUNT(*) AS count FROM monitor_outbox').first()).count, 0);
     f.env.MONITOR_DB.batch = batch;
     assert.equal((await f.run()).sent, 1);
-    assert.equal(f.messages[0].embeds[0].description, '**30K → 25K**');
+    assert.match(f.messages[0].embeds[0].description, /\*\*30K → 25K\*\*/);
   } finally { f.close(); }
+});
+
+ test('68-row baseline and mass update stay within D1 Free limits', async () => {
+  const f = fixture();
+  try {
+    const base = f.getRows()[0];
+    f.setRows(Array.from({length:68}, (_,i) => ({...base,id:`pet-${i}`,key:`pets/pet-${i}/normal`})));
+    assert.equal((await f.run()).checked,68);
+    assert.ok(f.env.MONITOR_DB.queryCount < 50);
+    f.setRows(f.getRows().map(row => ({...row,value:'25K'}))); f.advance();
+    const result = await f.run();
+    assert.equal(result.changed,68); assert.equal(result.sent,8); assert.equal(result.pending,60);
+    assert.ok(f.env.MONITOR_DB.queryCount < 50);
+  } finally { f.close(); }
+});
+
+test('authenticated diagnostic confirms feed and Discord; reports Discord failure', async () => {
+ const f=fixture(); const original=globalThis.fetch; let status=200; let tests=0;
+ globalThis.fetch=async(url,options={})=> {
+  assert.equal(options.redirect,'manual');
+  if(new URL(url).hostname==='petuniverse-values.pl') return Response.json({version:1,rows:f.getRows()});
+  tests++; const body=JSON.parse(options.body); assert.match(body.embeds[0].title,/test monitora/);
+  return Response.json({}, {status});
+ };
+ try {
+  const request=()=>new Request('https://monitor.example/test',{method:'POST',headers:{authorization:'Bearer test-secret-key'}});
+  f.env.MONITOR_DB.resetBudget();const response=await monitor.fetch(request(),f.env);
+  assert.equal(response.status,200);assert.equal((await response.json()).testSent,true);assert.equal(tests,1);
+  status=404;f.env.MONITOR_DB.resetBudget();const failure=await monitor.fetch(request(),f.env);
+  assert.equal(failure.status,503);assert.match((await failure.json()).error,/Discord test HTTP 404/);
+ }finally{globalThis.fetch=original;f.close();}
 });

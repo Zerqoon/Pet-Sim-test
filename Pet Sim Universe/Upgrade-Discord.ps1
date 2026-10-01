@@ -1,3 +1,12 @@
+﻿param([string]$ProjectPath = $PSScriptRoot)
+$ErrorActionPreference = "Stop"
+try {
+    if (-not (Get-Command node -ErrorAction SilentlyContinue)) { throw "Zainstaluj Node.js 22 z npm." }
+    $config = Join-Path $ProjectPath ".cloudflare\price-monitor.json"
+    if (-not (Test-Path -LiteralPath $config)) { throw "Brak konfiguracji monitora: $config. Podaj folder projektu parametrem -ProjectPath." }
+    $workerPath = Join-Path $ProjectPath "workers\price-monitor.js"
+    if (-not (Test-Path -LiteralPath (Join-Path $ProjectPath "server\pricing.js"))) { throw "Brakuje server/pricing.js w tym projekcie." }
+    $workerCode = @'
 import { changePayload, discordUrl, validateFeed } from '../server/pricing.js';
 
 export const MONITOR_SCHEMA = [
@@ -159,3 +168,60 @@ export default {
     catch (error) { return json({ error: safeError(error, env) }, 503); }
   },
 };
+'@
+    $helperCode = @'
+import {readFile,writeFile,mkdtemp,rm} from 'node:fs/promises';
+import {existsSync} from 'node:fs';
+import {spawn} from 'node:child_process';
+import {randomBytes} from 'node:crypto';
+import path from 'node:path';
+import {tmpdir} from 'node:os';
+const root=process.argv[2];
+const cfg=path.join(root,'.cloudflare','price-monitor.json');
+const config=JSON.parse(await readFile(cfg,'utf8'));
+const npx=path.join(path.dirname(process.execPath),'node_modules/npm/bin/npx-cli.js');
+if(!existsSync(npx)) throw Error('Nie znaleziono npm. Zainstaluj Node.js 22 z npm.');
+if(config.account_id) process.env.CLOUDFLARE_ACCOUNT_ID=config.account_id;
+function cli(args,input){return new Promise((resolve,reject)=>{
+ const child=spawn(process.execPath,[npx,'--yes','wrangler@4',...args],{cwd:root,shell:false,stdio:['pipe','pipe','pipe'],env:{...process.env,WRANGLER_SEND_METRICS:'false'}});
+ let output='';child.stdout.on('data',b=>{output+=b;process.stdout.write(b)});child.stderr.on('data',b=>process.stderr.write(b));
+ child.on('error',reject);child.on('close',c=>c===0?resolve(output):reject(Error(`Wrangler: blad ${c}.`)));
+ child.stdin.end(input||'');
+});}
+const temp=await mkdtemp(path.join(tmpdir(),'pet-monitor-repair-'));
+try {
+ const key=randomBytes(32).toString('base64url');
+ await cli(['secret','put','MONITOR_KEY','--config',cfg],key+'\n');
+ const output=await cli(['deploy','--config',cfg]);
+ const url=output.match(/https:\/\/[a-z0-9.-]+\.workers\.dev\b/i)?.[0];
+ if(!url)throw Error('Nie znaleziono adresu Worker w wyniku wdrozenia.');
+ const deadline=Date.now()+200000;
+ let result;
+ do {
+  const response=await fetch(url+'/test',{method:'POST',headers:{authorization:`Bearer ${key}`},signal:AbortSignal.timeout(60000)});
+  result=await response.json();
+  if(!response.ok)throw Error(`HTTP ${response.status}: ${result.error||JSON.stringify(result)}`);
+  if(!result.busy)break;
+  console.log('Poprzedni odczyt trzyma blokade. Ponawiam za 10 sekund...');
+  await new Promise(resolve=>setTimeout(resolve,10000));
+ }while(Date.now()<deadline);
+ if(result.busy)throw Error('Monitor nadal zajety. Uruchom naprawe ponownie; nie potwierdzono odczytu.');
+ if(!result.checked||!result.testSent)throw Error('Nie potwierdzono odczytu cen i testu Discord.');
+ console.log(`\nPOTWIERDZONE: odczytano ${result.checked} cen. Discord przyjal wiadomosc testowa.`);
+ console.log(`Zmiany: ${result.changed}; wyslane: ${result.sent}; oczekujace: ${result.pending}.`);
+ console.log('Teraz zmien cene w prices.js na GitHub i poczekaj na udane wdrozenie strony.');
+}finally{await rm(temp,{recursive:true,force:true});}
+'@
+    $utf8 = New-Object System.Text.UTF8Encoding($false)
+    Copy-Item -LiteralPath $workerPath -Destination ($workerPath + ".before-fix") -Force
+    [System.IO.File]::WriteAllText($workerPath, $workerCode, $utf8)
+    $helperPath = Join-Path ([System.IO.Path]::GetTempPath()) ("Pet-Monitor-Repair-" + [guid]::NewGuid().ToString("N") + ".mjs")
+    [System.IO.File]::WriteAllText($helperPath, $helperCode, $utf8)
+    try {
+        & node $helperPath $ProjectPath
+        if ($LASTEXITCODE -ne 0) { throw "Naprawa nie zostala potwierdzona. Blad jest powyzej." }
+    } finally { Remove-Item -LiteralPath $helperPath -Force -ErrorAction SilentlyContinue }
+} catch {
+    Write-Host $_.Exception.Message -ForegroundColor Red
+    exit 1
+}
