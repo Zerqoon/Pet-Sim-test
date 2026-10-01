@@ -185,6 +185,26 @@ function rarityFor(item) {
   return item.rarity || 'Basic';
 }
 
+let rarityPaintId = 0;
+const rarityLetterStyles = {
+  Exclusive: { width: 77, colors: ['#ffd0ff','#f599ff','#cb83ff'] },
+  Mythical: { width: 73, colors: ['#ffe3a4','#ffb750','#ff789c'] },
+  Legendary: { width: 89, colors: ['#ffda39','#fff3a1','#ffe94c'], horizontal: true },
+  Secret: { width: 55, colors: ['#fff8ec','#ecedff','#b8a5ff'] },
+  Epic: { width: 37, colors: ['#b0f8ff','#58e3ff','#1ea9ef'] },
+  Rare: { width: 41, colors: ['#bcff52','#a8ff07','#8ee800'] },
+  Basic: { width: 46, colors: ['#ffffff','#d4dce8','#9aa6ba'] },
+  Code: { width: 44, colors: ['#c8fbff','#69dfff','#679cff'] },
+};
+function rarityLetterMarkup(item) {
+  const rarity = rarityFor(item);
+  const style = rarityLetterStyles[rarity];
+  if (!style) return `<span class="rarity-text rarity-solid">${rarity}</span>`;
+  const id = `rarity-letter-${++rarityPaintId}`;
+  const stops = style.colors.map((color,index) => `<stop offset="${index/(style.colors.length-1)*100}%" stop-color="${color}"/>`).join('');
+  return `<span class="rarity-text rarity-lettering"><svg class="rarity-letter-svg" viewBox="0 0 ${style.width} 22" style="--letter-width:${style.width/16}em" role="img" aria-label="${rarity}" focusable="false"><defs><linearGradient id="${id}" x2="${style.horizontal ? '100%' : '0%'}" y2="${style.horizontal ? '0%' : '100%'}">${stops}</linearGradient></defs><text x="${style.width/2}" y="16" text-anchor="middle" fill="url(#${id})">${rarity}</text></svg></span>`;
+}
+
 function rarityIndex(item) {
   const index = RARITY_ORDER.indexOf(rarityFor(item));
   return index === -1 ? 999 : index;
@@ -466,7 +486,7 @@ function card(item, index = 0) {
         <span class="render-reflection" aria-hidden="true"></span>
         <span class="render-floor" aria-hidden="true"></span>
         <div class="card-badges">
-          <span class="rarity-badge"><i></i><span class="rarity-text">${rarityFor(item)}</span></span>
+          <span class="rarity-badge"><i></i>${rarityLetterMarkup(item)}</span>
           ${item.eventBadge ? `<span class="event-badge">${item.eventBadge}</span>` : ''}
           ${item.bestPct != null ? `<span class="best-badge">${item.bestPct}% Best Pet</span>` : ''}
         </div>
@@ -889,7 +909,7 @@ function renderCalcPicker() {
       <div class="calc-picker-body">
         <strong class="calc-picker-name">${item.name}</strong>
         <div class="calc-picker-meta">
-          <span class="calc-picker-rarity"><span class="rarity-text">${rarityFor(item)}</span></span>
+          <span class="calc-picker-rarity">${rarityLetterMarkup(item)}</span>
           <small class="calc-picker-value"><img ${imageAttributes(ticket, { sizes: '22px' })} alt=""> ${formatItemValue(item, 'normal')}</small>
         </div>
       </div>
@@ -1006,7 +1026,7 @@ function openModal(item) {
   modal.dataset.rarity = raritySlug(item);
   modal.dataset.itemId = item.id;
   $('#modalKicker').textContent = categoryMeta[state.category][3];
-  $('#modalRarity').innerHTML = `<i></i><span class="rarity-text">${rarityFor(item)}</span>`;
+  $('#modalRarity').innerHTML = `<i></i>${rarityLetterMarkup(item)}`;
   $('#modalBest').textContent = item.bestPct != null ? `${item.bestPct}% Best Pet` : '';
   $('#modalBest').hidden = item.bestPct == null;
   $('#modalEventBadge').textContent = item.eventBadge || '';
@@ -1133,7 +1153,7 @@ document.addEventListener('click', event => {
     return;
   }
 
-  const nav = event.target.closest('[data-category]');
+  const nav = event.target.closest('#categoryNav [data-category]');
   if (nav) {
     toggleSortMenu(false);
     switchCategory(nav.dataset.category);

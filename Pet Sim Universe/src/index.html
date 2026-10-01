@@ -8,8 +8,7 @@
   <title>Pet Universe Values</title>
   <script>
     try {
-      const theme = localStorage.getItem('pet-universe-theme');
-      if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
+      document.documentElement.dataset.theme = 'dark';
       document.documentElement.dataset.motion = localStorage.getItem('pet-universe-motion') === 'off' || matchMedia('(prefers-reduced-motion: reduce)').matches ? 'off' : 'on';
     } catch (_) {}
   </script>
@@ -54,6 +53,7 @@
   <link rel="stylesheet" href="./v87.css" />
   <link rel="stylesheet" href="./v88.css" />
   <link rel="stylesheet" href="./v89.css" />
+  <link rel="stylesheet" href="./phone.css" />
   <link rel="modulepreload" href="./data/catalog.js" />
   <link rel="modulepreload" href="./data/prices.js" />
 </head>
@@ -82,19 +82,19 @@
       <nav class="side-nav" id="categoryNav" aria-label="Catalog categories">
         <button class="side-card nav-btn active" data-category="pets" type="button">
           <span class="nav-icon"><img src="assets/ui/category-pets.png" alt="" /></span>
-          <strong class="nav-label">Pet Values</strong>
+          <strong class="nav-label"><span class="nav-desktop-label">Pet Values</span><span class="nav-phone-label">Pets</span></strong>
         </button>
         <button class="side-card nav-btn" data-category="charms" type="button">
           <span class="nav-icon"><img src="assets/ui/category-charms.png" alt="" /></span>
-          <strong class="nav-label">Charm Values</strong>
+          <strong class="nav-label"><span class="nav-desktop-label">Charm Values</span><span class="nav-phone-label">Charms</span></strong>
         </button>
         <button class="side-card nav-btn" data-category="eggs" type="button">
           <span class="nav-icon"><img src="assets/ui/category-eggs.png" alt="" /></span>
-          <strong class="nav-label">Egg Values</strong>
+          <strong class="nav-label"><span class="nav-desktop-label">Egg Values</span><span class="nav-phone-label">Eggs</span></strong>
         </button>
         <button class="side-card nav-btn" data-category="items" type="button">
           <span class="nav-icon"><img src="assets/ui/category-items.png" alt="" /></span>
-          <strong class="nav-label">Item Values</strong>
+          <strong class="nav-label"><span class="nav-desktop-label">Item Values</span><span class="nav-phone-label">Items</span></strong>
         </button>
         <button class="side-card nav-btn" data-category="codes" type="button">
           <span class="nav-icon"><img src="assets/ui/category-codes.png" alt="" /></span>

@@ -8,14 +8,13 @@
   <title>Pet Universe Values</title>
   <script>
     try {
-      const theme = localStorage.getItem('pet-universe-theme');
-      if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
+      document.documentElement.dataset.theme = 'dark';
       document.documentElement.dataset.motion = localStorage.getItem('pet-universe-motion') === 'off' || matchMedia('(prefers-reduced-motion: reduce)').matches ? 'off' : 'on';
     } catch (_) {}
   </script>
   <link rel="icon" type="image/png" href="assets/ui/category-pets.png" />
-  <link rel="stylesheet" href="./bundle/styles-28b66beab06365.css" />
-  <link rel="modulepreload" href="./bundle/app-b5aeb9e7583410.js" />
+  <link rel="stylesheet" href="./bundle/styles-d9f8a63c0f2cdd.css" />
+  <link rel="modulepreload" href="./bundle/app-8d4308d2a7383d.js" />
   <link rel="modulepreload" href="./data/catalog.js" />
   <link rel="modulepreload" href="./data/prices.js" />
 </head>
@@ -44,19 +43,19 @@
       <nav class="side-nav" id="categoryNav" aria-label="Catalog categories">
         <button class="side-card nav-btn active" data-category="pets" type="button">
           <span class="nav-icon"><img src="assets/optimized/category-pets-122dca91115b.webp" alt="" srcset="assets/optimized/category-pets-122dca91115b-64.webp 64w, assets/optimized/category-pets-122dca91115b-128.webp 128w, assets/optimized/category-pets-122dca91115b-256.webp 256w, assets/optimized/category-pets-122dca91115b-512.webp 512w, assets/optimized/category-pets-122dca91115b.webp 1254w" sizes="48px" decoding="async" draggable="false" loading="eager" /></span>
-          <strong class="nav-label">Pet Values</strong>
+          <strong class="nav-label"><span class="nav-desktop-label">Pet Values</span><span class="nav-phone-label">Pets</span></strong>
         </button>
         <button class="side-card nav-btn" data-category="charms" type="button">
           <span class="nav-icon"><img src="assets/optimized/category-charms-f527f93e8d1a.webp" alt="" srcset="assets/optimized/category-charms-f527f93e8d1a-64.webp 64w, assets/optimized/category-charms-f527f93e8d1a-128.webp 128w, assets/optimized/category-charms-f527f93e8d1a-256.webp 256w, assets/optimized/category-charms-f527f93e8d1a-512.webp 512w, assets/optimized/category-charms-f527f93e8d1a.webp 1254w" sizes="48px" decoding="async" draggable="false" loading="eager" /></span>
-          <strong class="nav-label">Charm Values</strong>
+          <strong class="nav-label"><span class="nav-desktop-label">Charm Values</span><span class="nav-phone-label">Charms</span></strong>
         </button>
         <button class="side-card nav-btn" data-category="eggs" type="button">
           <span class="nav-icon"><img src="assets/optimized/category-eggs-c760bcb45695.webp" alt="" srcset="assets/optimized/category-eggs-c760bcb45695-64.webp 64w, assets/optimized/category-eggs-c760bcb45695-128.webp 128w, assets/optimized/category-eggs-c760bcb45695-256.webp 256w, assets/optimized/category-eggs-c760bcb45695-512.webp 512w, assets/optimized/category-eggs-c760bcb45695.webp 1254w" sizes="48px" decoding="async" draggable="false" loading="eager" /></span>
-          <strong class="nav-label">Egg Values</strong>
+          <strong class="nav-label"><span class="nav-desktop-label">Egg Values</span><span class="nav-phone-label">Eggs</span></strong>
         </button>
         <button class="side-card nav-btn" data-category="items" type="button">
           <span class="nav-icon"><img src="assets/optimized/category-items-1d10b97790e7.webp" alt="" srcset="assets/optimized/category-items-1d10b97790e7-64.webp 64w, assets/optimized/category-items-1d10b97790e7-128.webp 128w, assets/optimized/category-items-1d10b97790e7-256.webp 256w, assets/optimized/category-items-1d10b97790e7-512.webp 512w, assets/optimized/category-items-1d10b97790e7.webp 1254w" sizes="48px" decoding="async" draggable="false" loading="eager" /></span>
-          <strong class="nav-label">Item Values</strong>
+          <strong class="nav-label"><span class="nav-desktop-label">Item Values</span><span class="nav-phone-label">Items</span></strong>
         </button>
         <button class="side-card nav-btn" data-category="codes" type="button">
           <span class="nav-icon"><img src="assets/optimized/category-codes-58ccc0457e14.webp" alt="" srcset="assets/optimized/category-codes-58ccc0457e14-64.webp 64w, assets/optimized/category-codes-58ccc0457e14-128.webp 128w, assets/optimized/category-codes-58ccc0457e14-256.webp 256w, assets/optimized/category-codes-58ccc0457e14-512.webp 512w, assets/optimized/category-codes-58ccc0457e14.webp 1308w" sizes="48px" decoding="async" draggable="false" loading="eager" /></span>
@@ -387,7 +386,7 @@
     <div class="calc-picker-grid" id="calcPickerGrid"></div>
   </dialog>
 
-  <script type="module" src="./bundle/app-b5aeb9e7583410.js"></script>
+  <script type="module" src="./bundle/app-8d4308d2a7383d.js"></script>
 <p id="exportStatus" class="export-status" role="status" hidden></p>
 <dialog id="tradeExportDialog" class="trade-export-dialog" aria-labelledby="tradeExportTitle">
   <div class="trade-export-heading"><div><h2 id="tradeExportTitle">Your Trade Snapshot</h2><p>Save the PNG and send it on Discord or anywhere you like.</p></div><button type="button" id="closeTradeExport" aria-label="Close image preview">×</button></div>

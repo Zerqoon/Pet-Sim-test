@@ -1,0 +1,120 @@
+/* Final mobile composition, loaded after every legacy source. */
+.nav-phone-label {display:none !important;}
+#cardsGrid .value-card[data-rarity] .rarity-badge .rarity-text.rarity-lettering,
+#calcPickerGrid .calc-picker-card[data-rarity] .calc-picker-rarity .rarity-text.rarity-lettering,
+#detailModal[data-rarity] .modal-rarity .rarity-text.rarity-lettering {
+ display:inline-flex !important;align-items:center !important;background:none !important;
+ color:#f6ceff !important;-webkit-text-fill-color:#f6ceff !important;
+ opacity:1 !important;visibility:visible !important;filter:none !important;text-shadow:none !important;
+}
+.rarity-letter-svg {display:block;width:var(--letter-width);height:1.375em;overflow:visible;}
+.rarity-letter-svg text {font-family:'Pet Nunito',system-ui,sans-serif !important;font-weight:1000 !important;font-size:16px !important;letter-spacing:0 !important;-webkit-text-stroke:0 !important;stroke:none !important;}
+.rarity-text.rarity-solid {color:#e7edff !important;-webkit-text-fill-color:#e7edff !important;background:none !important;}
+@media(max-width:900px) {
+ html {font-size:16px !important;-webkit-text-size-adjust:100%;text-size-adjust:100%;}
+ body {margin:0 !important;}
+ body[data-view='values'] {background:#090b15 !important;}
+ body[data-view='values'] .world-image {filter:saturate(.65) brightness(.22) !important;}
+ body[data-view='values'] .world-overlay {background:linear-gradient(160deg,#0c0b1bdd,#090c17ef) !important;}
+ body[data-view='values'] .lava-orb {opacity:.04 !important;}
+ body[data-view='values'] .app-layout {display:flex !important;flex-direction:column !important;width:calc(100% - 24px) !important;max-width:600px !important;margin:12px auto 24px !important;padding:0 !important;gap:12px !important;}
+ body[data-view='values'] .sidebar {display:flex !important;flex-direction:column !important;position:static !important;width:100% !important;min-height:0 !important;height:auto !important;gap:8px !important;padding:0 !important;border:0 !important;background:none !important;box-shadow:none !important;}
+ body[data-view='values'] .sidebar .brand-card {display:flex !important;align-items:center !important;gap:9px !important;width:100% !important;box-sizing:border-box !important;min-height:48px !important;height:48px !important;padding:6px 4px !important;margin:0 !important;background:none !important;border:0 !important;box-shadow:none !important;border-radius:0 !important;}
+ body[data-view='values'] .sidebar .brand-icon {width:34px !important;height:34px !important;flex:0 0 34px !important;border-radius:11px !important;}
+ body[data-view='values'] .sidebar .brand-icon img {width:30px !important;height:30px !important;object-fit:contain;}
+ body[data-view='values'] .sidebar .brand-copy strong {font-size:1rem !important;line-height:1.1 !important;color:#f4f2ff !important;}
+ body[data-view='values'] .sidebar .brand-copy small {font-size:.55rem !important;letter-spacing:.15em !important;}
+ body[data-view='values'] .sidebar .side-nav {position:static !important;display:grid !important;grid-template-columns:repeat(5,minmax(0,1fr)) !important;gap:4px !important;width:100% !important;padding:4px !important;margin:0 !important;background:#111423ed !important;border:1px solid #ffffff12 !important;border-radius:16px !important;overflow:visible !important;box-sizing:border-box !important;}
+ body[data-view='values'] .sidebar .side-nav .nav-btn {display:flex !important;flex-direction:column !important;align-items:center !important;justify-content:center !important;grid-column:auto !important;gap:4px !important;width:100% !important;min-width:0 !important;height:58px !important;min-height:58px !important;padding:5px 2px !important;margin:0 !important;border:1px solid transparent !important;border-radius:11px !important;background:transparent !important;box-shadow:none !important;transform:none !important;}
+ body[data-view='values'] .sidebar .side-nav .nav-btn.active {background:#302444 !important;border-color:#b781ff70 !important;box-shadow:inset 0 1px 0 #ffffff0c !important;}
+ body[data-view='values'] .sidebar .nav-btn::before,body[data-view='values'] .sidebar .nav-btn::after {display:none !important;}
+ body[data-view='values'] .sidebar .nav-icon {width:26px !important;height:26px !important;flex:0 0 26px !important;background:none !important;box-shadow:none !important;border:0 !important;}
+ body[data-view='values'] .sidebar .nav-icon img {width:24px !important;height:24px !important;object-fit:contain;}
+ body[data-view='values'] .sidebar .nav-label {font-size:.7rem !important;line-height:1.1 !important;white-space:nowrap !important;text-align:center !important;color:#dfdce9 !important;}
+ body[data-view='values'] .sidebar .nav-phone-label {display:inline !important;}
+ body[data-view='values'] .sidebar .nav-desktop-label {display:none !important;}
+ body[data-view='values'] .sidebar .side-footer {display:none !important;}
+ body[data-view='values'] .sidebar .appearance-tools {position:static !important;display:flex !important;justify-content:flex-end !important;width:100% !important;padding:0 !important;margin:0 !important;border:0 !important;background:none !important;box-shadow:none !important;}
+ body[data-view='values'] .sidebar .appearance-tools .motion-toggle {display:inline-flex !important;align-items:center !important;justify-content:center !important;gap:6px !important;width:auto !important;min-width:144px !important;height:36px !important;min-height:36px !important;padding:0 12px !important;border:1px solid #77b5d333 !important;border-radius:10px !important;background:#14202bbd !important;color:#acddef !important;font-size:.72rem !important;white-space:nowrap !important;}
+ body[data-view='values'] .sidebar .appearance-tools .motion-toggle::before {content:'Ⅱ';font-size:.78rem;color:#c7f0ff;}
+ body[data-view='values'] .sidebar .appearance-tools .motion-toggle[aria-pressed='true']::before {content:'▶';font-size:.65rem;}
+ body[data-view='values'] .main {display:block !important;width:100% !important;min-width:0 !important;padding:0 !important;}
+ body[data-view='values'] #valuesView {display:flex !important;flex-direction:column !important;gap:14px !important;width:100% !important;min-width:0 !important;}
+ body[data-view='values'] #valuesView[hidden] {display:none !important;}
+ body[data-view='values'] #valuesView .page-header {position:relative !important;display:flex !important;flex-direction:column !important;align-items:stretch !important;width:100% !important;min-width:0 !important;padding:14px !important;margin:0 !important;gap:12px !important;border-radius:18px !important;background:#111321e8 !important;border:1px solid #ffffff12 !important;box-sizing:border-box !important;box-shadow:0 8px 20px #0002 !important;}
+ body[data-view='values'] #valuesView .page-title-wrap {padding-right:70px !important;}
+ body[data-view='values'] #valuesView .page-title-wrap h1 {font-size:1.5rem !important;line-height:1.15 !important;margin:0 !important;color:#f5f2ff !important;}
+ body[data-view='values'] #valuesView #sectionKicker {display:none !important;}
+ body[data-view='values'] #valuesView .page-tools.page-tools-v40 {position:static !important;display:grid !important;grid-template-columns:minmax(0,1fr) 100px !important;grid-template-rows:44px 40px !important;gap:8px !important;width:100% !important;padding:0 !important;margin:0 !important;}
+ body[data-view='values'] #valuesView .page-tools.page-tools-v40.no-variants {grid-template-rows:44px !important;}
+ body[data-view='values'] #valuesView .search-box {grid-column:1 !important;grid-row:1 !important;width:100% !important;height:44px !important;min-height:44px !important;padding:0 10px !important;border-radius:11px !important;gap:8px !important;background:#090c16 !important;box-sizing:border-box !important;}
+ body[data-view='values'] #valuesView .search-box > span {width:22px !important;height:24px !important;min-width:22px !important;background:none !important;font-size:1.05rem !important;border-radius:0 !important;}
+ body[data-view='values'] #valuesView .search-box input {font-size:16px !important;line-height:1.2 !important;height:100% !important;padding:0 !important;min-width:0 !important;width:100% !important;}
+ body[data-view='values'] #valuesView .custom-sort {position:relative !important;grid-column:2 !important;grid-row:1 !important;min-width:0 !important;width:100% !important;margin:0 !important;}
+ body[data-view='values'] #valuesView .sort-trigger {height:44px !important;min-height:44px !important;padding:0 8px !important;border-radius:10px !important;font-size:.78rem !important;}
+ body[data-view='values'] #valuesView .sort-popover {width:210px !important;max-width:calc(100vw - 60px) !important;left:auto !important;right:0 !important;z-index:20 !important;}
+ body[data-view='values'] #valuesView .home-corner-btn {position:absolute !important;top:11px !important;right:13px !important;left:auto !important;bottom:auto !important;width:60px !important;height:34px !important;min-height:34px !important;margin:0 !important;padding:0 8px !important;border-radius:9px !important;font-size:.74rem !important;background:#25213a !important;transform:none !important;}
+ body[data-view='values'] #valuesView .pet-variant-tools {grid-column:1 / -1 !important;grid-row:2 !important;width:100% !important;min-width:0 !important;padding:0 !important;margin:0 !important;}
+ body[data-view='values'] #valuesView .pet-variant-tools[hidden] {display:none !important;}
+ body[data-view='values'] #valuesView .pet-variant-tools .tool-label {display:none !important;}
+ body[data-view='values'] #valuesView .variant-switch {display:grid !important;grid-template-columns:repeat(3,minmax(0,1fr)) !important;gap:3px !important;padding:3px !important;margin:0 !important;width:100% !important;max-width:none !important;height:40px !important;border-radius:10px !important;background:#090c16 !important;box-sizing:border-box !important;}
+ body[data-view='values'] #valuesView .variant-btn {height:34px !important;min-height:34px !important;min-width:0 !important;padding:0 4px !important;border-radius:7px !important;gap:5px !important;font-size:.78rem !important;letter-spacing:0 !important;}
+ body[data-view='values'] #valuesView .variant-btn i {width:5px !important;height:5px !important;flex:0 0 5px !important;}
+ body[data-view='values'] #valuesView .catalog-card {width:100% !important;min-width:0 !important;max-width:none !important;margin:0 !important;padding:0 !important;background:none !important;border:0 !important;border-radius:0 !important;box-shadow:none !important;}
+ body[data-view='values'] #valuesView .catalog-card:has(.compact-grid) {padding:0 !important;}
+ body[data-view='values'] #valuesView .catalog-meta {padding:0 2px !important;min-height:26px !important;margin:0 0 8px !important;gap:8px !important;align-items:center !important;}
+ body[data-view='values'] #valuesView .catalog-label {font-size:.58rem !important;letter-spacing:.1em !important;color:#a3a0b3 !important;}
+ body[data-view='values'] #valuesView .result-count {font-size:.65rem !important;padding:4px 8px !important;min-height:22px !important;}
+ body[data-view='values'] #valuesView #cardsGrid {display:block !important;width:100% !important;min-width:0 !important;container-type:normal !important;}
+ body[data-view='values'] #valuesView #cardsGrid .rarity-section {width:100% !important;max-width:none !important;padding:0 !important;margin:0 0 18px !important;border:0 !important;border-radius:0 !important;background:none !important;box-shadow:none !important;}
+ body[data-view='values'] #valuesView #cardsGrid .rarity-section::before,body[data-view='values'] #valuesView #cardsGrid .rarity-section::after {display:none !important;}
+ body[data-view='values'] #valuesView #cardsGrid .rarity-section-head {padding:0 2px 8px !important;margin:0 !important;min-height:26px !important;}
+ body[data-view='values'] #valuesView #cardsGrid .rarity-section-head h2 {font-size:1rem !important;line-height:1.2 !important;}
+ body[data-view='values'] #valuesView #cardsGrid .rarity-section-head > span {font-size:.65rem !important;padding:3px 6px !important;min-width:24px !important;}
+ body[data-view='values'] #valuesView #cardsGrid .card-grid,body[data-view='values'] #valuesView #cardsGrid :is(.compact-grid-charms,.compact-grid-items,.compact-grid-eggs) {display:grid !important;grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:10px !important;width:100% !important;min-width:0 !important;margin:0 !important;align-items:stretch !important;}
+ body[data-view='values'] #valuesView #cardsGrid .value-card {width:100% !important;min-width:0 !important;height:auto !important;margin:0 !important;}
+ body[data-view='values'] #valuesView #cardsGrid .card-button {position:relative !important;display:grid !important;grid-template-rows:180px 72px !important;gap:0 !important;width:100% !important;height:254px !important;min-height:254px !important;max-height:none !important;padding:0 !important;margin:0 !important;border-width:1px !important;border-radius:17px !important;background:linear-gradient(150deg,#191622,#0d0e18) !important;backdrop-filter:none !important;box-shadow:inset 0 1px 0 #ffffff0c,0 5px 14px #0003 !important;overflow:hidden !important;}
+ body[data-view='values'] #valuesView #cardsGrid .card-button {border-color:color-mix(in srgb,var(--rarity) 64%,#171323) !important;}
+ body[data-view='values'] #valuesView #cardsGrid .card-art,body[data-view='values'] #valuesView #cardsGrid .card-art:has(.best-badge),body[data-view='values'] #valuesView #cardsGrid .card-art:has(.event-badge) {position:relative !important;display:grid !important;place-items:center !important;width:100% !important;height:180px !important;min-height:180px !important;max-height:180px !important;padding:55px 9px 7px !important;margin:0 !important;box-sizing:border-box !important;background:none !important;border:0 !important;overflow:visible !important;}
+ body[data-view='values'] #valuesView #cardsGrid .card-badges {position:absolute !important;top:9px !important;left:9px !important;right:9px !important;display:flex !important;flex-wrap:wrap !important;justify-content:flex-start !important;align-items:center !important;gap:4px !important;width:auto !important;padding:0 !important;margin:0 !important;z-index:3 !important;}
+ body[data-view='values'] #valuesView #cardsGrid .card-badges > :is(.rarity-badge,.event-badge,.best-badge) {display:inline-flex !important;align-items:center !important;justify-content:center !important;position:static !important;flex:0 0 auto !important;height:22px !important;min-height:22px !important;padding:3px 6px !important;border-radius:999px !important;font-size:.62rem !important;line-height:1 !important;margin:0 !important;box-sizing:border-box !important;}
+ body[data-view='values'] #valuesView #cardsGrid .card-badges > .rarity-badge {font-size:.72rem !important;background:#211d2c !important;}
+ body[data-view='values'] #valuesView #cardsGrid .card-badges > .best-badge {order:3 !important;}
+ html[data-motion='on'] body[data-view='values'] #cardsGrid .value-card:not([data-offscreen]) .rarity-sheen::before {animation-play-state:running;}
+ html[data-mobile-scrolling] body[data-view='values'] #cardsGrid .rarity-sheen::before {animation-play-state:paused !important;}
+ body[data-view='values'] #valuesView #cardsGrid .card-image,body[data-view='values'] #valuesView #cardsGrid .animated-pop-card {position:relative !important;inset:auto !important;display:block !important;width:116px !important;height:116px !important;max-width:100% !important;max-height:116px !important;margin:0 !important;object-fit:contain !important;transform:none !important;z-index:1 !important;}
+ body[data-view='values'] #valuesView #cardsGrid .animated-pop-card .pop-frame {width:116px !important;height:116px !important;object-fit:contain !important;}
+ body[data-view='values'] #valuesView #cardsGrid .card-bottom {display:grid !important;grid-template-rows:32px 30px !important;gap:4px !important;height:72px !important;min-height:72px !important;padding:0 10px 6px !important;align-content:start !important;box-sizing:border-box !important;background:none !important;}
+ body[data-view='values'] #valuesView #cardsGrid .card-title {min-height:0 !important;height:32px !important;font-size:.86rem !important;line-height:1.15 !important;margin:0 !important;padding:0 !important;white-space:normal !important;overflow-wrap:normal !important;display:flex !important;align-items:center !important;color:#f1eef9 !important;}
+ body[data-view='values'] #valuesView #cardsGrid .card-value-row {display:flex !important;align-items:center !important;justify-content:space-between !important;gap:5px !important;margin:0 !important;padding:4px 0 0 !important;min-height:30px !important;border-top:1px solid #ffffff09 !important;}
+ body[data-view='values'] #valuesView #cardsGrid .card-value-row > span:first-child {font-size:.56rem !important;letter-spacing:.06em !important;color:#aaa5b9 !important;}
+ body[data-view='values'] #valuesView #cardsGrid .set-value {min-width:0 !important;min-height:25px !important;height:25px !important;padding:3px 7px !important;gap:5px !important;background:#241c33 !important;border:1px solid #b17cff26 !important;border-radius:8px !important;}
+ body[data-view='values'] #valuesView #cardsGrid .set-value img {width:14px !important;height:14px !important;}
+ body[data-view='values'] #valuesView #cardsGrid .set-value strong {font-size:.85rem !important;line-height:1 !important;}
+ body[data-view='values'] #valuesView #cardsGrid .compact-grid .card-button {grid-template-rows:148px 72px !important;height:222px !important;min-height:222px !important;}
+ body[data-view='values'] #valuesView #cardsGrid .compact-grid .card-art {height:148px !important;min-height:148px !important;max-height:148px !important;padding-top:30px !important;}
+ body[data-view='values'] #valuesView #cardsGrid .compact-grid .card-image {width:106px !important;height:106px !important;max-height:106px !important;}
+ #detailModal.detail-modal {position:fixed !important;inset:0 !important;width:calc(100vw - 24px) !important;max-width:540px !important;max-height:calc(100dvh - 24px) !important;height:fit-content !important;min-height:0 !important;margin:auto !important;border-radius:20px !important;overflow-y:auto !important;}
+ #detailModal .modal-grid {display:grid !important;grid-template-columns:1fr !important;height:auto !important;min-height:0 !important;}
+ #detailModal .modal-visual {height:245px !important;min-height:245px !important;padding:0 !important;}
+ #detailModal .modal-art-shell {width:190px !important;height:190px !important;margin:34px auto 0 !important;}
+ #detailModal :is(.modal-image,.modal-animated-art,.modal-animated-art .pop-frame) {width:180px !important;height:180px !important;}
+ #detailModal .modal-info {padding:16px !important;min-height:0 !important;}
+ #detailModal #modalTitle {font-size:1.6rem !important;margin:4px 0 8px !important;}
+ #detailModal .modal-badges-left {top:12px !important;left:12px !important;right:46px !important;max-width:calc(100% - 58px) !important;}
+ #detailModal .modal-close {width:34px !important;height:34px !important;top:10px !important;right:10px !important;}
+ #detailModal .detail-box {min-height:58px !important;padding:10px !important;}
+ #detailModal .history-panel {padding:12px !important;}
+}
+@media(min-width:600px) and (max-width:900px) {
+ body[data-view='values'] #valuesView #cardsGrid .card-grid {grid-template-columns:repeat(3,minmax(0,1fr)) !important;}
+}
+@media(max-width:359px) {
+ body[data-view='values'] #valuesView .page-tools.page-tools-v40 {grid-template-columns:1fr !important;grid-template-rows:44px 40px 40px !important;}
+ body[data-view='values'] #valuesView .pet-variant-tools {grid-column:1 !important;grid-row:3 !important;}
+ body[data-view='values'] #valuesView .search-box {grid-column:1 !important;grid-row:1 !important;}
+ body[data-view='values'] #valuesView .custom-sort {grid-column:1 !important;grid-row:2 !important;}
+ body[data-view='values'] #valuesView .page-tools.page-tools-v40.no-variants {grid-template-rows:44px 44px !important;}
+ body[data-view='values'] #valuesView #cardsGrid .card-grid {grid-template-columns:1fr !important;}
+ body[data-view='values'] #valuesView #cardsGrid .card-button {max-width:300px !important;justify-self:center !important;}
+}

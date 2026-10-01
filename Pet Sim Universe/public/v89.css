@@ -727,3 +727,4 @@ body:is([data-view='values'],[data-view='calculator']) .sidebar .appearance-tool
  body[data-view='values'] .page-tools .variant-btn {min-width:0 !important;padding:8px 3px !important;font-size:.75rem !important;}
  body[data-view='values'] .catalog-card {padding:10px !important;margin-top:0 !important;}
 }
+
