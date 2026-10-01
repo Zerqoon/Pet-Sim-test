@@ -284,6 +284,7 @@ function renderHistoryStats(points, currentValue) {
   changeEl.className = 'is-neutral';
   amountEl.className = 'is-neutral';
 
+  $('#modalHistoryArea').dataset.hasTrend = String(values.length >= 2);
   if (values.length < 2) {
     if (previousEl) previousEl.textContent = '—';
     changeEl.textContent = '—';
@@ -364,7 +365,7 @@ async function loadValueHistory() {
       setHistoryStatus(valueFor(item, state.modalVariant) === 'O/C' ? 'Owner’s Choice' : 'Not priced', 'offline');
       $('#historyHint').textContent = 'This item has no fixed numeric price. Agree on its value with the owner.';
     } else if (points.length <= 1) {
-      setHistoryStatus('History started', 'neutral');
+      setHistoryStatus('No previous price changes', 'neutral');
       $('#historyHint').textContent = 'One price record is available. A trend appears once another price is recorded.';
     } else {
       const trendDelta = points.at(-1).value - points.at(-2).value;
