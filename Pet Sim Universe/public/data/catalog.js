@@ -495,7 +495,7 @@ export const ITEMS = [
 
   { id:'vip-voucher', name:'VIP Voucher', rarity:'Exclusive', source:'Utility Item', description:'VIP Voucher | Nobody wanna This.', image:'assets/items/vip-voucher.png', dropSources:[SOURCE_PRESETS.moonChest, SOURCE_PRESETS.vipChest, SOURCE_PRESETS.playtimeRewards] },
 
-  { id:'universe-shard', name:'Universe Shard', rarity:'Mythical', source:'Utility Item', description:'Universe Shard.', image:'assets/items/universe-shard-v30.png', dropSources:[SOURCE_PRESETS.moonChest, SOURCE_PRESETS.vipChest] },
+  { id:'universe-shard', name:'Universe Shard', rarity:'Exclusive', source:'Utility Item', description:'Universe Shard.', image:'assets/items/universe-shard-v30.png', dropSources:[SOURCE_PRESETS.moonChest, SOURCE_PRESETS.vipChest] },
 
   { id:'vip-key', name:'VIP Key', rarity:'Legendary', source:'Utility Item', description:'VIP Key.', image:'assets/items/vip-key.png' },
 
