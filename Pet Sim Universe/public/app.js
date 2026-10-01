@@ -96,7 +96,7 @@ const categoryMeta = {
   charms: ['CHARM COLLECTION', 'Charm Values', 'Search charms...', 'CHARM DETAILS'],
   eggs: ['EGG COLLECTION', 'Egg Values', 'Search eggs...', 'EGG DETAILS'],
   items: ['ITEM COLLECTION', 'Item Values', 'Search items...', 'ITEM DETAILS'],
-  codes: ['BONUS CODES', 'Code Values', 'Search codes...', 'CODE DETAILS'],
+  codes: ['BONUS CODES', 'Codes', 'Search codes...', 'CODE DETAILS'],
 };
 
 const sortNames = {

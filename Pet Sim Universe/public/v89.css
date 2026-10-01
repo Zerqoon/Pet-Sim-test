@@ -436,3 +436,50 @@ h1,h2,h3,h4,.card-title,.brand-copy strong,.set-value strong,#modalValue {
  #calcPickerGrid .calc-picker-card[data-rarity] .calc-picker-rarity {font-size:.74rem !important;}
  #detailModal[data-rarity] .modal-rarity {font-size:.84rem !important;}
 }
+
+/* v99: compact utility collections; empty columns collapse. */
+body[data-view='values'] #cardsGrid :is(.compact-grid-charms,.compact-grid-items,.compact-grid-eggs) {
+ display:grid !important;grid-template-columns:repeat(auto-fit,minmax(185px,1fr)) !important;
+ gap:12px !important;align-items:stretch !important;width:100% !important;
+ max-width:none !important;margin:0 !important;
+}
+body[data-view='values'] #cardsGrid .compact-grid .value-card {min-width:0 !important;height:100% !important;}
+body[data-view='values'] #cardsGrid .compact-grid .card-button {
+ width:100% !important;height:100% !important;min-height:262px !important;
+ grid-template-rows:158px 1fr !important;padding:7px !important;gap:0 !important;
+}
+body[data-view='values'] #cardsGrid .compact-grid .card-art {
+ height:158px !important;min-height:158px !important;padding:32px 8px 4px !important;
+}
+body[data-view='values'] #cardsGrid .compact-grid .card-image {
+ width:112px !important;height:112px !important;max-height:112px !important;
+ max-width:100% !important;object-fit:contain !important;
+}
+body[data-view='values'] #cardsGrid .compact-grid .card-bottom {
+ display:grid !important;grid-template-rows:minmax(38px,auto) 36px !important;
+ align-content:start !important;min-height:94px !important;padding:10px 7px 5px !important;gap:8px !important;
+}
+body[data-view='values'] #cardsGrid .compact-grid .card-title {
+ font-size:.92rem !important;line-height:1.25 !important;margin:0 !important;
+ align-self:start !important;overflow-wrap:anywhere;
+}
+body[data-view='values'] #cardsGrid .compact-grid .card-value-row {
+ margin:0 !important;padding-top:6px !important;align-self:end !important;min-height:36px !important;
+}
+body[data-view='values'] .catalog-card:has(.compact-grid-eggs) {width:100% !important;max-width:850px !important;}
+body[data-view='values'] .catalog-card:has(.compact-grid) {min-height:0 !important;padding:14px !important;}
+body[data-view='values'] .catalog-card:has(.compact-grid) .catalog-meta {margin-bottom:10px !important;min-height:28px !important;}
+@media(max-width:768px) {
+ body[data-view='values'] #cardsGrid :is(.compact-grid-charms,.compact-grid-items,.compact-grid-eggs) {
+ grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:9px !important;
+ }
+ body[data-view='values'] #cardsGrid .compact-grid .card-button {min-height:234px !important;grid-template-rows:140px 1fr !important;padding:6px !important;}
+ body[data-view='values'] #cardsGrid .compact-grid .card-art {height:140px !important;min-height:140px !important;padding-top:28px !important;}
+ body[data-view='values'] #cardsGrid .compact-grid .card-image {width:100px !important;height:100px !important;max-height:100px !important;}
+ body[data-view='values'] #cardsGrid .compact-grid .card-bottom {min-height:88px !important;padding:9px 5px 4px !important;gap:5px !important;}
+ body[data-view='values'] #cardsGrid .compact-grid .card-title {font-size:.83rem !important;}
+ body[data-view='values'] .catalog-card:has(.compact-grid) {padding:10px !important;}
+}
+@media(max-width:340px) {
+ body[data-view='values'] #cardsGrid :is(.compact-grid-charms,.compact-grid-items,.compact-grid-eggs) {grid-template-columns:1fr !important;}
+}
