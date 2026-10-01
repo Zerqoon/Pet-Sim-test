@@ -291,26 +291,3 @@ body[data-view='values'] #valuesView[data-category='pets'] #cardsGrid :is([data-
   #detailModal .owner-choice-panel p {font-size:.75rem;}
   #detailModal .history-panel {padding:12px !important;}
 }
-
-/* v110: individual cards sit on the original world background. */
-body[data-view='values'] #valuesView:is([data-category='pets'],[data-category='charms'],[data-category='eggs'],[data-category='items']) .catalog-card {
-  background:none !important;
-  border-color:transparent !important;
-  border-radius:0 !important;
-  box-shadow:none !important;
-  backdrop-filter:none !important;
-  -webkit-backdrop-filter:none !important;
-  overflow:visible !important;
-}
-body[data-view='values'] #valuesView:is([data-category='pets'],[data-category='charms'],[data-category='eggs'],[data-category='items']) .catalog-card::before,
-body[data-view='values'] #valuesView:is([data-category='pets'],[data-category='charms'],[data-category='eggs'],[data-category='items']) .catalog-card::after {
-  content:none !important;
-  display:none !important;
-}
-body[data-view='values'] #valuesView:is([data-category='pets'],[data-category='charms'],[data-category='eggs'],[data-category='items']) .catalog-label {
-  color:#e3dfee !important;
-  text-shadow:0 1px 4px #000,0 2px 12px #000b !important;
-}
-body[data-view='values'] #valuesView[data-category='pets'] .rarity-section-head h2 {
-  text-shadow:0 1px 4px #000,0 2px 12px #000b !important;
-}

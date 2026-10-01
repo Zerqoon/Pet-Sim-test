@@ -12,7 +12,7 @@ function Run-Git {
 if (-not (Get-Command git -ErrorAction SilentlyContinue)) { throw "Zainstaluj Git for Windows i otworz ponownie PowerShell." }
 if (-not (Get-Command node -ErrorAction SilentlyContinue)) { throw "Zainstaluj Node.js 22 lub nowszy i otworz ponownie PowerShell." }
 foreach ($file in @("package.json", "public\data\prices.js", "public\data\catalog.js", "public\v89.css", "public\phone.css", "public\collections.css", "public\renovation.css", "src\index.html", "functions\api\price-feed.js", "workers\price-monitor.js", "scripts\build.mjs")) {
-    if (-not (Test-Path -LiteralPath (Join-Path $Source $file) -PathType Leaf)) { throw "Brakuje $file. Rozpakuj caly ZIP v110 do jednego folderu." }
+    if (-not (Test-Path -LiteralPath (Join-Path $Source $file) -PathType Leaf)) { throw "Brakuje $file. Rozpakuj caly ZIP v109 do jednego folderu." }
 }
 $work = Join-Path $env:TEMP ("Pet-Universe-Upload-" + [guid]::NewGuid().ToString("N"))
 Run-Git clone --single-branch --branch $Branch $RepoUrl $work
@@ -44,9 +44,9 @@ try {
         Write-Host "GitHub ma juz identyczne pliki." -ForegroundColor Green
     } elseif ($diffResult -eq 1) {
         Run-Git diff --cached --stat
-        Run-Git commit -m "Update Pet Universe v110: floating cards without collection panel"
+        Run-Git commit -m "Update Pet Universe v109: balanced pet collections and compact details"
         Run-Git push origin $Branch
         Write-Host "GOTOWE - projekt wyslany. Poczekaj na udane wdrozenie Cloudflare." -ForegroundColor Green
-        Write-Host "Zmiany v110 sa wizualne. Nie trzeba ponownie konfigurowac Discorda."
+        Write-Host "Zmiany v109 sa wizualne. Nie trzeba ponownie konfigurowac Discorda."
     } else { throw "Nie udalo sie sprawdzic zmian." }
 } finally { Pop-Location }
