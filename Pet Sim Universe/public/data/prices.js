@@ -23,9 +23,9 @@ export const PRICES = {
     // Void Owl
     "void-owl": 350,
     // Sun Deer
-    "sun-deer": 120,
+    "sun-deer": 110,
     // Spaceship Alien
-    "spaceship-alien": 95,
+    "spaceship-alien": 90,
     // Fallen Angel
     "fallen-angel": 500,
     // Job Cat
@@ -37,7 +37,7 @@ export const PRICES = {
     // Pop Cat
     "pop-cat": 25,
     // Queen Bee
-    "queen-bee": {"normal":400,"golden":"No Price","diamond":"No Price"},
+    "queen-bee": {"normal":375,"golden":"No Price","diamond":"No Price"},
     // Blaze Phoenix
     "blaze-phoenix": {"normal":350,"golden":900,"diamond":null},
     // Mossy Mushroom
@@ -89,9 +89,9 @@ export const PRICES = {
 
   eggs: {
     // Alien Egg
-    "alien-egg": 5,
+    "alien-egg": 3,
     // Party Egg
-    "party-egg": 2,
+    "party-egg": 1.5,
     // Galaxy Egg
     "galaxy-egg": 90,
   },
@@ -102,7 +102,7 @@ export const PRICES = {
     // Universe Shard
     "universe-shard": 30,
     // VIP Key
-    "vip-key": 0.35,
+    "vip-key": 0.3,
     // Globe
     "globe": 25,
     // Ball
