@@ -13,7 +13,7 @@ export const PRICES = {
     // Alien Emperor
     "alien-emperor": "7K",
     // Caaaaat
-    "caaaaat": "3K",
+    "caaaaat": "3.1K",
     // Exquisite Cat
     "exquisite-cat": "1.2K",
     // Happy Cupcake
