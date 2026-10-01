@@ -11,7 +11,7 @@ function Run-Git {
 if (-not (Get-Command git -ErrorAction SilentlyContinue)) { throw "Zainstaluj Git for Windows i otworz ponownie PowerShell." }
 if (-not (Get-Command node -ErrorAction SilentlyContinue)) { throw "Zainstaluj Node.js 22 lub nowszy i otworz ponownie PowerShell." }
 foreach ($file in @("package.json", "public\data\prices.js", "public\data\catalog.js", "public\v89.css", "functions\api\price-feed.js", "workers\price-monitor.js", "scripts\build.mjs")) {
-    if (-not (Test-Path -LiteralPath (Join-Path $Source $file) -PathType Leaf)) { throw "Brakuje $file. Rozpakuj caly ZIP v95 do jednego folderu." }
+    if (-not (Test-Path -LiteralPath (Join-Path $Source $file) -PathType Leaf)) { throw "Brakuje $file. Rozpakuj caly ZIP v96 do jednego folderu." }
 }
 Push-Location $Source
 try {
@@ -34,7 +34,7 @@ try {
         Write-Host "GitHub ma juz identyczne pliki." -ForegroundColor Green
     } elseif ($diffResult -eq 1) {
         Run-Git diff --cached --stat
-        Run-Git commit -m "Update Pet Universe v95: Nunito ExtraBold and Black typography"
+        Run-Git commit -m "Update Pet Universe v96: gradient rarity lettering and responsive mobile layout"
         Run-Git push origin $Branch
         Write-Host "GOTOWE - projekt wyslany. Poczekaj na udane wdrozenie Cloudflare." -ForegroundColor Green
         Write-Host "Potem uruchom Upgrade-Discord.ps1, aby wdrozyc wyglad embedu."

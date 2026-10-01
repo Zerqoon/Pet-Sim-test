@@ -333,3 +333,115 @@ h1,h2,h3,h4,.card-title,.brand-copy strong,.set-value strong,#modalValue {
 :root body :is(p,span,strong,b,em,label,a,button,input,select,textarea,small,li,dt,dd,h1,h2,h3,h4) {
  font-family:'Pet Nunito',system-ui,sans-serif !important;
 }
+
+/* v96: rarity is lettering, never a filled label. */
+[data-rarity] {--letter-gradient:linear-gradient(#f8fcff,#b3bfd0);--rim:#b3bfd0;}
+[data-rarity='exclusive'] {--letter-gradient:linear-gradient(#F783F9 0%,#F779FF 15%,#FB63FF 31%,#FB4DFF 46%,#DB3BFF 62%,#BB29FF 77%,#9B17FF 92%,#890EFA 100%);--rim:#bb63ff;}
+[data-rarity='mythical'] {--letter-gradient:linear-gradient(#FBD684 0%,#FFBF5E 17%,#FFA02B 35%,#FF7814 52%,#FF4129 70%,#FF0E40 87%,#FF0865 100%);--rim:#ff627c;}
+[data-rarity='legendary'] {--letter-gradient:linear-gradient(90deg,#FFCC02 0%,#FFCC02 45%,#FFF883 78%,#FFEF0A 100%);--rim:#ffda35;}
+[data-rarity='rare'] {--letter-gradient:linear-gradient(#bcff52,#A8FF07 60%,#8ee800);--rim:#a8ff07;}
+[data-rarity='epic'] {--letter-gradient:linear-gradient(#b0f8ff,#58e3ff 48%,#1ea9ef);--rim:#58e3ff;}
+[data-rarity='basic'] {--letter-gradient:linear-gradient(#ffffff,#d4dce8 55%,#9aa6ba);--rim:#c8d2df;}
+[data-rarity='secret'] {--letter-gradient:linear-gradient(#fff8ec,#ecedff 45%,#b8a5ff);--rim:#d8c8ff;}
+[data-rarity='code'] {--letter-gradient:linear-gradient(#c8fbff,#69dfff 50%,#679cff);--rim:#69dfff;}
+#cardsGrid .value-card[data-rarity] .rarity-badge,
+#calcPickerGrid .calc-picker-card[data-rarity] .calc-picker-rarity,
+#detailModal[data-rarity] .modal-rarity {
+ background:none !important;border:0 !important;box-shadow:none !important;
+ padding:0 !important;min-height:24px !important;border-radius:0 !important;
+ text-transform:capitalize !important;font-size:1rem !important;letter-spacing:0 !important;
+ overflow:visible !important;
+}
+#cardsGrid .value-card[data-rarity] .rarity-badge::before,
+#cardsGrid .value-card[data-rarity] .rarity-badge::after,
+#calcPickerGrid .calc-picker-card[data-rarity] .calc-picker-rarity::before,
+#calcPickerGrid .calc-picker-card[data-rarity] .calc-picker-rarity::after,
+#detailModal[data-rarity] .modal-rarity::before,
+#detailModal[data-rarity] .modal-rarity::after {display:none !important;}
+#cardsGrid .value-card[data-rarity] .rarity-badge .rarity-text,
+#calcPickerGrid .calc-picker-card[data-rarity] .calc-picker-rarity .rarity-text,
+#detailModal[data-rarity] .modal-rarity .rarity-text {
+ display:inline-block;background:var(--letter-gradient) !important;
+ background-clip:text !important;-webkit-background-clip:text !important;
+ color:transparent !important;-webkit-text-fill-color:transparent !important;
+ -webkit-text-stroke:.65px #171321 !important;paint-order:stroke fill;
+ text-shadow:none !important;filter:drop-shadow(0 1px 1px #0009) !important;
+ font-weight:900 !important;line-height:1.3 !important;
+}
+#cardsGrid .value-card .card-badges {
+ position:relative !important;inset:auto !important;width:100% !important;
+ display:flex !important;flex-wrap:wrap !important;gap:5px 8px !important;
+ align-items:center !important;justify-content:flex-start !important;
+ padding:0 3px 8px !important;z-index:2;
+}
+#cardsGrid .value-card .card-badges > .rarity-badge {flex-basis:100% !important;justify-content:flex-start !important;}
+#cardsGrid .value-card .card-badges > .event-badge {
+ background:linear-gradient(#c4f3ff,#62cdff 55%,#379cff) !important;
+ background-clip:text !important;-webkit-background-clip:text !important;
+ color:transparent !important;-webkit-text-fill-color:transparent !important;
+ border:0 !important;box-shadow:none !important;padding:0 !important;
+ font-size:.72rem !important;min-height:20px !important;
+}
+#detailModal .modal-event-badge {background:none !important;color:#87dcff !important;-webkit-text-fill-color:#87dcff !important;border:0 !important;box-shadow:none !important;}
+#cardsGrid .value-card .card-art {
+ display:flex !important;flex-direction:column !important;align-items:center !important;
+ height:auto !important;min-height:195px !important;padding:10px 8px 6px !important;
+}
+#cardsGrid .value-card .card-art :is(.pet-image,.animated-art) {position:relative !important;inset:auto !important;max-width:100% !important;}
+#cardsGrid .value-card .card-button {grid-template-rows:auto 1fr !important;}
+/* A narrow masked rim moves without animating the pet or its typography. */
+#cardsGrid .value-card[data-rarity] .card-button {position:relative !important;isolation:isolate;border-color:var(--rim) !important;}
+#cardsGrid .value-card[data-rarity] .card-button::after {
+ content:'';position:absolute;inset:0;pointer-events:none;border-radius:inherit;
+ padding:2px;z-index:3;background:linear-gradient(110deg,var(--rim) 10%,#fff 25%,var(--rim) 40%,var(--rim) 70%,#fff 85%,var(--rim) 100%);
+ background-size:300% 100%;
+ -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+ -webkit-mask-composite:xor;mask-composite:exclude;
+ animation:pet-rim-flow 7s linear infinite !important;
+}
+@keyframes pet-rim-flow {from {background-position:0% 50%}to {background-position:100% 50%}}
+html[data-motion='off'] #cardsGrid .card-button::after,
+html[data-mobile-scrolling] #cardsGrid .card-button::after {animation-play-state:paused !important;}
+@media(prefers-reduced-motion:reduce) {#cardsGrid .value-card[data-rarity] .card-button::after {animation:none !important;}}
+@media(max-width:768px) {
+ body[data-view='values'] .app-layout {gap:14px !important;padding:12px !important;}
+ body[data-view='values'] .sidebar {gap:10px !important;}
+ body[data-view='values'] .side-nav {display:grid !important;grid-template-columns:repeat(5,minmax(0,1fr)) !important;gap:5px !important;}
+ body[data-view='values'] .side-nav .nav-btn {min-width:0 !important;padding:9px 3px !important;min-height:76px !important;gap:5px !important;}
+ body[data-view='values'] .nav-label {font-size:.65rem !important;line-height:1.2 !important;}
+ body[data-view='values'] .nav-icon {width:30px !important;height:30px !important;}
+ body[data-view='values'] .appearance-tools {position:static !important;display:grid !important;grid-template-columns:minmax(0,1fr) 44px !important;width:100% !important;max-width:none !important;gap:8px !important;}
+ body[data-view='values'] .appearance-tools .theme-toggle {width:100% !important;min-height:44px !important;padding:8px 12px !important;font-size:.85rem !important;}
+ body[data-view='values'] .appearance-tools .motion-toggle {position:static !important;inset:auto !important;transform:none !important;width:44px !important;height:44px !important;min-height:44px !important;}
+ body[data-view='values'] .side-footer {display:none !important;}
+ body[data-view='values'] .page-header {padding:16px !important;margin-bottom:14px !important;gap:12px !important;}
+ body[data-view='values'] #sectionTitle {font-size:1.7rem !important;line-height:1.2 !important;}
+ body[data-view='values'] .page-tools {display:grid !important;grid-template-columns:minmax(0,1fr) 72px !important;gap:8px !important;}
+ body[data-view='values'] .search-box {grid-column:1 / -1 !important;min-height:44px !important;}
+ body[data-view='values'] .search-box input {font-size:.9rem !important;}
+ body[data-view='values'] .custom-sort {grid-column:1 !important;grid-row:2 !important;}
+ body[data-view='values'] .home-corner-btn {position:static !important;grid-column:2 !important;grid-row:2 !important;min-height:44px !important;font-size:.85rem !important;}
+ body[data-view='values'] .pet-variant-tools {grid-column:1 / -1 !important;}
+ body[data-view='values'] .variant-btn {font-size:.76rem !important;padding:10px 5px !important;min-width:0 !important;}
+ body[data-view='values'] .catalog-card {padding:12px !important;}
+ body[data-view='values'] .rarity-section {padding:8px !important;}
+ body[data-view='values'] .rarity-section .card-grid {grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:10px !important;}
+ #cardsGrid .value-card[data-rarity] .rarity-badge {font-size:.88rem !important;}
+ #cardsGrid .value-card .card-art {min-height:170px !important;padding:8px 5px 5px !important;}
+ #cardsGrid .value-card .card-badges {gap:3px 6px !important;padding-bottom:6px !important;}
+ #cardsGrid .value-card .card-title {font-size:.87rem !important;overflow-wrap:anywhere;}
+}
+@media(max-width:350px) {body[data-view='values'] .rarity-section .card-grid {grid-template-columns:1fr !important;}}
+#cardsGrid .value-card .card-art :is(.card-image,.animated-pop-card) {
+ position:relative !important;inset:auto !important;flex:0 0 auto;
+ width:min(100%,170px) !important;max-height:165px !important;
+ object-fit:contain;margin:auto 0 0 !important;transform:none !important;
+}
+#cardsGrid .value-card .animated-pop-card {height:145px !important;}
+#cardsGrid .value-card .animated-pop-card .pop-frame {width:100% !important;height:100% !important;object-fit:contain;}
+@media(max-width:768px) {
+ #cardsGrid .value-card .card-art :is(.card-image,.animated-pop-card) {width:min(100%,130px) !important;max-height:125px !important;}
+ #cardsGrid .value-card .animated-pop-card {height:125px !important;}
+ #cardsGrid .value-card .card-art:has(.best-badge),
+ #cardsGrid .value-card .card-art:has(.event-badge) {padding-top:8px !important;height:auto !important;min-height:170px !important;}
+}
