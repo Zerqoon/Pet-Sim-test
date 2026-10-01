@@ -645,3 +645,45 @@ body[data-view='values'] #cardsGrid {container-type:inline-size;}
  #detailModal .modal-visual {min-height:290px !important;}
  #detailModal.detail-modal {max-width:680px !important;}
 }
+
+/* v103: centering must never shrink a utility collection to one card. */
+body[data-view='values'] .main,
+body[data-view='values'] #valuesView {min-width:0 !important;justify-items:stretch !important;}
+body[data-view='values'] #valuesView .catalog-card:has(.compact-grid) {
+ width:100% !important;min-width:0 !important;max-width:none !important;
+ box-sizing:border-box !important;justify-self:stretch !important;margin-inline:auto !important;
+}
+body[data-view='values'] #valuesView .catalog-card:has(.compact-grid-eggs) {max-width:850px !important;justify-self:center !important;}
+body[data-view='values'] #valuesView #cardsGrid {width:100% !important;min-width:0 !important;box-sizing:border-box !important;}
+body[data-view='values'] #valuesView #cardsGrid :is(.compact-grid-charms,.compact-grid-items,.compact-grid-eggs) {
+ width:100% !important;min-width:0 !important;max-width:none !important;
+ flex-direction:row !important;flex-wrap:wrap !important;box-sizing:border-box !important;
+}
+/* Override the sidebar-wide sizing rule only for this floating control. */
+body:is([data-view='values'],[data-view='calculator']) .sidebar .appearance-tools {
+ position:fixed !important;inset:auto !important;right:18px !important;bottom:18px !important;
+ width:max-content !important;max-width:calc(100vw - 24px) !important;height:auto !important;
+ min-height:0 !important;display:flex !important;flex-direction:row !important;
+ align-items:center !important;justify-content:center !important;gap:6px !important;
+ padding:6px !important;margin:0 !important;transform:none !important;z-index:90 !important;
+ border-radius:999px !important;background:rgba(15,16,25,.94) !important;
+ border:1px solid #ffffff1c !important;box-shadow:0 5px 18px #0005 !important;
+}
+body:is([data-view='values'],[data-view='calculator']) .sidebar .appearance-tools .theme-toggle {
+ position:static !important;inset:auto !important;display:inline-flex !important;
+ width:auto !important;min-width:110px !important;max-width:none !important;
+ height:38px !important;min-height:38px !important;gap:7px !important;
+ padding:0 12px !important;margin:0 !important;transform:none !important;
+ justify-content:center !important;align-items:center !important;font-size:.76rem !important;
+}
+body:is([data-view='values'],[data-view='calculator']) .sidebar .appearance-tools .motion-toggle {
+ position:static !important;inset:auto !important;display:grid !important;place-items:center !important;
+ width:38px !important;min-width:38px !important;height:38px !important;min-height:38px !important;
+ padding:0 !important;margin:0 !important;transform:none !important;
+}
+@media(max-width:768px) {
+ body:is([data-view='values'],[data-view='calculator']) .sidebar .appearance-tools {
+ right:12px !important;bottom:calc(12px + env(safe-area-inset-bottom,0px)) !important;
+ }
+ body[data-view='values'] .main {padding-bottom:70px !important;}
+}
