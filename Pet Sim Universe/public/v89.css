@@ -483,3 +483,32 @@ body[data-view='values'] .catalog-card:has(.compact-grid) .catalog-meta {margin-
 @media(max-width:340px) {
  body[data-view='values'] #cardsGrid :is(.compact-grid-charms,.compact-grid-items,.compact-grid-eggs) {grid-template-columns:1fr !important;}
 }
+
+/* v100: center fitted panels and incomplete rows without stretching cards. */
+body[data-view='values'] .catalog-card:has(.compact-grid) {
+ margin-inline:auto !important;justify-self:center !important;
+}
+body[data-view='values'] #cardsGrid :is(.compact-grid-charms,.compact-grid-items,.compact-grid-eggs) {
+ display:flex !important;flex-wrap:wrap !important;justify-content:center !important;
+ align-items:stretch !important;gap:12px !important;
+}
+body[data-view='values'] #cardsGrid .compact-grid .value-card {
+ flex:0 0 clamp(185px,12vw,230px) !important;width:clamp(185px,12vw,230px) !important;
+ height:auto !important;
+}
+body[data-view='values'] #cardsGrid .compact-grid-eggs .value-card {flex-basis:calc((100% - 24px)/3) !important;width:calc((100% - 24px)/3) !important;}
+/* Bright moving segments stay within the original one-pixel rim. */
+#cardsGrid .rarity-sheen,#calcPickerGrid .rarity-sheen {padding:1px !important;opacity:.95 !important;}
+#cardsGrid .rarity-sheen::before,#calcPickerGrid .rarity-sheen::before {
+ background:conic-gradient(transparent 0 10%,color-mix(in srgb,var(--rarity,var(--picker-rarity)) 65%,white) 17%,#fff 21%,color-mix(in srgb,var(--rarity,var(--picker-rarity)) 75%,white) 25%,transparent 33% 59%,color-mix(in srgb,var(--rarity,var(--picker-rarity)) 70%,white) 69%,#fff 73%,transparent 82% 100%) !important;
+ animation-duration:7s !important;animation-timing-function:linear !important;
+}
+@media(max-width:768px) {
+ body[data-view='values'] #cardsGrid :is(.compact-grid-charms,.compact-grid-items,.compact-grid-eggs) {gap:9px !important;}
+ body[data-view='values'] #cardsGrid .compact-grid .value-card,
+ body[data-view='values'] #cardsGrid .compact-grid-eggs .value-card {flex:0 0 calc((100% - 9px)/2) !important;width:calc((100% - 9px)/2) !important;}
+}
+@media(max-width:340px) {
+ body[data-view='values'] #cardsGrid .compact-grid .value-card,
+ body[data-view='values'] #cardsGrid .compact-grid-eggs .value-card {flex-basis:100% !important;width:100% !important;}
+}
