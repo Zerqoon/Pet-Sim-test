@@ -571,3 +571,77 @@ body[data-view='values'] .variant-btn.active {background:color-mix(in srgb,var(-
  #cardsGrid .value-card .card-badges > .best-badge {grid-row:3 !important;}
  #cardsGrid .value-card .card-art:has(.event-badge) {padding-top:90px !important;}
 }
+
+/* v102: layout follows the available viewport and collection width. */
+body[data-view='values'] .main {min-width:0 !important;}
+body[data-view='values'] #cardsGrid {container-type:inline-size;}
+@media(min-width:901px) {
+ body[data-view='values'] .app-layout {
+ width:calc(100% - 40px) !important;max-width:3200px !important;margin-inline:auto !important;
+ display:grid !important;grid-template-columns:clamp(210px,15vw,260px) minmax(0,1fr) !important;
+ gap:clamp(16px,1.2vw,30px) !important;
+ }
+ body[data-view='values'] .main {width:100% !important;max-width:none !important;}
+ body[data-view='values'] .page-header {width:100% !important;max-width:none !important;}
+ body[data-view='values'] .page-tools.page-tools-v40 {
+ display:grid !important;grid-template-columns:minmax(180px,1fr) 150px 320px 90px !important;
+ align-items:end !important;gap:10px !important;width:100% !important;
+ }
+ body[data-view='values'] .page-tools.page-tools-v40.no-variants {
+ grid-template-columns:minmax(180px,1fr) 150px 90px !important;
+ }
+ body[data-view='values'] .page-tools :is(.search-box,.custom-sort,.pet-variant-tools,.home-corner-btn) {
+ position:relative !important;inset:auto !important;grid-column:auto !important;grid-row:auto !important;
+ width:100% !important;min-width:0 !important;margin:0 !important;
+ }
+ body[data-view='values'] .variant-switch {display:grid !important;grid-template-columns:repeat(3,minmax(0,1fr)) !important;}
+ body[data-view='values'] .variant-btn {min-width:0 !important;padding-inline:8px !important;}
+ body[data-view='values'] #cardsGrid .rarity-section .card-grid {
+ display:grid !important;grid-template-columns:repeat(auto-fit,minmax(210px,1fr)) !important;gap:14px !important;
+ }
+ body[data-view='values'] #cardsGrid .compact-grid .value-card {
+ flex:0 0 clamp(195px,11vw,245px) !important;width:clamp(195px,11vw,245px) !important;
+ }
+ body[data-view='values'] #cardsGrid .compact-grid-eggs .value-card {
+ flex-basis:calc((100% - 24px)/3) !important;width:calc((100% - 24px)/3) !important;
+ }
+}
+@media(min-width:901px) and (max-width:1250px) {
+ body[data-view='values'] .page-tools.page-tools-v40 {grid-template-columns:minmax(0,1fr) 150px 90px !important;}
+ body[data-view='values'] .page-tools:not(.no-variants) .search-box {grid-column:1 / -1 !important;grid-row:1 !important;}
+ body[data-view='values'] .page-tools:not(.no-variants) .pet-variant-tools {grid-column:1 !important;grid-row:2 !important;}
+ body[data-view='values'] .page-tools:not(.no-variants) .custom-sort {grid-column:2 !important;grid-row:2 !important;}
+ body[data-view='values'] .page-tools:not(.no-variants) .home-corner-btn {grid-column:3 !important;grid-row:2 !important;}
+ body[data-view='values'] #cardsGrid .rarity-section .card-grid {grid-template-columns:repeat(auto-fit,minmax(190px,1fr)) !important;}
+}
+@media(min-width:2200px) {
+ body[data-view='values'] .app-layout {width:calc(100% - 64px) !important;}
+ body[data-view='values'] #cardsGrid .rarity-section .card-grid {grid-template-columns:repeat(auto-fit,minmax(230px,1fr)) !important;gap:18px !important;}
+ body[data-view='values'] .page-header {padding:24px !important;}
+ body[data-view='values'] .catalog-card {padding:20px !important;}
+}
+@media(min-width:769px) and (max-width:900px) {
+ body[data-view='values'] .app-layout {width:calc(100% - 24px) !important;grid-template-columns:1fr !important;gap:14px !important;}
+ body[data-view='values'] .sidebar {position:static !important;width:100% !important;min-height:0 !important;}
+ body[data-view='values'] .side-nav {display:grid !important;grid-template-columns:repeat(5,minmax(0,1fr)) !important;gap:8px !important;}
+ body[data-view='values'] .side-nav .nav-btn {width:100% !important;min-width:0 !important;}
+ body[data-view='values'] .side-footer {display:none !important;}
+ body[data-view='values'] .page-tools.page-tools-v40 {display:grid !important;grid-template-columns:minmax(0,1fr) 140px 90px !important;gap:10px !important;}
+ body[data-view='values'] .search-box {grid-column:1 / -1 !important;}
+ body[data-view='values'] #cardsGrid .rarity-section .card-grid {grid-template-columns:repeat(3,minmax(0,1fr)) !important;gap:12px !important;}
+}
+/* Actual panel width controls density, even inside a resized desktop window. */
+@container(max-width:650px) {
+ body[data-view='values'] #cardsGrid .rarity-section .card-grid {grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:10px !important;}
+}
+@container(max-width:290px) {
+ body[data-view='values'] #cardsGrid .rarity-section .card-grid {grid-template-columns:1fr !important;}
+}
+@media(min-width:1400px) {
+ #detailModal.detail-modal {width:min(1280px,calc(100vw - 64px)) !important;max-width:1280px !important;}
+}
+@media(max-width:900px) {
+ #detailModal .modal-grid {grid-template-columns:1fr !important;}
+ #detailModal .modal-visual {min-height:290px !important;}
+ #detailModal.detail-modal {max-width:680px !important;}
+}
