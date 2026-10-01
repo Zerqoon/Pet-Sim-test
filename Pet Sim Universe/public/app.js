@@ -1,4 +1,4 @@
-import { renderTradePage, tradePageCount } from './data/trade-export.js';
+import { renderTradePage, tradePageCount, tradeSummary } from './data/trade-export.js';
 import { PETS, CHARMS, EGGS, ITEMS, CODES, RARITY_ORDER, LAST_UPDATED } from './data/catalog.js';
 import { IMAGE_ASSETS } from './data/image-assets.js';
 
@@ -554,9 +554,10 @@ function createPetSection(exclusive) {
   return { section, grid: $('.card-grid', section), count: $('.rarity-section-head > span', section) };
 }
 const observedTiles = new Set();
+const touchLayout = matchMedia('(max-width: 768px), (pointer: coarse)');
 const tileObserver = 'IntersectionObserver' in window ? new IntersectionObserver(entries => {
   for (const entry of entries) entry.target.toggleAttribute('data-offscreen', !entry.isIntersecting);
-}, { rootMargin: '450px 0px' }) : null;
+}, { rootMargin: touchLayout.matches ? '80px 0px' : '200px 0px' }) : null;
 function syncVisibleAnimations() {
   if (!tileObserver) return;
   const tiles = new Set($$('#cardsGrid .value-card, #calcPickerGrid .calc-picker-card'));
@@ -681,6 +682,13 @@ function calcSideInfo(side) {
   return { total: items + tickets, hasOC };
 }
 
+function calcEntryPrice(item, entry) {
+  const raw = valueFor(item, entry.variant);
+  if (parseNumericValue(raw) == null) return formatValue(raw);
+  const total = calcNumericValue(item, entry.variant) * entry.qty;
+  return item.compactValue ? compactValueFormat.format(total) : formatValue(total);
+}
+
 function calcEntryMarkup(side, entry) {
   const item = calcFindItem(entry.category, entry.id);
   if (!item) return '';
@@ -689,7 +697,7 @@ function calcEntryMarkup(side, entry) {
   const displayValue = parseNumericValue(rawValue) == null ? formatValue(rawValue) : (item.compactValue ? compactValueFormat.format(numericValue) : formatValue(numericValue));
   const image = imageFor(item, entry.variant);
   const variantName = entry.variant !== 'normal' ? entry.variant[0].toUpperCase() + entry.variant.slice(1) : '';
-  return `<article class="trade-item-v40">
+  return `<article class="trade-item-v40 trade-entry-new" data-entry-category="${entry.category}">
     <div class="trade-item-art-v40">
       <img ${imageAttributes(image)} alt="${item.name}">
       <span class="trade-item-qty-v40">x${entry.qty}</span>
@@ -697,9 +705,10 @@ function calcEntryMarkup(side, entry) {
     <div class="trade-item-copy-v40">
       <strong>${item.name}</strong>
       <small>${variantName || rarityFor(item)}</small>
-      <span><img ${imageAttributes(ticket, { sizes: '22px' })} alt="">${displayValue}</span>
+      <span class="trade-entry-price"><img ${imageAttributes(ticket, { sizes: '22px' })} alt="">${displayValue}</span>
     </div>
-    <button class="trade-item-remove-v40" type="button" data-calc-remove="${side}" data-id="${entry.id}" data-variant="${entry.variant}" aria-label="Remove ${item.name}">×</button>
+    <button class="trade-item-increase-v88" type="button" data-calc-increase="${side}" data-category="${entry.category}" data-id="${entry.id}" data-variant="${entry.variant}" aria-label="Add one ${item.name}">+</button>
+    <button class="trade-item-remove-v40" type="button" data-calc-remove="${side}" data-category="${entry.category}" data-id="${entry.id}" data-variant="${entry.variant}" aria-label="Remove one ${item.name}">−</button>
   </article>`;
 }
 
@@ -734,11 +743,40 @@ function flashTicketInput(element, direction = 'neutral') {
 }
 
 const calcListSignatures = { left: null, right: null };
+const calcNodes = { left: new Map(), right: new Map() };
+function updateCalcList(side) {
+  const cache = calcNodes[side];
+  const keys = new Set();
+  const nodes = state.calc[side].map(entry => {
+    const key = `${entry.category}/${entry.id}/${entry.variant}`;
+    keys.add(key);
+    let saved = cache.get(key);
+    if (!saved) {
+      saved = { node: elementFromMarkup(calcEntryMarkup(side, entry)), qty: entry.qty };
+      cache.set(key, saved);
+    } else if (saved.qty !== entry.qty) {
+      const direction = entry.qty > saved.qty ? 'up' : 'down';
+      animateMetric($('.trade-item-qty-v40', saved.node), `x${entry.qty}`, direction);
+      const price = $('.trade-entry-price', saved.node);
+      price.lastChild.textContent = calcEntryPrice(calcFindItem(entry.category, entry.id), entry);
+      saved.qty = entry.qty;
+    }
+    return saved.node;
+  });
+  for (const key of cache.keys()) if (!keys.has(key)) cache.delete(key);
+  const host = $(`#calc${side === 'left' ? 'Left' : 'Right'}List`);
+  nodes.push($('.trade-add-v40', host) || elementFromMarkup(calcAddTile(side)));
+  reconcileChildren(host, nodes);
+}
+let calculatorFrame = 0;
+function scheduleCalculatorRender() {
+  if (!calculatorFrame) calculatorFrame = requestAnimationFrame(() => { calculatorFrame = 0; renderCalculator(); });
+}
 function renderCalculator() {
   for (const side of ['left', 'right']) {
     const signature = JSON.stringify(state.calc[side]);
     if (signature !== calcListSignatures[side]) {
-      $(`#calc${side === 'left' ? 'Left' : 'Right'}List`).innerHTML = state.calc[side].map(entry => calcEntryMarkup(side, entry)).join('') + calcAddTile(side);
+      updateCalcList(side);
       calcListSignatures[side] = signature;
     }
   }
@@ -775,36 +813,18 @@ function renderCalculator() {
     });
   };
 
-  // Result is from My Offer perspective: giving more = L, receiving more = W.
-  let verdictState = 'fair';
-  const empty = !state.calc.left.length && !state.calc.right.length && !left && !right;
-  if (empty || hasAnyOC) {
-    setTradeStatus('');
-    animateMetric(centerVerdict, empty ? 'READY' : 'REVIEW', 'neutral');
-    label.className = '';
-    animateMetric(label, empty ? 'Add items or tickets to compare offers.' : 'O/C or unpriced items require a separate agreement.', 'neutral');
-  } else if (diff > 0) {
-    verdictState = 'lose';
-    setTradeStatus('lose');
-    centerVerdict.classList.add('is-lose');
-    animateMetric(centerVerdict, 'LOSS', 'down');
-    label.className = 'is-lose';
-    animateMetric(label, `You give ${formatValue(gap)} more in listed value${hasAnyOC ? ' · O/C excluded' : ''}`, 'down');
-  } else if (diff < 0) {
-    verdictState = 'win';
-    setTradeStatus('win');
-    centerVerdict.classList.add('is-win');
-    animateMetric(centerVerdict, 'WIN', 'up');
-    label.className = 'is-win';
-    animateMetric(label, `You receive ${formatValue(gap)} more in listed value${hasAnyOC ? ' · O/C excluded' : ''}`, 'up');
-  } else {
-    verdictState = 'fair';
-    setTradeStatus('fair');
-    centerVerdict.classList.add('is-fair');
-    animateMetric(centerVerdict, 'FAIR', 'neutral');
-    label.className = 'is-fair';
-    animateMetric(label, hasAnyOC ? 'Fair trade · O/C excluded' : 'Both offers have the same listed value.', 'neutral');
-  }
+  // One rule shared with PNG export: compare known values, keep O/C separate.
+  const summary = tradeSummary({ left: { total: left, entries: state.calc.left, tickets: state.calc.leftTickets, unpriced: leftInfo.hasOC }, right: { total: right, entries: state.calc.right, tickets: state.calc.rightTickets, unpriced: rightInfo.hasOC } });
+  const verdictState = summary.verdict;
+  setTradeStatus(verdictState);
+  centerVerdict.className = `is-${verdictState}`;
+  label.className = `is-${verdictState}`;
+  animateMetric(centerVerdict, verdictState === 'win' ? 'W' : verdictState === 'lose' ? 'L' : 'FAIR', verdictState === 'win' ? 'up' : verdictState === 'lose' ? 'down' : 'neutral');
+  animateMetric(label, summary.detail, verdictState === 'win' ? 'up' : verdictState === 'lose' ? 'down' : 'neutral');
+  $('#calcUnpricedNotice').hidden = !hasAnyOC;
+  const countText = side => { const count = state.calc[side].reduce((sum, entry) => sum + entry.qty, 0); return `${count} ${count === 1 ? 'item' : 'items'}`; };
+  $('#calcLeftCount').textContent = countText('left');
+  $('#calcRightCount').textContent = countText('right');
 
   calcMotionCache.leftTotal = left;
   calcMotionCache.rightTotal = right;
@@ -883,12 +903,12 @@ function addCalcItem(side, category, id, variant = 'normal') {
   renderCalculator();
 }
 
-function removeCalcItem(side, id, variant) {
+function removeCalcItem(side, category, id, variant) {
   const entries = state.calc[side];
-  const existing = entries.find(entry => entry.id === id && entry.variant === variant);
+  const existing = entries.find(entry => entry.category === category && entry.id === id && entry.variant === variant);
   if (!existing) return;
   if (existing.qty > 1) existing.qty -= 1;
-  else state.calc[side] = entries.filter(entry => !(entry.id === id && entry.variant === variant));
+  else state.calc[side] = entries.filter(entry => !(entry.category === category && entry.id === id && entry.variant === variant));
   renderCalculator();
 }
 
@@ -1127,9 +1147,12 @@ document.addEventListener('click', event => {
     return;
   }
 
+  const calcIncrease = event.target.closest('[data-calc-increase]');
+  if (calcIncrease) { addCalcItem(calcIncrease.dataset.calcIncrease, calcIncrease.dataset.category, calcIncrease.dataset.id, calcIncrease.dataset.variant); return; }
+
   const calcRemove = event.target.closest('[data-calc-remove]');
   if (calcRemove) {
-    removeCalcItem(calcRemove.dataset.calcRemove, calcRemove.dataset.id, calcRemove.dataset.variant);
+    removeCalcItem(calcRemove.dataset.calcRemove, calcRemove.dataset.category, calcRemove.dataset.id, calcRemove.dataset.variant);
     return;
   }
 
@@ -1196,17 +1219,17 @@ $('#calcPickerSearch').addEventListener('input', event => {
 });
 
 $('#calcLeftTickets').addEventListener('input', event => {
-  const next = Math.max(0, Number(event.target.value) || 0);
+  const next = Number.isFinite(Number(event.target.value)) ? Math.max(0, Number(event.target.value)) : 0;
   flashTicketInput(event.target, next > state.calc.leftTickets ? 'up' : next < state.calc.leftTickets ? 'down' : 'neutral');
   state.calc.leftTickets = next;
-  renderCalculator();
+  scheduleCalculatorRender();
 });
 
 $('#calcRightTickets').addEventListener('input', event => {
-  const next = Math.max(0, Number(event.target.value) || 0);
+  const next = Number.isFinite(Number(event.target.value)) ? Math.max(0, Number(event.target.value)) : 0;
   flashTicketInput(event.target, next > state.calc.rightTickets ? 'up' : next < state.calc.rightTickets ? 'down' : 'neutral');
   state.calc.rightTickets = next;
-  renderCalculator();
+  scheduleCalculatorRender();
 });
 for (const side of ['left', 'right']) {
   $(`#calc${side === 'left' ? 'Left' : 'Right'}Tickets`).addEventListener('blur', event => {
@@ -1269,6 +1292,9 @@ if (savedTheme === 'dark' || savedTheme === 'light') {
 
 function syncTheme() {
   $('#themeLabel').textContent = document.documentElement.dataset.theme === 'dark' ? 'Dark mode' : 'Light mode';
+  const action = document.documentElement.dataset.theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode';
+  $('#themeToggle').setAttribute('aria-label', action);
+  $('#themeToggle').title = action;
 }
 
 $('#themeToggle').addEventListener('click', () => {
@@ -1298,15 +1324,24 @@ document.addEventListener('visibilitychange', () => {
   document.documentElement.toggleAttribute('data-page-hidden', document.hidden);
   if (document.hidden) resetTilt();
 });
+// Keep the same effects; pause decorative motion briefly while touch scrolling.
+let touchScrollTimer;
+document.addEventListener('scroll', () => {
+  if (!touchLayout.matches || !motionAllowed()) return;
+  if (!document.documentElement.hasAttribute('data-mobile-scrolling')) document.documentElement.setAttribute('data-mobile-scrolling', '');
+  clearTimeout(touchScrollTimer);
+  touchScrollTimer = setTimeout(() => document.documentElement.removeAttribute('data-mobile-scrolling'), 160);
+}, { passive: true, capture: true });
 document.addEventListener('pointerdown', event => {
   if (!motionAllowed() || !event.target.closest('button')) return;
   const dialog = event.target.closest('dialog');
   const rect = dialog?.getBoundingClientRect();
   const fragment = document.createDocumentFragment();
   const sparks = [];
-  for (let i = 0; i < 5; i++) {
+  const count = event.pointerType === 'touch' ? 3 : 5;
+  for (let i = 0; i < count; i++) {
     const spark = document.createElement('i'); spark.className = 'click-ember';
-    const angle = Math.PI * 2 * i / 5;
+    const angle = Math.PI * 2 * i / count;
     spark.style.cssText = `left:${event.clientX}px;top:${event.clientY}px;--sx:${Math.cos(angle)*25}px;--sy:${Math.sin(angle)*25}px`;
     if (dialog) { spark.style.position = 'absolute'; spark.style.left = `${event.clientX-rect.left}px`; spark.style.top = `${event.clientY-rect.top+dialog.scrollTop}px`; }
     fragment.append(spark); sparks.push(spark);

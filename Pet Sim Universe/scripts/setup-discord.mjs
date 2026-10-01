@@ -1,0 +1,116 @@
+import { spawn } from 'node:child_process';
+import { existsSync } from 'node:fs';
+import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { randomBytes } from 'node:crypto';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
+import { createInterface } from 'node:readline/promises';
+import { discordUrl, validateFeed } from '../server/pricing.js';
+
+const root = path.resolve(import.meta.dirname, '..');
+const secret = process.env.PET_UNIVERSE_WEBHOOK?.trim();
+const site = new URL(process.env.PET_UNIVERSE_SITE || 'https://petuniverse-values.pl');
+let privateDirectory;
+const hide = value => String(value).split(secret || '\0').join('[hidden webhook]');
+
+// Calling the npm CLI through Node also works with spaces in Windows paths.
+// A webhook is never a command-line argument or part of the Wrangler config.
+const npxCli = process.env.PET_UNIVERSE_NPX_CLI || path.join(path.dirname(process.execPath), 'node_modules/npm/bin/npx-cli.js');
+function wrangler(args, { capture = false } = {}) {
+  const command = existsSync(npxCli) ? process.execPath : process.platform === 'win32' ? null : 'npx';
+  if (!command) throw new Error('Nie znaleziono npx-cli.js. Zainstaluj standardowy Node.js z npm.');
+  const argumentsList = [...(command === process.execPath ? [npxCli] : []), '--yes', 'wrangler@4', ...args];
+  return new Promise((resolve, reject) => {
+    const child = spawn(command, argumentsList, { cwd: root, shell: false, stdio: ['inherit', 'pipe', 'pipe'], env: { ...process.env, WRANGLER_SEND_METRICS: 'false' } });
+    let output = '';
+    child.stdout.on('data', bytes => { output += bytes; if (!capture) process.stdout.write(hide(bytes)); });
+    child.stderr.on('data', bytes => process.stderr.write(hide(bytes)));
+    child.once('error', () => reject(new Error('Nie udalo sie uruchomic Wrangler. Sprawdz Node.js i dostep do internetu.')));
+    child.once('close', code => code === 0 ? resolve(output) : reject(new Error(`Wrangler zakonczyl sie bledem (${code}).`)));
+  });
+}
+
+function parseList(text) {
+  try { return JSON.parse(text); } catch {
+    const start = text.indexOf('[\n');
+    if (start >= 0) return JSON.parse(text.slice(start));
+    throw new Error('Nie udalo sie odczytac listy baz D1.');
+  }
+}
+
+try {
+  if (Number(process.versions.node.split('.')[0]) < 22) throw new Error('Wymagany jest Node.js 22 lub nowszy.');
+  const webhook = discordUrl(secret);
+  const webhookResponse = await fetch(webhook, { redirect: 'error', signal: AbortSignal.timeout(15000) });
+  if (!webhookResponse.ok) throw new Error(`Discord nie przyjal adresu webhooka (HTTP ${webhookResponse.status}). Sprawdz, czy adres jest aktualny.`);
+  const webhookInfo = await webhookResponse.json();
+  if (webhookInfo.type !== 1) throw new Error('Ten adres nie jest webhookiem przychodzacym Discorda.');
+  if (site.protocol !== 'https:' || site.username || site.password) throw new Error('Adres strony musi zaczynac sie od https://.');
+  const feedResponse = await fetch(new URL('/api/price-feed', site), { cache: 'no-store', redirect: 'error', signal: AbortSignal.timeout(15000) });
+  if (!feedResponse.ok) throw new Error('Najpierw wdroz caly projekt v89 na Cloudflare. Endpoint /api/price-feed jeszcze nie dziala.');
+  validateFeed(await feedResponse.json(), site.origin);
+  console.log('Ceny z wdrozonej strony sa dostepne. Konfiguracja Cloudflare...');
+
+  const configDirectory = path.join(root, '.cloudflare');
+  const configPath = path.join(configDirectory, 'price-monitor.json');
+  let previous = {};
+  try { previous = JSON.parse(await readFile(configPath, 'utf8')); } catch {}
+  if (!process.env.CLOUDFLARE_ACCOUNT_ID && previous.account_id) process.env.CLOUDFLARE_ACCOUNT_ID = previous.account_id;
+  if (!process.env.CLOUDFLARE_API_TOKEN) await wrangler(['login']);
+  if (!process.env.CLOUDFLARE_ACCOUNT_ID) {
+    const identity = await wrangler(['whoami']);
+    const accounts = [...new Set(identity.match(/\b[a-f0-9]{32}\b/gi) || [])];
+    if (accounts.length === 1) process.env.CLOUDFLARE_ACCOUNT_ID = accounts[0];
+    else if (accounts.length > 1) {
+      accounts.forEach((id, i) => console.log(`${i + 1}. ${id}`));
+      const prompt = createInterface({ input: process.stdin, output: process.stdout });
+      const answer = Number(await prompt.question('Numer konta Cloudflare dla tej strony: '));
+      prompt.close();
+      if (!Number.isInteger(answer) || !accounts[answer - 1]) throw new Error('Nieprawidlowy numer konta.');
+      process.env.CLOUDFLARE_ACCOUNT_ID = accounts[answer - 1];
+    } else throw new Error('Ustaw CLOUDFLARE_ACCOUNT_ID na Account ID widoczny w panelu Cloudflare, potem uruchom ponownie.');
+  }
+  const databaseName = 'pet-universe-price-monitor';
+  let databases = parseList(await wrangler(['d1', 'list', '--json'], { capture: true }));
+  let database = databases.find(item => item.name === databaseName);
+  if (!database) {
+    await wrangler(['d1', 'create', databaseName, '--update-config=false']);
+    databases = parseList(await wrangler(['d1', 'list', '--json'], { capture: true }));
+    database = databases.find(item => item.name === databaseName);
+  }
+  if (!database?.uuid) throw new Error('Nie znaleziono identyfikatora bazy D1.');
+  const config = {
+    name: 'pet-universe-price-monitor', account_id: process.env.CLOUDFLARE_ACCOUNT_ID,
+    main: '../workers/price-monitor.js', compatibility_date: '2026-10-01', workers_dev: true,
+    triggers: { crons: ['* * * * *'] }, vars: { SITE_URL: site.origin },
+    d1_databases: [{ binding: 'MONITOR_DB', database_name: databaseName, database_id: database.uuid }],
+    observability: { enabled: true },
+  };
+  await mkdir(configDirectory, { recursive: true });
+  await writeFile(configPath, JSON.stringify(config, null, 2) + '\n');
+  const monitorKey = randomBytes(32).toString('base64url');
+  privateDirectory = await mkdtemp(path.join(tmpdir(), 'pet-universe-secrets-'));
+  const secretsPath = path.join(privateDirectory, 'secrets.json');
+  await writeFile(secretsPath, JSON.stringify({ DISCORD_WEBHOOK_URL: secret, MONITOR_KEY: monitorKey }), { mode: 0o600 });
+  const output = await wrangler(['deploy', '--config', configPath, '--secrets-file', secretsPath]);
+  const workerUrl = output.match(/https:\/\/[a-z0-9.-]+\.workers\.dev\b/i)?.[0];
+  if (workerUrl) {
+    // Seed the real production prices. There is no fake price-change message.
+    try {
+      const response = await fetch(workerUrl + '/check', { method: 'POST', headers: { authorization: `Bearer ${monitorKey}` }, signal: AbortSignal.timeout(20000) });
+      if (!response.ok) throw new Error('First check unavailable.');
+      const status = await response.json();
+      if (status.busy) console.log('Monitor jest juz uruchomiony przez cron.');
+      else console.log(`Sprawdzono ${status.checked ?? 0} cen. Kolejka powiadomien: ${status.pending ?? 0}.`);
+    } catch { console.log('Worker wdrozony. Pierwszy odczyt wykona cron; sprawdz logi, jesli nie ruszy.'); }
+    await writeFile(path.join(configDirectory, 'monitor-info.json'), JSON.stringify({ url: workerUrl, site: site.origin }, null, 2) + '\n');
+  }
+  console.log('GOTOWE: monitor jest wdrozony. Cron sprawdza ceny co minute.');
+  console.log('Pierwszy odczyt zapamietuje aktualne ceny. Kolejne zmiany po deployu trafiaja na Discord.');
+  console.log('Nowy cron Cloudflare moze potrzebowac do 15 minut na pierwsze uruchomienie.');
+} catch (error) {
+  console.error(hide(error instanceof Error ? error.message : 'Konfiguracja nie powiodla sie.'));
+  process.exitCode = 1;
+} finally {
+  if (privateDirectory) await rm(privateDirectory, { recursive: true, force: true });
+}

@@ -5,12 +5,14 @@ export function tradeSummary(model) {
   const left = model.left.total;
   const right = model.right.total;
   const empty = !model.left.entries.length && !model.right.entries.length && !model.left.tickets && !model.right.tickets;
-  if (empty) return { title: 'READY TO COMPARE', detail: 'Add items or tickets to start your trade.', color: '#c6b4e8' };
-  if (model.left.unpriced || model.right.unpriced) return { title: 'REQUIRES REVIEW', detail: 'O/C or unpriced items need a separate agreement.', color: '#ffd282' };
-  if (left === right) return { title: 'FAIR TRADE', detail: 'Both offers have the same listed value.', color: '#ba9aff' };
   const gain = right - left;
-  return { title: gain > 0 ? 'WIN FOR YOU' : 'LOSS FOR YOU', detail: `You ${gain > 0 ? 'receive' : 'give'} ${numberFormat.format(Math.abs(gain))} more in listed value.`, color: gain > 0 ? '#7cddb0' : '#ff96a6' };
+  const tied = Math.abs(gain) <= Math.max(1, Math.abs(left), Math.abs(right)) * Number.EPSILON * 4;
+  const suffix = model.left.unpriced || model.right.unpriced ? ' O/C and unpriced items excluded.' : '';
+  if (empty) return { verdict: 'fair', title: 'FAIR TRADE', detail: 'Add items or tickets to compare offers.', color: '#ba9aff' };
+  if (tied) return { verdict: 'fair', title: 'FAIR TRADE', detail: 'Known values are equal.' + suffix, color: '#ba9aff' };
+  return { verdict: gain > 0 ? 'win' : 'lose', title: gain > 0 ? 'W — WIN FOR YOU' : 'L — LOSS FOR YOU', detail: `You ${gain > 0 ? 'receive' : 'give'} ${numberFormat.format(Math.abs(gain))} more in listed value.` + suffix, color: gain > 0 ? '#7cddb0' : '#ff96a6' };
 }
+
 function browserImage(url) {
   return new Promise((resolve, reject) => {
     const img = new Image();

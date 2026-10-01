@@ -14,8 +14,8 @@
     } catch (_) {}
   </script>
   <link rel="icon" type="image/png" href="assets/ui/category-pets.png" />
-  <link rel="stylesheet" href="./bundle/styles-45239b4185ae36.css" />
-  <link rel="modulepreload" href="./bundle/app-6de7ce17bd86df.js" />
+  <link rel="stylesheet" href="./bundle/styles-bf5420a6838808.css" />
+  <link rel="modulepreload" href="./bundle/app-47697db115db4a.js" />
   <link rel="modulepreload" href="./data/catalog.js" />
   <link rel="modulepreload" href="./data/prices.js" />
 </head>
@@ -204,9 +204,9 @@
           </div>
           <div class="calculator-v55-actions">
             <div class="trade-status-switch" id="tradeStatusSwitch" aria-label="Trade status">
-              <span class="trade-status-segment is-win" data-trade-status="win">WIN</span>
+              <span class="trade-status-segment is-win" data-trade-status="win">W</span>
               <span class="trade-status-segment is-fair active" data-trade-status="fair">FAIR</span>
-              <span class="trade-status-segment is-lose" data-trade-status="lose">LOSS</span>
+              <span class="trade-status-segment is-lose" data-trade-status="lose">L</span>
             </div>
             <button class="calc-top-btn" type="button" data-view-target="home"><span>Home</span></button>
             <button class="calc-top-btn" type="button" id="saveTradeImage">Save Trade Image</button>
@@ -220,23 +220,24 @@
               <div class="trade-v55-side-head">
                 <div>
                   <span class="tool-label">YOU GIVE</span>
-                  <h2>My Offer</h2>
+                  <h2>My Offer</h2><span id="calcLeftCount" class="trade-count-v88">0 items</span>
                   <small class="trade-oc-note" id="calcLeftOcNote" hidden>Includes O/C or unpriced items</small>
                 </div>
                 <span class="trade-v40-total"><img src="assets/optimized/value-ticket-ed249abc2d85.webp" alt="" srcset="assets/optimized/value-ticket-ed249abc2d85-64.webp 64w, assets/optimized/value-ticket-ed249abc2d85-128.webp 128w, assets/optimized/value-ticket-ed249abc2d85-256.webp 256w, assets/optimized/value-ticket-ed249abc2d85.webp 384w" sizes="24px" decoding="async" draggable="false" loading="eager" /><strong id="calcLeftTotal">0</strong></span>
               </div>
-              <div class="trade-v55-items" id="calcLeftList"></div>
               <div class="trade-v55-bottom">
                 <label class="trade-v55-ticket"><img src="assets/optimized/value-ticket-ed249abc2d85.webp" alt="" srcset="assets/optimized/value-ticket-ed249abc2d85-64.webp 64w, assets/optimized/value-ticket-ed249abc2d85-128.webp 128w, assets/optimized/value-ticket-ed249abc2d85-256.webp 256w, assets/optimized/value-ticket-ed249abc2d85.webp 384w" sizes="24px" decoding="async" draggable="false" loading="eager" /><span>Tickets</span><input id="calcLeftTickets" type="number" min="0" value="0" inputmode="numeric" /></label>
               </div>
+              <div class="trade-v55-items" id="calcLeftList"></div>
             </section>
 
             <aside class="trade-v55-center">
               <div class="trade-v55-diff">
                 <span>DIFFERENCE</span>
-                <strong id="calcDifferenceVerdict">EVEN</strong>
+                <strong id="calcDifferenceVerdict">FAIR</strong>
                 <div class="trade-v42-diff-value"><img src="assets/optimized/value-ticket-ed249abc2d85.webp" alt="Ticket" srcset="assets/optimized/value-ticket-ed249abc2d85-64.webp 64w, assets/optimized/value-ticket-ed249abc2d85-128.webp 128w, assets/optimized/value-ticket-ed249abc2d85-256.webp 256w, assets/optimized/value-ticket-ed249abc2d85.webp 384w" sizes="24px" decoding="async" draggable="false" loading="eager" /><b id="calcDifference">0</b></div>
-                <small id="calcDifferenceLabel">Even trade</small>
+                <small id="calcDifferenceLabel">Add items or tickets to compare offers.</small>
+                <p id="calcUnpricedNotice" class="trade-unpriced-v88" hidden>Known values only · O/C is not included.</p>
               </div>
               <button type="button" class="trade-swap-btn" data-swap-trade>⇄ <span>Swap Sides</span></button>
             </aside>
@@ -245,15 +246,15 @@
               <div class="trade-v55-side-head">
                 <div>
                   <span class="tool-label">YOU RECEIVE</span>
-                  <h2>Their Offer</h2>
+                  <h2>Their Offer</h2><span id="calcRightCount" class="trade-count-v88">0 items</span>
                   <small class="trade-oc-note" id="calcRightOcNote" hidden>Includes O/C or unpriced items</small>
                 </div>
                 <span class="trade-v40-total"><img src="assets/optimized/value-ticket-ed249abc2d85.webp" alt="" srcset="assets/optimized/value-ticket-ed249abc2d85-64.webp 64w, assets/optimized/value-ticket-ed249abc2d85-128.webp 128w, assets/optimized/value-ticket-ed249abc2d85-256.webp 256w, assets/optimized/value-ticket-ed249abc2d85.webp 384w" sizes="24px" decoding="async" draggable="false" loading="eager" /><strong id="calcRightTotal">0</strong></span>
               </div>
-              <div class="trade-v55-items" id="calcRightList"></div>
               <div class="trade-v55-bottom">
                 <label class="trade-v55-ticket"><img src="assets/optimized/value-ticket-ed249abc2d85.webp" alt="" srcset="assets/optimized/value-ticket-ed249abc2d85-64.webp 64w, assets/optimized/value-ticket-ed249abc2d85-128.webp 128w, assets/optimized/value-ticket-ed249abc2d85-256.webp 256w, assets/optimized/value-ticket-ed249abc2d85.webp 384w" sizes="24px" decoding="async" draggable="false" loading="eager" /><span>Tickets</span><input id="calcRightTickets" type="number" min="0" value="0" inputmode="numeric" /></label>
               </div>
+              <div class="trade-v55-items" id="calcRightList"></div>
             </section>
           </div>
         </section>
@@ -389,7 +390,7 @@
     <div class="calc-picker-grid" id="calcPickerGrid"></div>
   </dialog>
 
-  <script type="module" src="./bundle/app-6de7ce17bd86df.js"></script>
+  <script type="module" src="./bundle/app-47697db115db4a.js"></script>
 <p id="exportStatus" class="export-status" role="status" hidden></p>
 <dialog id="tradeExportDialog" class="trade-export-dialog" aria-labelledby="tradeExportTitle">
   <div class="trade-export-heading"><div><h2 id="tradeExportTitle">Your Trade Snapshot</h2><p>Save the PNG and send it on Discord or anywhere you like.</p></div><button type="button" id="closeTradeExport" aria-label="Close image preview">×</button></div>

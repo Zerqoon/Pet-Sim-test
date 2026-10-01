@@ -1,39 +1,11 @@
-# Pet Universe Values v87
+# START — Pet Universe v89
 
-ZIP zawiera gotowy folder **Pet Sim Universe**. W repozytorium umiesc ten folder z jego zawartoscia, zachowujac nazwe. Nie wgrywaj zawartosci public bezposrednio do glownego katalogu repozytorium.
+1. Otwórz folder `Pet Sim Universe` z ZIP-a w PowerShellu.
+2. Wyślij projekt: `powershell -NoProfile -ExecutionPolicy Bypass -File .\Upload-GitHub.ps1`.
+3. Poczekaj na udany deploy Cloudflare: root `Pet Sim Universe`, build `npm run build`, output `public`.
+4. Uruchom powiadomienia: `powershell -NoProfile -ExecutionPolicy Bypass -File .\Setup-Discord.ps1`.
+5. Wklej webhook z rozmowy i zaloguj się do Cloudflare. Monitor zapamięta początkowe ceny.
+6. Potem zmieniaj ceny tylko w `public/data/prices.js`. Nowa cena po deployu i zwykłym odświeżeniu, embed na Discordzie po wykryciu przez monitor.
 
-## Edycja
-
-- `public/data/prices.js` — cala lista cen; np. `"job-cat": 22500,` lub `"job-cat": "O/C",`.
-- `public/data/catalog.js` — nazwy, procenty, opisy, warianty i sciezki grafik.
-- `public/app.js` — zachowanie strony i kalkulator.
-- `src/index.html` — zrodlo ukladu HTML.
-- `public/*.css` — dotychczasowe style; `public/assets/` — grafiki.
-- `scripts/` — walidacja, build i lokalny serwer.
-- `public/bundle/` — wygenerowane pliki; nie edytuj ich recznie.
-- `functions/api/` — API historii i snapshotow.
-
-W prices.js pety z wariantami maja normal, golden i diamond. Null oznacza brak ustalonej ceny. Codes nie maja cen. Przy dodawaniu przedmiotu dodaj opis w catalog.js i cene w prices.js.
-
-## Cloudflare Pages
-
-Root directory: `Pet Sim Universe`
-Build command: `npm run build`
-Build output directory: `public`
-Node.js: 22 lub nowszy.
-
-Ceny sa osobnym modulem z no-store. Po zmianie prices.js na GitHubie poczekaj na udany deploy Cloudflare i odswiez strone (F5). Nie potrzebujesz lokalnego builda do zmiany ceny. Zmiany kodu, HTML i CSS wymagaja builda; Cloudflare moze wykonac go automatycznie.
-
-## Lokalnie
-
-Otworz PowerShell w folderze Pet Sim Universe i uruchom `npm run dev`. Wejdz na http://127.0.0.1:4173. Nie otwieraj index.html jako file://.
-
-## Blad ze zdjecia
-
-`curl 56 GnuTLS recv error`, `early EOF` oraz `Failed ... fetching repository` oznaczaja przerwane pobieranie repozytorium przez Cloudflare przed buildem. Ponow wdrozenie. Zmiana plikow projektu nie naprawia tego bledu transferu.
-
-## Obraz oferty
-
-Save Trade Image otwiera podglad PNG. Download PNG zapisuje obraz: obie oferty, grafiki, warianty, ilosci, Tickets, sumy i wynik. Nie wysyla danych ani nie tworzy linkow. Dlugie oferty sa dzielone na strony; pobierz kazda strone osobnym przyciskiem. Ceny na obrazie sa zapisane z chwili eksportu.
-
-Usunieto przyciski linkow petow i tradeow oraz obsluge linkow #pet i #trade. Exist pozostaje usuniete. Przy O/C lub braku ceny wynik wymaga osobnej oceny, zamiast oznaczenia WIN/LOSS.
+Adresu webhooka nie dodawaj do publicznych plików. Skrypt zapisuje go jako sekret serwerowy.
+Pełna instrukcja: `README-CLOUDFLARE.md`.

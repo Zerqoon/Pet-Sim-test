@@ -4,13 +4,14 @@ import path from 'node:path';
 import {onRequestGet as history} from '../functions/api/history.js';
 import {onRequestGet as health} from '../functions/api/health.js';
 import {onRequestPost as snapshot} from '../functions/api/snapshot.js';
+import {onRequestGet as prices} from '../functions/api/price-feed.js';
 const root=path.resolve(import.meta.dirname,'../public');
 const port=Number(process.env.PORT || 4173);
 const mime={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'text/javascript; charset=utf-8','.png':'image/png','.webp':'image/webp','.json':'application/json'};
 const server=http.createServer(async(req,res)=>{
  try {
   const url=new URL(req.url,`http://127.0.0.1:${port}`);
-  const handlers={'/api/history':history,'/api/health':health,'/api/snapshot':snapshot};
+  const handlers={'/api/history':history,'/api/health':health,'/api/snapshot':snapshot,'/api/price-feed':prices};
   if(handlers[url.pathname]){
    const response=await handlers[url.pathname]({request:new Request(url,{method:req.method}),env:{}});
    res.writeHead(response.status,Object.fromEntries(response.headers));res.end(await response.text());return;

@@ -28,7 +28,7 @@ css = css.replace(/url\(['"]?(\.\/)?(assets\/[^)'"\s]+)['"]?\)/g,(_,prefix,sourc
 // exact original cascade order, including all mobile and light-theme rules.
 css = css.replace(/\/\*[\s\S]*?\*\//g,'').replace(/[ \t]+\n/g,'\n').replace(/\n{3,}/g,'\n\n');
 const imageModule = `const IMAGE_ASSETS = ${JSON.stringify(assets)};`;
-// Prices remain in the editable catalog. A catalog-only GitHub commit must
+// Prices remain in prices.js, imported through the editable catalog. A price-only GitHub commit must
 // work even when Pages publishes the existing bundle without running a build.
 const app = (await readFile(path.join(publicRoot,'app.js'),'utf8'))
   .replace(/from (['"])\.\/data\/catalog\.js\1/g, "from '../data/catalog.js'")

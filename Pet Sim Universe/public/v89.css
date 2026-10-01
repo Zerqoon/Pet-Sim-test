@@ -1,0 +1,172 @@
+/* v89: one badge treatment for every rarity, plus touch-friendly layouts. */
+:is(#cardsGrid .value-card, #calcPickerGrid .calc-picker-card, #detailModal)[data-rarity] {
+  --badge-fill: linear-gradient(135deg, #d5deed, #aebaca);
+  --badge-ink: #172033;
+}
+:is(#cardsGrid .value-card, #calcPickerGrid .calc-picker-card, #detailModal)[data-rarity='exclusive'] { --badge-fill: linear-gradient(135deg, #e8c2ff, #c58aff); --badge-ink: #2c1049; }
+:is(#cardsGrid .value-card, #calcPickerGrid .calc-picker-card, #detailModal)[data-rarity='mythical'] { --badge-fill: linear-gradient(135deg, #ffd883, #ff9f9e); --badge-ink: #421927; }
+:is(#cardsGrid .value-card, #calcPickerGrid .calc-picker-card, #detailModal)[data-rarity='secret'] { --badge-fill: linear-gradient(135deg, #fff, #cbd5e1); --badge-ink: #202637; }
+:is(#cardsGrid .value-card, #calcPickerGrid .calc-picker-card, #detailModal)[data-rarity='legendary'] { --badge-fill: linear-gradient(135deg, #ffe889, #ffd33f); --badge-ink: #302205; }
+:is(#cardsGrid .value-card, #calcPickerGrid .calc-picker-card, #detailModal)[data-rarity='epic'] { --badge-fill: linear-gradient(135deg, #a8efff, #58d7f5); --badge-ink: #073647; }
+:is(#cardsGrid .value-card, #calcPickerGrid .calc-picker-card, #detailModal)[data-rarity='rare'] { --badge-fill: linear-gradient(135deg, #c3fa8f, #8ee45b); --badge-ink: #203b10; }
+:is(#cardsGrid .value-card, #calcPickerGrid .calc-picker-card, #detailModal)[data-rarity='basic'] { --badge-fill: linear-gradient(135deg, #d8dfeb, #b8c3d3); --badge-ink: #263244; }
+:is(#cardsGrid .value-card, #calcPickerGrid .calc-picker-card, #detailModal)[data-rarity='code'] { --badge-fill: linear-gradient(135deg, #c3f5ff, #8ee5fa); --badge-ink: #073647; }
+
+#cardsGrid .value-card[data-rarity] .rarity-badge,
+#calcPickerGrid .calc-picker-card[data-rarity] .calc-picker-rarity,
+#detailModal[data-rarity] .modal-rarity {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 auto !important;
+  min-height: 32px !important;
+  height: auto !important;
+  padding: 7px 12px !important;
+  border: 1px solid rgba(255,255,255,.42) !important;
+  border-radius: 999px !important;
+  background: var(--badge-fill) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  color: var(--badge-ink) !important;
+  -webkit-text-fill-color: var(--badge-ink) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.35), 0 3px 10px rgba(0,0,0,.18) !important;
+  font: 900 .78rem/1.1 'Trebuchet MS', 'Segoe UI', system-ui, sans-serif !important;
+  letter-spacing: .015em !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+  animation: none !important;
+  filter: none !important;
+  text-shadow: none !important;
+}
+#cardsGrid .value-card[data-rarity] .rarity-badge i,
+#detailModal[data-rarity] .modal-rarity i { display: none !important; }
+#cardsGrid .value-card[data-rarity] .rarity-badge .rarity-text,
+#calcPickerGrid .calc-picker-card[data-rarity] .calc-picker-rarity .rarity-text,
+#detailModal[data-rarity] .modal-rarity .rarity-text {
+  background: none !important;
+  background-clip: border-box !important;
+  -webkit-background-clip: border-box !important;
+  color: var(--badge-ink) !important;
+  -webkit-text-fill-color: var(--badge-ink) !important;
+  -webkit-text-stroke: 0 !important;
+  font: inherit !important;
+  letter-spacing: inherit !important;
+  filter: none !important;
+  text-shadow: none !important;
+  animation: none !important;
+}
+
+/* Keep touch targets large without scaling the whole interface. */
+button, a, input { -webkit-tap-highlight-color: transparent; }
+button, a { touch-action: manipulation; }
+button:focus-visible, a:focus-visible { outline: 2px solid #a7ddff; outline-offset: 3px; }
+#detailModal, #calcPickerModal, #tradeExportDialog { overscroll-behavior: contain; }
+
+@media (max-width: 768px) {
+  .app-layout { width: calc(100% - 20px) !important; margin: 10px auto 22px !important; }
+  .main, .page-view, .page-header, .catalog-card, .calculator-v55-panel { min-width: 0 !important; }
+  body:not([data-view='calculator']) .sidebar { gap: 10px !important; }
+  body:not([data-view='calculator']) .brand-card { min-height: 58px !important; padding: 9px 10px !important; }
+  body:not([data-view='calculator']) .brand-icon { width: 36px !important; height: 36px !important; }
+  body:not([data-view='calculator']) .brand-icon img { width: 29px !important; height: 29px !important; }
+  body:not([data-view='calculator']) .brand-copy strong { font-size: .92rem !important; }
+  body:not([data-view='calculator']) .appearance-tools { grid-template-columns: 44px 44px !important; gap: 6px !important; }
+  body:not([data-view='calculator']) .theme-toggle,
+  body:not([data-view='calculator']) .motion-toggle { min-height: 58px !important; height: 58px !important; }
+  body:not([data-view='calculator']) .side-nav { position: static !important; display: grid !important; grid-template-columns: repeat(5,minmax(0,1fr)) !important; gap: 5px !important; padding: 5px !important; overflow: visible !important; }
+  body:not([data-view='calculator']) .side-nav .nav-btn { min-width: 0 !important; width: auto !important; min-height: 66px !important; padding: 7px 2px !important; grid-template-columns: 1fr !important; justify-items: center !important; gap: 5px !important; transform: none !important; }
+  body:not([data-view='calculator']) .side-nav .nav-icon { width: 29px !important; height: 29px !important; }
+  body:not([data-view='calculator']) .side-nav .nav-icon img { width: 24px !important; height: 24px !important; }
+  body:not([data-view='calculator']) .side-nav .nav-label { font-size: .62rem !important; line-height: 1.15 !important; white-space: normal !important; }
+  #categoryNav[hidden] { display: none !important; }
+
+  body[data-view='values'] .page-header { padding: 14px !important; gap: 14px !important; }
+  body[data-view='values'] .page-title-wrap h1 { font-size: clamp(1.65rem,7vw,2.4rem) !important; }
+  body[data-view='values'] .page-tools.page-tools-v40,
+  body[data-view='values'] .page-tools.page-tools-v40.no-variants { grid-template-columns: minmax(0,1fr) 84px !important; grid-template-rows: auto auto auto !important; padding: 0 !important; gap: 9px !important; }
+  body[data-view='values'] .search-box { grid-column: 1 / -1 !important; grid-row: 1 !important; }
+  body[data-view='values'] .custom-sort { grid-column: 1 !important; grid-row: 2 !important; min-width: 0 !important; }
+  body[data-view='values'] .home-corner-btn { grid-column: 2 !important; grid-row: 2 !important; }
+  body[data-view='values'] #variantTools { grid-column: 1 / -1 !important; grid-row: 3 !important; margin-top: 0 !important; min-width: 0 !important; }
+  body[data-view='values'] .variant-switch { display: grid !important; grid-template-columns: repeat(3,minmax(0,1fr)) !important; width: 100% !important; }
+  body[data-view='values'] .variant-btn { min-width: 0 !important; min-height: 44px !important; padding: 8px 5px !important; font-size: .76rem !important; }
+  body[data-view='values'] .catalog-card { padding: 10px !important; }
+  body[data-view='values'] #cardsGrid .card-grid { grid-template-columns: repeat(2,minmax(0,1fr)) !important; gap: 10px !important; }
+  body[data-view='values'] #cardsGrid .card-button { grid-template-rows: 170px auto !important; width: 100% !important; min-width: 0 !important; }
+  body[data-view='values'] #cardsGrid .card-art { height: 170px !important; min-height: 170px !important; }
+  body[data-view='values'] #cardsGrid .card-image,
+  body[data-view='values'] #cardsGrid .animated-pop-card { width: 116px !important; height: 116px !important; max-width: 100% !important; object-fit: contain !important; }
+  body[data-view='values'] #cardsGrid .animated-pop-card .pop-frame { width: 116px !important; height: 116px !important; object-fit: contain !important; }
+  body[data-view='values'] #cardsGrid .card-badges { top: 9px !important; left: 9px !important; right: 9px !important; gap: 4px !important; }
+  #cardsGrid .value-card[data-rarity] .rarity-badge,
+  #calcPickerGrid .calc-picker-card[data-rarity] .calc-picker-rarity { min-height: 28px !important; padding: 6px 9px !important; font-size: .65rem !important; }
+  body[data-view='values'] #cardsGrid .card-bottom { min-height: 100px !important; padding: 11px !important; gap: 9px !important; }
+  body[data-view='values'] #cardsGrid .card-title { font-size: .95rem !important; min-height: 2.5em !important; }
+  body[data-view='values'] #cardsGrid .set-value { min-width: 0 !important; }
+  body[data-view='values'] #cardsGrid .set-value strong { font-size: .98rem !important; overflow-wrap: anywhere; }
+
+  body[data-view='calculator'] .calculator-v55-header { padding: 16px !important; }
+  body[data-view='calculator'] .calculator-v55-title h1 { font-size: clamp(1.65rem,7vw,2.4rem) !important; }
+  body[data-view='calculator'] .calculator-v55-actions { display: grid !important; grid-template-columns: repeat(2,minmax(0,1fr)) !important; width: 100% !important; gap: 8px !important; }
+  body[data-view='calculator'] .calculator-v55-actions .trade-status-switch { grid-column: 1 / -1 !important; width: 100% !important; justify-content: center !important; }
+  body[data-view='calculator'] .calculator-v55-actions .calc-top-btn { min-width: 0 !important; min-height: 46px !important; padding: 9px 8px !important; font-size: .78rem !important; white-space: normal !important; }
+  body[data-view='calculator'] .calculator-v55-actions .calc-clear-btn { grid-column: 1 / -1 !important; }
+  body[data-view='calculator'] .trade-v55-center { display: grid !important; grid-template-columns: 1fr !important; gap: 9px !important; }
+  body[data-view='calculator'] .trade-v55-diff { min-height: 168px !important; padding: 17px 14px !important; }
+  body[data-view='calculator'] .trade-v55-side { padding: 13px !important; }
+  body[data-view='calculator'] .trade-v55-items { grid-template-columns: repeat(2,minmax(0,1fr)) !important; gap: 10px !important; }
+  body[data-view='calculator'] .trade-v55-items .trade-item-v40,
+  body[data-view='calculator'] .trade-v55-items .trade-add-v40 { padding: 9px !important; min-height: 208px !important; }
+  body[data-view='calculator'] .trade-item-remove-v40,
+  body[data-view='calculator'] .trade-item-increase-v88 { width: 36px !important; height: 36px !important; left: 7px !important; }
+  body[data-view='calculator'] .trade-item-increase-v88 { top: 49px !important; }
+  body[data-view='calculator'] .trade-v55-ticket input { min-width: 0 !important; width: 100% !important; font-size: 16px !important; }
+  body[data-view='calculator'] .trade-swap-btn { min-height: 46px !important; }
+
+  #detailModal { width: calc(100% - 16px) !important; max-height: calc(100dvh - 16px) !important; padding: 0 !important; overflow: auto !important; border-radius: 22px !important; }
+  #detailModal .modal-grid { display: grid !important; grid-template-columns: minmax(0,1fr) !important; max-height: none !important; overflow: visible !important; }
+  #detailModal .modal-visual { padding: 64px 16px 14px !important; min-height: 290px !important; }
+  #detailModal .modal-art-shell { width: min(100%,240px) !important; max-width: 240px !important; }
+  #detailModal .modal-image, #detailModal .modal-animated-art, #detailModal .animated-pop-modal { width: 230px !important; height: 230px !important; max-width: 100% !important; max-height: 230px !important; object-fit: contain !important; }
+  #detailModal .modal-animated-art .pop-frame, #detailModal .animated-pop-modal .pop-frame { width: 230px !important; height: 230px !important; max-width: 100% !important; object-fit: contain !important; }
+  #detailModal .modal-info { max-height: none !important; overflow: visible !important; padding: 16px !important; }
+  #detailModal #modalTitle { font-size: clamp(1.85rem,8vw,2.65rem) !important; line-height: 1.1 !important; overflow-wrap: anywhere; }
+  #detailModal .modal-close, #calcPickerModal .calc-picker-close { width: 44px !important; height: 44px !important; top: 10px !important; right: 10px !important; }
+  #detailModal .detail-box strong { overflow-wrap: anywhere; }
+  #detailModal .history-range { display: grid !important; grid-template-columns: repeat(6,minmax(0,1fr)) !important; gap: 4px !important; }
+  #detailModal .history-range button { min-width: 0 !important; min-height: 40px !important; padding: 6px 2px !important; }
+  #calcPickerModal { width: calc(100% - 16px) !important; max-height: calc(100dvh - 16px) !important; overflow: auto !important; }
+  #calcPickerModal .calc-picker-head { padding: 18px 62px 10px 14px !important; }
+  #calcPickerModal .calc-picker-head h2 { font-size: 1.45rem !important; }
+  #calcPickerModal .calc-picker-search { min-height: 46px !important; }
+  #calcPickerModal .calc-picker-tabs { padding: 8px 14px 14px !important; gap: 5px !important; }
+  #calcPickerModal .calc-picker-tabs button { min-height: 44px !important; padding: 5px !important; }
+  #calcPickerModal #calcPickerGrid { grid-template-columns: repeat(2,minmax(0,1fr)) !important; padding: 0 12px 18px !important; gap: 10px !important; }
+  #calcPickerModal .calc-picker-card { min-width: 0 !important; }
+  #calcPickerModal .calc-picker-variants { grid-template-columns: 1fr !important; gap: 5px !important; }
+  #calcPickerModal .calc-picker-variant { min-height: 44px !important; font-size: .73rem !important; }
+  #tradeExportDialog { width: calc(100% - 16px) !important; padding: 16px !important; }
+  #tradeExportDialog .trade-export-heading { align-items: start !important; gap: 12px !important; }
+  #tradeExportDialog .trade-export-heading h2 { font-size: 1.3rem !important; }
+  #tradeExportDialog button, #tradeExportDialog a { min-height: 44px !important; }
+  #searchInput, #calcPickerSearch { font-size: 16px !important; }
+  /* Glass stays in place; scrolling uses one modest blur per panel. */
+  body[data-view='values'] #cardsGrid .card-button,
+  #calcPickerModal .calc-picker-card { backdrop-filter: blur(8px) saturate(112%) !important; -webkit-backdrop-filter: blur(8px) saturate(112%) !important; }
+}
+@media (max-width: 359px) {
+  body[data-view='values'] #cardsGrid .card-grid,
+  #calcPickerModal #calcPickerGrid { grid-template-columns: minmax(0,1fr) !important; }
+}
+@media (hover: none) {
+  #cardsGrid .card-button:hover, #calcPickerGrid .calc-picker-card:hover { transform: none !important; }
+  .click-ember { animation-duration: 280ms !important; }
+}
+html[data-mobile-scrolling] .world-bg *,
+html[data-mobile-scrolling] .world-bg *::before,
+html[data-mobile-scrolling] .world-bg *::after,
+html[data-mobile-scrolling] .card-art::after,
+html[data-mobile-scrolling] .calc-picker-art::after,
+html[data-mobile-scrolling] .rarity-sheen::before,
+html[data-mobile-scrolling] .pop-frame,
+html[data-mobile-scrolling] .credits-marquee-track { animation-play-state: paused !important; }

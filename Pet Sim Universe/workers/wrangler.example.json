@@ -1,0 +1,10 @@
+{
+  "name": "pet-universe-price-monitor",
+  "main": "./price-monitor.js",
+  "compatibility_date": "2026-10-01",
+  "workers_dev": true,
+  "triggers": { "crons": ["* * * * *"] },
+  "vars": { "SITE_URL": "https://petuniverse-values.pl" },
+  "d1_databases": [{ "binding": "MONITOR_DB", "database_name": "pet-universe-price-monitor", "database_id": "REPLACE_WITH_D1_DATABASE_ID" }],
+  "observability": { "enabled": true }
+}

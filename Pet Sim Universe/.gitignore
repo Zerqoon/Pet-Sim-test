@@ -1,0 +1,10 @@
+node_modules/
+.wrangler/
+.cloudflare/
+.env
+.env.*
+.dev.vars
+.dev.vars.*
+*.private.*
+discord-secrets*.json
+*.log

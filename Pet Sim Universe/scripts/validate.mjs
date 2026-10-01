@@ -1,11 +1,12 @@
 import { PETS, CHARMS, EGGS, ITEMS, CODES, RARITY_ORDER } from '../public/data/catalog.js';
 import { IMAGE_ASSETS } from '../public/data/image-assets.js';
+import { normalizePrice } from '../server/pricing.js';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 const publicRoot = path.resolve(import.meta.dirname, '../public');
 
 const catalogs = { PETS, CHARMS, EGGS, ITEMS, CODES };
-const allowedValue = value => value == null || typeof value === 'string' || (typeof value === 'number' && Number.isFinite(value) && value >= 0);
+const allowedValue = value => { try { normalizePrice(value); return true; } catch { return false; } };
 const numericValue = value => {
   if (typeof value === 'number') return Number.isFinite(value) ? value : null;
   if (typeof value !== 'string') return null;
