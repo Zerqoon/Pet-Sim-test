@@ -402,3 +402,37 @@ h1,h2,h3,h4,.card-title,.brand-copy strong,.set-value strong,#modalValue {
  #cardsGrid .value-card .card-art:has(.best-badge),
  #cardsGrid .value-card .card-art:has(.event-badge) {padding-top:61px !important;}
 }
+
+/* v98: bold, readable lettering within the existing badge geometry. */
+[data-rarity='exclusive'] {--letter-gradient:linear-gradient(#ffd0ff,#f599ff 48%,#cb83ff);}
+[data-rarity='mythical'] {--letter-gradient:linear-gradient(#ffe3a4,#ffb750 40%,#ff789c);}
+[data-rarity='legendary'] {--letter-gradient:linear-gradient(90deg,#ffda39,#fff3a1 75%,#ffe94c);}
+#cardsGrid .value-card[data-rarity] .rarity-badge,
+#calcPickerGrid .calc-picker-card[data-rarity] .calc-picker-rarity,
+#detailModal[data-rarity] .modal-rarity {
+ font-family:'Pet Nunito',system-ui,sans-serif !important;
+ font-weight:1000 !important;font-variation-settings:'wght' 1000 !important;
+ font-size:.86rem !important;letter-spacing:.015em !important;line-height:1.2 !important;
+}
+#cardsGrid .value-card[data-rarity] .rarity-badge .rarity-text,
+#calcPickerGrid .calc-picker-card[data-rarity] .calc-picker-rarity .rarity-text,
+#detailModal[data-rarity] .modal-rarity .rarity-text {
+ font-weight:1000 !important;font-variation-settings:'wght' 1000 !important;
+ font-size:inherit !important;line-height:inherit !important;
+ -webkit-text-stroke:0 !important;
+}
+#cardsGrid .value-card .card-badges > .event-badge,
+#cardsGrid .value-card .card-badges > .best-badge,
+#detailModal .modal-event-badge,#detailModal .modal-best {
+ font-weight:1000 !important;font-variation-settings:'wght' 1000 !important;
+ letter-spacing:.01em !important;
+}
+#cardsGrid .value-card .card-badges > .event-badge {font-size:.73rem !important;}
+#cardsGrid .value-card .card-badges > .best-badge {font-size:.69rem !important;}
+@media(max-width:768px) {
+ #cardsGrid .value-card[data-rarity] .rarity-badge {font-size:.74rem !important;}
+ #cardsGrid .value-card .card-badges > .event-badge {font-size:.65rem !important;}
+ #cardsGrid .value-card .card-badges > .best-badge {font-size:.61rem !important;}
+ #calcPickerGrid .calc-picker-card[data-rarity] .calc-picker-rarity {font-size:.74rem !important;}
+ #detailModal[data-rarity] .modal-rarity {font-size:.84rem !important;}
+}
