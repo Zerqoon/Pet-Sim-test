@@ -10186,3 +10186,91 @@ html[data-mobile-scrolling] .credits-marquee-track { animation-play-state: pause
  background:linear-gradient(135deg,#dff6ff 0%,#abdfff 48%,#72bfff 100%) !important;
  border:1px solid rgba(173,230,255,.9) !important;
 }
+
+#cardsGrid .value-card .card-badges {
+ display:grid !important; grid-template-columns:max-content max-content !important;
+ justify-content:start !important; align-items:center !important;
+ gap:6px !important; top:10px !important; left:10px !important; right:10px !important;
+ width:auto !important;
+}
+#cardsGrid .value-card .card-badges > .rarity-badge {grid-column:1 !important;grid-row:1 !important;}
+#cardsGrid .value-card .card-badges > .event-badge {grid-column:2 !important;grid-row:1 !important;}
+#cardsGrid .value-card .card-badges > .best-badge {grid-column:1 / -1 !important;grid-row:2 !important;justify-self:start !important;}
+#cardsGrid .value-card .card-badges > :is(.rarity-badge,.event-badge,.best-badge) {
+ position:static !important; margin:0 !important; transform:none !important;
+ min-height:29px !important; padding:6px 10px !important;line-height:1.08 !important;
+}
+#cardsGrid .value-card .card-badges > .event-badge {font-size:.73rem !important;}
+#cardsGrid .value-card .card-badges > .best-badge {font-size:.67rem !important;min-height:24px !important;padding:5px 9px !important;}
+#cardsGrid .value-card .card-art:has(.best-badge) {padding-top:70px !important;}
+#detailModal .modal-badges-left {
+ display:flex !important;flex-wrap:wrap !important;align-items:center !important;
+ justify-content:flex-start !important;gap:8px !important;
+ max-width:calc(100% - 40px) !important;
+}
+#detailModal .modal-badges-left > :is(.modal-rarity,.modal-event-badge,.modal-best) {
+ position:static !important;margin:0 !important;transform:none !important;
+ min-height:34px !important;padding:8px 12px !important;line-height:1.08 !important;
+}
+#detailModal .modal-badges-left > [hidden] {display:none !important;}
+@media(max-width:768px) {
+ #cardsGrid .value-card .card-badges {gap:5px !important;top:8px !important;left:8px !important;right:8px !important;}
+ #cardsGrid .value-card .card-badges > :is(.rarity-badge,.event-badge) {font-size:.63rem !important;padding:5px 7px !important;min-height:26px !important;letter-spacing:.015em !important;}
+ #cardsGrid .value-card .card-badges > .best-badge {font-size:.58rem !important;min-height:22px !important;}
+ #detailModal .modal-badges-left {gap:6px !important;max-width:calc(100% - 32px) !important;}
+ #detailModal .modal-badges-left > :is(.modal-rarity,.modal-event-badge,.modal-best) {min-height:30px !important;padding:6px 9px !important;}
+}
+@media(max-width:350px) {
+ #cardsGrid .value-card .card-badges {grid-template-columns:1fr !important;}
+ #cardsGrid .value-card .card-badges > .event-badge {grid-column:1 !important;grid-row:2 !important;justify-self:start !important;}
+ #cardsGrid .value-card .card-badges > .best-badge {grid-row:3 !important;}
+ #cardsGrid .value-card .card-art:has(.event-badge) {height:205px !important;min-height:205px !important;padding-top:95px !important;}
+ body[data-view='values'] #cardsGrid .card-button:has(.event-badge) {grid-template-rows:205px auto !important;}
+}
+
+@font-face {
+ font-family:'Pet Nunito';src:url('../assets/fonts/nunito-variable.ttf') format('truetype');
+ font-weight:200 1000;font-style:normal;font-display:swap;
+}
+html {font-size:16px;}
+body,input,button,select,textarea {
+ font-family:'Pet Nunito',system-ui,sans-serif !important;
+ font-weight:800 !important;font-synthesis:none !important;
+}
+body {line-height:1.45;}
+h1,h2,h3,h4,.card-title,.brand-copy strong,.set-value strong,#modalValue {
+ font-family:'Pet Nunito',system-ui,sans-serif !important;
+ font-weight:900 !important;letter-spacing:0 !important;
+}
+#cardsGrid .value-card[data-rarity] .rarity-badge,
+#calcPickerGrid .calc-picker-card[data-rarity] .calc-picker-rarity,
+#detailModal[data-rarity] .modal-rarity,
+.event-badge,.modal-event-badge,.best-badge,.modal-best {
+ font-family:'Pet Nunito',system-ui,sans-serif !important;
+ font-weight:900 !important;font-synthesis:none !important;
+ font-variation-settings:normal !important;letter-spacing:.015em !important;
+ font-size:.75rem !important;line-height:1.1 !important;
+}
+#cardsGrid .value-card[data-rarity] .rarity-text,
+#calcPickerGrid .calc-picker-card[data-rarity] .rarity-text,
+#detailModal[data-rarity] .rarity-text {
+ font-family:inherit !important;font-weight:inherit !important;
+ font-size:inherit !important;letter-spacing:inherit !important;line-height:inherit !important;
+}
+#cardsGrid .value-card .card-title {font-size:1.05rem !important;line-height:1.25 !important;}
+#cardsGrid .value-card .set-value strong {font-size:1.1rem !important;line-height:1.15 !important;}
+#cardsGrid .value-card .card-badges > .best-badge {font-size:.65rem !important;}
+#detailModal .modal-badges-left > :is(.modal-rarity,.modal-event-badge,.modal-best) {font-size:.78rem !important;}
+.nav-label,.variant-btn,.modal-variant-btn,.calc-top-btn {line-height:1.2 !important;}
+@media(max-width:768px) {
+ #cardsGrid .value-card .card-badges > :is(.rarity-badge,.event-badge) {font-size:.62rem !important;letter-spacing:.01em !important;}
+ #cardsGrid .value-card .card-badges > .best-badge {font-size:.58rem !important;}
+ #detailModal .modal-badges-left > :is(.modal-rarity,.modal-event-badge,.modal-best) {font-size:.7rem !important;}
+ #cardsGrid .value-card .card-title {font-size:.95rem !important;line-height:1.25 !important;}
+ #cardsGrid .value-card .set-value strong {font-size:1rem !important;}
+ #calcPickerGrid .calc-picker-card[data-rarity] .calc-picker-rarity {font-size:.65rem !important;}
+}
+
+:root body :is(p,span,strong,b,em,label,a,button,input,select,textarea,small,li,dt,dd,h1,h2,h3,h4) {
+ font-family:'Pet Nunito',system-ui,sans-serif !important;
+}

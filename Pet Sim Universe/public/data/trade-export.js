@@ -39,7 +39,7 @@ export async function renderTradePage(model, page = 0, adapters = {}) {
   const cache = new Map();
   for (const entry of chunks.flat()) if (entry.image && !cache.has(entry.image)) cache.set(entry.image, loadImage(entry.image));
   await Promise.all(cache.values());
-  const font = '"Lilita One", "Arial Rounded MT Bold", Arial, sans-serif';
+  const font = '"Pet Nunito", system-ui, sans-serif';
   function box(x,y,w,h,fill,stroke,r=20) { ctx.beginPath(); ctx.roundRect(x,y,w,h,r); ctx.fillStyle=fill; ctx.fill(); if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=1.5;ctx.stroke();} }
   function text(value,x,y,size=22,color='#f5f0ff',weight=600) { ctx.font=`${weight} ${size}px ${font}`;ctx.fillStyle=color;ctx.textAlign='left';ctx.fillText(String(value),x,y); }
   function fit(value,x,y,maxWidth,size=22,color='#f5f0ff') { ctx.font=`700 ${size}px ${font}`;let label=String(value);while(ctx.measureText(label).width>maxWidth && label.length>1)label=label.slice(0,-2)+'…';text(label,x,y,size,color,700); }

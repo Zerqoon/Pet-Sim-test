@@ -465,9 +465,9 @@ function card(item, index = 0) {
         <span class="render-floor" aria-hidden="true"></span>
         <div class="card-badges">
           <span class="rarity-badge"><i></i><span class="rarity-text">${rarityFor(item)}</span></span>
+          ${item.eventBadge ? `<span class="event-badge">${item.eventBadge}</span>` : ''}
           ${item.bestPct != null ? `<span class="best-badge">${item.bestPct}% Best Pet</span>` : ''}
         </div>
-        ${item.eventBadge ? `<span class="event-badge">${item.eventBadge}</span>` : ''}
         ${isAnimated(item) ? '<span class="animated-badge card-animated-badge">▶ Animated</span>' : ''}
         ${art}
       </div>
