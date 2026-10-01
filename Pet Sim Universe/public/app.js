@@ -50,10 +50,10 @@ function motionAllowed() { return !animationsPaused && !reducedMotion.matches; }
 function syncMotion() {
   document.documentElement.dataset.motion = animationsPaused ? 'off' : 'on';
   const button = $('#motionToggle');
-  button.textContent = animationsPaused ? '▶' : 'Ⅱ';
-  button.setAttribute('aria-label', animationsPaused ? 'Enable animations' : 'Pause animations');
+  button.textContent = animationsPaused ? 'Resume Animations' : 'Stop Animations';
+  button.setAttribute('aria-label', animationsPaused ? 'Resume Animations' : 'Stop Animations');
   button.setAttribute('aria-pressed', String(animationsPaused));
-  button.title = animationsPaused ? 'Enable animations' : 'Pause animations';
+  button.title = animationsPaused ? 'Resume Animations' : 'Stop Animations';
 }
 
 const rarityColors = {
@@ -537,12 +537,19 @@ function renderCodes(list) {
 // to a category. No virtualization: the complete list stays in the document.
 const catalogViews = new Map();
 let catalogRenderSignature = '';
+const catalogTemplate = document.createElement('template');
 function elementFromMarkup(markup) {
-  const template = document.createElement('template');
-  template.innerHTML = markup;
-  return template.content.firstElementChild;
+  catalogTemplate.innerHTML = markup;
+  const node = catalogTemplate.content.firstElementChild;
+  return catalogTemplate.content.removeChild(node);
 }
 function reconcileChildren(parent, nodes) {
+  if (!parent.firstElementChild) {
+    const fragment = document.createDocumentFragment();
+    for (const node of nodes) fragment.append(node);
+    parent.append(fragment);
+    return;
+  }
   nodes.forEach((node, index) => {
     const current = parent.children[index];
     if (current !== node) parent.insertBefore(node, current || null);
@@ -1286,24 +1293,7 @@ document.addEventListener('keydown', event => {
   }
 });
 
-const savedTheme = readSetting('pet-universe-theme');
-if (savedTheme === 'dark' || savedTheme === 'light') {
-  document.documentElement.dataset.theme = savedTheme;
-}
-
-function syncTheme() {
-  $('#themeLabel').textContent = document.documentElement.dataset.theme === 'dark' ? 'Dark mode' : 'Light mode';
-  const action = document.documentElement.dataset.theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode';
-  $('#themeToggle').setAttribute('aria-label', action);
-  $('#themeToggle').title = action;
-}
-
-$('#themeToggle').addEventListener('click', () => {
-  const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
-  document.documentElement.dataset.theme = next;
-  writeSetting('pet-universe-theme', next);
-  syncTheme();
-});
+document.documentElement.dataset.theme = 'dark';
 
 let petTapTimer;
 $('#modalArtShell').addEventListener('click', () => {
@@ -1363,7 +1353,7 @@ $('#sortPopover').addEventListener('keydown', event => {
   if (event.key === 'End') { event.preventDefault(); options.at(-1)?.focus(); }
 });
 syncMotion();
-syncTheme();
+
 refreshHomeUpdated();
 setInterval(refreshHomeUpdated, 60000);
 render();
