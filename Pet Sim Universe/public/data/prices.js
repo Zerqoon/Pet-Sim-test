@@ -80,7 +80,7 @@ export const PRICES = {
     // Critical Charm III
     "critical-charm-iii": 45,
     // Lucky Charm III
-    "lucky-charm-iii": 60,
+    "lucky-charm-iii": 50,
     // Rubies Charm III
     "rubies-charm-iii": 45,
     // Coins Charm III
