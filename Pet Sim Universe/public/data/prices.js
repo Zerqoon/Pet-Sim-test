@@ -110,6 +110,6 @@ export const PRICES = {
     // Squeaky
     "squeaky": 3,
     // 1M luckyblock
-    "1M-LuckyBlock": 10,
+    "1m-lucky-block": 10,
   },
 };
