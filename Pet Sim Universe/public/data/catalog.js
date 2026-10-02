@@ -215,6 +215,16 @@ export const PETS = [
 
   {
 
+    id: 'agent-sheep', name: 'Agent Sheep', rarity: 'Exclusive', bestPct: 60,
+
+    source: 'Pack 3.0 Update', description: '60% Best Pet from Pack 3.0 Update.',
+
+    image: 'assets/pets/Agent-Sheep.png',
+
+  },
+  
+  {
+
     id: 'galaxy-bunny', name: 'Galaxy Bunny', rarity: 'Exclusive', bestPct: 50,
 
     source: 'Exclusive Shop • Galaxy Egg', hatchChance: '30%',
@@ -574,8 +584,15 @@ export const ITEMS = [
 
   { id:'squeaky', name:'Squeaky', rarity:'Epic', source:'Toy Item', description:'Squeaky toy item.', image:'assets/items/squeaky-v30.png', dropSources:[SOURCE_PRESETS.vipChest, SOURCE_PRESETS.moonChest, SOURCE_PRESETS.playtimeRewards] },
 
-   { id:'Canned Tuna', name:'Canned Tuna', rarity:'Legendary', source:'Toy Item', description:'Canned Tuna.', image:'assets/items/Canned-Tuna.png', dropSources:[SOURCE_PRESETS.fishingmerchant] },
+  { id:'Canned Tuna', name:'Canned Tuna', rarity:'Legendary', source:'Toy Item', description:'Canned Tuna.', image:'assets/items/Canned-Tuna.png', dropSources:[SOURCE_PRESETS.fishingmerchant] },
 
+  { id:'fishhook', name:'Fish hook', rarity:'Epic', source:'Utility Item', description:'+50% Luck Fishing to next 25 Catches', image:'assets/items/Fishhook.png', dropSources:[SOURCE_PRESETS.fishingmerchant] },
+
+  { id:'GoldenFishhook', name:'Golden Fish Hook', rarity:'Mythical', source:'Utility Item', description:'Item Needed Update Desc', image:'assets/items/GoldenFishhook.png', dropSources:[SOURCE_PRESETS.fishingmerchant] },
+
+  { id:'worm', name:'Worm', rarity:'Rare', source:'Utility Item', description:'+25% Fishing Luck & +10% Egg Luck', image:'assets/items/worm.png', dropSources:[SOURCE_PRESETS.fishingmerchant] },
+
+  { id:'universeworm', name:'Universe Worm', rarity:'Exclusive', source:'Utility Item', description:'Item Needed Update Desc', image:'assets/items/Universeworm.png', dropSources:[SOURCE_PRESETS.fishingmerchant] },
 ];
 
 export const RARITY_ORDER = ['Exclusive', 'Secret', 'Mythical', 'Legendary', 'Epic', 'Rare', 'Basic'];
