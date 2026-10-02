@@ -1,7 +1,7 @@
 import { PRICES } from './prices.js';
 // Opisy i grafiki: ten plik. Wszystkie ceny: prices.js.
 
-export const LAST_UPDATED = '2026-09-29T22:02:57Z';
+export const LAST_UPDATED = '2026-10-02T18:19:03Z';
 
 export const SOURCE_PRESETS = {
 
@@ -14,6 +14,36 @@ export const SOURCE_PRESETS = {
 };
 
 export const PETS = [
+
+  {
+    id: 'gummy-bear', name: 'Gummy Bear', rarity: 'Exclusive', bestPct: 100,
+    source: 'Gummy Egg', description: 'Exclusive pet from the Gummy Egg.',
+    image: 'assets/pets/gummy-bear.png',
+  },
+
+  {
+    id: 'gummy-gubby', name: 'Gummy Gubby', rarity: 'Exclusive', bestPct: 75,
+    source: 'Gummy Egg', description: 'Exclusive pet from the Gummy Egg.',
+    image: 'assets/pets/gummy-gubby.png',
+  },
+
+  {
+    id: 'gummy-penguin', name: 'Gummy Penguin', rarity: 'Exclusive', bestPct: 65,
+    source: 'Gummy Egg', description: 'Exclusive pet from the Gummy Egg.',
+    image: 'assets/pets/gummy-penguin.png',
+  },
+
+  {
+    id: 'gummy-capybara', name: 'Gummy Capybara', rarity: 'Exclusive', bestPct: 50,
+    source: 'Gummy Egg', description: 'Exclusive pet from the Gummy Egg.',
+    image: 'assets/pets/gummy-capybara.png',
+  },
+
+  {
+    id: 'gummy-frog', name: 'Gummy Frog', rarity: 'Exclusive', bestPct: 40,
+    source: 'Gummy Egg', description: 'Exclusive pet from the Gummy Egg.',
+    image: 'assets/pets/gummy-frog.png',
+  },
 
   {
 
@@ -300,6 +330,26 @@ export const PETS = [
   },
 
   {
+    id: 'sunken-eel', name: 'Sunken Eel', rarity: 'Mythical', source: 'Mythical Pet',
+    description: 'Mythical pet Sunken Eel.', supportsVariants: true,
+    variantImages: {
+      normal: 'assets/pets/sunken-eel-normal.png',
+      golden: 'assets/pets/sunken-eel-golden.png',
+      diamond: 'assets/pets/sunken-eel-diamond.png',
+    },
+  },
+
+  {
+    id: 'blobfish', name: 'Blobfish', rarity: 'Mythical', source: 'Mythical Pet',
+    description: 'Mythical pet Blobfish.', supportsVariants: true,
+    variantImages: {
+      normal: 'assets/pets/blobfish-normal.png',
+      golden: 'assets/pets/blobfish-golden.png',
+      diamond: 'assets/pets/blobfish-diamond.png',
+    },
+  },
+
+  {
 
     id: 'ruby-majesty', name: 'Ruby Majesty', rarity: 'Mythical', source: '1M Event',
 
@@ -466,6 +516,8 @@ export const CHARMS = [
 ];
 
 export const EGGS = [
+
+  { id:'gummy-egg', name:'Gummy Egg', rarity:'Exclusive', source:'Gummy Collection', description:'Gummy Egg.', image:'assets/eggs/gummy-egg.png' },
 
   { id:'alien-egg', name:'Alien Egg', rarity:'Exclusive', source:'Alien Invasion [Event]', description:'Alien Invasion event egg.', image:'assets/eggs/alien-egg.png' },
 

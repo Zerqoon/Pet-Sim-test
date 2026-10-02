@@ -509,5 +509,77 @@ export const IMAGE_ASSETS = {
     "width": 1080,
     "height": 1080,
     "srcset": "assets/optimized/1m-lucky-block-bb41e8426d0c.webp 1080w"
+  },
+  "assets/pets/gummy-bear.png": {
+    "src": "assets/optimized/gummy-bear-3f92f90b3ec7.webp",
+    "width": 512,
+    "height": 512,
+    "srcset": "assets/optimized/gummy-bear-3f92f90b3ec7.webp 512w"
+  },
+  "assets/pets/gummy-gubby.png": {
+    "src": "assets/optimized/gummy-gubby-98a261b15771.webp",
+    "width": 512,
+    "height": 512,
+    "srcset": "assets/optimized/gummy-gubby-98a261b15771.webp 512w"
+  },
+  "assets/pets/gummy-penguin.png": {
+    "src": "assets/optimized/gummy-penguin-033852ed4242.webp",
+    "width": 512,
+    "height": 512,
+    "srcset": "assets/optimized/gummy-penguin-033852ed4242.webp 512w"
+  },
+  "assets/pets/gummy-capybara.png": {
+    "src": "assets/optimized/gummy-capybara-17700120c4f9.webp",
+    "width": 512,
+    "height": 512,
+    "srcset": "assets/optimized/gummy-capybara-17700120c4f9.webp 512w"
+  },
+  "assets/pets/gummy-frog.png": {
+    "src": "assets/optimized/gummy-frog-a20d8677b3c9.webp",
+    "width": 512,
+    "height": 512,
+    "srcset": "assets/optimized/gummy-frog-a20d8677b3c9.webp 512w"
+  },
+  "assets/eggs/gummy-egg.png": {
+    "src": "assets/optimized/gummy-egg-89555b670755.webp",
+    "width": 1080,
+    "height": 1080,
+    "srcset": "assets/optimized/gummy-egg-89555b670755.webp 1080w"
+  },
+  "assets/pets/sunken-eel-normal.png": {
+    "src": "assets/optimized/sunken-eel-normal-c9f89c12bc73.webp",
+    "width": 512,
+    "height": 512,
+    "srcset": "assets/optimized/sunken-eel-normal-c9f89c12bc73.webp 512w"
+  },
+  "assets/pets/sunken-eel-golden.png": {
+    "src": "assets/optimized/sunken-eel-golden-fa4655a70080.webp",
+    "width": 512,
+    "height": 512,
+    "srcset": "assets/optimized/sunken-eel-golden-fa4655a70080.webp 512w"
+  },
+  "assets/pets/sunken-eel-diamond.png": {
+    "src": "assets/optimized/sunken-eel-diamond-bade9b072988.webp",
+    "width": 512,
+    "height": 512,
+    "srcset": "assets/optimized/sunken-eel-diamond-bade9b072988.webp 512w"
+  },
+  "assets/pets/blobfish-normal.png": {
+    "src": "assets/optimized/blobfish-normal-92e14e90bf90.webp",
+    "width": 512,
+    "height": 512,
+    "srcset": "assets/optimized/blobfish-normal-92e14e90bf90.webp 512w"
+  },
+  "assets/pets/blobfish-golden.png": {
+    "src": "assets/optimized/blobfish-golden-3fc579fcfaf1.webp",
+    "width": 512,
+    "height": 512,
+    "srcset": "assets/optimized/blobfish-golden-3fc579fcfaf1.webp 512w"
+  },
+  "assets/pets/blobfish-diamond.png": {
+    "src": "assets/optimized/blobfish-diamond-5a6edd4fc80e.webp",
+    "width": 512,
+    "height": 512,
+    "srcset": "assets/optimized/blobfish-diamond-5a6edd4fc80e.webp 512w"
   }
 };

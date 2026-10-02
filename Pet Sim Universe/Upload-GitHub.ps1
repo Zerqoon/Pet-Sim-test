@@ -11,8 +11,8 @@ function Run-Git {
 }
 if (-not (Get-Command git -ErrorAction SilentlyContinue)) { throw "Zainstaluj Git for Windows i otworz ponownie PowerShell." }
 if (-not (Get-Command node -ErrorAction SilentlyContinue)) { throw "Zainstaluj Node.js 22 lub nowszy i otworz ponownie PowerShell." }
-foreach ($file in @("package.json", "public\data\prices.js", "public\data\catalog.js", "public\v89.css", "public\phone.css", "public\collections.css", "public\calculator.css", "public\assets\items\1m-lucky-block.png", "src\index.html", "functions\api\price-feed.js", "workers\price-monitor.js", "scripts\build.mjs")) {
-    if (-not (Test-Path -LiteralPath (Join-Path $Source $file) -PathType Leaf)) { throw "Brakuje $file. Rozpakuj caly ZIP v112 do jednego folderu." }
+foreach ($file in @("package.json", "public\data\prices.js", "public\data\catalog.js", "public\v89.css", "public\phone.css", "public\collections.css", "public\calculator.css", "public\assets\items\1m-lucky-block.png", "public\assets\pets\gummy-bear.png", "public\assets\eggs\gummy-egg.png", "public\assets\pets\sunken-eel-diamond.png", "public\assets\pets\blobfish-diamond.png", "src\index.html", "functions\api\price-feed.js", "workers\price-monitor.js", "scripts\build.mjs")) {
+    if (-not (Test-Path -LiteralPath (Join-Path $Source $file) -PathType Leaf)) { throw "Brakuje $file. Rozpakuj caly ZIP v113 do jednego folderu." }
 }
 $work = Join-Path $env:TEMP ("Pet-Universe-Upload-" + [guid]::NewGuid().ToString("N"))
 Run-Git clone --single-branch --branch $Branch $RepoUrl $work
@@ -44,9 +44,9 @@ try {
         Write-Host "GitHub ma juz identyczne pliki." -ForegroundColor Green
     } elseif ($diffResult -eq 1) {
         Run-Git diff --cached --stat
-        Run-Git commit -m "Update Pet Universe v112: Legendary 1M Lucky Block with supplied prices"
+        Run-Git commit -m "Update Pet Universe v113: Gummy collection, Sunken Eel and Blobfish variants"
         Run-Git push origin $Branch
         Write-Host "GOTOWE - projekt wyslany. Poczekaj na udane wdrozenie Cloudflare." -ForegroundColor Green
-        Write-Host "Zmiany v112 sa wizualne. Nie trzeba ponownie konfigurowac Discorda."
+        Write-Host "Nowe pety, warianty i ceny v113 sa wyslane. Nie trzeba ponownie konfigurowac Discorda."
     } else { throw "Nie udalo sie sprawdzic zmian." }
 } finally { Pop-Location }
