@@ -109,5 +109,7 @@ export const PRICES = {
     "ball": 3,
     // Squeaky
     "squeaky": 3,
+    // 1M luckyblock
+    "1M-LuckyBlock": 10,
   },
 };
