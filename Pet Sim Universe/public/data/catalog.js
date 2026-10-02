@@ -97,7 +97,7 @@ export const PETS = [
 
     id: 'alien-emperor', name: 'Alien Emperor', rarity: 'Exclusive', bestPct: 95,
 
-    source: 'Alien Egg', hatchChance: '1 / 1,000',
+    source: 'Alien Egg', hatchChance: '1 / 2,500',
 
     description: 'Exclusive pet from the Alien Egg.',
 
@@ -121,7 +121,7 @@ export const PETS = [
 
     id: 'exquisite-cat', name: 'Exquisite Cat', rarity: 'Exclusive', bestPct: 85,
 
-    source: 'VIP Chest', hatchChance: '1 in 10,000',
+    source: 'VIP Chest', hatchChance: '1 in 25,000',
 
     description: 'Exclusive pet available from the VIP Chest.',
 
