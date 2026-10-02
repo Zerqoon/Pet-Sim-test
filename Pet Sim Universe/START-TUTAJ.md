@@ -1,4 +1,4 @@
-# START — Pet Universe v108
+# START — Pet Universe v111
 
 1. Rozpakuj ZIP. W środku jest cały folder `Pet Sim Universe`.
 2. Otwórz ten folder w PowerShellu i uruchom:
@@ -14,4 +14,4 @@ Skrypt wysyła cały folder projektu do `Zerqoon/Pet-Sim-test`, przebudowuje pli
 
 Aktualizacja wyglądu nie wymaga ponownej konfiguracji Discorda. Zachowaj swój prywatny folder `.cloudflare` oraz sekrety serwerowe. Konfiguracja monitora: `README-CLOUDFLARE.md`.
 
-Szczegóły zmian i sprawdzenia: `START-v108.md`.
+Szczegóły zmian i sprawdzenia: `START-v111.md`.

@@ -55,6 +55,7 @@
   <link rel="stylesheet" href="./v89.css" />
   <link rel="stylesheet" href="./phone.css" />
   <link rel="stylesheet" href="./collections.css" />
+  <link rel="stylesheet" href="./calculator.css" />
   <link rel="modulepreload" href="./data/catalog.js" />
   <link rel="modulepreload" href="./data/prices.js" />
 </head>
@@ -417,15 +418,26 @@
   <dialog id="calcPickerModal" class="calc-picker-modal" aria-labelledby="calcPickerTitle">
     <button class="calc-picker-close" type="button" data-close-calc-picker aria-label="Close picker">×</button>
     <div class="calc-picker-head">
-      <div><span class="tool-label">ADD TO OFFER</span><h2 id="calcPickerTitle">Choose an item</h2></div>
+      <div><span class="tool-label" id="calcPickerOfferLabel">MY OFFER · ADD ITEMS</span><h2 id="calcPickerTitle">Choose an item</h2></div>
       <label class="calc-picker-search"><span>⌕</span><input id="calcPickerSearch" type="search" placeholder="Search pets, charms, eggs, items..." /></label>
     </div>
-    <div class="calc-picker-tabs" id="calcPickerTabs">
-      <button type="button" class="active" data-calc-category="pets">Pets</button>
-      <button type="button" data-calc-category="charms">Charms</button>
-      <button type="button" data-calc-category="eggs">Eggs</button>
-      <button type="button" data-calc-category="items">Items</button>
+    <div class="calc-picker-toolbar">
+      <div class="calc-picker-tabs" id="calcPickerTabs" role="group" aria-label="Item category">
+        <button type="button" class="active" data-calc-category="pets" aria-pressed="true">Pets</button>
+        <button type="button" data-calc-category="charms" aria-pressed="false">Charms</button>
+        <button type="button" data-calc-category="eggs" aria-pressed="false">Eggs</button>
+        <button type="button" data-calc-category="items" aria-pressed="false">Items</button>
+      </div>
+      <div class="calc-picker-variant-tools" id="calcPickerVariantTools">
+        <span class="tool-label">PET VARIANT</span>
+        <div class="calc-picker-variant-switch" role="group" aria-label="Pet variant">
+          <button type="button" class="active" data-calc-filter-variant="normal" aria-pressed="true"><i aria-hidden="true"></i>Normal</button>
+          <button type="button" data-calc-filter-variant="golden" aria-pressed="false"><i aria-hidden="true"></i>Golden</button>
+          <button type="button" data-calc-filter-variant="diamond" aria-pressed="false"><i aria-hidden="true"></i>Diamond</button>
+        </div>
+      </div>
     </div>
+    <div class="calc-picker-summary"><span id="calcPickerOrderHint">O/C first · Value high to low</span><span id="calcPickerCount" role="status">26 results</span></div>
     <div class="calc-picker-grid" id="calcPickerGrid"></div>
   </dialog>
 

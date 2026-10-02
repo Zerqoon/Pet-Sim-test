@@ -118,6 +118,7 @@ const state = {
   modalRange: '24h',
   calcPickerSide: 'left',
   calcPickerCategory: 'pets',
+  calcPickerVariant: 'normal',
   calcPickerQuery: '',
   calc: { left: [], right: [], leftTickets: 0, rightTickets: 0 },
 };
@@ -149,8 +150,10 @@ function calcNumericValue(item, variant = 'normal') {
 
 function switchView(view) {
   if (!['home', 'values', 'calculator'].includes(view)) return;
+  const changed = state.view !== view;
   state.view = view;
   render();
+  if (changed) window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
 }
 
 async function copyText(text) {
@@ -754,15 +757,15 @@ function calcEntryMarkup(side, entry) {
   const numericValue = calcNumericValue(item, entry.variant) * entry.qty;
   const displayValue = parseNumericValue(rawValue) == null ? formatValue(rawValue) : (item.compactValue ? compactValueFormat.format(numericValue) : formatValue(numericValue));
   const image = imageFor(item, entry.variant);
-  const variantName = entry.variant !== 'normal' ? entry.variant[0].toUpperCase() + entry.variant.slice(1) : '';
-  return `<article class="trade-item-v40 trade-entry-new" data-entry-category="${entry.category}">
+  const variantName = entry.category === 'pets' ? entry.variant[0].toUpperCase() + entry.variant.slice(1) : '';
+  return `<article class="trade-item-v40 trade-entry-new" data-entry-category="${entry.category}" data-entry-id="${entry.id}" data-entry-variant="${entry.variant}">
     <div class="trade-item-art-v40">
       <img ${imageAttributes(image)} alt="${item.name}">
       <span class="trade-item-qty-v40">x${entry.qty}</span>
     </div>
     <div class="trade-item-copy-v40">
       <strong>${item.name}</strong>
-      <small>${variantName || rarityFor(item)}</small>
+      <small>${variantName ? `${variantName} · ${rarityFor(item)}` : rarityFor(item)}</small>
       <span class="trade-entry-price"><img ${imageAttributes(ticket, { sizes: '22px' })} alt="">${displayValue}</span>
     </div>
     <button class="trade-item-increase-v88" type="button" data-calc-increase="${side}" data-category="${entry.category}" data-id="${entry.id}" data-variant="${entry.variant}" aria-label="Add one ${item.name}">+</button>
@@ -888,6 +891,7 @@ function renderCalculator() {
   calcMotionCache.rightTotal = right;
   calcMotionCache.diff = gap;
   calcMotionCache.verdict = verdictState;
+  if ($('#calcPickerModal').open) syncPickerAddedCounts();
 }
 
 function swapCalcOffers() {
@@ -911,49 +915,92 @@ function clearCalcTrade() {
 function openCalcPicker(side) {
   state.calcPickerSide = side;
   state.calcPickerCategory = 'pets';
+  state.calcPickerVariant = 'normal';
   state.calcPickerQuery = '';
   $('#calcPickerSearch').value = '';
+  $('#calcPickerOfferLabel').textContent = side === 'left' ? 'MY OFFER · ADD ITEMS' : 'THEIR OFFER · ADD ITEMS';
   renderCalcPicker();
   $('#calcPickerModal').showModal();
+  $('#calcPickerGrid').scrollTop = 0;
 }
 
 const pickerCards = new Map();
+function syncPickerAddedCounts() {
+  const quantities = new Map(state.calc[state.calcPickerSide].map(entry => [`${entry.category}/${entry.id}/${entry.variant}`, entry.qty]));
+  $$('#calcPickerGrid [data-calc-pick]').forEach(button => {
+    const key = `${button.dataset.calcCategoryPick}/${button.dataset.calcPick}/${button.dataset.calcVariant}`;
+    const quantity = quantities.get(key) || 0;
+    const count = $('.calc-picker-added-count', button);
+    count.hidden = quantity === 0;
+    count.textContent = `×${quantity}`;
+    button.dataset.added = String(quantity > 0);
+    button.setAttribute('aria-label', `Add ${button.dataset.calcName} to ${state.calcPickerSide === 'left' ? 'My Offer' : 'Their Offer'}${quantity ? `; ${quantity} already added` : ''}`);
+  });
+}
 function renderCalcPicker() {
+  const category = state.calcPickerCategory;
+  const petsMode = category === 'pets';
+  const variant = petsMode ? state.calcPickerVariant : 'normal';
   $$('#calcPickerTabs [data-calc-category]').forEach(button => {
-    button.classList.toggle('active', button.dataset.calcCategory === state.calcPickerCategory);
+    const active = button.dataset.calcCategory === category;
+    button.classList.toggle('active', active);
+    button.setAttribute('aria-pressed', String(active));
+  });
+  $('#calcPickerVariantTools').hidden = !petsMode;
+  $$('#calcPickerVariantTools [data-calc-filter-variant]').forEach(button => {
+    const active = button.dataset.calcFilterVariant === state.calcPickerVariant;
+    button.classList.toggle('active', active);
+    button.setAttribute('aria-pressed', String(active));
   });
   const query = state.calcPickerQuery.trim().toLowerCase();
-  const list = (catalogs[state.calcPickerCategory] || [])
-    .filter(item => !query || `${item.name} ${item.rarity || ''}`.toLowerCase().includes(query));
-  const nodes = list.map(item => {
-    const key = `${state.calcPickerCategory}:${item.id}`;
+  const list = (catalogs[category] || [])
+    .filter(item => (!petsMode || supportsVariant(item, variant)) && (!query || `${item.name} ${item.rarity || ''}`.toLowerCase().includes(query)))
+    .map(item => {
+      const rawValue = valueFor(item, variant);
+      const numeric = parseNumericValue(rawValue);
+      const ownerChoice = typeof rawValue === 'string' && rawValue.trim().toUpperCase() === 'O/C';
+      return { item, priority: ownerChoice ? 2 : numeric != null ? 1 : 0, numeric: numeric ?? 0 };
+    })
+    .sort((a, b) => b.priority - a.priority || b.numeric - a.numeric || a.item.name.localeCompare(b.item.name, 'en', { sensitivity: 'base' }))
+    .map(entry => entry.item);
+  $('#calcPickerCount').textContent = `${list.length} ${list.length === 1 ? 'result' : 'results'}`;
+  $('#calcPickerOrderHint').textContent = petsMode ? 'O/C first · Value high to low' : 'Value high to low';
+  const variantLabel = variant[0].toUpperCase() + variant.slice(1);
+  const nodes = list.map((item, index) => {
+    const key = `${category}:${variant}:${item.id}`;
     if (pickerCards.has(key)) return pickerCards.get(key);
-    const variants = state.calcPickerCategory === 'pets' && item.supportsVariants
-      ? ['normal','golden','diamond'].filter(variant => item.variantImages?.[variant])
-      : ['normal'];
-    const chips = variants.map(variant => `<button type="button" class="calc-picker-variant" data-calc-pick="${item.id}" data-calc-variant="${variant}" data-calc-category-pick="${state.calcPickerCategory}">${variant === 'normal' ? 'Normal' : variant === 'golden' ? 'Golden' : 'Diamond'}</button>`).join('');
-    const node = elementFromMarkup(`<article class="calc-picker-card" data-id="${item.id}" data-rarity="${raritySlug(item)}" style="--picker-rarity:${rarityColor(item)};--rarity-gradient:${gradientFor(item)};--picker-conic:${pickerConicFor(item)}">
+    const node = elementFromMarkup(`<article class="calc-picker-card" data-id="${item.id}" data-variant="${variant}" data-rarity="${raritySlug(item)}" style="--picker-rarity:${rarityColor(item)};--rarity-gradient:${gradientFor(item)};--picker-conic:${pickerConicFor(item)}">
       <span class="rarity-sheen" aria-hidden="true"></span>
-      <div class="calc-picker-art"><img ${imageAttributes(imageFor(item, 'normal'))} alt="${item.name}"></div>
+      <div class="calc-picker-art">
+        <div class="calc-picker-badges">
+          <span class="calc-picker-rarity">${rarityLetterMarkup(item)}</span>
+          ${item.eventBadge ? `<span class="calc-picker-event">${item.eventBadge}</span>` : ''}
+          ${item.bestPct != null ? `<span class="calc-picker-best">${item.bestPct}% Best Pet</span>` : ''}
+        </div>
+        <img class="calc-picker-image" ${imageAttributes(imageFor(item, variant), { eager: index < 8, sizes: '140px' })} alt="${item.name}${petsMode ? ` (${variantLabel})` : ''}">
+      </div>
       <div class="calc-picker-body">
         <strong class="calc-picker-name">${item.name}</strong>
         <div class="calc-picker-meta">
-          <span class="calc-picker-rarity">${rarityLetterMarkup(item)}</span>
-          <small class="calc-picker-value"><img ${imageAttributes(ticket, { sizes: '22px' })} alt=""> ${formatItemValue(item, 'normal')}</small>
+          <span class="calc-picker-variant-label">${petsMode ? variantLabel : 'VALUE'}</span>
+          <strong class="calc-picker-value"><img ${imageAttributes(ticket, { sizes: '18px' })} alt=""><span>${formatItemValue(item, variant)}</span></strong>
         </div>
       </div>
-      <div class="calc-picker-variants">${chips}</div>
+      <button type="button" class="calc-picker-add" data-calc-pick="${item.id}" data-calc-name="${item.name}" data-calc-variant="${variant}" data-calc-category-pick="${category}"><span aria-hidden="true">+</span><span>Add to offer</span><span class="calc-picker-added-count" hidden>×0</span></button>
     </article>`);
     pickerCards.set(key, node);
     return node;
   });
   reconcileChildren($('#calcPickerGrid'), nodes.length ? nodes : [elementFromMarkup('<div class="calc-picker-empty">No matches found.</div>')]);
+  syncPickerAddedCounts();
   syncVisibleAnimations();
 }
 
 function addCalcItem(side, category, id, variant = 'normal') {
   const item = calcFindItem(category, id);
-  if (!item) return;
+  if (!item || !['left', 'right'].includes(side) || !calcCategories.includes(category)) return;
+  if (!['normal', 'golden', 'diamond'].includes(variant)) return;
+  if (category === 'pets' ? !supportsVariant(item, variant) : variant !== 'normal') return;
   const entries = state.calc[side];
   const existing = entries.find(entry => entry.category === category && entry.id === id && entry.variant === variant);
   if (existing) existing.qty += 1;
@@ -1223,6 +1270,14 @@ document.addEventListener('click', event => {
     return;
   }
 
+  const pickerVariant = event.target.closest('[data-calc-filter-variant]');
+  if (pickerVariant) {
+    state.calcPickerVariant = pickerVariant.dataset.calcFilterVariant;
+    renderCalcPicker();
+    $('#calcPickerGrid').scrollTop = 0;
+    return;
+  }
+
   const calcPick = event.target.closest('[data-calc-pick]');
   if (calcPick) {
     addCalcItem(state.calcPickerSide, calcPick.dataset.calcCategoryPick, calcPick.dataset.calcPick, calcPick.dataset.calcVariant || 'normal');
@@ -1233,6 +1288,7 @@ document.addEventListener('click', event => {
   if (calcTab) {
     state.calcPickerCategory = calcTab.dataset.calcCategory;
     renderCalcPicker();
+    $('#calcPickerGrid').scrollTop = 0;
     return;
   }
 
