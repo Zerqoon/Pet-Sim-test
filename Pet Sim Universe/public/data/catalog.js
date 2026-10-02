@@ -11,6 +11,8 @@ export const SOURCE_PRESETS = {
 
   playtimeRewards: { id: 'playtimeRewards', name: 'PlayTime Rewards', image: 'assets/sources/playtime-rewards.png' },
 
+  fishingmerchant: { id: 'fishingmerchant', name: 'Fishing Merchant', image: 'assets/sources/FishingMerchant.png' },
+
 };
 
 export const PETS = [
@@ -21,6 +23,12 @@ export const PETS = [
     image: 'assets/pets/gummy-bear.png',
   },
 
+  {
+    id: 'Kraken', name: 'Kraken', rarity: 'Exclusive', bestPct: 95,
+    source: 'Fishing', description: 'Exclusive pet from Fishing',
+    image: 'assets/pets/Kraken.png',
+  },
+  
   {
     id: 'gummy-gubby', name: 'Gummy Gubby', rarity: 'Exclusive', bestPct: 75,
     source: 'Gummy Egg', description: 'Exclusive pet from the Gummy Egg.',
