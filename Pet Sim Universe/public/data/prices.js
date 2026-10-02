@@ -121,5 +121,13 @@ export const PRICES = {
     "1m-lucky-block": 10,
      // Canned Tuna
     "Canned-Tuna": null,
+    // Universe Worm
+    "universeworm": null,
+    // Worm
+    "worm": null,
+    // GoldenFishhook
+    "GoldenFishhook": null,
+    // fishhook
+   "fishhook": null,
   },
 };
