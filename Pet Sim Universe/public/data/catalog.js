@@ -507,11 +507,11 @@ export const CHARMS = [
 
   { id:'secret-charm', name:'Secret Charm', rarity:'Exclusive', source:'Charm', description:'Secret Charm.', image:'assets/items/secret-charm-v30.png' },
 
-  { id:'fishing-charm-i', name:'Fishing Charm I', rarity:'Rare', source:'Charm', description:'Secret Charm.', image:'assets/items/FishingCharm I.png' },
+  { id:'fishing-charm-i', name:'Fishing Charm I', rarity:'Rare', source:'Charm', description:'+10% Fishing Luck & 5% Fishing Speed', image:'assets/items/FishingCharm I.png' },
 
-  { id:'fishing-charm-ii', name:'Fishing Charm II', rarity:'Epic', source:'Charm', description:'Secret Charm.', image:'assets/items/FishingCharm II.png' },
+  { id:'fishing-charm-ii', name:'Fishing Charm II', rarity:'Epic', source:'Charm', description:'+20% Fishing Luck & 10% Fishing Speed', image:'assets/items/FishingCharm II.png' },
 
-  { id:'fishing-charm-iii', name:'Fishing Charm III', rarity:'Legendary', source:'Charm', description:'Secret Charm.', image:'assets/items/FishingCharm III.png' },
+  { id:'fishing-charm-iii', name:'Fishing Charm III', rarity:'Legendary', source:'Charm', description:'+35% Fishing Luck & 15% Fishing Speed', image:'assets/items/FishingCharm III.png' },
 
   { id:'lightning-charm', name:'Lightning Charm', rarity:'Exclusive', source:'Charm', description:'Lightning Charm.', image:'assets/items/lightning-charm-v30.png' },
 
