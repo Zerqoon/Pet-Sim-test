@@ -503,5 +503,11 @@ export const IMAGE_ASSETS = {
     "width": 768,
     "height": 432,
     "srcset": "assets/optimized/sky-world-00957c8f2b5b.webp 768w"
+  },
+  "assets/items/1m-lucky-block.png": {
+    "src": "assets/optimized/1m-lucky-block-bb41e8426d0c.webp",
+    "width": 1080,
+    "height": 1080,
+    "srcset": "assets/optimized/1m-lucky-block-bb41e8426d0c.webp 1080w"
   }
 };

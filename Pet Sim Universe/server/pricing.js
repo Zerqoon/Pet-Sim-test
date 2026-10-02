@@ -4,7 +4,7 @@ const percent = new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 });
 
 // Compare values, not spelling: 30000, "30K" and "30k" are the same price.
 export function normalizePrice(value) {
-  if (value == null || (typeof value === 'string' && /^(?:no\s*price|unpriced|unknown|n\/?a|[-—]|)$/i.test(value.trim()))) {
+  if (value == null || (typeof value === 'string' && /^(?:no\s*price|unpriced|unknown|\?+|n\/?a|[-—]|)$/i.test(value.trim()))) {
     return { key: 'unpriced', number: null, label: 'No Price' };
   }
   if (typeof value === 'string' && /^(?:o\s*\/\s*c|oc)$/i.test(value.trim())) {

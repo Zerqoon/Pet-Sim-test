@@ -499,6 +499,8 @@ export const ITEMS = [
 
   { id:'vip-key', name:'VIP Key', rarity:'Legendary', source:'Utility Item', description:'VIP Key.', image:'assets/items/vip-key.png' },
 
+  { id:'1m-lucky-block', name:'1M Lucky Block', rarity:'Legendary', source:'1M Event', description:'A Legendary Lucky Block from the 1M Event.', eventBadge:'1M EVENT', image:'assets/items/1m-lucky-block.png' },
+
   { id:'globe', name:'Globe', rarity:'Legendary', source:'Utility Item', description:'Globe item.', image:'assets/items/globe-v30.png', dropSources:[SOURCE_PRESETS.moonChest, SOURCE_PRESETS.playtimeRewards] },
 
   { id:'ball', name:'Ball', rarity:'Epic', source:'Toy Item', description:'+10% Egg Luck while equipped on Unique Pet!', image:'assets/items/ball-v30.png', dropSources:[SOURCE_PRESETS.vipChest, SOURCE_PRESETS.moonChest, SOURCE_PRESETS.playtimeRewards] },
