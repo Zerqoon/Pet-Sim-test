@@ -10,6 +10,8 @@ export const PRICES = {
     "ruby-nebula-star": "O/C",
     // Universe Capybara
     "universe-capybara": "O/C",
+    // Gummy Bear
+    "gummy-bear": "O/C",
     // Alien Emperor
     "alien-emperor": "7K",
     // KRAKEN
@@ -24,6 +26,10 @@ export const PRICES = {
     "six-seven": "1.7K",
     // Void Owl
     "void-owl": 350,
+    // Galaxy Cat
+    "gummy-gubby": 350,
+    // Galaxy Cat
+    "gummy-penguin": 110,
     // Sun Deer
     "sun-deer": 110,
     // Spaceship Alien
@@ -32,10 +38,14 @@ export const PRICES = {
     "fallen-angel": 500,
     // Job Cat
     "job-cat": 200,
+    // Galaxy Cat
+    "gummy-capybara": 20,
     // Galaxy Bunny
     "galaxy-bunny": 20,
     // Galaxy Cat
     "galaxy-cat": 10,
+    // Galaxy Cat
+    "gummy-frog": 10,
     // Pop Cat
     "pop-cat": 30,
     // Queen Bee
@@ -58,6 +68,10 @@ export const PRICES = {
     "grove-seeker": {"normal":25,"golden":110,"diamond":400},
     // Exquisite Peacock
     "exquisite-peacock": {"normal":5,"golden":25,"diamond":115},
+    // Exquisite Peacock
+    "blobfish": {"normal":null,"golden":null,"diamond":null},
+    // Exquisite Peacock
+    "sunken-eel": {"normal":null,"golden":null,"diamond":null},
   },
 
   charms: {
