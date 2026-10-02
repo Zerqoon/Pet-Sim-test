@@ -7,23 +7,23 @@ export const PRICES = {
     // RICH BEE
     "rich-bee": "3.5k",
     // Ruby Nebula Star
-    "ruby-nebula-star": "O/C",
+    "ruby-nebula-star": "15k",
     // Universe Capybara
-    "universe-capybara": "O/C",
+    "universe-capybara": "25k",
     // Gummy Bear
-    "gummy-bear": "O/C",
+    "gummy-bear": "22k",
     // Alien Emperor
     "alien-emperor": "7K",
     // KRAKEN
     "Kraken": null,
     // Caaaaat
-    "caaaaat": "3.1K",
+    "caaaaat": "4K",
     // Exquisite Cat
-    "exquisite-cat": "1.5K",
+    "exquisite-cat": "1.95K",
     // Happy Cupcake
-    "happy-cupcake": "1.5K",
+    "happy-cupcake": "2K",
     // Six Seven!
-    "six-seven": "1.7K",
+    "six-seven": "2K",
     // Void Owl
     "void-owl": 350,
     // Galaxy Cat
