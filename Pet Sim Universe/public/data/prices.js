@@ -111,5 +111,7 @@ export const PRICES = {
     "squeaky": 3,
     // 1M luckyblock
     "1m-lucky-block": 10,
+     // Canned Tuna
+    "Canned-Tuna": null,
   },
 };
