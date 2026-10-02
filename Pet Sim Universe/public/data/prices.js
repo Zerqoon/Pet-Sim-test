@@ -15,11 +15,11 @@ export const PRICES = {
     // Caaaaat
     "caaaaat": "3.1K",
     // Exquisite Cat
-    "exquisite-cat": "1.2K",
+    "exquisite-cat": "1.5K",
     // Happy Cupcake
-    "happy-cupcake": "1.3K",
+    "happy-cupcake": "1.5K",
     // Six Seven!
-    "six-seven": "1.4K",
+    "six-seven": "1.7K",
     // Void Owl
     "void-owl": 350,
     // Sun Deer
@@ -35,13 +35,13 @@ export const PRICES = {
     // Galaxy Cat
     "galaxy-cat": 10,
     // Pop Cat
-    "pop-cat": 25,
+    "pop-cat": 30,
     // Queen Bee
     "queen-bee": {"normal":375,"golden":"No Price","diamond":"No Price"},
     // Blaze Phoenix
-    "blaze-phoenix": {"normal":350,"golden":900,"diamond":null},
+    "blaze-phoenix": {"normal":350,"golden":1900,"diamond":4500},
     // Mossy Mushroom
-    "mossy-mushroom": {"normal":250,"golden":850,"diamond":3500},
+    "mossy-mushroom": {"normal":250,"golden":850,"diamond":3200},
     // Throne Dragon
     "throne-dragon": {"normal":150,"golden":"No Price","diamond":"No Price"},
     // Ruby Majesty
@@ -49,7 +49,7 @@ export const PRICES = {
     // Ember Monster
     "ember-monster": {"normal":30,"golden":150,"diamond":750},
     // Shadow Dominus
-    "shadow-dominus": {"normal":15,"golden":75,"diamond":"No Price"},
+    "shadow-dominus": {"normal":15,"golden":"???","diamond":"???"},
     // Imp
     "imp": {"normal":5,"golden":25,"diamond":115},
     // Grove Seeker
@@ -60,27 +60,27 @@ export const PRICES = {
 
   charms: {
     // Secret Charm
-    "secret-charm": 350,
+    "secret-charm": 400,
     // Lightning Charm
-    "lightning-charm": 400,
+    "lightning-charm": 425,
     // Moon Charm
-    "moon-charm": 45,
+    "moon-charm": 35,
     // Rubies Charm IV
-    "rubies-charm-iv": 325,
+    "rubies-charm-iv": 285,
     // Hatch Charm IV
-    "hatch-charm-iv": 175,
+    "hatch-charm-iv": 140,
     // Critical Charm IV
     "critical-charm-iv": 200,
     // Luck Charm IV
     "luck-charm-iv": 225,
     // Coins Charm IV
-    "coins-charm-iv": 175,
+    "coins-charm-iv": 170,
     // Hatch Charm III
-    "hatch-charm-iii": 20,
+    "hatch-charm-iii": 30,
     // Critical Charm III
-    "critical-charm-iii": 45,
+    "critical-charm-iii": 30,
     // Lucky Charm III
-    "lucky-charm-iii": 50,
+    "lucky-charm-iii": 35,
     // Rubies Charm III
     "rubies-charm-iii": 45,
     // Coins Charm III
@@ -100,14 +100,14 @@ export const PRICES = {
     // VIP Voucher
     "vip-voucher": 8,
     // Universe Shard
-    "universe-shard": 30,
+    "universe-shard": 25,
     // VIP Key
-    "vip-key": 0.3,
+    "vip-key": 0.25,
     // Globe
     "globe": 25,
     // Ball
-    "ball": 5,
+    "ball": 3,
     // Squeaky
-    "squeaky": 5,
+    "squeaky": 3,
   },
 };
