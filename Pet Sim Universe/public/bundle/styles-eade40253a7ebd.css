@@ -10780,6 +10780,74 @@ body:is([data-view='values'],[data-view='calculator']) .sidebar .appearance-tool
  body[data-view='values'] #valuesView #cardsGrid .card-button {max-width:300px !important;justify-self:center !important;}
 }
 
+.item-group-tabs {
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin:0 0 18px;
+}
+.item-group-tabs[hidden] {display:none !important;}
+.item-group-tabs button {
+  min-height:40px;
+  padding:8px 16px;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:12px;
+  background:rgba(255,255,255,.04);
+  color:var(--muted);
+  font:inherit;
+  font-size:.86rem;
+  font-weight:800;
+  cursor:pointer;
+}
+.item-group-tabs button[aria-pressed='true'] {
+  border-color:rgba(166,107,255,.7);
+  background:rgba(166,107,255,.15);
+  color:#eadcff;
+}
+.item-group-tabs button:focus-visible {
+  outline:2px solid #a66bff;
+  outline-offset:3px;
+}
+body[data-view='values'] #valuesView[data-category='items'] #cardsGrid {
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) !important;
+  gap:22px !important;
+}
+.item-section {width:100%;min-width:0;}
+.item-section-head {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:0 2px 12px;
+}
+.item-section-head h2 {margin:0;font-size:1.08rem;line-height:1.3;}
+.item-section-head > span {
+  min-width:28px;
+  padding:4px 8px;
+  border-radius:8px;
+  background:rgba(255,255,255,.06);
+  color:var(--muted);
+  font-size:.75rem;
+  font-weight:800;
+  text-align:center;
+}
+html[data-theme='light'] .item-group-tabs button {
+  border-color:rgba(77,49,108,.2);
+  background:rgba(77,49,108,.04);
+  color:#493658;
+}
+html[data-theme='light'] .item-group-tabs button[aria-pressed='true'] {
+  border-color:#8950cc;
+  background:rgba(137,80,204,.12);
+  color:#58228a;
+}
+@media (max-width:900px) {
+  .item-group-tabs {padding-inline:10px;gap:6px;margin-bottom:14px;}
+  .item-group-tabs button {flex:1;min-width:0;padding:8px 10px;}
+  .item-section-head {padding-inline:10px;}
+}
+
 @media (min-width:901px) {
   body[data-view='values'] #valuesView[data-category='items'] .catalog-card {
     --item-width:clamp(195px,11vw,245px);

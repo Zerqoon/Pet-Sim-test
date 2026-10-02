@@ -439,10 +439,10 @@ export const IMAGE_ASSETS = {
     "srcset": "assets/optimized/void-owl-v30-0929129e4ed8.webp 512w"
   },
   "assets/sources/moon-chest.png": {
-    "src": "assets/optimized/moon-chest-f1c508f4c434.webp",
-    "width": 1254,
-    "height": 1254,
-    "srcset": "assets/optimized/moon-chest-f1c508f4c434.webp 1254w"
+    "src": "assets/optimized/moon-chest-81ced8a61aec.webp",
+    "width": 512,
+    "height": 512,
+    "srcset": "assets/optimized/moon-chest-81ced8a61aec.webp 512w"
   },
   "assets/sources/playtime-rewards.png": {
     "src": "assets/optimized/playtime-rewards-b131b207e2af.webp",

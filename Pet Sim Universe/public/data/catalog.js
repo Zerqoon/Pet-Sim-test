@@ -24,7 +24,7 @@ export const PETS = [
   },
 
   {
-    id: 'Kraken', name: 'Kraken', rarity: 'Exclusive', bestPct: 95,
+    id: 'kraken', name: 'Kraken', rarity: 'Exclusive', bestPct: 95,
     source: 'Fishing', description: 'Exclusive pet from Fishing',
     image: 'assets/pets/Kraken.png',
   },
@@ -584,15 +584,15 @@ export const ITEMS = [
 
   { id:'squeaky', name:'Squeaky', rarity:'Epic', source:'Toy Item', description:'Squeaky toy item.', image:'assets/items/squeaky-v30.png', dropSources:[SOURCE_PRESETS.vipChest, SOURCE_PRESETS.moonChest, SOURCE_PRESETS.playtimeRewards] },
 
-  { id:'Canned Tuna', name:'Canned Tuna', rarity:'Legendary', source:'Toy Item', description:'Canned Tuna.', image:'assets/items/Canned-Tuna.png', dropSources:[SOURCE_PRESETS.fishingmerchant] },
+  { id:'canned-tuna', name:'Canned Tuna', itemGroup:'fishing', rarity:'Legendary', source:'Toy Item', description:'Canned Tuna.', image:'assets/items/Canned-Tuna.png', dropSources:[SOURCE_PRESETS.fishingmerchant] },
 
-  { id:'fishhook', name:'Fish hook', rarity:'Epic', source:'Utility Item', description:'+50% Luck Fishing to next 25 Catches', image:'assets/items/Fishhook.png', dropSources:[SOURCE_PRESETS.fishingmerchant] },
+  { id:'fishhook', name:'Fish Hook', itemGroup:'fishing', rarity:'Epic', source:'Utility Item', description:'+50% Luck Fishing to next 25 Catches', image:'assets/items/Fishhook.png', dropSources:[SOURCE_PRESETS.fishingmerchant] },
 
-  { id:'GoldenFishhook', name:'Golden Fish Hook', rarity:'Mythical', source:'Utility Item', description:'Item Needed Update Desc', image:'assets/items/GoldenFishhook.png', dropSources:[SOURCE_PRESETS.fishingmerchant] },
+  { id:'golden-fish-hook', name:'Golden Fish Hook', itemGroup:'fishing', rarity:'Mythical', source:'Utility Item', description:'Item Needed Update Desc', image:'assets/items/GoldenFishhook.png', dropSources:[SOURCE_PRESETS.fishingmerchant] },
 
-  { id:'worm', name:'Worm', rarity:'Rare', source:'Utility Item', description:'+25% Fishing Luck & +10% Egg Luck', image:'assets/items/worm.png', dropSources:[SOURCE_PRESETS.fishingmerchant] },
+  { id:'worm', name:'Worm', itemGroup:'fishing', rarity:'Rare', source:'Utility Item', description:'+25% Fishing Luck & +10% Egg Luck', image:'assets/items/worm.png', dropSources:[SOURCE_PRESETS.fishingmerchant] },
 
-  { id:'universeworm', name:'Universe Worm', rarity:'Exclusive', source:'Utility Item', description:'Item Needed Update Desc', image:'assets/items/Universeworm.png', dropSources:[SOURCE_PRESETS.fishingmerchant] },
+  { id:'universeworm', name:'Universe Worm', itemGroup:'fishing', rarity:'Exclusive', source:'Utility Item', description:'Item Needed Update Desc', image:'assets/items/Universeworm.png', dropSources:[SOURCE_PRESETS.fishingmerchant] },
 ];
 
 export const RARITY_ORDER = ['Exclusive', 'Secret', 'Mythical', 'Legendary', 'Epic', 'Rare', 'Basic'];

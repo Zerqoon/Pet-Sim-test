@@ -1,5 +1,6 @@
 import { PETS, CHARMS, EGGS, ITEMS, CODES, RARITY_ORDER } from '../public/data/catalog.js';
 import { IMAGE_ASSETS } from '../public/data/image-assets.js';
+import { PRICES } from '../public/data/prices.js';
 import { normalizePrice } from '../server/pricing.js';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
@@ -40,6 +41,10 @@ for (const [name, list] of Object.entries(catalogs)) {
       errors++;
       continue;
     }
+    if (!/^[a-z0-9-]{1,100}$/.test(item.id)) {
+      console.error(`[catalog] Invalid id for the price API: ${name}/${item.id}`);
+      errors++;
+    }
     if (ids.has(item.id)) {
       console.error(`[catalog] Duplicate id in ${name}: ${item.id}`);
       errors++;
@@ -63,6 +68,44 @@ for (const [name, list] of Object.entries(catalogs)) {
       }
     } else if ('value' in item && !allowedValue(item.value)) {
       console.error(`[catalog] Invalid value for ${item.id}.`);
+      errors++;
+    }
+  }
+}
+
+// Keep the editable price file aligned with every catalog entry, including
+// unpriced items. This catches missing entries and spelling/case mismatches.
+for (const [category, list] of Object.entries({ pets: PETS, charms: CHARMS, eggs: EGGS, items: ITEMS })) {
+  const prices = PRICES[category];
+  if (!prices || typeof prices !== 'object' || Array.isArray(prices)) {
+    console.error(`[prices] Missing price table: ${category}`);
+    errors++;
+    continue;
+  }
+  const ids = new Set(list.map(item => item.id));
+  for (const item of list) {
+    if (!Object.hasOwn(prices, item.id)) {
+      console.error(`[prices] Missing entry: ${category}/${item.id}`);
+      errors++;
+      continue;
+    }
+    if (item.supportsVariants) {
+      const values = prices[item.id];
+      for (const variant of ['normal', 'golden', 'diamond']) {
+        if (!values || typeof values !== 'object' || !Object.hasOwn(values, variant)) {
+          console.error(`[prices] Missing variant: ${category}/${item.id}/${variant}`);
+          errors++;
+        }
+      }
+    }
+    if (category === 'items' && item.itemGroup && !['general', 'fishing'].includes(item.itemGroup)) {
+      console.error(`[catalog] Unknown item group for ${item.id}: ${item.itemGroup}`);
+      errors++;
+    }
+  }
+  for (const id of Object.keys(prices)) {
+    if (!ids.has(id)) {
+      console.error(`[prices] Entry has no catalog item: ${category}/${id}`);
       errors++;
     }
   }

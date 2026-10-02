@@ -7,28 +7,30 @@ export const PRICES = {
     // RICH BEE
     "rich-bee": "3.5k",
     // Ruby Nebula Star
-    "ruby-nebula-star": "15k",
+    "ruby-nebula-star": "O/C",
     // Universe Capybara
-    "universe-capybara": "25k",
+    "universe-capybara": "O/C",
     // Gummy Bear
-    "gummy-bear": "22k",
+    "gummy-bear": "O/C",
     // Alien Emperor
     "alien-emperor": "7K",
     // KRAKEN
-    "Kraken": null,
+    "kraken": null,
+    // Agent Sheep
+    "agent-sheep": null,
     // Caaaaat
-    "caaaaat": "4K",
+    "caaaaat": "3.1K",
     // Exquisite Cat
-    "exquisite-cat": "1.95K",
+    "exquisite-cat": "1.5K",
     // Happy Cupcake
-    "happy-cupcake": "2K",
+    "happy-cupcake": "1.5K",
     // Six Seven!
-    "six-seven": "2K",
+    "six-seven": "1.7K",
     // Void Owl
     "void-owl": 350,
-    // Galaxy Cat
+    // Gummy Gubby
     "gummy-gubby": 350,
-    // Galaxy Cat
+    // Gummy Penguin
     "gummy-penguin": 110,
     // Sun Deer
     "sun-deer": 110,
@@ -38,13 +40,13 @@ export const PRICES = {
     "fallen-angel": 500,
     // Job Cat
     "job-cat": 200,
-    // Galaxy Cat
+    // Gummy Capybara
     "gummy-capybara": 20,
     // Galaxy Bunny
     "galaxy-bunny": 20,
     // Galaxy Cat
     "galaxy-cat": 10,
-    // Galaxy Cat
+    // Gummy Frog
     "gummy-frog": 10,
     // Pop Cat
     "pop-cat": 30,
@@ -68,9 +70,9 @@ export const PRICES = {
     "grove-seeker": {"normal":25,"golden":110,"diamond":400},
     // Exquisite Peacock
     "exquisite-peacock": {"normal":5,"golden":25,"diamond":115},
-    // Exquisite Peacock
+    // Blobfish
     "blobfish": {"normal":null,"golden":null,"diamond":null},
-    // Exquisite Peacock
+    // Sunken Eel
     "sunken-eel": {"normal":null,"golden":null,"diamond":null},
   },
 
@@ -110,6 +112,8 @@ export const PRICES = {
   },
 
   eggs: {
+    // Gummy Egg
+    "gummy-egg": null,
     // Alien Egg
     "alien-egg": 3,
     // Party Egg
@@ -133,15 +137,15 @@ export const PRICES = {
     "squeaky": 3,
     // 1M luckyblock
     "1m-lucky-block": 10,
-     // Canned Tuna
-    "Canned-Tuna": null,
+    // Canned Tuna
+    "canned-tuna": null,
     // Universe Worm
     "universeworm": null,
     // Worm
     "worm": null,
-    // GoldenFishhook
-    "GoldenFishhook": null,
-    // fishhook
-   "fishhook": null,
+    // Golden Fish Hook
+    "golden-fish-hook": null,
+    // Fish Hook
+    "fishhook": null,
   },
 };

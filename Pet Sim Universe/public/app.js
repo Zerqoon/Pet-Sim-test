@@ -91,6 +91,8 @@ function pickerConicFor(item) {
 }
 
 const catalogs = { pets: PETS, charms: CHARMS, eggs: EGGS, items: ITEMS, codes: CODES };
+const itemGroups = { general: 'General Items', fishing: 'Fishing' };
+function itemGroupFor(item) { return item.itemGroup || 'general'; }
 const categoryMeta = {
   pets: ['PET COLLECTION', 'Pet Values', 'Search pets...', 'PET DETAILS'],
   charms: ['CHARM COLLECTION', 'Charm Values', 'Search charms...', 'CHARM DETAILS'],
@@ -110,6 +112,7 @@ const sortNames = {
 const state = {
   view: 'home',
   category: 'pets',
+  itemGroup: 'all',
   variant: 'normal',
   query: '',
   sort: 'featured',
@@ -436,6 +439,10 @@ function filtered() {
     list = list.filter(item => supportsVariant(item, state.variant));
   }
 
+  if (state.category === 'items' && state.itemGroup !== 'all') {
+    list = list.filter(item => itemGroupFor(item) === state.itemGroup);
+  }
+
   if (query) {
     list = list.filter(item => [
       item.name,
@@ -445,6 +452,7 @@ function filtered() {
       item.note,
       item.map,
       item.hatchChance,
+      state.category === 'items' ? itemGroups[itemGroupFor(item)] : '',
     ].filter(Boolean).join(' ').toLowerCase().includes(query));
   }
 
@@ -594,6 +602,10 @@ function createPetSection(exclusive) {
   const section = elementFromMarkup(`<section class="rarity-section rarity-section-${exclusive ? 'exclusive' : 'stat'}" data-rarity="${rarity.toLowerCase()}" style="--section-color:${rarityColors[rarity]};--section-gradient:${gradientFor(rarity)}"><div class="rarity-section-head"><h2>${exclusive ? 'Exclusive' : 'Stat Pets'}</h2><span></span></div><div class="card-grid"></div></section>`);
   return { section, grid: $('.card-grid', section), count: $('.rarity-section-head > span', section) };
 }
+function createItemSection(group) {
+  const section = elementFromMarkup(`<section class="item-section" data-item-section="${group}"><div class="item-section-head"><h2>${itemGroups[group]}</h2><span></span></div><div class="card-grid compact-grid compact-grid-items"></div></section>`);
+  return { section, grid: $('.card-grid', section), count: $('.item-section-head > span', section) };
+}
 const observedTiles = new Set();
 const touchLayout = matchMedia('(max-width: 768px), (pointer: coarse)');
 const tileObserver = 'IntersectionObserver' in window ? new IntersectionObserver(entries => {
@@ -611,7 +623,7 @@ function syncVisibleAnimations() {
 }
 function renderCatalog(list) {
   const key = `${state.category}:${state.variant}`;
-  const signature = `${key}:${list.map(item => item.id).join(',')}`;
+  const signature = `${key}:${state.category === 'items' ? state.itemGroup : ''}:${list.map(item => item.id).join(',')}`;
   if (signature === catalogRenderSignature) return;
   catalogRenderSignature = signature;
   let view = catalogViews.get(key);
@@ -620,6 +632,8 @@ function renderCatalog(list) {
     if (state.category === 'pets') {
       view.exclusive = createPetSection(true);
       view.stat = createPetSection(false);
+    } else if (state.category === 'items') {
+      view.groups = Object.fromEntries(Object.keys(itemGroups).map(group => [group, createItemSection(group)]));
     } else {
       view.root = elementFromMarkup(state.category === 'codes' ? '<div class="codes-list"></div>' : `<div class="card-grid compact-grid compact-grid-${state.category}"></div>`);
     }
@@ -638,6 +652,13 @@ function renderCatalog(list) {
   if (state.category === 'pets') {
     for (const [group, exclusive] of [[view.exclusive, true], [view.stat, false]]) {
       const items = list.filter(item => (rarityFor(item) === 'Exclusive') === exclusive);
+      reconcileChildren(group.grid, items.map(cardNode));
+      group.count.textContent = items.length;
+      if (items.length) roots.push(group.section);
+    }
+  } else if (state.category === 'items') {
+    for (const [name, group] of Object.entries(view.groups)) {
+      const items = list.filter(item => itemGroupFor(item) === name);
       reconcileChildren(group.grid, items.map(cardNode));
       group.count.textContent = items.length;
       if (items.length) roots.push(group.section);
@@ -681,6 +702,10 @@ function render() {
   const [kicker, title, placeholder] = categoryMeta[state.category];
   const petsMode = state.category === 'pets';
   const codesMode = state.category === 'codes';
+  $('#itemGroupTabs').hidden = state.category !== 'items';
+  $$('#itemGroupTabs [data-item-group]').forEach(button => {
+    button.setAttribute('aria-pressed', String(button.dataset.itemGroup === state.itemGroup));
+  });
 
   // Fit Items to complete rows; CSS selects the column count for the viewport.
   if (state.category === 'items') {
@@ -1066,6 +1091,7 @@ function switchCategory(category) {
   resetTilt();
   state.view = 'values';
   state.category = category;
+  state.itemGroup = 'all';
   state.query = '';
   if (category !== 'pets') state.variant = 'normal';
   if (category !== 'pets' && state.sort.startsWith('best-')) {
@@ -1206,7 +1232,7 @@ function toggleSortMenu(forceOpen = null) {
 const copyFeedbackTimers = new WeakMap();
 document.addEventListener('click', event => {
   if (event.target.closest('#clearFilters')) {
-    state.query = ''; state.variant = 'normal';
+    state.query = ''; state.variant = 'normal'; state.itemGroup = 'all';
     $('#searchInput').value = ''; render(); $('#searchInput').focus(); return;
   }
   const copyButton = event.target.closest('.copy-code-btn');
@@ -1242,6 +1268,17 @@ document.addEventListener('click', event => {
   if (nav) {
     toggleSortMenu(false);
     switchCategory(nav.dataset.category);
+    return;
+  }
+
+  const itemGroupButton = event.target.closest('#itemGroupTabs [data-item-group]');
+  if (itemGroupButton && state.category === 'items') {
+    const group = itemGroupButton.dataset.itemGroup;
+    if (group !== 'all' && !Object.hasOwn(itemGroups, group)) return;
+    toggleSortMenu(false);
+    resetTilt();
+    state.itemGroup = group;
+    render();
     return;
   }
 
