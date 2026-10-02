@@ -93,7 +93,7 @@ export const PRICES = {
     // Party Egg
     "party-egg": 1.5,
     // Galaxy Egg
-    "galaxy-egg": 90,
+    "galaxy-egg": 135,
   },
 
   items: {
