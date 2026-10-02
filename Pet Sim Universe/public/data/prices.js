@@ -87,6 +87,12 @@ export const PRICES = {
     "rubies-charm-iii": 45,
     // Coins Charm III
     "coins-charm-iii": 30,
+    // Fishing Charm I
+    "fishing-charm-i": null,
+    // Fishing Charm II
+    "fishing-charm-ii": null,
+    // Fishing Charm III
+    "fishing-charm-iii": null,
   },
 
   eggs: {
