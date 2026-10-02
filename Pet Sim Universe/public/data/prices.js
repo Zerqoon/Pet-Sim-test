@@ -12,6 +12,8 @@ export const PRICES = {
     "universe-capybara": "O/C",
     // Alien Emperor
     "alien-emperor": "7K",
+    // KRAKEN
+    "Kraken": null,
     // Caaaaat
     "caaaaat": "3.1K",
     // Exquisite Cat
