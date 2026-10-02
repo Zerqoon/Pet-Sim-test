@@ -55,7 +55,6 @@
   <link rel="stylesheet" href="./v89.css" />
   <link rel="stylesheet" href="./phone.css" />
   <link rel="stylesheet" href="./collections.css" />
-  <link rel="stylesheet" href="./renovation.css" />
   <link rel="modulepreload" href="./data/catalog.js" />
   <link rel="modulepreload" href="./data/prices.js" />
 </head>
@@ -364,14 +363,6 @@
           <div><img id="modalValueIcon" src="assets/items/value-ticket.png" alt="Ticket" /><strong id="modalValue">Not priced</strong></div>
         </section>
 
-        <section id="modalOwnerChoice" class="owner-choice-panel" aria-labelledby="ownerChoiceTitle" hidden>
-          <span class="owner-choice-mark" aria-hidden="true">O/C</span>
-          <div>
-            <h3 id="ownerChoiceTitle">Owner’s Choice</h3>
-            <p id="ownerChoiceHint">This item has no fixed value. Agree on a price with its owner.</p>
-          </div>
-        </section>
-
         <section id="modalHistoryArea" class="history-panel market-panel-v68 market-panel-v69" aria-labelledby="historyTitle">
           <div class="market-v69-glow" aria-hidden="true"></div>
           <span class="market-scan" aria-hidden="true"></span>
@@ -399,12 +390,12 @@
           </div>
 
           <p id="historyHint" class="history-explanation">No previous price changes.</p>
-          <p id="historyLastUpdated" class="history-last-update">No snapshots yet</p>
           <div class="market-hidden-utility" aria-hidden="true">
             <span id="historyCurrentMeta">Current catalog value</span>
             <span id="historyPrevious">—</span>
             <span id="historyHigh">—</span>
             <span id="historyLow">—</span>
+            <span id="historyLastUpdated">No snapshots yet</span>
             
             <div class="history-range" id="historyRange">
               <button type="button" data-history-range="1h">1H</button>

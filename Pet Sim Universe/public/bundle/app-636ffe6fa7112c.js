@@ -348,30 +348,17 @@ async function loadValueHistory() {
   if (!item || state.category === 'codes') return;
 
   const historyArea = $('#modalHistoryArea');
+  historyArea.hidden = false;
   const currentValue = parseNumericValue(valueFor(item, state.modalVariant));
-  historyController?.abort();
-  const requestId = ++historyRequestId;
-  const numeric = Number.isFinite(currentValue);
-  historyArea.hidden = !numeric;
-  $('#modalOwnerChoice').hidden = numeric;
-  $('#detailModal').dataset.pricing = numeric ? 'numeric' : 'unpriced';
-  if (!numeric) {
-    const ownerChoice = String(valueFor(item, state.modalVariant)).trim().toUpperCase() === 'O/C';
-    $('#detailModal').dataset.pricing = ownerChoice ? 'owner-choice' : 'unpriced';
-    $('#ownerChoiceTitle').textContent = ownerChoice ? 'Owner’s Choice' : 'Not priced';
-    $('#ownerChoiceHint').textContent = ownerChoice
-      ? 'This item has no fixed value. Agree on a price with its owner.'
-      : 'This item does not have a listed numeric value yet.';
-    $('.owner-choice-mark').textContent = ownerChoice ? 'O/C' : '—';
-    return;
-  }
   const fallback = fallbackHistoryPoint(item, state.modalVariant);
   renderHistoryStats(fallback, currentValue);
-  updateHistoryTimestamp([]);
+  updateHistoryTimestamp(fallback);
   $('#historyHint').textContent = 'Connecting to value history…';
   setHistoryStatus('Loading', 'loading');
 
+  historyController?.abort();
   historyController = new AbortController();
+  const requestId = ++historyRequestId;
 
   try {
     const params = new URLSearchParams({
@@ -389,7 +376,7 @@ async function loadValueHistory() {
     const usablePoints = points.length ? points : fallback;
     const apiCurrent = Number.isFinite(payload.current) ? payload.current : currentValue;
     renderHistoryStats(usablePoints, apiCurrent);
-    updateHistoryTimestamp(points);
+    updateHistoryTimestamp(usablePoints);
 
     if (payload.available === false) {
       setHistoryStatus('History unavailable', 'offline');
@@ -399,9 +386,7 @@ async function loadValueHistory() {
       $('#historyHint').textContent = 'This item has no fixed numeric price. Agree on its value with the owner.';
     } else if (points.length <= 1) {
       setHistoryStatus('No previous price changes', 'neutral');
-      $('#historyHint').textContent = points.length
-        ? 'One price record is available. A trend appears once another price is recorded.'
-        : 'No price records are available yet. A trend appears after two prices are recorded.';
+      $('#historyHint').textContent = 'One price record is available. A trend appears once another price is recorded.';
     } else {
       const trendDelta = points.at(-1).value - points.at(-2).value;
       const trendMode = trendDelta > 0 ? 'up' : trendDelta < 0 ? 'down' : 'live';
@@ -653,9 +638,6 @@ function renderCatalog(list) {
       const items = list.filter(item => (rarityFor(item) === 'Exclusive') === exclusive);
       reconcileChildren(group.grid, items.map(cardNode));
       group.count.textContent = items.length;
-      for (const columns of [2, 3, 4, 5, 6, 8]) {
-        group.section.style.setProperty(`--section-columns-${columns}`, Math.min(columns, items.length || columns));
-      }
       if (items.length) roots.push(group.section);
     }
   } else {
@@ -698,19 +680,11 @@ function render() {
   const petsMode = state.category === 'pets';
   const codesMode = state.category === 'codes';
 
-  if (petsMode) {
-    const exclusiveCount = list.filter(item => rarityFor(item) === 'Exclusive').length;
-    const statCount = list.length - exclusiveCount;
-    for (const columns of [2, 3, 4, 6, 8]) {
-      const count = Math.max(Math.min(columns, exclusiveCount), Math.min(columns, 5, statCount));
-      valuesView.style.setProperty(`--pets-columns-${columns}`, count || Math.min(columns, 4));
-    }
-  }
-
   // Fit Items to complete rows; CSS selects the column count for the viewport.
   if (state.category === 'items') {
+    const panel = $('.catalog-card', valuesView);
     for (const columns of [2, 3, 6]) {
-      valuesView.style.setProperty(`--items-columns-${columns}`, Math.min(columns, list.length || columns));
+      panel.style.setProperty(`--items-columns-${columns}`, Math.min(columns, list.length || columns));
     }
   }
 
@@ -723,9 +697,9 @@ function render() {
   variantTools.hidden = !petsMode;
   $('.page-tools').classList.toggle('no-variants', !petsMode);
   $('#customSort').hidden = codesMode;
-  // Keep the same Home location for every category.
+  // Codes has a single search row; keep Home in the title corner.
   const homeButton = $('.home-corner-btn', valuesView);
-  const homeHost = $('.page-header', valuesView);
+  const homeHost = $(codesMode ? '.page-header' : '.page-tools', valuesView);
   if (homeButton.parentElement !== homeHost) homeHost.append(homeButton);
 
   const catalogLabel = $('#catalogLabel');
@@ -1088,17 +1062,10 @@ function openModal(item) {
   $('#modalEventBadge').textContent = item.eventBadge || '';
   $('#modalEventBadge').hidden = !item.eventBadge;
   $('#modalTitle').textContent = item.name;
-  const source = String(item.source || '').trim();
-  const description = String(item.description || '').trim();
-  const normalizedDetail = text => String(text).toLowerCase().replace(/[^a-z0-9]/g, '');
-  const sameDescription = [source, `Exclusive pet from the ${source}`, `Exclusive pet from ${source}`]
-    .some(text => normalizedDetail(text) === normalizedDetail(description));
-  $('#modalDescription').textContent = description;
-  $('#modalDescription').hidden = !description || sameDescription;
+  $('#modalDescription').textContent = item.description || item.source || '';
   $('#modalSource').textContent = item.source || '—';
 
   const isCode = state.category === 'codes';
-  $('#modalOwnerChoice').hidden = true;
   $('#modalHistoryArea').hidden = isCode;
   if (!isCode) {
     state.modalRange = '24h';
@@ -1117,9 +1084,7 @@ function openModal(item) {
   $('#modalSourceGallery').innerHTML = item.dropSources?.length ? dropSourcesMarkup(item.dropSources) : '';
   $('#modalVariantArea').hidden = !(state.category === 'pets' && item.supportsVariants);
   $('#modalAnimatedBadge').hidden = !isAnimated(item);
-  const repeatedNote = item.note && [source, item.eventBadge || '']
-    .some(text => text && normalizedDetail(text) === normalizedDetail(item.note));
-  $('#modalNote').hidden = !(item.note || isCode) || Boolean(repeatedNote);
+  $('#modalNote').hidden = !(item.note || isCode);
   $('#modalNote').textContent = isCode ? 'Use the copy button on the code card, then redeem it in game.' : (item.note || '');
 
   $('#modalValueLabel').textContent = isCode ? 'Code' : 'Value';
