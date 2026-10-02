@@ -541,6 +541,7 @@ export const CODES = [
 
   { id:'code-darkrose', name:'DarkRose', code:'DarkRose', status:'active', source:'Reward Code', description:'Redeem this game code in Pet Universe.' },
 
+  { id:'code-update3', name:'update3', code:'update3', status:'active', source:'Reward Code', description:'Redeem this game code in Pet Universe.' },
 ];
 
 export const ITEMS = [
