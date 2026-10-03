@@ -7,7 +7,7 @@
 powershell -NoProfile -ExecutionPolicy Bypass -File .\Upload-GitHub.ps1
 ```
 
-Ta komenda wysyła cały folder do `Zerqoon/Pet-Sim-test`, przebudowuje stronę i używa cen dołączonych do tej paczki. Plik `public/data/prices.js` jest dokładną kopią przesłanego `prices (4).js`, z Twoimi cenami petów, jajek, charms i Items.
+Ta komenda wysyła cały folder do `Zerqoon/Pet-Sim-test`, przebudowuje stronę i używa cen dołączonych do tej paczki. Plik `public/data/prices.js` jest dokładną kopią przesłanego `prices(2).js`, z Twoimi cenami petów, jajek, charms i Items.
 
 Skrypt domyślnie korzysta z cen z tej paczki. Opcjonalne `-UseLocalPrices` nadal działa. Tylko jawne `-UseRemotePrices` zachowuje ceny aktualnie zapisane na GitHubie.
 
@@ -22,8 +22,11 @@ Poprzednie pliki `START-v*.md` opisują starsze wersje projektu.
 
 ## Data aktualizacji cen
 
-Pod tytułem Pet Values, Charm Values, Egg Values i Item Values jest teraz
-`Prices updated … ago` oraz dokładna data i godzina w strefie `Europe/Warsaw`.
+W lewym panelu, bezpośrednio pod `Stop Animations`, jest większa karta
+`VALUES UPDATED`: duży czas `… ago`, ikona zegara oraz dokładna data i godzina
+w strefie `Europe/Warsaw`. Na telefonie jest pod przyciskiem animacji i nad
+listą Values. Pet Values, Charm Values, Egg Values i Item Values używają tej
+samej karty; mały napis w nagłówku został przeniesiony do niej.
 To wspólna data ostatniej aktualizacji wszystkich cen; Codes jej nie pokazuje.
 
 Nadal edytuj tylko `public/data/prices.js`. `npm run build` automatycznie
@@ -33,7 +36,9 @@ zerują daty. Równoważne zapisy, np. `30000` i `"30K"`, również jej nie zeru
 W Cloudflare zostaw build command `npm run build` — bez wykonania buildu
 ceny mogą się zmienić, ale zapisany czas nie będzie zaktualizowany.
 
-ZIP pobrany z GitHuba nie zawiera historii commitów, więc przed pierwszym
-buildem w repozytorium lub faktyczną zmianą cen może być widoczne
-`Price update time unavailable`. Projekt nie przypisuje cenom daty samego
-rozpakowania ZIP-a. Skrypt `Upload-GitHub.ps1` wykonuje build w repozytorium.
+W tej paczce zachowano datę aktualizacji widoczną na przesłanym zrzucie:
+`03 Oct 2026, 16:49 CEST`. Dołączone `prices(2).js` ma te same wartości;
+przeniesienie panelu i rozpakowanie ZIP-a nie zmieniają tej daty.
+Skrypt `Upload-GitHub.ps1` wykonuje build w repozytorium, więc kolejne faktyczne
+zmiany cen dostaną właściwą datę automatycznie. Gdy brakuje historii i zapisanej
+daty, panel pokazuje `Not recorded yet` zamiast daty rozpakowania ZIP-a.

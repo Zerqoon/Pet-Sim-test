@@ -57,6 +57,7 @@
   <link rel="stylesheet" href="./collections.css" />
   <link rel="stylesheet" href="./calculator.css" />
   <link rel="stylesheet" href="./headers.css" />
+  <link rel="stylesheet" href="./price-update-panel.css" />
   <link rel="modulepreload" href="./data/catalog.js" />
   <link rel="modulepreload" href="./data/prices.js" />
 </head>
@@ -108,6 +109,16 @@
       <div class="appearance-tools">
       <button class="side-card motion-toggle" id="motionToggle" type="button" aria-label="Stop Animations" aria-pressed="false" title="Stop Animations">Stop Animations</button>
       </div>
+      <section class="price-update-panel" id="valuesUpdated" aria-labelledby="valuesUpdatedHeading" hidden>
+        <div class="price-update-heading">
+          <span class="price-update-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5" /><path d="M12 7v5l3 2" /></svg>
+          </span>
+          <h2 id="valuesUpdatedHeading">Values updated</h2>
+        </div>
+        <p class="price-update-relative" id="valuesUpdatedRelative"></p>
+        <time class="price-update-date" id="valuesUpdatedTime"></time>
+      </section>
       <div class="side-card side-footer side-footer-v72">
         <strong>Pet Universe Values</strong>
         <small>Community value list</small>
@@ -189,11 +200,6 @@
           <div class="page-title-wrap">
             <span class="eyebrow" id="sectionKicker">PET COLLECTION</span>
             <h1 id="sectionTitle">Pet Values</h1>
-            <p class="values-updated" id="valuesUpdated" hidden>
-              <span id="valuesUpdatedRelative"></span>
-              <span id="valuesUpdatedSeparator" aria-hidden="true">·</span>
-              <time id="valuesUpdatedTime"></time>
-            </p>
           </div>
 
           <div class="page-tools page-tools-v40">

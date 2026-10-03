@@ -1,24 +1,4 @@
 /* Shared titles and aligned collection filters, after the legacy styles. */
-body[data-view='values'] #valuesView .values-updated {
-  display:flex;
-  flex-wrap:wrap;
-  align-items:center;
-  justify-content:center;
-  gap:4px 8px;
-  margin:10px 0 0;
-  color:var(--muted);
-  font-size:.76rem;
-  font-weight:700;
-  line-height:1.5;
-}
-body[data-view='values'] #valuesView .values-updated[hidden],
-body[data-view='values'] #valuesView .values-updated [hidden] {display:none;}
-body[data-view='values'] #valuesView #valuesUpdatedRelative {color:#c7a0ff;}
-html[data-theme='light'] body[data-view='values'] #valuesView #valuesUpdatedRelative {color:#754aa9;}
-@media (max-width:600px) {
-  body[data-view='values'] #valuesView .values-updated {flex-direction:column;font-size:.68rem;}
-  body[data-view='values'] #valuesView #valuesUpdatedSeparator {display:none;}
-}
 body[data-view='values'] #valuesView .page-header {
   position:relative !important;
   display:grid !important;

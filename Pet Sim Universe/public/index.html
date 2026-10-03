@@ -13,8 +13,8 @@
     } catch (_) {}
   </script>
   <link rel="icon" type="image/png" href="assets/ui/category-pets.png" />
-  <link rel="stylesheet" href="./bundle/styles-7ab44c620e339d.css" />
-  <link rel="modulepreload" href="./bundle/app-5c54d76c7cf94b.js" />
+  <link rel="stylesheet" href="./bundle/styles-55a7cc90216736.css" />
+  <link rel="modulepreload" href="./bundle/app-5cdd92e8860e56.js" />
   <link rel="modulepreload" href="./data/catalog.js" />
   <link rel="modulepreload" href="./data/prices.js" />
 </head>
@@ -66,6 +66,16 @@
       <div class="appearance-tools">
       <button class="side-card motion-toggle" id="motionToggle" type="button" aria-label="Stop Animations" aria-pressed="false" title="Stop Animations">Stop Animations</button>
       </div>
+      <section class="price-update-panel" id="valuesUpdated" aria-labelledby="valuesUpdatedHeading" hidden>
+        <div class="price-update-heading">
+          <span class="price-update-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5" /><path d="M12 7v5l3 2" /></svg>
+          </span>
+          <h2 id="valuesUpdatedHeading">Values updated</h2>
+        </div>
+        <p class="price-update-relative" id="valuesUpdatedRelative"></p>
+        <time class="price-update-date" id="valuesUpdatedTime"></time>
+      </section>
       <div class="side-card side-footer side-footer-v72">
         <strong>Pet Universe Values</strong>
         <small>Community value list</small>
@@ -147,11 +157,6 @@
           <div class="page-title-wrap">
             <span class="eyebrow" id="sectionKicker">PET COLLECTION</span>
             <h1 id="sectionTitle">Pet Values</h1>
-            <p class="values-updated" id="valuesUpdated" hidden>
-              <span id="valuesUpdatedRelative"></span>
-              <span id="valuesUpdatedSeparator" aria-hidden="true">·</span>
-              <time id="valuesUpdatedTime"></time>
-            </p>
           </div>
 
           <div class="page-tools page-tools-v40">
@@ -414,7 +419,7 @@
     <div class="calc-picker-grid" id="calcPickerGrid"></div>
   </dialog>
 
-  <script type="module" src="./bundle/app-5c54d76c7cf94b.js"></script>
+  <script type="module" src="./bundle/app-5cdd92e8860e56.js"></script>
 <p id="exportStatus" class="export-status" role="status" hidden></p>
 <dialog id="tradeExportDialog" class="trade-export-dialog" aria-labelledby="tradeExportTitle">
   <div class="trade-export-heading"><div><h2 id="tradeExportTitle">Your Trade Snapshot</h2><p>Save the PNG and send it on Discord or anywhere you like.</p></div><button type="button" id="closeTradeExport" aria-label="Close image preview">×</button></div>

@@ -282,17 +282,17 @@ const priceUpdateDateFormat = new Intl.DateTimeFormat('en-GB', {
 function refreshPricesUpdated() {
   const label = $('#valuesUpdated');
   if (!label) return;
-  label.hidden = state.category === 'codes';
+  label.hidden = state.view !== 'values' || state.category === 'codes';
   if (label.hidden) return;
   const relative = $('#valuesUpdatedRelative');
   const exact = $('#valuesUpdatedTime');
-  const separator = $('#valuesUpdatedSeparator');
   const date = PRICE_UPDATE.updatedAt ? new Date(PRICE_UPDATE.updatedAt) : null;
   const known = date && Number.isFinite(date.getTime());
+  label.dataset.recorded = String(Boolean(known));
   relative.textContent = known
-    ? `Prices ${formatRelativeTime(date).toLowerCase()}`
-    : 'Price update time unavailable';
-  exact.hidden = separator.hidden = !known;
+    ? formatRelativeTime(date).replace(/^Updated /, '')
+    : 'Not recorded yet';
+  exact.hidden = !known;
   if (known) {
     exact.dateTime = date.toISOString();
     exact.textContent = priceUpdateDateFormat.format(date);
@@ -1501,6 +1501,7 @@ reducedMotion.addEventListener('change', event => { if (event.matches) { animati
 document.addEventListener('visibilitychange', () => {
   document.documentElement.toggleAttribute('data-page-hidden', document.hidden);
   if (document.hidden) resetTilt();
+  else refreshPricesUpdated();
 });
 // Keep the same effects; pause decorative motion briefly while touch scrolling.
 let touchScrollTimer;
