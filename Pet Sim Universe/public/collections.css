@@ -1,30 +1,40 @@
-/* Items and Codes only. Loaded after phone.css and bundled into one CSS file. */
+/* Collection controls and grids. Loaded after phone.css in the shared bundle. */
 
-.item-group-tabs {
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  margin:0 0 18px;
+body[data-view='values'] #valuesView .item-category-tools {
+  display:grid !important;
+  grid-template-rows:auto auto;
+  gap:5px !important;
+  align-self:end !important;
+  min-width:0 !important;
+  margin:0 !important;
 }
-.item-group-tabs[hidden] {display:none !important;}
-.item-group-tabs button {
-  min-height:40px;
-  padding:8px 16px;
+body[data-view='values'] #valuesView .item-category-tools[hidden] {display:none !important;}
+body[data-view='values'] #valuesView .item-category-tools .tool-label {
+  display:block !important;
+  font-size:.65rem;
+  line-height:1.2;
+  color:var(--muted);
+}
+.item-category-switch button {
+  height:38px;
+  min-width:0;
+  padding:0 8px;
   border:1px solid rgba(255,255,255,.12);
-  border-radius:12px;
+  border-radius:9px;
   background:rgba(255,255,255,.04);
   color:var(--muted);
   font:inherit;
-  font-size:.86rem;
+  font-size:.79rem;
   font-weight:800;
+  white-space:nowrap;
   cursor:pointer;
 }
-.item-group-tabs button[aria-pressed='true'] {
+.item-category-switch button[aria-pressed='true'] {
   border-color:rgba(166,107,255,.7);
   background:rgba(166,107,255,.15);
   color:#eadcff;
 }
-.item-group-tabs button:focus-visible {
+.item-category-switch button:focus-visible {
   outline:2px solid #a66bff;
   outline-offset:3px;
 }
@@ -52,26 +62,40 @@ body[data-view='values'] #valuesView[data-category='items'] #cardsGrid {
   font-weight:800;
   text-align:center;
 }
-html[data-theme='light'] .item-group-tabs button {
+html[data-theme='light'] .item-category-switch button {
   border-color:rgba(77,49,108,.2);
   background:rgba(77,49,108,.04);
   color:#493658;
 }
-html[data-theme='light'] .item-group-tabs button[aria-pressed='true'] {
+html[data-theme='light'] .item-category-switch button[aria-pressed='true'] {
   border-color:#8950cc;
   background:rgba(137,80,204,.12);
   color:#58228a;
 }
 @media (max-width:900px) {
-  .item-group-tabs {padding-inline:10px;gap:6px;margin-bottom:14px;}
-  .item-group-tabs button {flex:1;min-width:0;padding:8px 10px;}
+  body[data-view='values'] #valuesView[data-category='items'] .page-tools.page-tools-v40 {
+    grid-template-rows:44px auto !important;
+  }
+  .item-category-switch button {height:34px;padding:0 4px;font-size:.78rem;}
   .item-section-head {padding-inline:10px;}
+}
+@media (max-width:359px) {
+  body[data-view='values'] #valuesView[data-category='items'] .page-tools.page-tools-v40 {
+    grid-template-rows:44px 40px auto !important;
+  }
 }
 
 @media (min-width:901px) {
+  body[data-view='values'] #valuesView[data-category='items'] .page-tools.page-tools-v40 {
+    grid-template-rows:auto !important;
+    align-items:end !important;
+  }
+  body[data-view='values'] #valuesView[data-category='items'] .page-tools :is(.search-box,.custom-sort) {
+    align-self:end !important;
+  }
   body[data-view='values'] #valuesView[data-category='items'] .catalog-card {
     --item-width:clamp(195px,11vw,245px);
-    --item-columns:var(--items-columns-3,3);
+    --item-columns:var(--items-columns-4,4);
     width:min(100%,calc(var(--item-columns) * (var(--item-width) + 12px) + 18px)) !important;
     max-width:none !important;
     min-width:0 !important;
@@ -91,13 +115,46 @@ html[data-theme='light'] .item-group-tabs button[aria-pressed='true'] {
   }
 }
 @media (min-width:901px) and (max-width:1140px) {
+  body[data-view='values'] #valuesView[data-category='items'] .page-tools.page-tools-v40 {
+    grid-template-rows:46px auto !important;
+  }
   body[data-view='values'] #valuesView[data-category='items'] .catalog-card {
     --item-columns:var(--items-columns-2,2);
   }
 }
 @media (min-width:1800px) {
   body[data-view='values'] #valuesView[data-category='items'] .catalog-card {
-    --item-columns:var(--items-columns-6,6);
+    --item-columns:var(--items-columns-7,7);
+  }
+}
+
+/* A regular grid keeps all four eggs in one row, or two matching rows. */
+body[data-view='values'] #valuesView[data-category='eggs'] .catalog-card {
+  width:min(100%,920px) !important;
+  max-width:920px !important;
+  justify-self:center !important;
+}
+body[data-view='values'] #valuesView[data-category='eggs'] #cardsGrid .compact-grid-eggs {
+  display:grid !important;
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  gap:12px !important;
+  align-items:stretch !important;
+}
+body[data-view='values'] #valuesView[data-category='eggs'] #cardsGrid .value-card {
+  width:100% !important;
+  min-width:0 !important;
+}
+@media (min-width:1200px) {
+  body[data-view='values'] #valuesView[data-category='eggs'] #cardsGrid .compact-grid-eggs {
+    grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+  }
+}
+@media (max-width:900px) {
+  body[data-view='values'] #valuesView[data-category='eggs'] #cardsGrid .compact-grid-eggs {gap:10px !important;}
+}
+@media (max-width:359px) {
+  body[data-view='values'] #valuesView[data-category='eggs'] #cardsGrid .compact-grid-eggs {
+    grid-template-columns:minmax(0,1fr) !important;
   }
 }
 

@@ -1,8 +1,13 @@
-# Pet Universe Values v89
+# Pet Universe Values
 
 Cały projekt z oryginalnymi grafikami, Value List, Trade Calculator,
 W/L/FAIR, zapisem oferty do PNG oraz historią Cloudflare D1.
-Ceny w paczce pobrano z gałęzi main Twojego GitHuba 1 października 2026.
+Ceny w tej paczce są dokładną kopią Twojego przesłanego `prices (4).js`.
+
+Aktualna instrukcja wgrywania: `START-TUTAJ.md`. Categories w Items znajdują
+się przy wyszukiwarce, w miejscu wariantów z Pet Values. Zachowano General,
+Fishing i działającą grafikę Moon Chest. Jajka są ułożone w regularnej siatce.
+Skrypt wgrywania domyślnie wysyła ceny z tej paczki.
 
 ## Zmiany
 

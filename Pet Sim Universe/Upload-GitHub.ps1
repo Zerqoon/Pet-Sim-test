@@ -2,7 +2,8 @@
     [string]$Source = $PSScriptRoot,
     [string]$RepoUrl = "https://github.com/Zerqoon/Pet-Sim-test.git",
     [string]$Branch = "main",
-    [switch]$UseLocalPrices
+    [switch]$UseLocalPrices,
+    [switch]$UseRemotePrices
 )
 $ErrorActionPreference = "Stop"
 function Run-Git {
@@ -21,7 +22,8 @@ try {
     $destination = Join-Path $work "Pet Sim Universe"
     $repoPrices = Join-Path $destination "public\data\prices.js"
     $savedPrices = Join-Path $work "prices-keep-local.tmp"
-    if (-not $UseLocalPrices -and (Test-Path -LiteralPath $repoPrices -PathType Leaf)) {
+    # Domyslnie wysylamy prices.js z paczki. Zdalne ceny tylko na wyrazne zadanie.
+    if ($UseRemotePrices -and -not $UseLocalPrices -and (Test-Path -LiteralPath $repoPrices -PathType Leaf)) {
         Copy-Item -LiteralPath $repoPrices -Destination $savedPrices
     }
     & robocopy $Source $destination /MIR /XD .git node_modules .wrangler .cloudflare /XF *.before-fix .env .env.* .dev.vars .dev.vars.* *.private.* discord-secrets*.json /R:2 /W:1 /NFL /NDL /NJH /NJS /NP
@@ -29,6 +31,8 @@ try {
     if (Test-Path -LiteralPath $savedPrices -PathType Leaf) {
         Copy-Item -LiteralPath $savedPrices -Destination $repoPrices -Force
         Write-Host "Zachowano aktualne public/data/prices.js z GitHuba." -ForegroundColor Cyan
+    } else {
+        Write-Host "Uzyto public/data/prices.js dolaczonego do tej paczki." -ForegroundColor Cyan
     }
     Push-Location $destination
     try {
@@ -44,9 +48,9 @@ try {
         Write-Host "GitHub ma juz identyczne pliki." -ForegroundColor Green
     } elseif ($diffResult -eq 1) {
         Run-Git diff --cached --stat
-        Run-Git commit -m "Update Pet Universe v113: Gummy collection, Sunken Eel and Blobfish variants"
+        Run-Git commit -m "Update Pet Universe: item categories, aligned eggs and current prices"
         Run-Git push origin $Branch
         Write-Host "GOTOWE - projekt wyslany. Poczekaj na udane wdrozenie Cloudflare." -ForegroundColor Green
-        Write-Host "Nowe pety, warianty i ceny v113 sa wyslane. Nie trzeba ponownie konfigurowac Discorda."
+        Write-Host "Kategorie Items, jajka i ceny sa wyslane. Nie trzeba ponownie konfigurowac Discorda."
     } else { throw "Nie udalo sie sprawdzic zmian." }
 } finally { Pop-Location }

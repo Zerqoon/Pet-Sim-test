@@ -702,17 +702,19 @@ function render() {
   const list = filtered();
   const [kicker, title, placeholder] = categoryMeta[state.category];
   const petsMode = state.category === 'pets';
+  const itemsMode = state.category === 'items';
   const codesMode = state.category === 'codes';
-  $('#itemGroupTabs').hidden = state.category !== 'items';
+  $('#itemGroupTabs').hidden = !itemsMode;
   $$('#itemGroupTabs [data-item-group]').forEach(button => {
     button.setAttribute('aria-pressed', String(button.dataset.itemGroup === state.itemGroup));
   });
 
-  // Fit Items to complete rows; CSS selects the column count for the viewport.
-  if (state.category === 'items') {
+  // Size the panel for its largest visible section, rather than both groups combined.
+  if (itemsMode) {
     const panel = $('.catalog-card', valuesView);
-    for (const columns of [2, 3, 6]) {
-      panel.style.setProperty(`--items-columns-${columns}`, Math.min(columns, list.length || columns));
+    const largestGroup = Math.max(...Object.keys(itemGroups).map(group => list.filter(item => itemGroupFor(item) === group).length));
+    for (const columns of [2, 4, 7]) {
+      panel.style.setProperty(`--items-columns-${columns}`, Math.min(columns, largestGroup || columns));
     }
   }
 
@@ -723,7 +725,7 @@ function render() {
 
   const variantTools = $('#variantTools');
   variantTools.hidden = !petsMode;
-  $('.page-tools').classList.toggle('no-variants', !petsMode);
+  $('.page-tools').classList.toggle('no-variants', !petsMode && !itemsMode);
   $('#customSort').hidden = codesMode;
   // Codes has a single search row; keep Home in the title corner.
   const homeButton = $('.home-corner-btn', valuesView);
