@@ -14,7 +14,7 @@ Skrypt domyślnie korzysta z cen z tej paczki. Opcjonalne `-UseLocalPrices` nada
 3. Poczekaj na udane wdrożenie Cloudflare Pages. Ustawienia: root `Pet Sim Universe`, build `npm run build`, output `public`.
 4. Późniejsze ceny edytuj w `public/data/prices.js`. Wszystkie 35 petów, 16 charms, 4 jajka i 12 Items mają wpisy. Warianty petów mają osobne ceny `normal`, `golden`, `diamond`.
 
-W Items przyciski All Items / General / Fishing są w nagłówku przy wyszukiwarce, pod etykietą Categories. Pet Variant pojawia się w Pet Values. Jajka mają równy układ czterech kart na komputerze i dwóch kolumn na mniejszych ekranach; przy szerokości poniżej 360 px jest jedna kolumna. Zachowano pięć itemów Fishing oraz poprawioną grafikę Moon Chest.
+Tytuły Pet Values, Charm Values, Egg Values, Item Values i Codes są wyśrodkowane nad filtrami. Nagłówek Trade Calculator jest również wyśrodkowany. W Items przyciski All Items / General / Fishing są w nagłówku przy wyszukiwarce, pod etykietą Categories. Mają większe napisy, jednakową wysokość i wyraźnie zaznaczoną aktywną kategorię. Pet Variant pojawia się w Pet Values. Jajka mają równy układ czterech kart na komputerze i dwóch kolumn na mniejszych ekranach; przy szerokości poniżej 360 px jest jedna kolumna. Zachowano pięć itemów Fishing oraz poprawioną grafikę Moon Chest.
 
 Nie trzeba ponownie konfigurować Discorda. Zachowaj swoje sekrety i prywatny folder `.cloudflare`. Instrukcje monitora: `README-CLOUDFLARE.md`.
 

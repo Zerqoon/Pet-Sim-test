@@ -1,0 +1,264 @@
+/* Shared titles and aligned collection filters, after the legacy styles. */
+body[data-view='values'] #valuesView .page-header {
+  position:relative !important;
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) !important;
+  justify-items:center !important;
+  width:min(100%,1200px) !important;
+  max-width:1200px !important;
+  min-width:0 !important;
+  margin-inline:auto !important;
+  gap:18px !important;
+  box-sizing:border-box !important;
+  justify-self:center !important;
+}
+body[data-view='values'] #valuesView[data-category] .page-title-wrap {
+  width:100% !important;
+  min-width:0 !important;
+  padding:0 84px !important;
+  box-sizing:border-box !important;
+  text-align:center !important;
+}
+body[data-view='values'] #valuesView #sectionKicker {display:none !important;}
+body[data-view='values'] #valuesView #sectionTitle {
+  width:100% !important;
+  margin:0 !important;
+  font-size:clamp(1.65rem,2.1vw,2.15rem) !important;
+  line-height:1.2 !important;
+  letter-spacing:-.025em !important;
+  text-align:center !important;
+  color:var(--text) !important;
+}
+body[data-view='values'] #valuesView #sectionTitle::after {
+  content:'';
+  display:block;
+  width:52px;
+  height:3px;
+  margin:9px auto 0;
+  border-radius:999px;
+  background:#a66bff;
+  box-shadow:0 0 14px #a66bff40;
+}
+body[data-view='values'] #valuesView .page-tools.page-tools-v40 {
+  position:static !important;
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) 144px 340px !important;
+  grid-template-rows:auto !important;
+  align-items:end !important;
+  width:100% !important;
+  max-width:1100px !important;
+  min-width:0 !important;
+  margin:0 auto !important;
+  padding:0 !important;
+  gap:12px !important;
+}
+body[data-view='values'] #valuesView .page-tools.page-tools-v40.no-variants {
+  grid-template-columns:minmax(0,1fr) 144px !important;
+}
+body[data-view='values'] #valuesView[data-category='codes'] .page-tools.page-tools-v40.no-variants {
+  grid-template-columns:minmax(0,1fr) !important;
+  grid-template-rows:auto !important;
+}
+body[data-view='values'] #valuesView .page-tools .search-box {
+  grid-column:1 !important;
+  grid-row:1 !important;
+  align-self:end !important;
+  width:100% !important;
+  min-width:0 !important;
+  height:52px !important;
+  min-height:52px !important;
+  margin:0 !important;
+  box-sizing:border-box !important;
+}
+body[data-view='values'] #valuesView .page-tools .custom-sort {
+  grid-column:2 !important;
+  grid-row:1 !important;
+  align-self:end !important;
+  width:100% !important;
+  min-width:0 !important;
+  margin:0 !important;
+}
+body[data-view='values'] #valuesView .page-tools .sort-trigger {
+  height:52px !important;
+  min-height:52px !important;
+}
+body[data-view='values'] #valuesView .page-tools #variantTools,
+body[data-view='values'] #valuesView .page-tools #itemGroupTabs {
+  position:relative !important;
+  inset:auto !important;
+  display:grid !important;
+  grid-template-rows:auto auto !important;
+  grid-column:3 !important;
+  grid-row:1 !important;
+  align-self:end !important;
+  justify-self:center !important;
+  width:100% !important;
+  min-width:0 !important;
+  margin:0 !important;
+  padding:0 !important;
+  gap:7px !important;
+}
+body[data-view='values'] #valuesView .page-tools #variantTools[hidden],
+body[data-view='values'] #valuesView .page-tools #itemGroupTabs[hidden] {display:none !important;}
+body[data-view='values'] #valuesView .page-tools :is(#variantTools,#itemGroupTabs) .tool-label {
+  display:block !important;
+  margin:0 !important;
+  font-size:.72rem !important;
+  font-weight:900 !important;
+  line-height:1.2 !important;
+  letter-spacing:.1em !important;
+  text-align:center !important;
+  color:var(--text) !important;
+}
+body[data-view='values'] #valuesView #variantTools .variant-switch,
+body[data-view='values'] #valuesView #itemGroupTabs .item-category-switch {
+  display:grid !important;
+  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  align-items:stretch !important;
+  gap:5px !important;
+  width:100% !important;
+  max-width:none !important;
+  height:52px !important;
+  margin:0 !important;
+  padding:5px !important;
+  border-radius:13px !important;
+  box-sizing:border-box !important;
+}
+body[data-view='values'] #valuesView #variantTools .variant-btn {
+  height:40px !important;
+  min-height:0 !important;
+  padding:0 7px !important;
+  font-size:.85rem !important;
+}
+body[data-view='values'] #valuesView #itemGroupTabs .item-category-switch {
+  border:1px solid #b58cff52 !important;
+  background:#131321cc !important;
+  box-shadow:inset 0 1px 0 #ffffff0d !important;
+}
+body[data-view='values'] #valuesView #itemGroupTabs button {
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  width:100% !important;
+  min-width:0 !important;
+  height:100% !important;
+  min-height:0 !important;
+  margin:0 !important;
+  padding:0 7px !important;
+  border:1px solid #ffffff21 !important;
+  border-radius:9px !important;
+  background:#ffffff09 !important;
+  color:#ece5f7 !important;
+  font-size:.88rem !important;
+  font-weight:900 !important;
+  line-height:1 !important;
+  white-space:nowrap !important;
+  cursor:pointer;
+}
+body[data-view='values'] #valuesView #itemGroupTabs button:hover {background:#a66bff22 !important;}
+body[data-view='values'] #valuesView #itemGroupTabs button:focus-visible {
+  outline:2px solid #cdb0ff;
+  outline-offset:2px;
+}
+body[data-view='values'] #valuesView #itemGroupTabs button[aria-pressed='true'] {
+  border-color:#bb91ff !important;
+  background:#7650ae !important;
+  color:#fff !important;
+  box-shadow:inset 0 1px 0 #ffffff24,0 0 12px #a66bff25 !important;
+}
+body[data-view='values'] #valuesView .page-header .home-corner-btn {
+  position:absolute !important;
+  inset:18px 18px auto auto !important;
+  grid-area:auto !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  width:76px !important;
+  min-width:76px !important;
+  height:40px !important;
+  min-height:40px !important;
+  margin:0 !important;
+  padding:0 8px !important;
+}
+html[data-theme='light'] body[data-view='values'] #valuesView #itemGroupTabs .item-category-switch {
+  background:#eee8f7 !important;
+  border-color:#9865ca66 !important;
+}
+html[data-theme='light'] body[data-view='values'] #valuesView #itemGroupTabs button {
+  color:#513968 !important;
+  border-color:#8055a633 !important;
+  background:#ffffffa3 !important;
+}
+html[data-theme='light'] body[data-view='values'] #valuesView #itemGroupTabs button[aria-pressed='true'] {
+  background:#7650ae !important;
+  border-color:#7650ae !important;
+  color:#fff !important;
+}
+
+/* Trade Calculator uses the same centered title composition. */
+body[data-view='calculator'] #calculatorView .calculator-v55-header {
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) !important;
+  justify-items:center !important;
+  gap:16px !important;
+}
+body[data-view='calculator'] #calculatorView .calculator-v55-title {
+  width:100% !important;
+  min-width:0 !important;
+  text-align:center !important;
+}
+body[data-view='calculator'] #calculatorView .calculator-v55-title h1 {text-align:center !important;}
+body[data-view='calculator'] #calculatorView .calculator-v55-title p {margin-inline:auto !important;}
+body[data-view='calculator'] #calculatorView .calculator-v55-actions {justify-content:center !important;}
+
+@media (max-width:1140px) {
+  body[data-view='values'] #valuesView .page-tools.page-tools-v40 {
+    grid-template-columns:minmax(0,1fr) 130px !important;
+    grid-template-rows:52px auto !important;
+  }
+  body[data-view='values'] #valuesView .page-tools.page-tools-v40.no-variants {
+    grid-template-columns:minmax(0,1fr) 130px !important;
+    grid-template-rows:auto !important;
+  }
+  body[data-view='values'] #valuesView .page-tools #variantTools,
+  body[data-view='values'] #valuesView .page-tools #itemGroupTabs {
+    grid-column:1 / -1 !important;
+    grid-row:2 !important;
+    max-width:420px !important;
+  }
+}
+@media (max-width:900px) {
+  body[data-view='values'] #valuesView[data-category] .page-title-wrap {padding-inline:72px !important;}
+  body[data-view='values'] #valuesView #sectionTitle {font-size:1.5rem !important;}
+  body[data-view='values'] #valuesView .page-tools.page-tools-v40,
+  body[data-view='values'] #valuesView .page-tools.page-tools-v40.no-variants {
+    grid-template-columns:minmax(0,1fr) 112px !important;
+    gap:10px !important;
+  }
+  body[data-view='values'] #valuesView .page-header .home-corner-btn {
+    inset:12px 12px auto auto !important;
+    width:60px !important;
+    min-width:60px !important;
+    height:34px !important;
+    min-height:34px !important;
+  }
+}
+@media (max-width:359px) {
+  body[data-view='values'] #valuesView[data-category] .page-title-wrap {padding-inline:62px !important;}
+  body[data-view='values'] #valuesView #sectionTitle {font-size:1.3rem !important;}
+  body[data-view='values'] #valuesView .page-tools.page-tools-v40,
+  body[data-view='values'] #valuesView .page-tools.page-tools-v40.no-variants {
+    grid-template-columns:minmax(0,1fr) !important;
+    grid-template-rows:auto !important;
+  }
+  body[data-view='values'] #valuesView .page-tools .custom-sort {
+    grid-column:1 !important;
+    grid-row:2 !important;
+  }
+  body[data-view='values'] #valuesView .page-tools #variantTools,
+  body[data-view='values'] #valuesView .page-tools #itemGroupTabs {
+    grid-column:1 !important;
+    grid-row:3 !important;
+  }
+  body[data-view='values'] #valuesView #itemGroupTabs button {font-size:.82rem !important;}
+}

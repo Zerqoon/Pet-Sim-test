@@ -1,43 +1,4 @@
-/* Collection controls and grids. Loaded after phone.css in the shared bundle. */
-
-body[data-view='values'] #valuesView .item-category-tools {
-  display:grid !important;
-  grid-template-rows:auto auto;
-  gap:5px !important;
-  align-self:end !important;
-  min-width:0 !important;
-  margin:0 !important;
-}
-body[data-view='values'] #valuesView .item-category-tools[hidden] {display:none !important;}
-body[data-view='values'] #valuesView .item-category-tools .tool-label {
-  display:block !important;
-  font-size:.65rem;
-  line-height:1.2;
-  color:var(--muted);
-}
-.item-category-switch button {
-  height:38px;
-  min-width:0;
-  padding:0 8px;
-  border:1px solid rgba(255,255,255,.12);
-  border-radius:9px;
-  background:rgba(255,255,255,.04);
-  color:var(--muted);
-  font:inherit;
-  font-size:.79rem;
-  font-weight:800;
-  white-space:nowrap;
-  cursor:pointer;
-}
-.item-category-switch button[aria-pressed='true'] {
-  border-color:rgba(166,107,255,.7);
-  background:rgba(166,107,255,.15);
-  color:#eadcff;
-}
-.item-category-switch button:focus-visible {
-  outline:2px solid #a66bff;
-  outline-offset:3px;
-}
+/* Collection grids. Header controls are defined in headers.css. */
 body[data-view='values'] #valuesView[data-category='items'] #cardsGrid {
   display:grid !important;
   grid-template-columns:minmax(0,1fr) !important;
@@ -62,37 +23,11 @@ body[data-view='values'] #valuesView[data-category='items'] #cardsGrid {
   font-weight:800;
   text-align:center;
 }
-html[data-theme='light'] .item-category-switch button {
-  border-color:rgba(77,49,108,.2);
-  background:rgba(77,49,108,.04);
-  color:#493658;
-}
-html[data-theme='light'] .item-category-switch button[aria-pressed='true'] {
-  border-color:#8950cc;
-  background:rgba(137,80,204,.12);
-  color:#58228a;
-}
 @media (max-width:900px) {
-  body[data-view='values'] #valuesView[data-category='items'] .page-tools.page-tools-v40 {
-    grid-template-rows:44px auto !important;
-  }
-  .item-category-switch button {height:34px;padding:0 4px;font-size:.78rem;}
   .item-section-head {padding-inline:10px;}
-}
-@media (max-width:359px) {
-  body[data-view='values'] #valuesView[data-category='items'] .page-tools.page-tools-v40 {
-    grid-template-rows:44px 40px auto !important;
-  }
 }
 
 @media (min-width:901px) {
-  body[data-view='values'] #valuesView[data-category='items'] .page-tools.page-tools-v40 {
-    grid-template-rows:auto !important;
-    align-items:end !important;
-  }
-  body[data-view='values'] #valuesView[data-category='items'] .page-tools :is(.search-box,.custom-sort) {
-    align-self:end !important;
-  }
   body[data-view='values'] #valuesView[data-category='items'] .catalog-card {
     --item-width:clamp(195px,11vw,245px);
     --item-columns:var(--items-columns-4,4);
@@ -115,9 +50,6 @@ html[data-theme='light'] .item-category-switch button[aria-pressed='true'] {
   }
 }
 @media (min-width:901px) and (max-width:1140px) {
-  body[data-view='values'] #valuesView[data-category='items'] .page-tools.page-tools-v40 {
-    grid-template-rows:46px auto !important;
-  }
   body[data-view='values'] #valuesView[data-category='items'] .catalog-card {
     --item-columns:var(--items-columns-2,2);
   }
