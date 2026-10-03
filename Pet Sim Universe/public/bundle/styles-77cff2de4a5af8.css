@@ -10871,8 +10871,8 @@ body[data-view='values'] #valuesView[data-category='eggs'] #cardsGrid .value-car
 }
 
 body[data-view='values'] #valuesView[data-category='codes'] :is(.page-header,.catalog-card) {
-  width:min(100%,860px) !important;
-  max-width:860px !important;
+  width:min(100%,1200px) !important;
+  max-width:1200px !important;
   min-width:0 !important;
   margin-inline:auto !important;
   justify-self:center !important;
@@ -10923,6 +10923,7 @@ body[data-view='values'] #valuesView[data-category='codes'] .home-corner-btn {
   margin:0 !important;
 }
 body[data-view='values'] #valuesView[data-category='codes'] .catalog-card {
+  container:codes / inline-size;
   min-height:0 !important;
   padding:18px !important;
   border:1px solid var(--line) !important;
@@ -10958,7 +10959,7 @@ body[data-view='values'] #valuesView[data-category='codes'] .result-count {
 body[data-view='values'] #valuesView[data-category='codes'] .codes-list {
   display:grid !important;
   grid-template-columns:minmax(0,1fr) !important;
-  gap:8px !important;
+  gap:12px !important;
   width:100% !important;
 }
 body[data-view='values'] #valuesView[data-category='codes'] .code-row {
@@ -11173,6 +11174,72 @@ body[data-view='values'] #valuesView[data-category='codes'] .code-row.is-expired
     flex-basis:14px;
     width:14px;
     height:14px;
+  }
+}
+
+@container codes (min-width:560px) {
+  body[data-view='values'] #valuesView[data-category='codes'] .codes-list {
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    gap:14px !important;
+    align-items:stretch;
+  }
+  body[data-view='values'] #valuesView[data-category='codes'] .code-row {
+    grid-template-columns:40px minmax(0,1fr) !important;
+    grid-template-rows:minmax(52px,1fr) 44px !important;
+    align-items:stretch !important;
+    gap:12px !important;
+    min-height:146px !important;
+    padding:16px !important;
+    border-radius:16px !important;
+  }
+  body[data-view='values'] #valuesView[data-category='codes'] .code-row-mark {
+    grid-column:1;
+    grid-row:1;
+    align-self:center;
+    width:40px;
+    height:40px;
+    border-radius:12px;
+  }
+  body[data-view='values'] #valuesView[data-category='codes'] .code-row-mark svg {
+    width:23px;
+    height:23px;
+  }
+  body[data-view='values'] #valuesView[data-category='codes'] .code-row-main {
+    grid-column:2;
+    grid-row:1;
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr);
+    align-items:start !important;
+    align-content:center;
+    gap:5px !important;
+  }
+  body[data-view='values'] #valuesView[data-category='codes'] .code-row-code {
+    font-size:1.1rem !important;
+  }
+  body[data-view='values'] #valuesView[data-category='codes'] .code-row-status {
+    min-height:22px !important;
+    font-size:.67rem !important;
+    padding:2px 7px !important;
+  }
+  body[data-view='values'] #valuesView[data-category='codes'] .code-copy-button {
+    grid-column:1 / -1 !important;
+    grid-row:2 !important;
+    width:100% !important;
+    height:44px !important;
+    min-height:44px !important;
+    padding:0 12px !important;
+    gap:7px !important;
+    font-size:.82rem !important;
+  }
+  body[data-view='values'] #valuesView[data-category='codes'] .copy-icon {
+    flex-basis:16px;
+    width:16px;
+    height:16px;
+  }
+}
+@container codes (min-width:980px) {
+  body[data-view='values'] #valuesView[data-category='codes'] .codes-list {
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
   }
 }
 
