@@ -51,17 +51,17 @@ export const PRICES = {
     // Pop Cat
     "pop-cat": 30,
     // Queen Bee
-    "queen-bee": {"normal":400,"golden":"No Price","diamond":"No Price"},
+    "queen-bee": {"normal":450,"golden":"No Price","diamond":"No Price"},
     // Blaze Phoenix
-    "blaze-phoenix": {"normal":400,"golden":1900,"diamond":4500},
+    "blaze-phoenix": {"normal":450,"golden":2200,"diamond":5750},
     // Mossy Mushroom
-    "mossy-mushroom": {"normal":275,"golden":850,"diamond":3200},
+    "mossy-mushroom": {"normal":325,"golden":925,"diamond":4750},
     // Throne Dragon
-    "throne-dragon": {"normal":185,"golden":"No Price","diamond":"No Price"},
+    "throne-dragon": {"normal":200,"golden":"No Price","diamond":"No Price"},
     // Ruby Majesty
     "ruby-majesty": {"normal":45,"golden":250,"diamond":950},
     // Ember Monster
-    "ember-monster": {"normal":35,"golden":175,"diamond":750},
+    "ember-monster": {"normal":40,"golden":190,"diamond":750},
     // Shadow Dominus
     "shadow-dominus": {"normal":15,"golden":"???","diamond":"???"},
     // Imp
