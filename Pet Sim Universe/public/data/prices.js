@@ -73,7 +73,7 @@ export const PRICES = {
     // Blobfish
     "blobfish": {"normal":null,"golden":null,"diamond":null},
     // Sunken Eel
-    "sunken-eel": {"normal":400,"golden":null,"diamond":null},
+    "sunken-eel": {"normal":150,"golden":null,"diamond":null},
   },
 
   charms: {
