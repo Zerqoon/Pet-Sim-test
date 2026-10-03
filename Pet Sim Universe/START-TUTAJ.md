@@ -19,3 +19,21 @@ Tytuły Pet Values, Charm Values, Egg Values, Item Values i Codes są wyśrodkow
 Nie trzeba ponownie konfigurować Discorda. Zachowaj swoje sekrety i prywatny folder `.cloudflare`. Instrukcje monitora: `README-CLOUDFLARE.md`.
 
 Poprzednie pliki `START-v*.md` opisują starsze wersje projektu.
+
+## Data aktualizacji cen
+
+Pod tytułem Pet Values, Charm Values, Egg Values i Item Values jest teraz
+`Prices updated … ago` oraz dokładna data i godzina w strefie `Europe/Warsaw`.
+To wspólna data ostatniej aktualizacji wszystkich cen; Codes jej nie pokazuje.
+
+Nadal edytuj tylko `public/data/prices.js`. `npm run build` automatycznie
+zapisuje czas commita zmieniającego ten plik; przy lokalnej zmianie cen używa
+czasu zapisania pliku. Odświeżanie strony i build bez zmiany wartości nie
+zerują daty. Równoważne zapisy, np. `30000` i `"30K"`, również jej nie zerują.
+W Cloudflare zostaw build command `npm run build` — bez wykonania buildu
+ceny mogą się zmienić, ale zapisany czas nie będzie zaktualizowany.
+
+ZIP pobrany z GitHuba nie zawiera historii commitów, więc przed pierwszym
+buildem w repozytorium lub faktyczną zmianą cen może być widoczne
+`Price update time unavailable`. Projekt nie przypisuje cenom daty samego
+rozpakowania ZIP-a. Skrypt `Upload-GitHub.ps1` wykonuje build w repozytorium.

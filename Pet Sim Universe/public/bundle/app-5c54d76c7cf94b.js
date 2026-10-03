@@ -3,6 +3,8 @@ const IMAGE_ASSETS = {"assets/eggs/alien-egg.png":{"src":"assets/optimized/alien
 import { renderTradePage, tradePageCount, tradeSummary } from '../data/trade-export.js';
 import { PETS, CHARMS, EGGS, ITEMS, CODES, RARITY_ORDER, LAST_UPDATED } from '../data/catalog.js';
 
+import { PRICE_UPDATE } from '../data/price-updates.js';
+
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 const ticket = 'assets/items/value-ticket.png';
@@ -272,6 +274,36 @@ function refreshHomeUpdated() {
   const el = $('#homeUpdated');
   if (!el) return;
   el.textContent = formatRelativeTime(LAST_UPDATED);
+}
+
+const priceUpdateDateFormat = new Intl.DateTimeFormat('en-GB', {
+  timeZone: 'Europe/Warsaw', day: '2-digit', month: 'short', year: 'numeric',
+  hour: '2-digit', minute: '2-digit', hourCycle: 'h23', timeZoneName: 'short',
+});
+
+function refreshPricesUpdated() {
+  const label = $('#valuesUpdated');
+  if (!label) return;
+  label.hidden = state.category === 'codes';
+  if (label.hidden) return;
+  const relative = $('#valuesUpdatedRelative');
+  const exact = $('#valuesUpdatedTime');
+  const separator = $('#valuesUpdatedSeparator');
+  const date = PRICE_UPDATE.updatedAt ? new Date(PRICE_UPDATE.updatedAt) : null;
+  const known = date && Number.isFinite(date.getTime());
+  relative.textContent = known
+    ? `Prices ${formatRelativeTime(date).toLowerCase()}`
+    : 'Price update time unavailable';
+  exact.hidden = separator.hidden = !known;
+  if (known) {
+    exact.dateTime = date.toISOString();
+    exact.textContent = priceUpdateDateFormat.format(date);
+    label.title = `Last price update: ${exact.textContent} (Europe/Warsaw)`;
+  } else {
+    exact.textContent = '';
+    exact.removeAttribute('datetime');
+    label.removeAttribute('title');
+  }
 }
 
 function fallbackHistoryPoint(item, variant = state.modalVariant) {
@@ -692,6 +724,8 @@ function render() {
   categoryNav.hidden = state.view !== 'values';
 
   refreshHomeUpdated();
+
+  refreshPricesUpdated();
 
   if (state.view === 'calculator') {
     renderCalculator();
@@ -1510,7 +1544,11 @@ $('#sortPopover').addEventListener('keydown', event => {
 syncMotion();
 
 refreshHomeUpdated();
-setInterval(refreshHomeUpdated, 60000);
+refreshPricesUpdated();
+setInterval(() => {
+  refreshHomeUpdated();
+  if (!document.hidden && state.view === 'values') refreshPricesUpdated();
+}, 60000);
 render();
 
 let exportMessageTimer;
