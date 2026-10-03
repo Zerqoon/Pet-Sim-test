@@ -130,7 +130,7 @@ export const PRICES = {
     // VIP Key
     "vip-key": 0.3,
     // Globe
-    "globe": 25,
+    "globe": 20,
     // Ball
     "ball": 3,
     // Squeaky
@@ -138,14 +138,14 @@ export const PRICES = {
     // 1M luckyblock
     "1m-lucky-block": 10,
     // Canned Tuna
-    "canned-tuna": null,
+    "canned-tuna": 25,
     // Universe Worm
     "universeworm": null,
     // Worm
-    "worm": null,
+    "worm": 1,
     // Golden Fish Hook
     "golden-fish-hook": null,
     // Fish Hook
-    "fishhook": null,
+    "fishhook": 3,
   },
 };
