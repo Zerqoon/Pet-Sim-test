@@ -5,7 +5,7 @@ export const PRICES = {
 
   pets: {
     // RICH BEE
-    "rich-bee": "3.5k",
+    "rich-bee": "2k",
     // Ruby Nebula Star
     "ruby-nebula-star": "15K",
     // Universe Capybara
@@ -51,17 +51,17 @@ export const PRICES = {
     // Pop Cat
     "pop-cat": 30,
     // Queen Bee
-    "queen-bee": {"normal":375,"golden":"No Price","diamond":"No Price"},
+    "queen-bee": {"normal":400,"golden":"No Price","diamond":"No Price"},
     // Blaze Phoenix
-    "blaze-phoenix": {"normal":350,"golden":1900,"diamond":4500},
+    "blaze-phoenix": {"normal":400,"golden":1900,"diamond":4500},
     // Mossy Mushroom
-    "mossy-mushroom": {"normal":250,"golden":850,"diamond":3200},
+    "mossy-mushroom": {"normal":275,"golden":850,"diamond":3200},
     // Throne Dragon
-    "throne-dragon": {"normal":150,"golden":"No Price","diamond":"No Price"},
+    "throne-dragon": {"normal":185,"golden":"No Price","diamond":"No Price"},
     // Ruby Majesty
-    "ruby-majesty": {"normal":40,"golden":195,"diamond":950},
+    "ruby-majesty": {"normal":45,"golden":250,"diamond":950},
     // Ember Monster
-    "ember-monster": {"normal":30,"golden":150,"diamond":750},
+    "ember-monster": {"normal":35,"golden":175,"diamond":750},
     // Shadow Dominus
     "shadow-dominus": {"normal":15,"golden":"???","diamond":"???"},
     // Imp
@@ -128,7 +128,7 @@ export const PRICES = {
     // Universe Shard
     "universe-shard": 25,
     // VIP Key
-    "vip-key": 0.25,
+    "vip-key": 0.3,
     // Globe
     "globe": 25,
     // Ball
