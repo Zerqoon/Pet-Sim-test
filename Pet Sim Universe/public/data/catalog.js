@@ -552,20 +552,17 @@ export const EGGS = [
 ];
 
 export const CODES = [
-
-  { id:'code-update2', name:'update2', code:'update2', status:'active', source:'Reward Code', description:'Redeem this game code in Pet Universe.' },
-
-  { id:'code-1mvisits', name:'1mvisits', code:'1mvisits', status:'active', source:'Reward Code', description:'Redeem this game code in Pet Universe.' },
-
-  { id:'code-roksek', name:'Roksek', code:'Roksek', status:'active', source:'Reward Code', description:'Redeem this game code in Pet Universe.' },
-
   { id:'code-droverq', name:'DroverQ', code:'DroverQ', status:'active', source:'Reward Code', description:'Redeem this game code in Pet Universe.' },
-
-  { id:'code-release', name:'Release', code:'Release', status:'active', source:'Reward Code', description:'Redeem this game code in Pet Universe.' },
-
+  { id:'code-russo', name:'Russo', code:'Russo', status:'active', source:'Reward Code', description:'Redeem this game code in Pet Universe.' },
   { id:'code-darkrose', name:'DarkRose', code:'DarkRose', status:'active', source:'Reward Code', description:'Redeem this game code in Pet Universe.' },
-
-  { id:'code-update3', name:'update3', code:'update3', status:'active', source:'Reward Code', description:'Redeem this game code in Pet Universe.' },
+  { id:'code-ag64', name:'AG64', code:'AG64', status:'active', source:'Reward Code', description:'Redeem this game code in Pet Universe.' },
+  { id:'code-cupcake', name:'Cupcake', code:'Cupcake', status:'active', source:'Reward Code', description:'Redeem this game code in Pet Universe.' },
+  { id:'code-e11opoppet', name:'E11opoppet', code:'E11opoppet', status:'active', source:'Reward Code', description:'Redeem this game code in Pet Universe.' },
+  { id:'code-olopomidoro', name:'Olopomidoro', code:'Olopomidoro', status:'active', source:'Reward Code', description:'Redeem this game code in Pet Universe.' },
+  { id:'code-ostrichh', name:'Ostrichh', code:'Ostrichh', status:'active', source:'Reward Code', description:'Redeem this game code in Pet Universe.' },
+  { id:'code-1mvisits', name:'1mvisits', code:'1mvisits', status:'active', source:'Reward Code', description:'Redeem this game code in Pet Universe.' },
+  { id:'code-update3', name:'Update3', code:'Update3', status:'active', source:'Reward Code', description:'Redeem this game code in Pet Universe.' },
+  { id:'code-smidl155', name:'Smidl155', code:'Smidl155', status:'active', source:'Reward Code', description:'Redeem this game code in Pet Universe.' },
 ];
 
 export const ITEMS = [
