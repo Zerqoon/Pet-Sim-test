@@ -11,13 +11,13 @@ export const PRICES = {
     // Universe Capybara
     "universe-capybara": "25K",
     // Gummy Bear
-    "gummy-bear": "22.5K",
+    "gummy-bear": "18K",
     // Alien Emperor
     "alien-emperor": "7K",
     // KRAKEN
     "kraken": null,
     // Agent Sheep
-    "agent-sheep": null,
+    "agent-sheep": 200,
     // Caaaaat
     "caaaaat": "4K",
     // Exquisite Cat
@@ -27,9 +27,9 @@ export const PRICES = {
     // Six Seven!
     "six-seven": "2K",
     // Void Owl
-    "void-owl": 350,
+    "void-owl": 420,
     // Gummy Gubby
-    "gummy-gubby": 350,
+    "gummy-gubby": 375,
     // Gummy Penguin
     "gummy-penguin": 110,
     // Sun Deer
@@ -41,7 +41,7 @@ export const PRICES = {
     // Job Cat
     "job-cat": 200,
     // Gummy Capybara
-    "gummy-capybara": 20,
+    "gummy-capybara": 25,
     // Galaxy Bunny
     "galaxy-bunny": 20,
     // Galaxy Cat
@@ -51,13 +51,13 @@ export const PRICES = {
     // Pop Cat
     "pop-cat": 30,
     // Queen Bee
-    "queen-bee": {"normal":450,"golden":"No Price","diamond":"No Price"},
+    "queen-bee": {"normal":550,"golden":"No Price","diamond":"No Price"},
     // Blaze Phoenix
-    "blaze-phoenix": {"normal":450,"golden":2200,"diamond":5750},
+    "blaze-phoenix": {"normal":500,"golden":2350,"diamond":6100},
     // Mossy Mushroom
-    "mossy-mushroom": {"normal":325,"golden":925,"diamond":4750},
+    "mossy-mushroom": {"normal":400,"golden":1100,"diamond":5000},
     // Throne Dragon
-    "throne-dragon": {"normal":200,"golden":"No Price","diamond":"No Price"},
+    "throne-dragon": {"normal":250,"golden":"No Price","diamond":"No Price"},
     // Ruby Majesty
     "ruby-majesty": {"normal":45,"golden":250,"diamond":950},
     // Ember Monster
@@ -80,9 +80,9 @@ export const PRICES = {
     // Secret Charm
     "secret-charm": 400,
     // Lightning Charm
-    "lightning-charm": 425,
+    "lightning-charm": 450,
     // Moon Charm
-    "moon-charm": 35,
+    "moon-charm": 55,
     // Rubies Charm IV
     "rubies-charm-iv": 285,
     // Hatch Charm IV
@@ -104,7 +104,7 @@ export const PRICES = {
     // Coins Charm III
     "coins-charm-iii": 30,
     // Fishing Charm I
-    "fishing-charm-i": null,
+    "fishing-charm-i": 5,
     // Fishing Charm II
     "fishing-charm-ii": null,
     // Fishing Charm III
@@ -113,7 +113,7 @@ export const PRICES = {
 
   eggs: {
     // Gummy Egg
-    "gummy-egg": null,
+    "gummy-egg": 110,
     // Alien Egg
     "alien-egg": 3,
     // Party Egg
@@ -136,7 +136,7 @@ export const PRICES = {
     // Squeaky
     "squeaky": 3,
     // 1M luckyblock
-    "1m-lucky-block": 10,
+    "1m-lucky-block": 15,
     // Canned Tuna
     "canned-tuna": 25,
     // Universe Worm
