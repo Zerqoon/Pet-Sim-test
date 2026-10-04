@@ -1,6 +1,11 @@
 import { PETS, CHARMS, EGGS, ITEMS, CODES, RARITY_ORDER } from '../public/data/catalog.js';
 import { IMAGE_ASSETS } from '../public/data/image-assets.js';
-import { PRICES } from '../public/data/prices.js';
+import { readPrices } from './price-file.mjs';
+import { applyFeedPrices } from '../public/data/price-core.js';
+import { rowsFromPrices } from '../public/data/value-loader.js';
+const priceCatalogs = { pets: PETS, charms: CHARMS, eggs: EGGS, items: ITEMS };
+const { prices: PRICES } = await readPrices(import.meta.dirname + '/..', priceCatalogs);
+applyFeedPrices(priceCatalogs, rowsFromPrices(priceCatalogs, PRICES));
 import { normalizePrice } from '../server/pricing.js';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
@@ -8,16 +13,7 @@ const publicRoot = path.resolve(import.meta.dirname, '../public');
 
 const catalogs = { PETS, CHARMS, EGGS, ITEMS, CODES };
 const allowedValue = value => { try { normalizePrice(value); return true; } catch { return false; } };
-const numericValue = value => {
-  if (typeof value === 'number') return Number.isFinite(value) ? value : null;
-  if (typeof value !== 'string') return null;
-  const normalized = value.trim().replace(/,/g, '').toUpperCase();
-  const match = normalized.match(/^([+-]?(?:\d+(?:\.\d+)?|\.\d+))\s*(K|M|B|T|QA|QI|SX|SP|OC)?$/);
-  if (!match) return null;
-  const multipliers = { K:1e3, M:1e6, B:1e9, T:1e12, QA:1e15, QI:1e18, SX:1e21, SP:1e24, OC:1e27 };
-  const numeric = Number(match[1]) * (multipliers[match[2]] || 1);
-  return Number.isFinite(numeric) ? numeric : null;
-};
+const numericValue = value => { try { return normalizePrice(value).number; } catch { return null; } };
 let errors = 0;
 function validateImage(source) {
   if (!source) return;

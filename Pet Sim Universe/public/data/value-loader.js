@@ -55,7 +55,7 @@ export function readDataModule(source, exportName) {
       }
       offset++; return object;
     }
-    const match = source.slice(offset).match(/^(?:null|true|false|-?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?)/);
+    const match = source.slice(offset).match(/^(?:null|true|false|-?(?:(?:0|[1-9]\d*)(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?)/);
     if (!match) fail(); offset += match[0].length;
     if (match[0] === 'null') return null;
     if (match[0] === 'true') return true;
@@ -84,12 +84,12 @@ export function rowsFromPrices(catalogs, prices) {
     for (const item of items) {
       const price = table[item.id];
       if (item.supportsVariants) {
-        if (!price || typeof price !== 'object' || Object.keys(price).some(key => !['normal', 'golden', 'diamond'].includes(key))) throw new Error('Invalid price variants.');
+        if (!price || typeof price !== 'object' || Object.keys(price).some(key => !['normal', 'golden', 'diamond'].includes(key))) throw new Error(`Invalid price variants: ${category}/${item.id}.`);
         for (const variant of ['normal', 'golden', 'diamond']) {
-          if (!Object.hasOwn(price, variant)) throw new Error('Missing price variant.');
-          normalizePrice(price[variant]);
+          if (!Object.hasOwn(price, variant)) throw new Error(`Missing price variant: ${category}/${item.id}/${variant}.`);
+          try { normalizePrice(price[variant]); } catch { throw new Error(`Invalid price: ${category}/${item.id}/${variant}.`); }
         }
-      } else normalizePrice(price);
+      } else { try { normalizePrice(price); } catch { throw new Error(`Invalid price: ${category}/${item.id}.`); } }
     }
   }
   return catalogPriceRows(catalogs).map(row => ({ ...row,
@@ -98,21 +98,52 @@ export function rowsFromPrices(catalogs, prices) {
   }));
 }
 
-export async function loadCurrentPrices(site, { catalogs, fetcher = fetch, now = Date.now() } = {}) {
+export async function loadCurrentPrices(site, { catalogs, fetcher = fetch, now = Date.now(), monitorUrl } = {}) {
   if (!catalogs) throw new Error('Catalog metadata is missing.');
   const origin = new URL(site).origin;
   const get = async filename => {
     const url = new URL(`/data/${filename}`, origin); url.searchParams.set('check', String(now));
     const response = await fetcher(url.href, { headers: { accept: 'text/javascript', 'cache-control': 'no-cache' },
-      cache: 'no-store', redirect: 'manual', signal: AbortSignal.timeout(12000) });
+      cache: 'no-store', redirect: 'manual', signal: AbortSignal.timeout(filename === 'prices.js' ? 12000 : 3000) });
     if (!response.ok) throw new Error(`${filename}: HTTP ${response.status}.`);
-    return response.text();
+    return boundedText(response);
   };
   const prices = readDataModule(await get('prices.js'), 'PRICES');
   const rows = validateFeed({ version: 1, rows: rowsFromPrices(catalogs, prices) }, origin);
   const revision = await priceRevision(rows);
   let update = null;
-  try { update = selectPriceUpdate(revision, readDataModule(await get('price-updates.js'), 'PRICE_UPDATE')); }
+  try { update = selectPriceUpdate(revision, readDataModule(await get('price-updates.js'), 'PRICE_UPDATE'), now); }
   catch { /* Missing metadata never blocks fresh prices or supplies a stale date. */ }
-  return { rows, revision, updatedAt: update?.updatedAt || null, source: '/data/prices.js' };
+  if (!update && monitorUrl) update = await loadMonitorUpdate(revision, { monitorUrl, fetcher, now });
+  return { rows, revision, updatedAt: update?.updatedAt || null, dateSource: update?.source || null, source: '/data/prices.js' };
+}
+
+export async function boundedText(response, limit = 200000) {
+  if (Number(response.headers.get('content-length')) > limit) { await response.body?.cancel(); throw new Error('Data file is too large.'); }
+  const reader = response.body?.getReader();
+  if (!reader) return '';
+  const decoder = new TextDecoder('utf-8', { fatal: true });
+  let size = 0, text = '';
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      size += value.byteLength;
+      if (size > limit) throw new Error('Data file is too large.');
+      text += decoder.decode(value, { stream: true });
+    }
+    return text + decoder.decode();
+  } catch (error) { await reader.cancel().catch(() => {}); throw error; }
+  finally { reader.releaseLock(); }
+}
+export async function loadMonitorUpdate(revision, { monitorUrl, fetcher = fetch, now = Date.now() }) {
+  try {
+    const url = new URL('/status', monitorUrl);
+    if (url.protocol !== 'https:' || !url.hostname.endsWith('.workers.dev') || url.username || url.password || url.port) return null;
+    url.searchParams.set('revision', revision); url.searchParams.set('check', String(now));
+    const response = await fetcher(url.href, { cache: 'no-store', redirect: 'manual', signal: AbortSignal.timeout(4000) });
+    if (!response.ok) return null;
+    const result = JSON.parse(await boundedText(response, 10000));
+    return result.version === 116 ? selectPriceUpdate(revision, result.update, now) : null;
+  } catch { return null; }
 }

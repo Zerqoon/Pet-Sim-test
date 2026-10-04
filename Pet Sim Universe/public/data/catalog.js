@@ -1,4 +1,4 @@
-import { PRICES } from './prices.js';
+
 // Opisy i grafiki: ten plik. Wszystkie ceny: prices.js.
 
 export const SOURCE_PRESETS = {
@@ -592,14 +592,3 @@ export const ITEMS = [
 
 export const RARITY_ORDER = ['Exclusive', 'Secret', 'Mythical', 'Legendary', 'Epic', 'Rare', 'Basic'];
 
-// Jedno zrodlo cen: prices.js. Katalog przechowuje opisy i obrazy.
-for (const [category, list] of Object.entries({ pets: PETS, charms: CHARMS, eggs: EGGS, items: ITEMS })) {
-  for (const item of list) {
-    const price = PRICES[category]?.[item.id];
-    if (item.supportsVariants) {
-      item.values = { normal: null, golden: null, diamond: null, ...(price && typeof price === 'object' ? price : {}) };
-    } else {
-      item.value = typeof price === 'number' || typeof price === 'string' ? price : null;
-    }
-  }
-}

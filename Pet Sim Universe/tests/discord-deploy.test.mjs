@@ -27,8 +27,8 @@ test('authorization preflight waits through 401 and the previous deployment with
   let time = 0;
   const replies = [
     new Response('Unauthorized.', { status: 401 }),
-    Response.json({ authorized: true, version: 115, deployment: 'previous', hasDatabase: true, hasWebhook: true }),
-    Response.json({ authorized: true, version: 115, deployment: 'current', hasDatabase: true, hasWebhook: true }),
+    Response.json({ authorized: true, version: 116, deployment: 'previous', hasDatabase: true, hasWebhook: true }),
+    Response.json({ authorized: true, version: 116, deployment: 'current', hasDatabase: true, hasWebhook: true }),
   ];
   const calls = [];
   const result = await waitForMonitor('https://monitor.example', 'new-key', 'current', {
@@ -50,7 +50,7 @@ test('persistent 401 and missing bindings fail before the Discord test, with no 
     timeout: 0, fetcher: async () => new Response('Unauthorized.', { status: 401 }),
   }), error => /HTTP 401/.test(error.message) && /Test Discorda nie zostal wywolany/.test(error.message) && !error.message.includes('private-key'));
   await assert.rejects(() => waitForMonitor('https://monitor.example', 'private-key', 'current', {
-    timeout: 0, fetcher: async () => Response.json({ authorized: true, version: 115, deployment: 'current', hasDatabase: true, hasWebhook: false }),
+    timeout: 0, fetcher: async () => Response.json({ authorized: true, version: 116, deployment: 'current', hasDatabase: true, hasWebhook: false }),
   }), /Brak sekretu webhooka/);
 });
 
@@ -87,7 +87,7 @@ test('deployment cleans legacy vars, installs real secrets, verifies them and re
         assert.equal(new URL(url).pathname, '/auth');
         assert.equal(options.headers.authorization, 'Bearer actual-new-key');
         const config = JSON.parse(await readFile(configPath, 'utf8'));
-        return Response.json({ authorized: true, version: 115, deployment: config.vars.MONITOR_DEPLOYMENT, hasDatabase: true, hasWebhook: true });
+        return Response.json({ authorized: true, version: 116, deployment: config.vars.MONITOR_DEPLOYMENT, hasDatabase: true, hasWebhook: true });
       },
     });
     assert.equal(result.url, 'https://pet-universe-price-monitor.account.workers.dev');
@@ -126,6 +126,6 @@ test('Worker authorization endpoint checks the key and deployment without access
   const response = await worker.fetch(request('new-key'), env);
   assert.equal(response.status, 200);
   const result = await response.json();
-  assert.deepEqual(result, { authorized: true, version: 115, deployment: 'current', hasWebhook: true, hasDatabase: true });
+  assert.deepEqual(result, { authorized: true, version: 116, deployment: 'current', hasWebhook: true, hasDatabase: true });
   assert.ok(!JSON.stringify(result).includes('new-key'));
 });

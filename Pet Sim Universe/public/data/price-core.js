@@ -11,7 +11,11 @@ export function normalizePrice(value) {
   }
   let number = value;
   if (typeof value === 'string') {
-    const match = value.trim().replace(/,/g, '').match(/^(\d+(?:\.\d+)?|\.\d+)\s*(K|M|B|T|QA|QI|SX|SP|OC)?$/i);
+    let text = value.trim();
+    if (text.length > 64) throw new Error('Price is too long.');
+    if (/^[1-9]\d{0,2}(?:,\d{3})+(?:\.\d+)?(?:\s*[A-Za-z]+)?$/.test(text)) text = text.replace(/,/g, '');
+    else if (/^\d+,\d+(?:\s*[A-Za-z]+)?$/.test(text)) text = text.replace(',', '.');
+    const match = text.match(/^(\d+(?:\.\d+)?|\.\d+)\s*(K|M|B|T|QA|QI|SX|SP|OC)?$/i);
     if (!match) throw new Error('Invalid price in feed.');
     number = Number(match[1]) * (UNITS[(match[2] || '').toUpperCase()] || 1);
   }
@@ -59,8 +63,8 @@ export function validateFeed(feed, siteUrl) {
 }
 
 // A timestamp is usable only for these exact normalized prices.
-export function selectPriceUpdate(revision, metadata) {
-  if (metadata?.revision !== revision || !metadata.updatedAt || !Number.isFinite(Date.parse(metadata.updatedAt))) return null;
+export function selectPriceUpdate(revision, metadata, now = Date.now()) {
+  if (metadata?.revision !== revision || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,3})?Z$/.test(metadata.updatedAt) || !Number.isFinite(Date.parse(metadata.updatedAt)) || Date.parse(metadata.updatedAt) > now + 300000) return null;
   return { ...metadata, updatedAt: new Date(metadata.updatedAt).toISOString() };
 }
 
@@ -88,9 +92,9 @@ export function applyFeedPrices(catalogs, rows) {
     for (const item of items) {
       for (const variant of item.supportsVariants ? ['normal', 'golden', 'diamond'] : ['normal']) {
         const value = incoming.get(`${category}/${item.id}/${variant}`).value ?? null;
-        const old = item.supportsVariants ? item.values[variant] : item.value;
+        const old = item.supportsVariants ? item.values?.[variant] : item.value;
         changed ||= normalizePrice(old).key !== normalizePrice(value).key;
-        if (item.supportsVariants) item.values[variant] = value;
+        if (item.supportsVariants) { item.values ||= {}; item.values[variant] = value; }
         else item.value = value;
       }
     }

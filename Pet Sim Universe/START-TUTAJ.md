@@ -1,6 +1,6 @@
 # Pet Universe Values — jeden plik cen i poprawiony Discord
 
-Cały projekt zawiera dokładnie przesłany `prices (7).js` pod nazwą
+Cały projekt zawiera dokładnie przesłany `prices (8).js` pod nazwą
 `public/data/prices.js`. To jedyny plik, w którym zmieniasz ceny.
 Strona i monitor czytają go bezpośrednio. Kopia cen i dodatkowy feed zostały usunięte.
 
@@ -61,13 +61,40 @@ Build automatycznie zapisuje samą datę i identyfikator wartości w
 `price-updates.js`. Ten plik nie zawiera cen i nie wymaga ręcznej edycji.
 Panel `VALUES UPDATED` pod `Stop Animations` pokazuje dokładną datę do sekund
 w strefie `Europe/Warsaw` oraz aktualizowany licznik `… ago`.
-Strona odczytuje ceny co minutę i po powrocie do karty. Kalkulator zachowuje ofertę.
+Strona odczytuje ceny co 30 sekund i po powrocie do karty. Kalkulator zachowuje ofertę.
 
-Data odpowiada faktycznej zmianie wartości: czasowi zapisu pliku albo commita.
-Ponowny build, wizyta, rozpakowanie, komentarz czy ponowne przesłanie tych samych
-cen nie zerują licznika. `prices (7).js` ma te same wartości co poprzedni załącznik,
-więc zachowana data to **04 Oct 2026, 14:17:41 CEST**. Nieaktualna data z innej
-wersji cen nie jest pokazywana.
+Data jest powiązana z SHA-256 wartości. Build zapisuje czas zmiany pliku lub
+commita; ponowny build, wizyty i równoważne zapisy cen nie zerują licznika.
+W tej paczce jest **25 zmienionych wycen** z `prices (8).js`. Znacznik
+**04 Oct 2026, 15:55:37 CEST** to czas otrzymania załącznika; plik nie udostępnia
+oryginalnej godziny edycji na Twoim komputerze.
+
+Gdy publikacja pominie wygenerowaną metrykę, monitor zapisuje w D1 pierwszy
+czas wykrycia zmiany. Panel pokazuje wtedy **CHANGE DETECTED**. Ten czas pozostaje
+stały po odświeżeniu. To czas wykrycia, a nie odtworzona godzina edycji.
+Późniejsza poprawna metryka tej samej wersji ma pierwszeństwo.
+
+## Co zabezpieczono w v116
+
+- Jeden wspólny parser dla builda, strony, historii i monitora. Nie wykonuje
+  kodu z `prices.js`; odrzuca powtórzone ID, brakujące warianty, nieznane itemy,
+  niepoprawne liczby, zbyt duże odpowiedzi i uszkodzone dane.
+- Błędny build przerywa upload. Poprawne metryki są zapisywane atomowo.
+- Strona zachowuje ostatni pełny, zweryfikowany zestaw cen podczas awarii.
+  Przeglądarka może odzyskać swoją zapisaną kopię; panel oznacza ją SAVED VALUES.
+  Ta pamięć nie jest drugim plikiem do edytowania.
+- Ułamki `0,4` i `22,5K` są obsługiwane; `30,000` nadal oznacza trzydzieści tysięcy.
+- Discord otrzymuje do 8 osobnych embedów w jednej wiadomości. 25 zmian mieści
+  się w 4 wiadomościach podczas jednego sprawdzenia, o ile Discord je przyjmuje.
+- Kolejka przetrwa awarię. Monitor przestrzega rzeczywistego `retry_after` i
+  nagłówków limitu. Błędy 401/403/404 zatrzymują próby do skutecznej naprawy.
+  Udany test naprawy od razu podejmuje kolejkę, zamiast czekać na kolejny cron.
+- Historia zapisuje wszystkie 76 liczbowych wycen jednym insertem i pomija
+  niezmienione ceny. Cały monitor mieści się w limicie zapytań D1 sprawdzonym testami.
+
+Build oraz **44 testy automatyczne** przeszły. Testy używają prawdziwego SQLite,
+a odpowiedzi Discorda są symulowane. Test na Twoim kanale wykonuje Upload lub
+Upgrade i potwierdza sukces dopiero po odpowiedzi Discorda.
 
 ## Zachowane elementy
 

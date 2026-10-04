@@ -1,6 +1,6 @@
 import { spawn } from 'node:child_process';
 import { existsSync } from 'node:fs';
-import { readFile } from 'node:fs/promises';
+import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { loadCurrentPrices, readDataModule, rowsFromPrices } from '../public/data/value-loader.js';
 import { priceRevision } from '../public/data/price-core.js';
@@ -85,4 +85,10 @@ export async function testMonitor(url, key, { fetcher = fetch, timeout = 180000,
     await pause(delay);
   } while (Date.now() - started < timeout);
   throw new Error('Monitor jest zajety. Ponow Upgrade-Discord.ps1 za chwile.');
+}
+
+export async function writeMonitorSettings(address) {
+  const url = new URL(address);
+  if (url.protocol !== 'https:' || !url.hostname.endsWith('.workers.dev') || url.username || url.password || url.port) throw new Error('Invalid monitor address.');
+  await writeFile(path.join(root,'public/data/monitor-settings.js'), `// Public monitor address. No prices or secrets.\nexport const MONITOR = ${JSON.stringify({url:url.origin})};\n`);
 }

@@ -3,7 +3,7 @@ import { randomBytes } from 'node:crypto';
 import path from 'node:path';
 import { createInterface } from 'node:readline/promises';
 import { discordUrl } from '../server/pricing.js';
-import { createWrangler, parseJsonList, waitForPublishedPrices, testMonitor } from './discord-tools.mjs';
+import { createWrangler, parseJsonList, waitForPublishedPrices, testMonitor, writeMonitorSettings } from './discord-tools.mjs';
 import { deployMonitor } from './discord-deploy.mjs';
 
 const root = path.resolve(import.meta.dirname, '..');
@@ -64,6 +64,7 @@ try {
   await writeFile(configPath, JSON.stringify(config, null, 2) + '\n');
   const { url: workerUrl } = await deployMonitor(wrangler, configPath, { DISCORD_WEBHOOK_URL: secret, MONITOR_KEY: monitorKey });
   await testMonitor(workerUrl, monitorKey);
+  await writeMonitorSettings(workerUrl);
   await writeFile(path.join(configDirectory, 'monitor-info.json'), JSON.stringify({ url: workerUrl, site: site.origin }, null, 2) + '\n');
   console.log('GOTOWE: monitor wdrozony, Discord potwierdzil test. Cron sprawdza ceny co minute.');
   console.log('Monitor zachowuje kolejke zmian i ponawia nieudane wiadomosci.');

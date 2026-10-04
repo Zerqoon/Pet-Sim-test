@@ -1,7 +1,7 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import { randomBytes } from 'node:crypto';
 import path from 'node:path';
-import { createWrangler, root, publicSite, waitForPublishedPrices, testMonitor } from './discord-tools.mjs';
+import { createWrangler, root, publicSite, waitForPublishedPrices, testMonitor, writeMonitorSettings } from './discord-tools.mjs';
 import { deployMonitor } from './discord-deploy.mjs';
 
 const monitorKey = randomBytes(32).toString('base64url');
@@ -32,6 +32,7 @@ try {
   await writeFile(configPath, JSON.stringify(config, null, 2) + '\n');
   const { url: workerUrl } = await deployMonitor(wrangler, configPath, { MONITOR_KEY: monitorKey });
   await testMonitor(workerUrl, monitorKey);
+  await writeMonitorSettings(workerUrl);
   await writeFile(path.join(directory, 'monitor-info.json'), JSON.stringify({ url: workerUrl, site }, null, 2) + '\n');
   console.log('GOTOWE: wdrozono aktualny monitor i Discord przyjal test. Kolejne zmiany sprawdza cron co minute.');
 } catch (error) {

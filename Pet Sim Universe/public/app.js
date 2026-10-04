@@ -1,14 +1,18 @@
+import { readPriceCache, savePriceCache } from './data/price-cache.js';
 import { renderTradePage, tradePageCount, tradeSummary } from './data/trade-export.js';
 import { PETS, CHARMS, EGGS, ITEMS, CODES, RARITY_ORDER } from './data/catalog.js';
 import { IMAGE_ASSETS } from './data/image-assets.js';
-import { PRICE_UPDATE } from './data/price-updates.js';
-import { catalogPriceRows, priceRevision, selectPriceUpdate, formatPriceAge, applyFeedPrices } from './data/price-core.js';
+import { MONITOR } from './data/monitor-settings.js';
+import { normalizePrice, selectPriceUpdate, formatPriceAge, applyFeedPrices } from './data/price-core.js';
 import { loadCurrentPrices } from './data/value-loader.js';
 
 const priceCatalogs = { pets: PETS, charms: CHARMS, eggs: EGGS, items: ITEMS };
 let currentPriceRevision = null;
 let currentPriceUpdate = null;
 let priceSyncBusy = false;
+let pricesReady = false;
+let priceCacheRead = false;
+let priceSyncError = false;
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -145,14 +149,7 @@ function calcFindItem(category, id) {
 }
 
 function parseNumericValue(value) {
-  if (typeof value === 'number') return Number.isFinite(value) ? value : null;
-  if (typeof value !== 'string') return null;
-  const normalized = value.trim().replace(/,/g, '').toUpperCase();
-  const match = normalized.match(/^([+-]?(?:\d+(?:\.\d+)?|\.\d+))\s*(K|M|B|T|QA|QI|SX|SP|OC)?$/);
-  if (!match) return null;
-  const multipliers = { K:1e3, M:1e6, B:1e9, T:1e12, QA:1e15, QI:1e18, SX:1e21, SP:1e24, OC:1e27 };
-  const numeric = Number(match[1]) * (multipliers[match[2]] || 1);
-  return Number.isFinite(numeric) ? numeric : null;
+  try { return normalizePrice(value).number; } catch { return null; }
 }
 
 function calcNumericValue(item, variant = 'normal') {
@@ -238,6 +235,7 @@ function formatValue(value) {
 }
 
 function formatItemValue(item, variant = state.variant) {
+  if (!pricesReady) return priceSyncError ? 'Unavailable' : 'Loading…';
   const value = valueFor(item, variant);
   // Keep compact labels such as RICH BEE's 2K, but derive them from the live
   // value so a stored label cannot hide a price edit or an O/C change.
@@ -264,8 +262,8 @@ function refreshHomeUpdated() {
   const el = $('#homeUpdated');
   if (!el) return;
   el.textContent = currentPriceUpdate?.updatedAt
-    ? `Values updated ${formatPriceAge(currentPriceUpdate.updatedAt)}`
-    : 'Price update not recorded yet';
+    ? `${currentPriceUpdate.source === 'detected' ? 'Change detected' : 'Values updated'} ${formatPriceAge(currentPriceUpdate.updatedAt)}`
+    : pricesReady ? 'Update time unavailable' : 'Loading values…';
 }
 
 const priceUpdateDateFormat = new Intl.DateTimeFormat('en-GB', {
@@ -279,6 +277,8 @@ function refreshPricesUpdated() {
   if (!label) return;
   label.hidden = state.view !== 'values' || state.category === 'codes';
   if (label.hidden) return;
+  const heading = $('h2', label);
+  if (heading) heading.textContent = priceSyncError && pricesReady ? 'SAVED VALUES' : currentPriceUpdate?.source === 'detected' ? 'CHANGE DETECTED' : 'VALUES UPDATED';
   const relative = $('#valuesUpdatedRelative');
   const exact = $('#valuesUpdatedTime');
   const date = currentPriceUpdate?.updatedAt ? new Date(currentPriceUpdate.updatedAt) : null;
@@ -286,12 +286,12 @@ function refreshPricesUpdated() {
   label.dataset.recorded = String(Boolean(known));
   relative.textContent = known
     ? formatPriceAge(date.toISOString())
-    : 'Not recorded yet';
+    : priceSyncError ? (pricesReady ? 'Connection unavailable' : 'Prices unavailable') : pricesReady ? 'Update time unavailable' : 'Loading values…';
   exact.hidden = !known;
   if (known) {
     exact.dateTime = date.toISOString();
     exact.textContent = priceUpdateDateFormat.format(date);
-    label.title = `Last price update: ${exact.textContent} (Europe/Warsaw)`;
+    label.title = `${currentPriceUpdate?.source === 'detected' ? 'Change detected' : 'Last price update'}: ${exact.textContent} (Europe/Warsaw)${priceSyncError ? ' — saved values, connection unavailable' : ''}`;
   } else {
     exact.textContent = '';
     exact.removeAttribute('datetime');
@@ -299,26 +299,7 @@ function refreshPricesUpdated() {
   }
 }
 
-async function syncPublishedPrices() {
-  if (priceSyncBusy) return;
-  priceSyncBusy = true;
-  try {
-    if (!currentPriceRevision) {
-      currentPriceRevision = await priceRevision(catalogPriceRows(priceCatalogs));
-      currentPriceUpdate = selectPriceUpdate(currentPriceRevision, PRICE_UPDATE);
-      refreshPricesUpdated();
-    }
-    const latest = await loadCurrentPrices(location.origin, { catalogs: priceCatalogs });
-    // A price-only edit without a build must not inherit old timestamp metadata
-    // or roll the already loaded prices back to that older publication.
-    if (!currentPriceUpdate && PRICE_UPDATE.revision !== currentPriceRevision && latest.revision === PRICE_UPDATE.revision) return;
-    if (currentPriceUpdate && latest.updatedAt && Date.parse(latest.updatedAt) < Date.parse(currentPriceUpdate.updatedAt)) return;
-    const changed = applyFeedPrices(priceCatalogs, latest.rows);
-    const sameRevision = currentPriceRevision === latest.revision;
-    currentPriceRevision = latest.revision;
-    currentPriceUpdate = selectPriceUpdate(latest.revision, { revision: latest.revision, updatedAt: latest.updatedAt })
-      || (sameRevision ? currentPriceUpdate : null);
-    if (changed) {
+function refreshPriceViews() {
       for (const [key, view] of catalogViews) {
         const [category, variant] = key.split(':');
         for (const [id, node] of view.cards) {
@@ -338,8 +319,38 @@ async function syncPublishedPrices() {
       render();
       if ($('#calcPickerModal').open) renderCalcPicker();
       if ($('#detailModal').open) renderModalVariant();
+}
+
+async function syncPublishedPrices() {
+  if (priceSyncBusy) return;
+  priceSyncBusy = true;
+  try {
+    if (!priceCacheRead) {
+      priceCacheRead = true;
+      const cached = await readPriceCache(priceCatalogs,location.origin);
+      if (cached) {
+        applyFeedPrices(priceCatalogs,cached.rows);
+        currentPriceRevision = cached.revision;
+        currentPriceUpdate = selectPriceUpdate(cached.revision,{ revision:cached.revision, updatedAt:cached.updatedAt, source:cached.dateSource });
+        pricesReady = true; refreshPriceViews(); refreshPricesUpdated();
+      }
+    }
+    const latest = await loadCurrentPrices(location.origin, { catalogs: priceCatalogs, monitorUrl: MONITOR.url });
+    const initial = !pricesReady || priceSyncError;
+    pricesReady = true;
+    priceSyncError = false;
+    const changed = applyFeedPrices(priceCatalogs, latest.rows);
+    const sameRevision = currentPriceRevision === latest.revision;
+    currentPriceRevision = latest.revision;
+    currentPriceUpdate = selectPriceUpdate(latest.revision, { revision: latest.revision, updatedAt: latest.updatedAt, source: latest.dateSource })
+      || (sameRevision ? currentPriceUpdate : null);
+    savePriceCache({ ...latest, updatedAt:currentPriceUpdate?.updatedAt || null, dateSource:currentPriceUpdate?.source });
+    if (changed || initial) {
+      refreshPriceViews();
     }
   } catch {
+    priceSyncError = true;
+    refreshPriceViews();
     // Keep the last verified prices and time during a temporary outage.
   } finally {
     priceSyncBusy = false;
@@ -1590,7 +1601,7 @@ refreshPricesUpdated();
 setInterval(() => {
   refreshHomeUpdated();
   if (!document.hidden) syncPublishedPrices();
-}, 60000);
+}, 30000);
 setInterval(() => {
   if (!document.hidden && state.view === 'values') refreshPricesUpdated();
 }, 1000);

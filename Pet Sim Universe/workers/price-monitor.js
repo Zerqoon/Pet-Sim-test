@@ -1,3 +1,5 @@
+import { priceRevision, selectPriceUpdate } from '../public/data/price-core.js';
+import { messageGroups, sendDiscord, wait } from './discord-delivery.js';
 import { changePayload, discordUrl, validateFeed } from '../server/pricing.js';
 import { loadCurrentPrices } from '../public/data/value-loader.js';
 import { PETS, CHARMS, EGGS, ITEMS } from '../public/data/catalog.js';
@@ -17,7 +19,7 @@ function siteOrigin(value) {
   return url.origin;
 }
 
-export async function runMonitor(env, { fetcher = fetch, clock = Date.now, catalogs = MONITOR_CATALOGS } = {}) {
+export async function runMonitor(env, { fetcher = fetch, clock = Date.now, catalogs = MONITOR_CATALOGS, diagnostic = false, pause = wait } = {}) {
   if (!env.MONITOR_DB) throw new Error('MONITOR_DB binding is missing.');
   const webhook = discordUrl(env.DISCORD_WEBHOOK_URL);
   const site = siteOrigin(env.SITE_URL);
@@ -35,7 +37,13 @@ export async function runMonitor(env, { fetcher = fetch, clock = Date.now, catal
     const stored = await db.prepare('SELECT item_key, price_key, payload FROM monitor_prices').all();
     const previous = new Map(stored.results.map(row => [row.item_key, row]));
     const seeded = await db.prepare("SELECT value FROM monitor_meta WHERE name = 'initialized'").first();
-    const changeTime = updatedAt && Date.parse(updatedAt) <= now + 300000 ? updatedAt : null;
+    const savedUpdate = await db.prepare("SELECT value FROM monitor_meta WHERE name='price_update'").first();
+    let persisted = null;
+    try { persisted = selectPriceUpdate(revision, JSON.parse(savedUpdate?.value || 'null'), now); } catch {}
+    const oldRevision = previous.size ? await priceRevision([...previous.values()].map(row => JSON.parse(row.payload))) : null;
+    const update = selectPriceUpdate(revision, { revision, updatedAt, source: 'author' }, now) || persisted
+      || (seeded && oldRevision !== revision ? { revision, updatedAt: new Date(now).toISOString(), source: 'detected' } : null);
+    const changeTime = update?.source !== 'detected' ? update?.updatedAt : null;
     const statements = [];
     const priceWrites = [];
     const events = [];
@@ -65,44 +73,53 @@ export async function runMonitor(env, { fetcher = fetch, clock = Date.now, catal
     if (removed.length) statements.push(db.prepare('DELETE FROM monitor_prices WHERE item_key IN (SELECT value FROM json_each(?))').bind(JSON.stringify(removed)));
     if (!seeded) statements.push(db.prepare("INSERT INTO monitor_meta (name,value) VALUES ('initialized',?)").bind(String(now)));
     statements.push(db.prepare("INSERT INTO monitor_meta (name,value) VALUES ('last_check',?) ON CONFLICT(name) DO UPDATE SET value=excluded.value").bind(String(now)));
+    statements.push(db.prepare("INSERT INTO monitor_meta(name,value) VALUES ('revision',?) ON CONFLICT(name) DO UPDATE SET value=excluded.value").bind(revision));
+    statements.push(db.prepare("INSERT INTO monitor_meta(name,value) VALUES ('price_update',?) ON CONFLICT(name) DO UPDATE SET value=excluded.value").bind(JSON.stringify(update)));
     if (statements.length) await db.batch(statements);
 
-    // Keep accepted messages; retry failed ones on a later cron tick. Never
-    // create a new change just because Discord is temporarily unavailable.
+    let testSent = false, retryScheduled = false;
+    if (diagnostic) {
+      const payload = { allowed_mentions: { parse: [] }, embeds: [{ title: 'Pet Universe — test monitora', description: 'Ceny odczytane. Discord potwierdzil odbior testu.', color: 3066993, timestamp: new Date(now).toISOString() }] };
+      let result = await sendDiscord(fetcher, webhook.href, payload);
+      if (result.status === 429 && result.retryMs <= 5000) { await pause(result.retryMs); result = await sendDiscord(fetcher, webhook.href, payload); }
+      if (!result.ok) throw new Error(`Discord test HTTP ${result.status}.`);
+      testSent = true; retryScheduled = true;
+      await db.batch([
+        db.prepare("DELETE FROM monitor_meta WHERE name IN ('discord_retry_after','discord_blocked')"),
+        db.prepare('UPDATE monitor_outbox SET next_attempt_at=0 WHERE sent_at IS NULL'),
+      ]);
+      if (result.resetMs && result.resetMs <= 5000) await pause(result.resetMs);
+      else if (result.resetMs) await db.prepare("INSERT INTO monitor_meta(name,value) VALUES ('discord_retry_after',?) ON CONFLICT(name) DO UPDATE SET value=excluded.value").bind(String(clock()+result.resetMs)).run();
+    }
     const cooldown = await db.prepare("SELECT value FROM monitor_meta WHERE name='discord_retry_after'").first();
-    const queue = Number(cooldown?.value || 0) > clock() ? { results: [] }
-      : await db.prepare('SELECT * FROM monitor_outbox WHERE sent_at IS NULL AND next_attempt_at <= ? ORDER BY created_at, rowid LIMIT 8').bind(clock()).all();
-    let sent = 0;
-    let webhookStatus = null;
-    for (const event of queue.results) {
-      let result;
-      let status = 0;
-      let retryAfter = Math.min(3600000, 60000 * 2 ** Math.min(event.attempts, 6));
-      try {
-        result = await fetcher(webhook.href, { method: 'POST', headers: { 'content-type': 'application/json' }, body: event.payload, redirect: 'manual', signal: AbortSignal.timeout(15000) });
-        status = result.status;
-        webhookStatus = status;
-        if (status === 429) {
-          const rate = await result.json().catch(() => ({}));
-          retryAfter = Math.max(60000, Number(rate.retry_after || result.headers.get('retry-after') || 60) * 1000);
-          if (!Number.isFinite(retryAfter)) retryAfter = 60000;
+    const blocked = await db.prepare("SELECT value FROM monitor_meta WHERE name='discord_blocked'").first();
+    const queue = blocked || Number(cooldown?.value || 0) > clock() ? { results: [] }
+      : await db.prepare('SELECT * FROM monitor_outbox WHERE sent_at IS NULL AND next_attempt_at <= ? ORDER BY created_at, rowid LIMIT 64').bind(clock()).all();
+    let sent = 0, batches = 0, webhookStatus = null;
+    for (const group of messageGroups(queue.results).slice(0,8)) {
+      if (clock() - now > 90000) break;
+      const payload = { allowed_mentions: { parse: [] }, embeds: group.embeds };
+      let result = await sendDiscord(fetcher, webhook.href, payload);
+      if (result.status === 429 && result.retryMs <= 5000) { await pause(result.retryMs); result = await sendDiscord(fetcher, webhook.href, payload); }
+      webhookStatus = result.status;
+      if (result.ok) {
+        await db.prepare('UPDATE monitor_outbox SET sent_at=?,last_status=? WHERE id IN (SELECT value FROM json_each(?))').bind(clock(),result.status,JSON.stringify(group.ids)).run();
+        sent += group.ids.length; batches++;
+        if (result.resetMs && result.resetMs <= 5000) await pause(result.resetMs);
+        else if (result.resetMs) {
+          await db.prepare("INSERT INTO monitor_meta(name,value) VALUES ('discord_retry_after',?) ON CONFLICT(name) DO UPDATE SET value=excluded.value").bind(String(clock()+result.resetMs)).run(); break;
         }
-      } catch { /* Network errors contain no useful public details or secrets. */ }
-      if (result?.ok) {
-        // Drain the response before the next fetch to free a Worker connection.
-        await result.text().catch(() => '');
-        await db.prepare('UPDATE monitor_outbox SET sent_at=?, last_status=? WHERE id=?').bind(clock(), status, event.id).run();
-        sent++;
       } else {
-        await db.prepare('UPDATE monitor_outbox SET attempts=attempts+1, next_attempt_at=?, last_status=? WHERE id=?').bind(clock() + retryAfter, status, event.id).run();
-        await db.prepare("INSERT INTO monitor_meta (name,value) VALUES ('discord_retry_after',?) ON CONFLICT(name) DO UPDATE SET value=excluded.value").bind(String(clock() + retryAfter)).run();
-        // Respect the shared Discord rate limit / outage for the whole queue.
-        break;
+        if ([401,403,404].includes(result.status)) await db.prepare("INSERT INTO monitor_meta(name,value) VALUES ('discord_blocked',?) ON CONFLICT(name) DO UPDATE SET value=excluded.value").bind(String(result.status)).run();
+        const attempts = Math.max(...queue.results.filter(event => group.ids.includes(event.id)).map(event => event.attempts));
+        const retry = result.status === 429 ? result.retryMs : Math.min(3600000,60000*2**Math.min(attempts,6));
+        await db.prepare('UPDATE monitor_outbox SET attempts=attempts+1,next_attempt_at=?,last_status=? WHERE id IN (SELECT value FROM json_each(?))').bind(clock()+retry,result.status,JSON.stringify(group.ids)).run();
+        await db.prepare("INSERT INTO monitor_meta(name,value) VALUES ('discord_retry_after',?) ON CONFLICT(name) DO UPDATE SET value=excluded.value").bind(String(clock()+retry)).run(); break;
       }
     }
     await db.prepare('DELETE FROM monitor_outbox WHERE sent_at IS NOT NULL AND sent_at < ?').bind(clock() - 30 * 86400000).run();
     const pending = await db.prepare('SELECT COUNT(*) AS count FROM monitor_outbox WHERE sent_at IS NULL').first();
-    return { initialized: !seeded, checked: rows.length, changed, sent, pending: pending.count, checkedAt: new Date(now).toISOString(), revision, priceUpdatedAt: updatedAt, feedSource: source, webhookStatus };
+    return { initialized: !seeded, checked: rows.length, changed, sent, pending: pending.count, checkedAt: new Date(now).toISOString(), revision, priceUpdatedAt: update?.updatedAt || null, dateSource: update?.source || null, feedSource: source, webhookStatus, batches, testSent, retryScheduled };
   } finally {
     await db.prepare("DELETE FROM monitor_locks WHERE name='prices' AND token=?").bind(token).run();
   }
@@ -137,38 +154,30 @@ export default {
   },
   async fetch(request, env) {
     const path = new URL(request.url).pathname;
-    if (path === '/health' && request.method === 'GET') return json({ version: 115, deployment: env.MONITOR_DEPLOYMENT || null, configured: Boolean(env.MONITOR_DB && env.DISCORD_WEBHOOK_URL && env.MONITOR_KEY) });
+    if (path === '/status' && request.method === 'GET') {
+      const headers = { 'content-type': 'application/json', 'cache-control': 'no-store' };
+      if (request.headers.get('origin') === siteOrigin(env.SITE_URL)) headers['access-control-allow-origin'] = siteOrigin(env.SITE_URL);
+      try {
+        const stored = await env.MONITOR_DB.prepare("SELECT name,value FROM monitor_meta WHERE name IN ('revision','price_update','last_check')").all();
+        const data = Object.fromEntries(stored.results.map(row => [row.name,row.value]));
+        let update = null;
+        try { update = selectPriceUpdate(data.revision,JSON.parse(data.price_update || 'null')); } catch {}
+        const desired = new URL(request.url).searchParams.get('revision');
+        if (desired && desired !== data.revision) update = null;
+        return new Response(JSON.stringify({ version:116, revision:data.revision || null, update, checkedAt:data.last_check || null }), { headers });
+      } catch { return new Response(JSON.stringify({ version:116, update:null }), { status:503, headers }); }
+    }
+    if (path === '/health' && request.method === 'GET') return json({ version: 116, deployment: env.MONITOR_DEPLOYMENT || null, configured: Boolean(env.MONITOR_DB && env.DISCORD_WEBHOOK_URL && env.MONITOR_KEY) });
     if (path === '/auth') {
       if (request.method !== 'GET') return json({ error: 'Use GET.' }, 405);
       if (!matchesKey(request, env.MONITOR_KEY)) return json({ error: 'Unauthorized.' }, 401);
-      return json({ authorized: true, version: 115, deployment: env.MONITOR_DEPLOYMENT || null, hasWebhook: Boolean(env.DISCORD_WEBHOOK_URL), hasDatabase: Boolean(env.MONITOR_DB) });
+      return json({ authorized: true, version: 116, deployment: env.MONITOR_DEPLOYMENT || null, hasWebhook: Boolean(env.DISCORD_WEBHOOK_URL), hasDatabase: Boolean(env.MONITOR_DB) });
     }
     if (path !== '/check' && path !== '/test') return json({ error: 'Not found.' }, 404);
     if (request.method !== 'POST') return json({ error: 'Use POST.' }, 405);
     if (!matchesKey(request, env.MONITOR_KEY)) return json({ error: 'Unauthorized.' }, 401);
     try {
-      const result = await runMonitor(env);
-      if (path === '/test' && !result.busy) {
-        const response = await fetch(discordUrl(env.DISCORD_WEBHOOK_URL).href, {
-          method: 'POST', headers: { 'content-type': 'application/json' }, redirect: 'manual',
-          signal: AbortSignal.timeout(15000), body: JSON.stringify({ allowed_mentions: { parse: [] }, embeds: [{
-            title: 'Pet Universe — test monitora', description: 'Monitor odczytał ceny i połączył się z Discordem. To test po naprawie, bez zmiany cen.',
-            color: 3066993, timestamp: new Date().toISOString()
-          }] })
-        });
-        if (!response.ok) throw new Error(`Discord test HTTP ${response.status}.`);
-        await response.text();
-        result.testSent = true;
-        // A confirmed repair can retry failed queued changes on the next tick,
-        // rather than inheriting an hour-long cooldown from a broken webhook.
-        if (result.pending) {
-          await env.MONITOR_DB.batch([
-            env.MONITOR_DB.prepare("DELETE FROM monitor_meta WHERE name='discord_retry_after'"),
-            env.MONITOR_DB.prepare('UPDATE monitor_outbox SET next_attempt_at=0 WHERE sent_at IS NULL'),
-          ]);
-          result.retryScheduled = true;
-        }
-      }
+      const result = await runMonitor(env, { diagnostic: path === '/test' });
       return json(result);
     }
     catch (error) { return json({ error: safeError(error, env) }, 503); }

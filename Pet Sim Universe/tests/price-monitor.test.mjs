@@ -6,7 +6,8 @@ import { normalizePrice, validateFeed, priceRevision } from '../server/pricing.j
 import { PETS, CHARMS, EGGS, ITEMS } from '../public/data/catalog.js';
 import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
-import { PRICES } from '../public/data/prices.js';
+import { readDataModule as parsePrices, rowsFromPrices as priceRows } from '../public/data/value-loader.js';
+const PRICES = parsePrices(await readFile(new URL('../public/data/prices.js', import.meta.url), 'utf8'), 'PRICES');
 import { catalogPriceRows } from '../public/data/price-core.js';
 import { loadCurrentPrices } from '../public/data/value-loader.js';
 
@@ -98,11 +99,11 @@ function fixture() {
     assert.equal(options.method, 'POST');
     messages.push(JSON.parse(options.body));
     if (failure === 'network') throw new Error('Network failed');
-    if (failure) return Response.json(failure.status === 429 ? { retry_after: 180 } : {}, { status: failure.status });
+    if (failure) return Response.json(failure.status === 429 ? { retry_after: failure.retryAfter ?? 180 } : {}, { status: failure.status });
     return Response.json({ id: 'message-id' });
   };
   return {
-    env, messages, requests, run: () => { env.MONITOR_DB.resetBudget(); return runMonitor(env, { fetcher, clock: () => time, catalogs: dataForRows(rows).catalogs }); },
+    env, messages, requests, run: (options = {}) => { env.MONITOR_DB.resetBudget(); return runMonitor(env, { fetcher, clock: () => time, catalogs: dataForRows(rows).catalogs, ...options }); },
     setSource: value => { invalidSource = value; },
     setMetadata: value => { metadata = value; },
     setRows: value => { rows = value; }, getRows: () => structuredClone(rows),
@@ -182,7 +183,7 @@ test('Discord 429 applies a cooldown to the entire queue', async () => {
     f.setRows(rows); await f.run(); rows.forEach(row => { row.value = 25000; }); f.advance(); f.failure({ status: 429 });
     assert.equal((await f.run()).pending, 2); assert.equal(f.messages.length, 1);
     f.failure(null); f.advance(60000); await f.run(); assert.equal(f.messages.length, 1);
-    f.advance(120000); assert.equal((await f.run()).sent, 2); assert.equal(f.messages.length, 3);
+    f.advance(120000); assert.equal((await f.run()).sent, 2); assert.equal(f.messages.length, 2);
   } finally { f.close(); }
 });
 
@@ -228,7 +229,7 @@ test('the single public prices.js supplies every catalog price and valid image w
       const variants = item.supportsVariants ? ['normal', 'golden', 'diamond'] : ['normal'];
       for (const variant of variants) {
         const row = rows.find(entry => entry.key === `${category}/${item.id}/${variant}`);
-        assert.equal(row.price.key, normalizePrice(item.supportsVariants ? item.values?.[variant] : item.value).key);
+        assert.equal(row.price.key, normalizePrice(item.supportsVariants ? PRICES[category][item.id][variant] : PRICES[category][item.id]).key);
         if (row.image) assert.ok(existsSync(new URL('../public' + new URL(row.image).pathname, import.meta.url)), 'pet image must exist in full project');
       }
     }
@@ -253,9 +254,9 @@ test('a large update stays in the queue and sends each changed price once', asyn
     const template = f.getRows()[0];
     const rows = Array.from({ length: 10 }, (_, index) => ({ ...template, name: `Pet ${index}`, id: `pet-${index}`, key: `pets/pet-${index}/normal` }));
     f.setRows(rows); await f.run(); rows.forEach(row => { row.value = 25000; }); f.advance();
-    const first = await f.run(); assert.equal(first.changed, 10); assert.equal(first.sent, 8); assert.equal(first.pending, 2);
-    f.advance(); const second = await f.run(); assert.equal(second.changed, 0); assert.equal(second.sent, 2); assert.equal(second.pending, 0);
-    assert.equal(new Set(f.messages.map(message => message.embeds[0].title)).size, 10);
+    const first = await f.run(); assert.equal(first.changed, 10); assert.equal(first.sent, 10); assert.equal(first.pending, 0);
+    f.advance(); const second = await f.run(); assert.equal(second.changed, 0); assert.equal(second.sent, 0); assert.equal(second.pending, 0);
+    assert.equal(new Set(f.messages.flatMap(message => message.embeds.map(embed => embed.title))).size, 10);
   } finally { f.close(); }
 });
 
@@ -289,7 +290,7 @@ test('failed transaction keeps the previous price and does not create a partial 
     assert.ok(f.env.MONITOR_DB.queryCount < 50);
     f.setRows(f.getRows().map(row => ({...row,value:'25K'}))); f.advance();
     const result = await f.run();
-    assert.equal(result.changed,68); assert.equal(result.sent,8); assert.equal(result.pending,60);
+    assert.equal(result.changed,68); assert.equal(result.sent,64); assert.equal(result.pending,4);
     assert.ok(f.env.MONITOR_DB.queryCount < 50);
   } finally { f.close(); }
 });
@@ -341,7 +342,8 @@ test('stale timestamp metadata cannot block new prices or date them with an old 
     f.setMetadata({ revision: 'previous-revision', updatedAt: '2026-09-01T12:00:00Z' });
     f.advance(); const result = await f.run();
     assert.match(f.messages[0].embeds[0].description, /30K → 25K/);
-    assert.equal(result.priceUpdatedAt, null);
+    assert.equal(result.priceUpdatedAt, '2026-10-01T12:31:00.000Z');
+    assert.equal(result.dateSource, 'detected');
     assert.equal(f.messages[0].embeds[0].timestamp, '2026-10-01T12:31:00.000Z');
   } finally { f.close(); }
 });
@@ -364,21 +366,21 @@ test('invalid JavaScript price data cannot overwrite the D1 snapshot or execute 
 test('all streams in the supplied prices.js are monitored and a full update drains once', async () => {
   const f = fixture();
   try {
-    const rows = catalogPriceRows(fullCatalogs);
-    const expected = rows.filter(row => typeof row.value === 'number').length;
+    const rows = priceRows(fullCatalogs, PRICES);
+    const expected = rows.filter(row => normalizePrice(row.value).number !== null).length;
     assert.ok(expected > 10);
-    f.setRows(rows.map(row => ({ ...row, value: typeof row.value === 'number' ? row.value + 1 : row.value })));
+    f.setRows(rows.map(row => ({ ...row, value: normalizePrice(row.value).number !== null ? normalizePrice(row.value).number + 1 : row.value })));
     assert.equal((await f.run()).checked, rows.length);
     f.setRows(rows);
     f.setMetadata({ revision: await priceRevision(rows), updatedAt: '2026-10-01T12:17:41Z' });
     const first = await f.run();
     assert.equal(first.changed, expected);
-    assert.equal(first.sent, 8);
-    assert.equal(first.pending, expected - 8);
+    assert.equal(first.sent, Math.min(expected,64));
+    assert.equal(first.pending, Math.max(expected-64,0));
     let pending = first.pending;
     while (pending) { f.advance(); const next = await f.run(); assert.equal(next.changed, 0); pending = next.pending; }
-    assert.equal(f.messages.length, expected);
-    assert.equal(new Set(f.messages.map(message => message.embeds[0].title)).size, expected);
+    assert.equal(f.messages.flatMap(message => message.embeds).length, expected);
+    assert.equal(new Set(f.messages.flatMap(message => message.embeds.map(embed => embed.title))).size, expected);
     f.advance(); assert.equal((await f.run()).sent, 0);
     assert.ok(f.env.MONITOR_DB.queryCount < 50);
   } finally { f.close(); }
@@ -396,7 +398,7 @@ test('successful repair test releases old retry cooldown without losing queued m
     let diagnostics = 0;
     globalThis.fetch = async (url, options) => {
       if (new URL(url).hostname === 'petuniverse-values.pl') return fullSiteResponse(url, f.getRows());
-      diagnostics++; assert.match(JSON.parse(options.body).embeds[0].title, /test monitora/);
+      if (/test monitora/.test(JSON.parse(options.body).embeds[0].title)) diagnostics++;
       return Response.json({id:'diagnostic-message'});
     };
     f.env.MONITOR_DB.resetBudget();
@@ -405,7 +407,53 @@ test('successful repair test releases old retry cooldown without losing queued m
     const result = await response.json(); assert.equal(result.testSent,true); assert.equal(result.retryScheduled,true);
     assert.equal(diagnostics,1);
     assert.equal(await f.env.MONITOR_DB.prepare("SELECT value FROM monitor_meta WHERE name='discord_retry_after'").first(),null);
-    f.failure(null); f.advance(); assert.equal((await f.run()).sent,1);
+    f.failure(null); f.advance(); assert.equal((await f.run()).sent,0);
     f.advance(); assert.equal((await f.run()).sent,0);
   } finally { globalThis.fetch=original; f.close(); }
+});
+
+test('25 simultaneous changes send in four grouped messages and never repeat', async () => {
+ const f=fixture();
+ try {
+  const base=f.getRows()[0];
+  f.setRows(Array.from({length:25},(_,i)=>({...base,id:`pet-${i}`,name:`Pet ${i}`,key:`pets/pet-${i}/normal`})));await f.run();
+  f.setRows(f.getRows().map(row=>({...row,value:25000}))); f.advance();
+  const result=await f.run();assert.equal(result.sent,25);assert.equal(result.batches,4);assert.equal(result.pending,0);
+  assert.deepEqual(f.messages.map(m=>m.embeds.length),[8,8,8,1]);
+  assert.equal(new Set(f.messages.flatMap(m=>m.embeds.map(e=>e.title))).size,25);
+  f.advance();assert.equal((await f.run()).sent,0);assert.equal(f.messages.length,4);
+ }finally{f.close();}
+});
+
+test('detected timestamp survives later checks and public status performs no Discord requests',async()=>{
+ const f=fixture(); const original=globalThis.fetch;
+ try {
+  await f.run();f.price(25000);f.advance();const changed=await f.run();f.advance(3600000);
+  assert.equal((await f.run()).priceUpdatedAt,changed.priceUpdatedAt);
+  globalThis.fetch=()=>{throw new Error('Status must not fetch');};f.env.MONITOR_DB.resetBudget();
+  const response=await monitor.fetch(new Request(`https://monitor.example/status?revision=${changed.revision}`,{headers:{origin:f.env.SITE_URL}}),f.env);
+  assert.equal(response.headers.get('access-control-allow-origin'),f.env.SITE_URL);
+  const data=await response.json();assert.equal(data.update.updatedAt,changed.priceUpdatedAt);assert.equal(data.update.source,'detected');assert.equal(data.version,116);
+  assert.ok(!JSON.stringify(data).includes('test-secret-key'));assert.ok(!JSON.stringify(data).includes('test_token'));
+  const wrong=await monitor.fetch(new Request('https://monitor.example/status?revision=wrong'),f.env);assert.equal((await wrong.json()).update,null);
+ }finally{globalThis.fetch=original;f.close();}
+});
+
+test('permanent Discord 404 pauses delivery while new price events remain safely queued',async()=>{
+ const f=fixture();
+ try {
+  await f.run();f.price(25000);f.advance();f.failure({status:404});assert.equal((await f.run()).pending,1);
+  f.advance(7200000);f.price(20000);assert.equal((await f.run()).pending,2);assert.equal(f.messages.length,1);
+  f.failure(null);f.advance(7200000);assert.equal((await f.run()).sent,0);assert.equal(f.messages.length,1);
+ }finally{f.close();}
+});
+
+
+test('short Discord retry waits for the advertised delay and succeeds within the same check',async()=>{
+ const f=fixture();const delays=[];
+ try {
+  await f.run();f.price(25000);f.advance();f.failure({status:429,retryAfter:1.25});
+  const result=await f.run({pause:async ms=>{delays.push(ms);f.failure(null);f.advance(ms);}});
+  assert.deepEqual(delays,[1250]);assert.equal(result.sent,1);assert.equal(result.pending,0);assert.equal(f.messages.length,2);
+ }finally{f.close();}
 });

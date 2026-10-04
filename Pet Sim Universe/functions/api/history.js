@@ -1,17 +1,9 @@
+import { loadCurrentPrices } from '../../public/data/value-loader.js';
 import { PETS, CHARMS, EGGS, ITEMS } from '../../public/data/catalog.js';
 
 const catalogs = { pets: PETS, charms: CHARMS, eggs: EGGS, items: ITEMS };
 
-function parseNumericValue(value) {
-  if (typeof value === 'number') return Number.isFinite(value) ? value : null;
-  if (typeof value !== 'string') return null;
-  const normalized = value.trim().replace(/,/g, '').toUpperCase();
-  const match = normalized.match(/^([+-]?(?:\d+(?:\.\d+)?|\.\d+))\s*(K|M|B|T|QA|QI|SX|SP|OC)?$/);
-  if (!match) return null;
-  const multipliers = { K:1e3, M:1e6, B:1e9, T:1e12, QA:1e15, QI:1e18, SX:1e21, SP:1e24, OC:1e27 };
-  const numeric = Number(match[1]) * (multipliers[match[2]] || 1);
-  return Number.isFinite(numeric) ? numeric : null;
-}
+
 const ranges = {
   '1h': 60 * 60 * 1000,
   '6h': 6 * 60 * 60 * 1000,
@@ -28,14 +20,6 @@ function json(data, status = 200) {
       'cache-control': 'no-store',
     },
   });
-}
-
-function valueFor(item, variant = 'normal') {
-  if (item?.supportsVariants) {
-    if (item.values && Object.prototype.hasOwnProperty.call(item.values, variant)) return item.values[variant];
-    return item.values?.normal ?? null;
-  }
-  return item?.value ?? null;
 }
 
 function findItem(category, id) {
@@ -93,7 +77,11 @@ export async function onRequestGet(context) {
   if (!item) return json({ error: 'Item not found.' }, 404);
   if (!['normal', 'golden', 'diamond'].includes(variant)) return json({ error: 'Invalid variant.' }, 400);
 
-  const current = parseNumericValue(valueFor(item, variant));
+  let current;
+  try {
+    const latest = await loadCurrentPrices(url.origin, { catalogs, fetcher: context.fetcher || fetch });
+    current = latest.rows.find(row => row.key === `${category}/${id}/${variant}`)?.price.number ?? null;
+  } catch { return json({ available: false, reason: 'prices-unavailable', current: null, points: [] }); }
   const now = Date.now();
 
   if (!context.env.VALUES_DB) {

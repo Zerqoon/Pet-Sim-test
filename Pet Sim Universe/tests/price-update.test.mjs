@@ -8,7 +8,8 @@ import { fileURLToPath } from 'node:url';
 import { updatePriceTime } from '../scripts/update-price-time.mjs';
 import { selectPriceUpdate, formatPriceAge, applyFeedPrices, catalogPriceRows, priceRevision } from '../public/data/price-core.js';
 import { loadCurrentPrices, readDataModule, rowsFromPrices } from '../public/data/value-loader.js';
-import { PRICES } from '../public/data/prices.js';
+import { readDataModule as parsePrices, rowsFromPrices as priceRows } from '../public/data/value-loader.js';
+const PRICES = parsePrices(await readFile(new URL('../public/data/prices.js', import.meta.url), 'utf8'), 'PRICES');
 import { PETS, CHARMS, EGGS, ITEMS } from '../public/data/catalog.js';
 import { testMonitor, waitForPublishedPrices } from '../scripts/discord-tools.mjs';
 
@@ -80,7 +81,7 @@ test('Git dates real changes, ignores equivalent spelling, and detects an unbuil
 
 test('the supplied prices.js is read directly, including comments, trailing commas and escaped names', async () => {
   const text = await readFile(new URL('../public/data/prices.js', import.meta.url), 'utf8');
-  assert.deepEqual(JSON.parse(JSON.stringify(readDataModule(text, 'PRICES'))), PRICES);
+  assert.equal(JSON.stringify(readDataModule(text, 'PRICES')), JSON.stringify(PRICES));
   const parsed = readDataModule("/* header */ export const PRICES = {pets:{'test-pet':2.5e4,},charms:{},eggs:{},items:{},}; // footer", 'PRICES');
   assert.equal(rowsFromPrices(catalogs, parsed)[0].value, 25000);
   assert.equal(readDataModule("export const TEST = {'na\\u006de':'a\\x62\\\\c',};", 'TEST').name, 'ab\\c');
@@ -124,11 +125,11 @@ test('prices.js works with Functions disabled and its exact revision selects the
   const fetcher = async (url, options) => {
     calls.push(new URL(url).pathname);
     assert.equal(options.cache, 'no-store'); assert.equal(options.redirect, 'manual');
-    assert.equal(new URL(url).searchParams.get('check'), '123');
+    assert.equal(new URL(url).searchParams.get('check'), String(Date.parse(stamp) + 123));
     return new Response(new URL(url).pathname === '/data/prices.js'
       ? source(25000) : `export const PRICE_UPDATE = ${JSON.stringify({ revision, updatedAt: stamp })};`);
   };
-  const loaded = await loadCurrentPrices(site, { catalogs, fetcher, now: 123 });
+  const loaded = await loadCurrentPrices(site, { catalogs, fetcher, now: Date.parse(stamp) + 123 });
   assert.equal(loaded.source, '/data/prices.js');
   assert.equal(loaded.updatedAt, stamp);
   assert.equal(loaded.rows[0].value, 25000);

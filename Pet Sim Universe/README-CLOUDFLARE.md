@@ -1,6 +1,6 @@
 # Pet Universe Values
 
-Kompletny projekt z `prices (7).js`, wszystkimi grafikami, Value List,
+Kompletny projekt z `prices (8).js`, wszystkimi grafikami, Value List,
 Trade Calculator, eksportem oferty do PNG i historią Cloudflare D1.
 Instrukcja wgrania do Twojego folderu: `START-TUTAJ.md`.
 
@@ -34,12 +34,21 @@ zapisaniu pliku, przy edycji w Git — commitowi zmieniającemu ceny.
 Build bez zmian, rozpakowanie, wizyty, komentarze i równoważne zapisy
 `30000` / `"30K"` nie resetują licznika. Historia Git uwzględnia także A → B → A.
 
-Nowy załącznik ma te same wartości co poprzedni, dlatego zachowuje poprzednio
-zapisany czas `2026-10-04T12:17:41.048Z` / `04 Oct 2026, 14:17:41 CEST`.
-Przesłany plik nie udostępnia oryginalnego czasu edycji na Twoim komputerze.
+Załącznik zmienia 25 wycen. Zapisany czas `2026-10-04T13:55:37.065Z`
+/ `04 Oct 2026, 15:55:37 CEST` odpowiada otrzymaniu tego załącznika.
+Oryginalna godzina edycji na komputerze nie jest dostępna.
+
+Jeżeli metryka publikacji jest brakująca, niepoprawna, z przyszłości lub dotyczy
+innych cen, frontend pyta publiczny `/status` Workera. Monitor zapisuje czas
+pierwszego wykrycia nowej wersji w D1 i zachowuje go między sprawdzeniami.
+Panel używa wtedy nagłówka CHANGE DETECTED, aby odróżnić wykrycie od edycji.
+Endpoint `/status` nie wywołuje Discorda, nie zwraca cen ani sekretów i zezwala
+na odczyt CORS tylko z SITE_URL. Adres Workera jest w `monitor-settings.js`
+(bez cen i sekretów); setup i upgrade aktualizują go automatycznie. Przy zmianie
+adresu opublikuj też ten plik na stronie. Dla obecnego konta adres jest już w paczce.
 
 Panel pod Stop Animations pokazuje polską datę do sekund i bieżący licznik.
-Strona pobiera dane co minutę oraz po powrocie do karty. Aktualizuje karty,
+Strona pobiera dane co 30 sekund oraz po powrocie do karty. Aktualizuje karty,
 dialogi i kalkulator bez utraty oferty. Niepasująca albo brakująca metryka nie
 blokuje nowych cen ani nie przypisuje im starej daty.
 
@@ -76,7 +85,13 @@ Konfiguracji `.cloudflare` ani adresu webhooka nie publikuj w repozytorium.
 Zmiany porównywane są z poprzednio zapisanymi cenami D1. Zapis nowych cen i
 kolejki odbywa się w jednej transakcji. Udane wiadomości nie są powtarzane
 przy następnym odczycie. Błąd sieci lub Discorda powoduje ponowienie;
-HTTP 429 opóźnia całą kolejkę. Jedno sprawdzenie wysyła maksymalnie 8 zmian.
+HTTP 429 opóźnia całą kolejkę. Jedno sprawdzenie obsługuje do 64 zmian w maksymalnie 8 wiadomościach,
+po 8 embedów i nie więcej niż 5800 znaków treści embedów w wiadomości.
+25 zmian wysyła się w 4 wiadomościach, bez czekania na cztery uruchomienia cron.
+Nagłówki Discorda i `retry_after` mają pierwszeństwo; krótki limit jest
+obsługiwany podczas uruchomienia, dłuższy zapisuje termin ponowienia w D1.
+401/403/404 zapisują blokadę wysyłki, którą usuwa dopiero udany test naprawy.
+Nowe zmiany dalej trafiają bezpiecznie do kolejki podczas blokady.
 Blokada zapobiega równoczesnemu przetwarzaniu przez cron i test.
 
 Każdy zmieniony wariant otrzymuje nazwę, właściwą miniaturę, starą → nową cenę,
@@ -134,3 +149,18 @@ Dokumentacja: [Cloudflare Cron](https://developers.cloudflare.com/workers/config
 [Cloudflare secrets](https://developers.cloudflare.com/workers/configuration/secrets/),
 [Wrangler commands](https://developers.cloudflare.com/workers/wrangler/commands/workers/),
 [Discord webhook](https://docs.discord.com/developers/resources/webhook).
+
+## Odporność danych i sprawdzenie paczki
+
+Build, przeglądarka, historia oraz Worker korzystają ze wspólnego parsera
+obiektów. Katalog zawiera tylko opisy i obrazy, dlatego literówka w pliku cen nie
+uniemożliwia uruchomienia całej strony. Nie wykonujemy kodu z pliku cen ani z Git.
+Pełny katalog i wszystkie warianty muszą być poprawne przed zastosowaniem danych.
+Strona zachowuje ostatni dobry zestaw cen i oznacza awarię. Zapis przeglądarki ma
+limit 7 dni, kontrolę wersji, katalogu, kompletności i SHA-256.
+
+44 testy przeszły, w tym wszystkie wyceny, grupowanie 25 zmian, awarie sieci,
+429, blokady 404, naprawa kolejki, rollback transakcji, limity D1, odzyskiwanie
+metryki, odrzucanie kodu wykonywalnego, powtarzanych ID i nadmiernych odpowiedzi.
+Build przeszedł; grafiki i wynikowy CSS zachowano. Testu na koncie użytkownika
+nie wykonano w tym środowisku. Uruchomi go skrypt wdrożenia z Twoją konfiguracją.

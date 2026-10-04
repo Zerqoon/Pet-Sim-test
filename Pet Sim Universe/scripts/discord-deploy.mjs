@@ -26,7 +26,7 @@ export async function waitForMonitor(url, key, deployment, {
       const response = await fetcher(endpoint.href, { headers: { authorization: `Bearer ${key}` },
         cache: 'no-store', redirect: 'manual', signal: AbortSignal.timeout(12000) });
       const result = await response.json().catch(() => ({}));
-      if (response.ok && result.authorized && result.version === 115 && result.deployment === deployment) {
+      if (response.ok && result.authorized && result.version === 116 && result.deployment === deployment) {
         if (!result.hasDatabase) throw new Error('CONFIG: Brak MONITOR_DB. Uruchom Setup-Discord.ps1.');
         if (!result.hasWebhook) throw new Error('CONFIG: Brak sekretu webhooka. Uruchom Setup-Discord.ps1.');
         console.log('Nowa wersja Workera i klucz administracyjny potwierdzone.');
