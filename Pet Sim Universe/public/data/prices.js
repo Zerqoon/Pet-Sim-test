@@ -5,17 +5,17 @@ export const PRICES = {
 
   pets: {
     // RICH BEE
-    "rich-bee": "2k",
+    "rich-bee": "3.5k",
     // Ruby Nebula Star
     "ruby-nebula-star": "15K",
     // Universe Capybara
-    "universe-capybara": "25K",
+    "universe-capybara": "O/C",
     // Gummy Bear
     "gummy-bear": "18K",
     // Alien Emperor
-    "alien-emperor": "7K",
+    "alien-emperor": "6.5K",
     // KRAKEN
-    "kraken": null,
+    "kraken": "6K",
     // Agent Sheep
     "agent-sheep": 200,
     // Caaaaat
