@@ -1,18 +1,18 @@
-import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { randomBytes } from 'node:crypto';
-import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { createInterface } from 'node:readline/promises';
 import { discordUrl } from '../server/pricing.js';
 import { createWrangler, parseJsonList, waitForPublishedPrices, testMonitor } from './discord-tools.mjs';
+import { deployMonitor } from './discord-deploy.mjs';
 
 const root = path.resolve(import.meta.dirname, '..');
 const secret = process.env.PET_UNIVERSE_WEBHOOK?.trim();
 const site = new URL(process.env.PET_UNIVERSE_SITE || 'https://petuniverse-values.pl');
-let privateDirectory;
-const hide = value => String(value).split(secret || '\0').join('[hidden webhook]');
+const hide = value => String(value).split(secret || '\0').join('[hidden webhook]').split(monitorKey).join('[hidden key]');
 
-const wrangler = createWrangler([secret]);
+const monitorKey = randomBytes(32).toString('base64url');
+const wrangler = createWrangler([secret, monitorKey]);
 
 try {
   if (Number(process.versions.node.split('.')[0]) < 22) throw new Error('Wymagany jest Node.js 22 lub nowszy.');
@@ -62,13 +62,7 @@ try {
   };
   await mkdir(configDirectory, { recursive: true });
   await writeFile(configPath, JSON.stringify(config, null, 2) + '\n');
-  const monitorKey = randomBytes(32).toString('base64url');
-  privateDirectory = await mkdtemp(path.join(tmpdir(), 'pet-universe-secrets-'));
-  const secretsPath = path.join(privateDirectory, 'secrets.json');
-  await writeFile(secretsPath, JSON.stringify({ DISCORD_WEBHOOK_URL: secret, MONITOR_KEY: monitorKey }), { mode: 0o600 });
-  const output = await wrangler(['deploy', '--config', configPath, '--secrets-file', secretsPath]);
-  const workerUrl = output.match(/https:\/\/[a-z0-9.-]+\.workers\.dev\b/i)?.[0];
-  if (!workerUrl) throw new Error('Nie znaleziono adresu wdrozonego Workera. Test nie zostal potwierdzony.');
+  const { url: workerUrl } = await deployMonitor(wrangler, configPath, { DISCORD_WEBHOOK_URL: secret, MONITOR_KEY: monitorKey });
   await testMonitor(workerUrl, monitorKey);
   await writeFile(path.join(configDirectory, 'monitor-info.json'), JSON.stringify({ url: workerUrl, site: site.origin }, null, 2) + '\n');
   console.log('GOTOWE: monitor wdrozony, Discord potwierdzil test. Cron sprawdza ceny co minute.');
@@ -77,6 +71,4 @@ try {
 } catch (error) {
   console.error(hide(error instanceof Error ? error.message : 'Konfiguracja nie powiodla sie.'));
   process.exitCode = 1;
-} finally {
-  if (privateDirectory) await rm(privateDirectory, { recursive: true, force: true });
 }

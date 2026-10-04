@@ -1,9 +1,8 @@
 # Pet Universe Values
 
-Kompletny projekt z Twoim `prices (6).js`, grafikami, Value List,
-Trade Calculator, W/L/FAIR, eksportem oferty do PNG oraz historią Cloudflare D1.
-Aktualna instrukcja: `START-TUTAJ.md`. Zachowano Categories w Items,
-Fishing / General, Moon Chest, wyrównane jajka, nagłówki i wszystkie 11 kodów.
+Kompletny projekt z `prices (7).js`, wszystkimi grafikami, Value List,
+Trade Calculator, eksportem oferty do PNG i historią Cloudflare D1.
+Instrukcja wgrania do Twojego folderu: `START-TUTAJ.md`.
 
 ## Cloudflare Pages
 
@@ -12,151 +11,126 @@ Fishing / General, Moon Chest, wyrównane jajka, nagłówki i wszystkie 11 kodó
 | Root directory | `Pet Sim Universe` |
 | Build command | `npm run build` |
 | Build output directory | `public` |
-| D1 binding historii, jeśli używany | `VALUES_DB` |
+| Binding historii, jeśli używany | `VALUES_DB` |
 
-`Upload-GitHub.ps1` domyślnie wgrywa ceny z paczki, wykonuje build przed
-commitem i zachowuje pozostałe katalogi repozytorium. Sekrety i `.cloudflare`
-są wyłączone z kopiowania. Jeśli lokalna konfiguracja monitora istnieje,
-skrypt następnie czeka na nowe ceny na stronie, wdraża Workera i sprawdza Discorda.
+`Upload-GitHub.ps1` używa cen z paczki, wykonuje build przed commitem i zachowuje
+pozostałe katalogi repozytorium. Prywatna konfiguracja i sekrety są wyłączone
+z kopiowania. Przy istniejącym `.cloudflare/price-monitor.json` upload następnie
+czeka na publikację cen, aktualizuje Workera i wykonuje test Discorda.
 
-## Ceny i czas
+## Jedno źródło cen
 
-Jedynym edytowanym źródłem cen jest `public/data/prices.js`. Build porównuje
-rzeczywiste wartości, zapisuje datę w `price-updates.js` i generuje
-`public/data/price-feed.json`. Revision jest skrótem SHA-256 posortowanych
-wartości po ich normalizacji. Data jest używana tylko dla pasującej revision.
-Nie edytuj plików wygenerowanych ani `public/bundle`.
+Edytujesz wyłącznie `public/data/prices.js`. Strona oraz Worker pobierają
+`/data/prices.js` z `no-store`, unikalnym parametrem odświeżenia i bez używania
+Pages Functions. Nie istnieje dodatkowy plik z kopią cen ani zapasowy endpoint cen.
+Parser odczytuje obiekty, komentarze i końcowe przecinki; nie wykonuje pobranego JS.
+Pełny zestaw kategorii i wariantów jest sprawdzany przed zastosowaniem wartości.
+Nazwy i obrazy pochodzą z katalogu; wyceny pochodzą z `prices.js`.
 
-Przy lokalnej zmianie używany jest czas zapisania pliku, przy edycji na
-GitHubie — czas commita zmieniającego ceny. Zachowany czas importu nie zmienia
-się przy późniejszym uploadzie tej samej paczki. Build, komentarz, formatowanie
-lub równoważne zapisy `30000`, `"30K"`, `"30k"` nie tworzą aktualizacji cen.
-Powrót A → B → A jest uwzględniany w historii Git.
+Build zapisuje w `price-updates.js` tylko datę, źródło daty i SHA-256
+znormalizowanych wartości. To automatyczna metryka, bez cen i bez ręcznej edycji.
+Data obowiązuje tylko dla tych samych wartości. Przy lokalnej zmianie odpowiada
+zapisaniu pliku, przy edycji w Git — commitowi zmieniającemu ceny.
+Build bez zmian, rozpakowanie, wizyty, komentarze i równoważne zapisy
+`30000` / `"30K"` nie resetują licznika. Historia Git uwzględnia także A → B → A.
 
-Duży panel pod Stop Animations pokazuje dokładną datę z sekundami w polskiej
-strefie oraz bieżący licznik. Strona sprawdza nowe dane co minutę i po powrocie
-do karty. Aktualizuje wspólne obiekty katalogu, ceny kart, dialogi i kalkulator
-bez utraty wybranej oferty. Przy chwilowym błędzie zachowuje ostatnie sprawdzone dane.
+Nowy załącznik ma te same wartości co poprzedni, dlatego zachowuje poprzednio
+zapisany czas `2026-10-04T12:17:41.048Z` / `04 Oct 2026, 14:17:41 CEST`.
+Przesłany plik nie udostępnia oryginalnego czasu edycji na Twoim komputerze.
 
-Ta paczka zawiera czas otrzymania nowego pliku: `2026-10-04T12:17:41.048Z`,
-czyli `04 Oct 2026, 14:17:41 CEST`. Oryginalny czas edycji na komputerze
-nie jest dostępny w przesłanym pliku. Data nie jest czasem wizyty na stronie.
+Panel pod Stop Animations pokazuje polską datę do sekund i bieżący licznik.
+Strona pobiera dane co minutę oraz po powrocie do karty. Aktualizuje karty,
+dialogi i kalkulator bez utraty oferty. Niepasująca albo brakująca metryka nie
+blokuje nowych cen ani nie przypisuje im starej daty.
 
-## Discord — uruchomienie albo naprawa
+## Discord — instalacja i naprawa
 
-Pages i Worker monitora są osobnymi wdrożeniami. ZIP i sam commit strony
-nie aktywują monitora na koncie Cloudflare.
+Pages i Worker wymagają osobnych wdrożeń. Sam ZIP nie zmienia konta Cloudflare.
+W tej wersji Upload automatycznie uruchamia naprawę przy zachowanej konfiguracji.
 
-Z istniejącym `.cloudflare/price-monitor.json`:
+| Sytuacja | Polecenie w folderze projektu |
+| --- | --- |
+| Wgrywasz cały projekt z zachowaną konfiguracją | `powershell -NoProfile -ExecutionPolicy Bypass -File .\Upload-GitHub.ps1` |
+| Tylko naprawa istniejącego Workera | `powershell -NoProfile -ExecutionPolicy Bypass -File .\Upgrade-Discord.ps1` |
+| Konfiguracja została w innym folderze | `powershell -NoProfile -ExecutionPolicy Bypass -File .\Upgrade-Discord.ps1 -ProjectPath "C:\Poprzedni-projekt\Pet Sim Universe"` |
+| Pierwszy setup albo zmiana webhooka | `powershell -NoProfile -ExecutionPolicy Bypass -File .\Setup-Discord.ps1` |
 
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\Upgrade-Discord.ps1
-```
+Naprawa zachowuje istniejącą bazę `MONITOR_DB`, zapisane ceny, kolejkę i sekret
+webhooka. Setup wykorzystuje istniejącą bazę `pet-universe-price-monitor`
+albo tworzy ją, jeżeli nie istnieje.
 
-Jeśli konfiguracja została w poprzednim folderze:
+Poprawka HTTP 401 usuwa stare jawne `MONITOR_KEY` / `DISCORD_WEBHOOK_URL`
+z konfiguracji. Rzeczywisty stary webhook zostaje przeniesiony do sekretów.
+Kod jest wdrażany z `--keep-vars=false`, a klucz zapisywany przez `wrangler secret bulk`.
+Następnie `secret list` potwierdza oba sekrety, a chroniony `GET /auth` sprawdza
+nowy klucz i identyfikator dokładnie tego wdrożenia. Odpowiedź poprzedniej wersji
+lub przejściowy 401 powodują oczekiwanie, zamiast przedwczesnego testu.
 
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\Upgrade-Discord.ps1 -ProjectPath "C:\Poprzedni-projekt\Pet Sim Universe"
-```
+Dopiero potem `POST /test` odczytuje ceny i wysyła wiadomość z `wait=true`.
+Sukces wymaga potwierdzenia Discorda. Udany test zwalnia stare opóźnienie
+ponawiania kolejki po uszkodzonym webhooku. Tymczasowy plik sekretów jest usuwany.
+Konfiguracji `.cloudflare` ani adresu webhooka nie publikuj w repozytorium.
 
-Bez niej:
+## Powiadomienia i kolejka
 
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\Setup-Discord.ps1
-```
+Zmiany porównywane są z poprzednio zapisanymi cenami D1. Zapis nowych cen i
+kolejki odbywa się w jednej transakcji. Udane wiadomości nie są powtarzane
+przy następnym odczycie. Błąd sieci lub Discorda powoduje ponowienie;
+HTTP 429 opóźnia całą kolejkę. Jedno sprawdzenie wysyła maksymalnie 8 zmian.
+Blokada zapobiega równoczesnemu przetwarzaniu przez cron i test.
 
-Setup pyta o aktualny webhook, sprawdza jego odpowiedź i wykorzystuje istniejącą
-bazę `pet-universe-price-monitor` lub tworzy ją, jeśli jej brakuje.
-Upgrade wdraża aktualny `workers/price-monitor.js`, zachowuje bazę,
-zdalny `DISCORD_WEBHOOK_URL` i kolejkę; aktualizuje cron i klucz `MONITOR_KEY`.
-Nie zawiera starego Workera zaszytego w PowerShellu.
+Każdy zmieniony wariant otrzymuje nazwę, właściwą miniaturę, starą → nową cenę,
+różnicę i czas. Brak metryki daty oznacza czas wykrycia zmiany. O/C i No Price
+są obsługiwane. Nowe przedmioty i pierwszy start pustej bazy zapisują stan
+początkowy. Nie potrzeba drugiego pliku cen do przechowywania historii.
 
-Oba skrypty czekają na revision z paczki na stronie. Następnie chroniony
-`POST /test` odczytuje ceny i wysyła `Pet Universe — test monitora` z
-`wait=true`. Sukces jest zgłaszany tylko po odpowiedzi Discorda.
-Po potwierdzonym teście oczekujące zmiany mogą być ponowione na następnym
-odczycie, bez długiego opóźnienia pozostałego po uszkodzonym webhooku.
-Nie trzeba fikcyjnie zmieniać ceny, aby sprawdzić webhook.
-Nie wgrywaj `.cloudflare`, adresu webhooka ani plików z sekretami do GitHuba.
-Tymczasowe pliki z sekretami są usuwane po wdrożeniu.
-
-## Monitor i powiadomienia
-
-Monitor sprawdza statyczny `/data/price-feed.json`. Może więc czytać ceny bez
-Pages Functions i bez `VALUES_DB`. `/api/price-feed` pozostaje źródłem zapasowym
-dla starszych wdrożeń. Żadne z tych źródeł nie zawiera sekretu webhooka.
-Odczyty mają `no-store` i unikalny parametr odświeżenia.
-
-D1 zapisuje zmianę i kolejkę atomowo. Udana wiadomość jest oznaczana jako
-wysłana; nie powtarza się przy kolejnym odczycie. Błąd sieci lub Discorda
-powoduje ponowienie; HTTP 429 opóźnia całą kolejkę. Jeden odczyt wysyła
-maksymalnie 8 zmian, reszta pozostaje w D1. Blokada chroni równoczesne wywołania.
-
-Każdy zmieniony wariant ma powiadomienie: nazwa, właściwa miniatura,
-stara → nowa cena, różnica i czas. Godzina jest czasem aktualizacji zapisanym
-z tymi cenami; starszy feed bez daty używa czasu wykrycia. O/C i No Price są
-obsługiwane. Nowe przedmioty zaczynają historię bez udawanej zmiany ceny.
-
-Statyczny feed przechowuje poprzednią opublikowaną wycenę. Jeśli monitor
-uruchamiany jest pierwszy raz po tej aktualizacji, odtwarza z niej realne
-zmiany. Istniejący stan D1 zawsze ma pierwszeństwo. Zwykły rebuild zachowuje
-poprzedni snapshot. Ta paczka zawiera 18 zmian względem poprzedniej paczki.
-
-Przy utracie połączenia już po przyjęciu wiadomości przez Discord pojedynczy
-duplikat przy ponowieniu pozostaje możliwy, ponieważ D1 i Discord nie mają
-wspólnej transakcji. Nowy cron może propagować się do 15 minut; test skryptu
-działa od razu i nie czeka na pierwsze zaplanowane uruchomienie.
+Utrata połączenia po przyjęciu wiadomości przez Discord może spowodować
+pojedynczy duplikat przy ponowieniu. D1 i Discord nie mają wspólnej transakcji.
+Nowy cron może propagować się do 15 minut; test po wdrożeniu działa bez czekania
+na pierwszy cron. Monitor sprawdza dane co minutę bez otwartej strony.
 
 ## Diagnostyka
 
-`/health` pokazuje wersję monitora i obecność konfiguracji bez sekretów.
-`POST /check` i `/test` wymagają klucza `MONITOR_KEY`. Wynik zawiera
-`checked`, `changed`, `sent`, `pending`, `revision`, `priceUpdatedAt`,
-`feedSource` i `webhookStatus`. Publiczna przeglądarka nie wywołuje monitora.
+`/health` pokazuje wersję i obecność konfiguracji bez sekretów. `/auth`
+wymaga klucza i nie wysyła wiadomości. `POST /check` / `/test` również wymagają
+klucza `MONITOR_KEY`. Wynik zawiera `checked`, `changed`, `sent`, `pending`,
+`revision`, `priceUpdatedAt`, `feedSource` i `webhookStatus`.
 
-| Wynik | Co sprawdzić |
+| Błąd | Rozwiązanie |
 | --- | --- |
-| Strona nadal ma inną revision | Udany build Pages, gałąź produkcyjną i `npm run build` |
-| Price feed unavailable | Czy cały `public` został opublikowany, zwłaszcza `data/price-feed.json` |
-| Discord test HTTP 404 | Aktualny adres webhooka; ustaw go przez Setup |
-| Discord test HTTP 401/403 | Webhook i uprawnienia/kanał Discorda |
-| Discord test HTTP 429 | Limit Discorda; spróbuj testu później, zmiany czekają w D1 |
-| Brak konfiguracji | Prywatny `.cloudflare` z poprzedniego folderu lub Setup |
-| pending > 0 | Sprawdź następny odczyt i logi Workera; kolejka jest zachowana |
+| Strona nadal ma inne ceny | Sprawdź udany build Pages, gałąź produkcyjną i `npm run build` |
+| `prices.js: HTTP ...` / Invalid PRICES data | Opublikuj cały `public`, sprawdź format `public/data/prices.js` |
+| Catalog changed | Wgraj cały projekt i zaktualizuj Worker po dodaniu przedmiotów |
+| 401 przy `/auth` | Uruchom Upgrade z nowej paczki; czyści stary klucz i sprawdza nowe wdrożenie |
+| Discord test HTTP 404 | Ustaw aktualny webhook przez Setup |
+| Discord test HTTP 401/403 | Sprawdź webhook i uprawnienia kanału Discorda |
+| Discord test HTTP 429 | Limit Discorda; ponów test później, kolejka jest zachowana |
+| Brak konfiguracji | Zachowaj prywatny `.cloudflare` albo uruchom Setup |
+| `pending > 0` | Kolejne odczyty opróżniają kolejkę; sprawdź logi Workera |
 
-W panelu Cloudflare sprawdzaj Worker `pet-universe-price-monitor`,
-`MONITOR_DB`, sekret webhooka, cron i logi. Historia `VALUES_DB` strony
-pozostaje osobną bazą.
+## Lokalnie i testy
 
-## Lokalnie
+Node.js 22.13 lub nowszy z npm; strona nie wymaga dodatkowych bibliotek.
+`npm run dev` uruchamia podgląd pod `http://127.0.0.1:4173`. `npm test` sprawdza
+rzeczywisty SQLite, daty i historię Git, jeden plik cen, warianty, kolejkę,
+ponawianie, 429, autoryzację, wdrożenie sekretów i składnię wygenerowanego JS.
+HTTP w testach jest symulowany; testy nie wysyłają wiadomości na kanał.
 
-Node.js 22.13 lub nowszy z npm. Strona nie potrzebuje instalacji bibliotek.
+W tej paczce przeszedł build oraz 34 testy. Wdrożenie na Twoim koncie i
+rzeczywiste potwierdzenie Discorda wykonuje Upload/Upgrade/Setup.
 
-```powershell
-npm run dev
-# http://127.0.0.1:4173
-npm test
-```
-
-Podgląd nie wysyła Discorda. Testy używają prawdziwego SQLite i symulowanego
-HTTP. Sprawdzają daty, Git, statyczny feed, odświeżanie cen, odzyskanie zmian,
-kolejkę, błędy, 429, autoryzację i poprawność składni wygenerowanego JS.
-Nie wykonano w tym środowisku wdrożenia na Twoim koncie ani rzeczywistego
-testu kanału Discorda; zrobi go Setup/Upgrade. Nie wykonano pełnego testu
-wizualnego w przeglądarce.
-
-| Co zmieniasz | Plik |
+| Element | Plik |
 | --- | --- |
-| Ceny | `public/data/prices.js` |
-| Nazwy, rarity, grafiki | `public/data/catalog.js` |
+| Wszystkie ceny | `public/data/prices.js` |
+| Nazwy, rarity i grafiki | `public/data/catalog.js` |
+| Odczyt jednego pliku | `public/data/value-loader.js` |
+| Data zapisywana przez build | `scripts/update-price-time.mjs` |
 | Działanie strony | `public/app.js` |
 | Struktura strony | `src/index.html` |
-| Data cen | `scripts/update-price-time.mjs` |
-| Statyczny feed | `scripts/build-price-feed.mjs` |
-| Porównanie i embedy | `server/pricing.js` |
-| Monitor, cron i kolejka | `workers/price-monitor.js` |
-| Naprawa istniejącego monitora | `scripts/repair-discord.mjs` |
+| Monitor i kolejka | `workers/price-monitor.js` |
+| Naprawa i kontrola wdrożenia | `scripts/repair-discord.mjs`, `scripts/discord-deploy.mjs` |
 
 Dokumentacja: [Cloudflare Cron](https://developers.cloudflare.com/workers/configuration/cron-triggers/),
 [Cloudflare secrets](https://developers.cloudflare.com/workers/configuration/secrets/),
+[Wrangler commands](https://developers.cloudflare.com/workers/wrangler/commands/workers/),
 [Discord webhook](https://docs.discord.com/developers/resources/webhook).

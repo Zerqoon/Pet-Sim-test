@@ -1,9 +1,9 @@
 import { renderTradePage, tradePageCount, tradeSummary } from './data/trade-export.js';
-import { PETS, CHARMS, EGGS, ITEMS, CODES, RARITY_ORDER, LAST_UPDATED } from './data/catalog.js';
+import { PETS, CHARMS, EGGS, ITEMS, CODES, RARITY_ORDER } from './data/catalog.js';
 import { IMAGE_ASSETS } from './data/image-assets.js';
 import { PRICE_UPDATE } from './data/price-updates.js';
 import { catalogPriceRows, priceRevision, selectPriceUpdate, formatPriceAge, applyFeedPrices } from './data/price-core.js';
-import { loadPriceFeed } from './data/price-feed-client.js';
+import { loadCurrentPrices } from './data/value-loader.js';
 
 const priceCatalogs = { pets: PETS, charms: CHARMS, eggs: EGGS, items: ITEMS };
 let currentPriceRevision = null;
@@ -260,25 +260,12 @@ function formatSignedValue(value) {
   return `${value > 0 ? '+' : '-'}${formatChartValue(Math.abs(value))}`;
 }
 
-function formatRelativeTime(input) {
-  const date = new Date(input);
-  if (Number.isNaN(date.getTime())) return 'Updated recently';
-  const diffMs = Date.now() - date.getTime();
-  const future = diffMs < 0;
-  const absMs = Math.abs(diffMs);
-  const minutes = Math.round(absMs / 60000);
-  if (minutes < 1) return future ? 'Updated in a moment' : 'Updated just now';
-  if (minutes < 60) return `Updated ${future ? 'in ' : ''}${minutes}m${future ? '' : ' ago'}`;
-  const hours = Math.round(minutes / 60);
-  if (hours < 24) return `Updated ${future ? 'in ' : ''}${hours}h${future ? '' : ' ago'}`;
-  const days = Math.round(hours / 24);
-  return `Updated ${future ? 'in ' : ''}${days}d${future ? '' : ' ago'}`;
-}
-
 function refreshHomeUpdated() {
   const el = $('#homeUpdated');
   if (!el) return;
-  el.textContent = formatRelativeTime(LAST_UPDATED);
+  el.textContent = currentPriceUpdate?.updatedAt
+    ? `Values updated ${formatPriceAge(currentPriceUpdate.updatedAt)}`
+    : 'Price update not recorded yet';
 }
 
 const priceUpdateDateFormat = new Intl.DateTimeFormat('en-GB', {
@@ -287,6 +274,7 @@ const priceUpdateDateFormat = new Intl.DateTimeFormat('en-GB', {
 });
 
 function refreshPricesUpdated() {
+  refreshHomeUpdated();
   const label = $('#valuesUpdated');
   if (!label) return;
   label.hidden = state.view !== 'values' || state.category === 'codes';
@@ -320,8 +308,8 @@ async function syncPublishedPrices() {
       currentPriceUpdate = selectPriceUpdate(currentPriceRevision, PRICE_UPDATE);
       refreshPricesUpdated();
     }
-    const latest = await loadPriceFeed(location.origin);
-    // A price-only edit without a build must not inherit the old feed's date
+    const latest = await loadCurrentPrices(location.origin, { catalogs: priceCatalogs });
+    // A price-only edit without a build must not inherit old timestamp metadata
     // or roll the already loaded prices back to that older publication.
     if (!currentPriceUpdate && PRICE_UPDATE.revision !== currentPriceRevision && latest.revision === PRICE_UPDATE.revision) return;
     if (currentPriceUpdate && latest.updatedAt && Date.parse(latest.updatedAt) < Date.parse(currentPriceUpdate.updatedAt)) return;

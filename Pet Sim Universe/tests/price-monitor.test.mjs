@@ -3,10 +3,47 @@ import { test } from 'node:test';
 import { DatabaseSync } from 'node:sqlite';
 import monitor, { runMonitor, MONITOR_SCHEMA } from '../workers/price-monitor.js';
 import { normalizePrice, validateFeed, priceRevision } from '../server/pricing.js';
-import { onRequestGet } from '../functions/api/price-feed.js';
 import { PETS, CHARMS, EGGS, ITEMS } from '../public/data/catalog.js';
 import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
+import { PRICES } from '../public/data/prices.js';
+import { catalogPriceRows } from '../public/data/price-core.js';
+import { loadCurrentPrices } from '../public/data/value-loader.js';
+
+const fullCatalogs = { pets: PETS, charms: CHARMS, eggs: EGGS, items: ITEMS };
+const dataModule = (name, data) => `export const ${name} = ${JSON.stringify(data)};`;
+
+function dataForRows(rows) {
+  const catalogs = { pets: [], charms: [], eggs: [], items: [] };
+  const prices = { pets: {}, charms: {}, eggs: {}, items: {} };
+  for (const row of rows) {
+    let item = catalogs[row.category].find(item => item.id === row.id);
+    if (!item) {
+      item = { id: row.id, name: row.name, rarity: row.rarity, image: row.image };
+      catalogs[row.category].push(item);
+    }
+    if (row.variant !== 'normal' || rows.some(other => other.category === row.category && other.id === row.id && other.variant !== 'normal')) {
+      item.supportsVariants = true;
+      item.variantImages ||= {};
+      item.variantImages[row.variant] = row.image;
+      prices[row.category][row.id] ||= { normal: null, golden: null, diamond: null };
+      prices[row.category][row.id][row.variant] = row.value;
+    } else prices[row.category][row.id] = row.value;
+  }
+  return { catalogs, prices };
+}
+
+function fullSiteResponse(url, overrides = []) {
+  const prices = structuredClone(PRICES);
+  for (const row of overrides) {
+    if (!Object.hasOwn(prices[row.category], row.id)) continue;
+    const item = fullCatalogs[row.category].find(item => item.id === row.id);
+    if (item.supportsVariants) prices[row.category][row.id][row.variant] = row.value;
+    else prices[row.category][row.id] = row.value;
+  }
+  return new Response(new URL(url).pathname === '/data/prices.js'
+    ? dataModule('PRICES', prices) : dataModule('PRICE_UPDATE', {}));
+}
 
 // Exercise the real SQL, transactions and retry queue in SQLite. Only remote
 // HTTP is replaced; these tests never send anything to a Discord channel.
@@ -43,6 +80,7 @@ function fixture() {
   let failure = null;
   let feedFailure = false;
   let metadata = {};
+  let invalidSource = null;
   const messages = [];
   const requests = [];
   const env = { MONITOR_DB: d1(), DISCORD_WEBHOOK_URL: 'https://discord.com/api/webhooks/123456789012345678/test_token', MONITOR_KEY: 'test-secret-key', SITE_URL: 'https://petuniverse-values.pl' };
@@ -52,7 +90,9 @@ function fixture() {
     if (new URL(url).hostname === 'petuniverse-values.pl') {
       if (feedFailure) return new Response('Failure', { status: 503 });
       assert.equal(options.cache, 'no-store');
-      return Response.json({ version: 1, rows, ...metadata });
+      assert.ok(['/data/prices.js', '/data/price-updates.js'].includes(new URL(url).pathname));
+      return new Response(new URL(url).pathname === '/data/prices.js'
+        ? invalidSource ?? dataModule('PRICES', dataForRows(rows).prices) : dataModule('PRICE_UPDATE', metadata));
     }
     assert.equal(new URL(url).searchParams.get('wait'), 'true');
     assert.equal(options.method, 'POST');
@@ -62,7 +102,8 @@ function fixture() {
     return Response.json({ id: 'message-id' });
   };
   return {
-    env, messages, requests, run: () => { env.MONITOR_DB.resetBudget(); return runMonitor(env, { fetcher, clock: () => time }); },
+    env, messages, requests, run: () => { env.MONITOR_DB.resetBudget(); return runMonitor(env, { fetcher, clock: () => time, catalogs: dataForRows(rows).catalogs }); },
+    setSource: value => { invalidSource = value; },
     setMetadata: value => { metadata = value; },
     setRows: value => { rows = value; }, getRows: () => structuredClone(rows),
     price: value => { rows[0].value = value; }, failure: value => { failure = value; },
@@ -145,7 +186,7 @@ test('Discord 429 applies a cooldown to the entire queue', async () => {
   } finally { f.close(); }
 });
 
-test('invalid or unavailable feed does not corrupt the baseline', async () => {
+test('invalid or unavailable prices.js does not corrupt the baseline', async () => {
   const f = fixture();
   try {
     await f.run(); f.price(25000); f.failFeed(true); await assert.rejects(f.run);
@@ -172,11 +213,15 @@ test('new or reintroduced entries seed quietly; an overlapping check cannot acqu
   } finally { f.close(); }
 });
 
-test('public API derives all prices from the same catalog, validates images and has no cache', async () => {
-  const response = await onRequestGet();
-  const feed = await response.json();
-  assert.match(response.headers.get('cache-control'), /no-store/);
-  const rows = validateFeed(feed, 'https://petuniverse-values.pl');
+test('the single public prices.js supplies every catalog price and valid image without an API', async () => {
+  const source = await readFile(new URL('../public/data/prices.js', import.meta.url), 'utf8');
+  const metadata = await readFile(new URL('../public/data/price-updates.js', import.meta.url), 'utf8');
+  const feed = await loadCurrentPrices('https://petuniverse-values.pl', { catalogs: fullCatalogs, fetcher: async (url, options) => {
+    assert.equal(options.cache, 'no-store');
+    assert.ok(['/data/prices.js', '/data/price-updates.js'].includes(new URL(url).pathname));
+    return new Response(new URL(url).pathname === '/data/prices.js' ? source : metadata);
+  } });
+  const rows = feed.rows;
   assert.ok(rows.length > 48);
   for (const [category, items] of Object.entries({ pets: PETS, charms: CHARMS, eggs: EGGS, items: ITEMS })) {
     for (const item of items) {
@@ -249,11 +294,11 @@ test('failed transaction keeps the previous price and does not create a partial 
   } finally { f.close(); }
 });
 
-test('authenticated diagnostic confirms feed and Discord; reports Discord failure', async () => {
+test('authenticated diagnostic confirms prices.js and Discord; reports Discord failure', async () => {
  const f=fixture(); const original=globalThis.fetch; let status=200; let tests=0;
  globalThis.fetch=async(url,options={})=> {
   assert.equal(options.redirect,'manual');
-  if(new URL(url).hostname==='petuniverse-values.pl') return Response.json({version:1,rows:f.getRows()});
+  if(new URL(url).hostname==='petuniverse-values.pl') return fullSiteResponse(url);
   tests++; const body=JSON.parse(options.body); assert.match(body.embeds[0].title,/test monitora/);
   return Response.json({}, {status});
  };
@@ -267,21 +312,20 @@ test('authenticated diagnostic confirms feed and Discord; reports Discord failur
 });
 
 
-test('static publication recovers real price changes on first start and uses the authoring time', async () => {
+test('direct prices.js changes use their matching authoring time without any duplicate price source', async () => {
   const f = fixture();
   try {
-    const old = f.getRows();
-    const baseline = { version: 1, revision: await priceRevision(old), rows: old };
+    await f.run();
     f.price('25K');
-    f.setMetadata({ revision: await priceRevision(f.getRows()), updatedAt: '2026-10-01T12:17:41Z', baseline });
+    f.setMetadata({ revision: await priceRevision(f.getRows()), updatedAt: '2026-10-01T12:17:41Z' });
     const result = await f.run();
-    assert.equal(result.initialized, true);
+    assert.equal(result.initialized, false);
     assert.equal(result.changed, 1);
     assert.equal(result.sent, 1);
-    assert.equal(result.feedSource, '/data/price-feed.json');
+    assert.equal(result.feedSource, '/data/prices.js');
     assert.equal(result.priceUpdatedAt, '2026-10-01T12:17:41.000Z');
-    assert.match(f.requests[0].url, /data\/price-feed\.json\?check=/);
-    assert.ok(!f.requests.some(request => request.url.includes('/api/price-feed')));
+    assert.match(f.requests[0].url, /data\/prices\.js\?check=/);
+    assert.ok(!f.requests.some(request => request.url.includes('price-feed')));
     assert.equal(f.messages[0].embeds[0].timestamp, '2026-10-01T12:17:41.000Z');
     assert.match(f.messages[0].embeds[0].footer.text, /czas aktualizacji cen/);
     f.advance(); assert.equal((await f.run()).changed, 0);
@@ -289,43 +333,44 @@ test('static publication recovers real price changes on first start and uses the
   } finally { f.close(); }
 });
 
-test('initialized D1 takes precedence over a publication baseline', async () => {
+test('stale timestamp metadata cannot block new prices or date them with an old update', async () => {
   const f = fixture();
   try {
     await f.run();
-    const baselineRows = f.getRows().map(row => ({ ...row, value: '90K' }));
     f.price('25K');
-    f.setMetadata({ revision: await priceRevision(f.getRows()), baseline: { version: 1, revision: await priceRevision(baselineRows), rows: baselineRows } });
-    f.advance(); await f.run();
+    f.setMetadata({ revision: 'previous-revision', updatedAt: '2026-09-01T12:00:00Z' });
+    f.advance(); const result = await f.run();
     assert.match(f.messages[0].embeds[0].description, /30K → 25K/);
+    assert.equal(result.priceUpdatedAt, null);
+    assert.equal(f.messages[0].embeds[0].timestamp, '2026-10-01T12:31:00.000Z');
   } finally { f.close(); }
 });
 
-test('mismatched current or previous revision cannot overwrite the D1 snapshot', async () => {
+test('invalid JavaScript price data cannot overwrite the D1 snapshot or execute code', async () => {
   const f = fixture();
   try {
     await f.run(); f.price(25000);
-    f.setMetadata({ revision: 'wrong-revision' });
-    await assert.rejects(f.run, /revision/);
-    f.setMetadata({ revision: await priceRevision(f.getRows()), baseline: { version: 1, revision: 'wrong', rows: f.getRows() } });
-    await assert.rejects(f.run, /previous price revision/);
+    f.setSource('export const PRICES = (() => { throw new Error("executed"); })();');
+    await assert.rejects(f.run, /Invalid PRICES data/);
+    f.setSource('export const PRICES = {pets:{"unknown-id":25000},charms:{},eggs:{},items:{}};');
+    await assert.rejects(f.run, /Catalog changed/);
     const saved = await f.env.MONITOR_DB.prepare('SELECT price_key FROM monitor_prices').first();
     assert.equal(saved.price_key, 'number:30000');
     assert.equal(f.messages.length, 0);
-    f.setMetadata({}); f.advance(); assert.equal((await f.run()).sent, 1);
+    f.setSource(null); f.advance(); assert.equal((await f.run()).sent, 1);
   } finally { f.close(); }
 });
 
-test('this full prices import recovers all changed streams and drains its outbox once', async () => {
+test('all streams in the supplied prices.js are monitored and a full update drains once', async () => {
   const f = fixture();
   try {
-    const feed = JSON.parse(await readFile(new URL('../public/data/price-feed.json', import.meta.url), 'utf8'));
-    assert.ok(feed.baseline, 'the previous project prices must travel with this import');
-    const previous = new Map(feed.baseline.rows.map(row => [row.key, normalizePrice(row.value).key]));
-    const expected = feed.rows.filter(row => previous.has(row.key) && previous.get(row.key) !== normalizePrice(row.value).key).length;
-    assert.ok(expected > 10, 'the supplied prices contain a real update, not just a new timestamp');
-    f.setRows(feed.rows);
-    f.setMetadata({ revision: feed.revision, updatedAt: feed.updatedAt, baseline: feed.baseline });
+    const rows = catalogPriceRows(fullCatalogs);
+    const expected = rows.filter(row => typeof row.value === 'number').length;
+    assert.ok(expected > 10);
+    f.setRows(rows.map(row => ({ ...row, value: typeof row.value === 'number' ? row.value + 1 : row.value })));
+    assert.equal((await f.run()).checked, rows.length);
+    f.setRows(rows);
+    f.setMetadata({ revision: await priceRevision(rows), updatedAt: '2026-10-01T12:17:41Z' });
     const first = await f.run();
     assert.equal(first.changed, expected);
     assert.equal(first.sent, 8);
@@ -350,7 +395,7 @@ test('successful repair test releases old retry cooldown without losing queued m
     await f.env.MONITOR_DB.prepare('UPDATE monitor_outbox SET next_attempt_at=? WHERE sent_at IS NULL').bind(future).run();
     let diagnostics = 0;
     globalThis.fetch = async (url, options) => {
-      if (new URL(url).hostname === 'petuniverse-values.pl') return Response.json({version:1,rows:f.getRows()});
+      if (new URL(url).hostname === 'petuniverse-values.pl') return fullSiteResponse(url, f.getRows());
       diagnostics++; assert.match(JSON.parse(options.body).embeds[0].title, /test monitora/);
       return Response.json({id:'diagnostic-message'});
     };

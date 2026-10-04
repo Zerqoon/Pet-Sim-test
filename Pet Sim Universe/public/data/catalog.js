@@ -1,8 +1,6 @@
 import { PRICES } from './prices.js';
 // Opisy i grafiki: ten plik. Wszystkie ceny: prices.js.
 
-export const LAST_UPDATED = '2026-10-02T18:19:03Z';
-
 export const SOURCE_PRESETS = {
 
   vipChest: { id: 'vipChest', name: 'VIP Chest', image: 'assets/sources/vip-chest.png' },
@@ -594,7 +592,7 @@ export const ITEMS = [
 
 export const RARITY_ORDER = ['Exclusive', 'Secret', 'Mythical', 'Legendary', 'Epic', 'Rare', 'Basic'];
 
-// Jedno zrodlo cen dla strony i Cloudflare Functions. Brak ceny = null.
+// Jedno zrodlo cen: prices.js. Katalog przechowuje opisy i obrazy.
 for (const [category, list] of Object.entries({ pets: PETS, charms: CHARMS, eggs: EGGS, items: ITEMS })) {
   for (const item of list) {
     const price = PRICES[category]?.[item.id];

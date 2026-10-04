@@ -1,5 +1,7 @@
 import { changePayload, discordUrl, validateFeed } from '../server/pricing.js';
-import { loadPriceFeed } from '../public/data/price-feed-client.js';
+import { loadCurrentPrices } from '../public/data/value-loader.js';
+import { PETS, CHARMS, EGGS, ITEMS } from '../public/data/catalog.js';
+const MONITOR_CATALOGS = { pets: PETS, charms: CHARMS, eggs: EGGS, items: ITEMS };
 
 export const MONITOR_SCHEMA = [
   `CREATE TABLE IF NOT EXISTS monitor_prices (item_key TEXT PRIMARY KEY, price_key TEXT NOT NULL, payload TEXT NOT NULL)`,
@@ -15,7 +17,7 @@ function siteOrigin(value) {
   return url.origin;
 }
 
-export async function runMonitor(env, { fetcher = fetch, clock = Date.now } = {}) {
+export async function runMonitor(env, { fetcher = fetch, clock = Date.now, catalogs = MONITOR_CATALOGS } = {}) {
   if (!env.MONITOR_DB) throw new Error('MONITOR_DB binding is missing.');
   const webhook = discordUrl(env.DISCORD_WEBHOOK_URL);
   const site = siteOrigin(env.SITE_URL);
@@ -29,18 +31,10 @@ export async function runMonitor(env, { fetcher = fetch, clock = Date.now } = {}
   if (!lock.meta?.changes) return { busy: true, sent: 0 };
 
   try {
-    const { feed, rows, revision, updatedAt, source } = await loadPriceFeed(site, { fetcher, now });
+    const { rows, revision, updatedAt, source } = await loadCurrentPrices(site, { catalogs, fetcher, now });
     const stored = await db.prepare('SELECT item_key, price_key, payload FROM monitor_prices').all();
     const previous = new Map(stored.results.map(row => [row.item_key, row]));
     const seeded = await db.prepare("SELECT value FROM monitor_meta WHERE name = 'initialized'").first();
-    // A newly configured monitor can recover this publication's real changes
-    // from the previous build snapshot, rather than silently seeding new prices.
-    if (!seeded && feed.baseline) {
-      for (const row of validateFeed(feed.baseline, site)) {
-        previous.set(row.key, { price_key: row.price.key, payload: JSON.stringify(row) });
-      }
-    }
-    const canCompare = Boolean(seeded || feed.baseline);
     const changeTime = updatedAt && Date.parse(updatedAt) <= now + 300000 ? updatedAt : null;
     const statements = [];
     const priceWrites = [];
@@ -49,7 +43,7 @@ export async function runMonitor(env, { fetcher = fetch, clock = Date.now } = {}
     for (const row of rows) {
       const old = previous.get(row.key);
       const payload = JSON.stringify(row);
-      if (canCompare && old && old.price_key !== row.price.key) {
+      if (seeded && old && old.price_key !== row.price.key) {
         changed++;
         events.push([crypto.randomUUID(), JSON.stringify(changePayload(JSON.parse(old.payload), row, now, changeTime)), now]);
       }
@@ -143,7 +137,12 @@ export default {
   },
   async fetch(request, env) {
     const path = new URL(request.url).pathname;
-    if (path === '/health' && request.method === 'GET') return json({ version: 114, configured: Boolean(env.MONITOR_DB && env.DISCORD_WEBHOOK_URL && env.MONITOR_KEY) });
+    if (path === '/health' && request.method === 'GET') return json({ version: 115, deployment: env.MONITOR_DEPLOYMENT || null, configured: Boolean(env.MONITOR_DB && env.DISCORD_WEBHOOK_URL && env.MONITOR_KEY) });
+    if (path === '/auth') {
+      if (request.method !== 'GET') return json({ error: 'Use GET.' }, 405);
+      if (!matchesKey(request, env.MONITOR_KEY)) return json({ error: 'Unauthorized.' }, 401);
+      return json({ authorized: true, version: 115, deployment: env.MONITOR_DEPLOYMENT || null, hasWebhook: Boolean(env.DISCORD_WEBHOOK_URL), hasDatabase: Boolean(env.MONITOR_DB) });
+    }
     if (path !== '/check' && path !== '/test') return json({ error: 'Not found.' }, 404);
     if (request.method !== 'POST') return json({ error: 'Use POST.' }, 405);
     if (!matchesKey(request, env.MONITOR_KEY)) return json({ error: 'Unauthorized.' }, 401);

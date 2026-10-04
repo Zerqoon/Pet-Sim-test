@@ -1,12 +1,11 @@
-import { readFile, writeFile, mkdtemp, rm } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
+import { readFile, writeFile } from 'node:fs/promises';
 import { randomBytes } from 'node:crypto';
 import path from 'node:path';
 import { createWrangler, root, publicSite, waitForPublishedPrices, testMonitor } from './discord-tools.mjs';
+import { deployMonitor } from './discord-deploy.mjs';
 
 const monitorKey = randomBytes(32).toString('base64url');
 const wrangler = createWrangler([monitorKey]);
-let privateDirectory;
 try {
   if (Number(process.versions.node.split('.')[0]) < 22) throw new Error('Wymagany jest Node.js 22 lub nowszy.');
   const directoryIndex = process.argv.indexOf('--config-directory');
@@ -31,23 +30,11 @@ try {
   config.vars = { ...config.vars, SITE_URL: site };
   config.observability = { ...config.observability, enabled: true };
   await writeFile(configPath, JSON.stringify(config, null, 2) + '\n');
-  privateDirectory = await mkdtemp(path.join(tmpdir(), 'pet-universe-repair-'));
-  const secretsPath = path.join(privateDirectory, 'secrets.json');
-  // --secrets-file preserves remote secrets omitted from this file.
-  await writeFile(secretsPath, JSON.stringify({ MONITOR_KEY: monitorKey }), { mode: 0o600 });
-  const output = await wrangler(['deploy', '--config', configPath, '--secrets-file', secretsPath]);
-  const workerUrl = output.match(/https:\/\/[a-z0-9.-]+\.workers\.dev\b/i)?.[0];
-  if (!workerUrl) throw new Error('Worker wdrozony, ale nie znaleziono adresu workers.dev. Test nie zostal potwierdzony.');
-  const health = await fetch(workerUrl + '/health', { cache: 'no-store', redirect: 'manual', signal: AbortSignal.timeout(15000) });
-  const status = await health.json().catch(() => ({}));
-  if (!health.ok || status.version !== 114) throw new Error('Nie potwierdzono nowej wersji monitora. Sprawdz wdrozenie Workers.');
-  if (!status.configured) throw new Error('Na Workerze brakuje webhooka lub MONITOR_DB. Uruchom Setup-Discord.ps1, aby ustawic aktualny webhook.');
+  const { url: workerUrl } = await deployMonitor(wrangler, configPath, { MONITOR_KEY: monitorKey });
   await testMonitor(workerUrl, monitorKey);
   await writeFile(path.join(directory, 'monitor-info.json'), JSON.stringify({ url: workerUrl, site }, null, 2) + '\n');
   console.log('GOTOWE: wdrozono aktualny monitor i Discord przyjal test. Kolejne zmiany sprawdza cron co minute.');
 } catch (error) {
   console.error(String(error.message || 'Naprawa nie powiodla sie.').split(monitorKey).join('[hidden]'));
   process.exitCode = 1;
-} finally {
-  if (privateDirectory) await rm(privateDirectory, { recursive: true, force: true });
 }

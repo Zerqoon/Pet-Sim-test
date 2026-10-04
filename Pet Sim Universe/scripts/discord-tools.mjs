@@ -2,7 +2,10 @@ import { spawn } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
-import { loadPriceFeed } from '../public/data/price-feed-client.js';
+import { loadCurrentPrices, readDataModule, rowsFromPrices } from '../public/data/value-loader.js';
+import { priceRevision } from '../public/data/price-core.js';
+import { PETS, CHARMS, EGGS, ITEMS } from '../public/data/catalog.js';
+const PRICE_CATALOGS = { pets: PETS, charms: CHARMS, eggs: EGGS, items: ITEMS };
 
 export const root = path.resolve(import.meta.dirname, '..');
 export const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -43,14 +46,15 @@ export function publicSite(value) {
 }
 
 export async function waitForPublishedPrices(site, { fetcher = fetch, timeout = 600000, delay = 10000 } = {}) {
-  const local = JSON.parse(await readFile(path.join(root, 'public/data/price-feed.json'), 'utf8'));
+  const local = readDataModule(await readFile(path.join(root, 'public/data/prices.js'), 'utf8'), 'PRICES');
+  const localRevision = await priceRevision(rowsFromPrices(PRICE_CATALOGS, local));
   const started = Date.now();
   let reason = 'brak aktualnych cen';
   console.log('Sprawdzam, czy Cloudflare opublikowal ceny z tej paczki...');
   do {
     try {
-      const latest = await loadPriceFeed(site, { fetcher });
-      if (latest.revision === local.revision) {
+      const latest = await loadCurrentPrices(site, { catalogs: PRICE_CATALOGS, fetcher });
+      if (latest.revision === localRevision) {
         console.log(`Ceny potwierdzone: ${latest.rows.length}, ${latest.source}, aktualizacja ${latest.updatedAt || 'niezapisana'}.`);
         return latest;
       }

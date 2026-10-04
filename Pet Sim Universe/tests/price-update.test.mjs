@@ -6,15 +6,17 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { updatePriceTime } from '../scripts/update-price-time.mjs';
-import { buildPriceFeed } from '../scripts/build-price-feed.mjs';
 import { selectPriceUpdate, formatPriceAge, applyFeedPrices, catalogPriceRows, priceRevision } from '../public/data/price-core.js';
-import { loadPriceFeed } from '../public/data/price-feed-client.js';
+import { loadCurrentPrices, readDataModule, rowsFromPrices } from '../public/data/value-loader.js';
+import { PRICES } from '../public/data/prices.js';
+import { PETS, CHARMS, EGGS, ITEMS } from '../public/data/catalog.js';
 import { testMonitor, waitForPublishedPrices } from '../scripts/discord-tools.mjs';
 
 const stamp = '2026-10-04T12:17:41.000Z';
 const source = value => `export const PRICES = { pets: { 'test-pet': ${JSON.stringify(value)} }, charms: {}, eggs: {}, items: {} };\n`;
 const row = value => ({ key: 'pets/test-pet/normal', category: 'pets', id: 'test-pet', name: 'Test Pet', variant: 'normal', value, image: null });
 const site = 'https://petuniverse-values.pl';
+const catalogs = { pets: [{ id: 'test-pet', name: 'Test Pet', value: 30000 }], charms: [], eggs: [], items: [] };
 
 async function temporaryRoot() {
   const root = await mkdtemp(path.join(tmpdir(), 'pet-price-time-'));
@@ -76,22 +78,30 @@ test('Git dates real changes, ignores equivalent spelling, and detects an unbuil
   } finally { await rm(root, { recursive: true, force: true }); }
 });
 
-test('static feed is self-consistent and retains its previous revision through rebuilds', async () => {
-  const root = await temporaryRoot();
-  try {
-    await writeFile(path.join(root, 'public/data/catalog.js'), `export const PETS = [{id:'test-pet',name:'Test Pet',value:25000}]; export const CHARMS=[]; export const EGGS=[]; export const ITEMS=[];`);
-    const previousRows = [row(30000)];
-    const previous = { version: 1, revision: await priceRevision(previousRows), updatedAt: '2026-10-03T14:49:00Z', rows: previousRows };
-    await writeFile(path.join(root, 'public/data/price-feed.json'), JSON.stringify(previous));
-    const current = { revision: await priceRevision([row(25000)]), updatedAt: stamp };
-    const feed = await buildPriceFeed(root, current);
-    assert.equal(feed.updatedAt, stamp);
-    assert.equal(feed.revision, await priceRevision(feed.rows));
-    assert.equal(feed.baseline.revision, previous.revision);
-    const again = await buildPriceFeed(root, current);
-    assert.deepEqual(again, feed);
-    assert.ok(!JSON.stringify(feed).includes('webhook'));
-  } finally { await rm(root, { recursive: true, force: true }); }
+test('the supplied prices.js is read directly, including comments, trailing commas and escaped names', async () => {
+  const text = await readFile(new URL('../public/data/prices.js', import.meta.url), 'utf8');
+  assert.deepEqual(JSON.parse(JSON.stringify(readDataModule(text, 'PRICES'))), PRICES);
+  const parsed = readDataModule("/* header */ export const PRICES = {pets:{'test-pet':2.5e4,},charms:{},eggs:{},items:{},}; // footer", 'PRICES');
+  assert.equal(rowsFromPrices(catalogs, parsed)[0].value, 25000);
+  assert.equal(readDataModule("export const TEST = {'na\\u006de':'a\\x62\\\\c',};", 'TEST').name, 'ab\\c');
+  const all = rowsFromPrices({ pets: PETS, charms: CHARMS, eggs: EGGS, items: ITEMS }, parsedFrom(text));
+  assert.equal(all.length, catalogPriceRows({ pets: PETS, charms: CHARMS, eggs: EGGS, items: ITEMS }).length);
+});
+
+const parsedFrom = text => readDataModule(text, 'PRICES');
+
+test('the data reader rejects executable code, duplicate IDs, missing variants and prototype keys', () => {
+  for (const text of [
+    'export const PRICES = {}; globalThis.changed=true;',
+    'export const PRICES = {pets: (()=>1)()};',
+    'export const PRICES = {pets:{"test-pet":1,"test-pet":2}};',
+    'export const PRICES = {__proto__: {polluted: true}};',
+    'export const PRICES = {pets: [1,2]};',
+    'export const PRICES = {/* unfinished',
+  ]) assert.throws(() => readDataModule(text, 'PRICES'), /Invalid PRICES data/);
+  assert.throws(() => rowsFromPrices(catalogs, { pets: { 'different-pet': 1 }, charms: {}, eggs: {}, items: {} }), /Catalog changed/);
+  const variantCatalog = { ...catalogs, pets: [{ ...catalogs.pets[0], supportsVariants: true }] };
+  assert.throws(() => rowsFromPrices(variantCatalog, { pets: { 'test-pet': { normal: 1 } }, charms: {}, eggs: {}, items: {} }), /Missing price variant/);
 });
 
 test('browser prices update shared catalog objects without losing a calculator selection', () => {
@@ -107,30 +117,43 @@ test('browser prices update shared catalog objects without losing a calculator s
   assert.equal(selection.item.values.golden, '50K');
 });
 
-test('static data works with Functions disabled; old HTML fallback uses the API with fresh requests', async () => {
+test('prices.js works with Functions disabled and its exact revision selects the timestamp', async () => {
   const rows = [row(25000)];
-  const feed = { version: 1, revision: await priceRevision(rows), updatedAt: stamp, rows };
+  const revision = await priceRevision(rows);
   const calls = [];
   const fetcher = async (url, options) => {
     calls.push(new URL(url).pathname);
     assert.equal(options.cache, 'no-store'); assert.equal(options.redirect, 'manual');
     assert.equal(new URL(url).searchParams.get('check'), '123');
-    if (calls.length === 1) return new Response('<html>old site fallback</html>', { headers: { 'content-type': 'text/html' } });
-    return Response.json(feed);
+    return new Response(new URL(url).pathname === '/data/prices.js'
+      ? source(25000) : `export const PRICE_UPDATE = ${JSON.stringify({ revision, updatedAt: stamp })};`);
   };
-  assert.equal((await loadPriceFeed(site, { fetcher, now: 123 })).source, '/api/price-feed');
-  assert.deepEqual(calls, ['/data/price-feed.json', '/api/price-feed']);
-  const staticOnly = async url => {
-    assert.equal(new URL(url).pathname, '/data/price-feed.json', 'disabled API must not be required');
-    return Response.json(feed);
-  };
-  assert.equal((await loadPriceFeed(site, { fetcher: staticOnly })).updatedAt, stamp);
+  const loaded = await loadCurrentPrices(site, { catalogs, fetcher, now: 123 });
+  assert.equal(loaded.source, '/data/prices.js');
+  assert.equal(loaded.updatedAt, stamp);
+  assert.equal(loaded.rows[0].value, 25000);
+  assert.deepEqual(calls, ['/data/prices.js', '/data/price-updates.js']);
+  assert.equal(catalogs.pets[0].value, 30000, 'reading prices must not mutate metadata');
+});
+
+test('missing or stale date metadata never supplies an old date or blocks current prices', async () => {
+  for (const metadata of ['export const PRICE_UPDATE = {revision:"old",updatedAt:"2026-10-01T12:00:00Z"};', '<html>unavailable</html>', null]) {
+    const loaded = await loadCurrentPrices(site, { catalogs, fetcher: async url => new URL(url).pathname === '/data/prices.js'
+      ? new Response(source(25000)) : metadata === null ? new Response('', { status: 404 }) : new Response(metadata) });
+    assert.equal(loaded.rows[0].value, 25000);
+    assert.equal(loaded.updatedAt, null);
+  }
+  await assert.rejects(() => loadCurrentPrices(site, { catalogs, fetcher: async () => new Response('<html>old fallback</html>') }), /Invalid PRICES data/);
 });
 
 test('repair confirms actual deployed prices and never reports success without Discord acknowledgement', async () => {
-  const local = JSON.parse(await readFile(new URL('../public/data/price-feed.json', import.meta.url), 'utf8'));
-  const published = await waitForPublishedPrices(site, { fetcher: async () => Response.json(local), timeout: 0 });
-  assert.equal(published.revision, local.revision);
+  const local = await readFile(new URL('../public/data/prices.js', import.meta.url), 'utf8');
+  const metadata = await readFile(new URL('../public/data/price-updates.js', import.meta.url), 'utf8');
+  const published = await waitForPublishedPrices(site, { fetcher: async url => {
+    assert.ok(['/data/prices.js', '/data/price-updates.js'].includes(new URL(url).pathname));
+    return new Response(new URL(url).pathname === '/data/prices.js' ? local : metadata);
+  }, timeout: 0 });
+  assert.equal(published.revision, await priceRevision(rowsFromPrices({ pets: PETS, charms: CHARMS, eggs: EGGS, items: ITEMS }, parsedFrom(local))));
   let attempts = 0;
   const result = await testMonitor('https://monitor.example', 'private-key', { delay: 0, fetcher: async (url, options) => {
     assert.equal(url, 'https://monitor.example/test');

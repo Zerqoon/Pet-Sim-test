@@ -12,8 +12,8 @@ function Run-Git {
 }
 if (-not (Get-Command git -ErrorAction SilentlyContinue)) { throw "Zainstaluj Git for Windows i otworz ponownie PowerShell." }
 if (-not (Get-Command node -ErrorAction SilentlyContinue)) { throw "Zainstaluj Node.js 22 lub nowszy i otworz ponownie PowerShell." }
-foreach ($file in @("package.json", "public\data\prices.js", "public\data\catalog.js", "public\v89.css", "public\phone.css", "public\collections.css", "public\calculator.css", "public\assets\items\1m-lucky-block.png", "public\assets\pets\gummy-bear.png", "public\assets\eggs\gummy-egg.png", "public\assets\pets\sunken-eel-diamond.png", "public\assets\pets\blobfish-diamond.png", "src\index.html", "functions\api\price-feed.js", "workers\price-monitor.js", "scripts\build.mjs")) {
-    if (-not (Test-Path -LiteralPath (Join-Path $Source $file) -PathType Leaf)) { throw "Brakuje $file. Rozpakuj caly ZIP v114 do jednego folderu." }
+foreach ($file in @("package.json", "public\data\prices.js", "public\data\catalog.js", "public\v89.css", "public\phone.css", "public\collections.css", "public\calculator.css", "public\assets\items\1m-lucky-block.png", "public\assets\pets\gummy-bear.png", "public\assets\eggs\gummy-egg.png", "public\assets\pets\sunken-eel-diamond.png", "public\assets\pets\blobfish-diamond.png", "src\index.html", "public\data\value-loader.js", "scripts\discord-deploy.mjs", "workers\price-monitor.js", "scripts\build.mjs")) {
+    if (-not (Test-Path -LiteralPath (Join-Path $Source $file) -PathType Leaf)) { throw "Brakuje $file. Rozpakuj caly ZIP v115 do jednego folderu." }
 }
 $work = Join-Path $env:TEMP ("Pet-Universe-Upload-" + [guid]::NewGuid().ToString("N"))
 Run-Git clone --single-branch --branch $Branch $RepoUrl $work
@@ -41,6 +41,12 @@ try {
         & node scripts/build.mjs
         if ($LASTEXITCODE -ne 0) { throw "Build nie powiodl sie. Nic nie wyslano." }
     } finally { Pop-Location }
+    # Zachowaj wygenerowana date takze w lokalnym projekcie. Kolejny upload
+    # identycznych cen nie powinien przypisywac im nowego czasu commita.
+    $localPrices = Join-Path $Source "public\data\prices.js"
+    if ((Get-FileHash -LiteralPath $localPrices -Algorithm SHA256).Hash -eq (Get-FileHash -LiteralPath $repoPrices -Algorithm SHA256).Hash) {
+        Copy-Item -LiteralPath (Join-Path $destination "public\data\price-updates.js") -Destination (Join-Path $Source "public\data\price-updates.js") -Force
+    }
     Run-Git add -A -- "Pet Sim Universe"
     & git diff --cached --quiet
     $diffResult = $LASTEXITCODE
@@ -48,7 +54,7 @@ try {
         Write-Host "GitHub ma juz identyczne pliki." -ForegroundColor Green
     } elseif ($diffResult -eq 1) {
         Run-Git diff --cached --stat
-        Run-Git commit -m "Update Pet Universe: current prices, accurate update time and Discord monitor"
+        Run-Git commit -m "Update Pet Universe: one prices.js source and Discord authorization fix"
         Run-Git push origin $Branch
         Write-Host "GOTOWE - projekt wyslany. Poczekaj na udane wdrozenie Cloudflare." -ForegroundColor Green
         Write-Host "Ceny i monitor sa wyslane. Wdrozenie Workera potwierdzi ponizszy test."
