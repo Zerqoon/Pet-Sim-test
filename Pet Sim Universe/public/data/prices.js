@@ -19,47 +19,47 @@ export const PRICES = {
     // Agent Sheep
     "agent-sheep": 200,
     // Caaaaat
-    "caaaaat": "4K",
+    "caaaaat": "5K",
     // Exquisite Cat
-    "exquisite-cat": "1.95K",
+    "exquisite-cat": "2.15K",
     // Happy Cupcake
-    "happy-cupcake": "2K",
+    "happy-cupcake": "2.25K",
     // Six Seven!
-    "six-seven": "2K",
+    "six-seven": "2.45K",
     // Void Owl
-    "void-owl": 420,
+    "void-owl": 450,
     // Gummy Gubby
     "gummy-gubby": 375,
     // Gummy Penguin
     "gummy-penguin": 110,
     // Sun Deer
-    "sun-deer": 110,
+    "sun-deer": 135,
     // Spaceship Alien
     "spaceship-alien": 90,
     // Fallen Angel
     "fallen-angel": 500,
     // Job Cat
-    "job-cat": 200,
+    "job-cat": 250,
     // Gummy Capybara
     "gummy-capybara": 25,
     // Galaxy Bunny
-    "galaxy-bunny": 20,
+    "galaxy-bunny": 25,
     // Galaxy Cat
-    "galaxy-cat": 10,
+    "galaxy-cat": 15,
     // Gummy Frog
     "gummy-frog": 10,
     // Pop Cat
     "pop-cat": 30,
     // Queen Bee
-    "queen-bee": {"normal":550,"golden":"No Price","diamond":"No Price"},
+    "queen-bee": {"normal":650,"golden":"No Price","diamond":"No Price"},
     // Blaze Phoenix
-    "blaze-phoenix": {"normal":500,"golden":2350,"diamond":6100},
+    "blaze-phoenix": {"normal":750,"golden":2750,"diamond":6100},
     // Mossy Mushroom
-    "mossy-mushroom": {"normal":400,"golden":1100,"diamond":5000},
+    "mossy-mushroom": {"normal":600,"golden":1250,"diamond":5000},
     // Throne Dragon
-    "throne-dragon": {"normal":250,"golden":"No Price","diamond":"No Price"},
+    "throne-dragon": {"normal":325,"golden":"No Price","diamond":"No Price"},
     // Ruby Majesty
-    "ruby-majesty": {"normal":45,"golden":250,"diamond":950},
+    "ruby-majesty": {"normal":55,"golden":275,"diamond":950},
     // Ember Monster
     "ember-monster": {"normal":40,"golden":190,"diamond":750},
     // Shadow Dominus
@@ -78,11 +78,11 @@ export const PRICES = {
 
   charms: {
     // Secret Charm
-    "secret-charm": 400,
+    "secret-charm": 450,
     // Lightning Charm
-    "lightning-charm": 450,
+    "lightning-charm": 475,
     // Moon Charm
-    "moon-charm": 55,
+    "moon-charm": 60,
     // Rubies Charm IV
     "rubies-charm-iv": 285,
     // Hatch Charm IV
@@ -119,16 +119,16 @@ export const PRICES = {
     // Party Egg
     "party-egg": 1.5,
     // Galaxy Egg
-    "galaxy-egg": 170,
+    "galaxy-egg": 185,
   },
 
   items: {
     // VIP Voucher
-    "vip-voucher": 8,
+    "vip-voucher": 10,
     // Universe Shard
     "universe-shard": 25,
     // VIP Key
-    "vip-key": 0.3,
+    "vip-key": 0.4,
     // Globe
     "globe": 20,
     // Ball
@@ -138,13 +138,13 @@ export const PRICES = {
     // 1M luckyblock
     "1m-lucky-block": 15,
     // Canned Tuna
-    "canned-tuna": 25,
+    "canned-tuna": 50,
     // Universe Worm
     "universeworm": null,
     // Worm
     "worm": 1,
     // Golden Fish Hook
-    "golden-fish-hook": null,
+    "golden-fish-hook": 25,
     // Fish Hook
     "fishhook": 3,
   },
