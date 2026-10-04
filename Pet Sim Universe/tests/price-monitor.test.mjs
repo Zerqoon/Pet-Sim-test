@@ -6,6 +6,7 @@ import { normalizePrice, validateFeed, priceRevision } from '../server/pricing.j
 import { onRequestGet } from '../functions/api/price-feed.js';
 import { PETS, CHARMS, EGGS, ITEMS } from '../public/data/catalog.js';
 import { existsSync } from 'node:fs';
+import { readFile } from 'node:fs/promises';
 
 // Exercise the real SQL, transactions and retry queue in SQLite. Only remote
 // HTTP is replaced; these tests never send anything to a Discord channel.
@@ -41,6 +42,7 @@ function fixture() {
   let rows = [{ key: 'pets/job-cat/normal', category: 'pets', id: 'job-cat', name: 'Job Cat', rarity: 'Exclusive', variant: 'normal', value: '30K', image: 'assets/pets/job-cat-v30.png' }];
   let failure = null;
   let feedFailure = false;
+  let metadata = {};
   const messages = [];
   const requests = [];
   const env = { MONITOR_DB: d1(), DISCORD_WEBHOOK_URL: 'https://discord.com/api/webhooks/123456789012345678/test_token', MONITOR_KEY: 'test-secret-key', SITE_URL: 'https://petuniverse-values.pl' };
@@ -50,7 +52,7 @@ function fixture() {
     if (new URL(url).hostname === 'petuniverse-values.pl') {
       if (feedFailure) return new Response('Failure', { status: 503 });
       assert.equal(options.cache, 'no-store');
-      return Response.json({ version: 1, rows });
+      return Response.json({ version: 1, rows, ...metadata });
     }
     assert.equal(new URL(url).searchParams.get('wait'), 'true');
     assert.equal(options.method, 'POST');
@@ -61,6 +63,7 @@ function fixture() {
   };
   return {
     env, messages, requests, run: () => { env.MONITOR_DB.resetBudget(); return runMonitor(env, { fetcher, clock: () => time }); },
+    setMetadata: value => { metadata = value; },
     setRows: value => { rows = value; }, getRows: () => structuredClone(rows),
     price: value => { rows[0].value = value; }, failure: value => { failure = value; },
     failFeed: value => { feedFailure = value; }, advance: (ms = 60000) => { time += ms; }, close: () => env.MONITOR_DB.close(),
@@ -261,4 +264,103 @@ test('authenticated diagnostic confirms feed and Discord; reports Discord failur
   status=404;f.env.MONITOR_DB.resetBudget();const failure=await monitor.fetch(request(),f.env);
   assert.equal(failure.status,503);assert.match((await failure.json()).error,/Discord test HTTP 404/);
  }finally{globalThis.fetch=original;f.close();}
+});
+
+
+test('static publication recovers real price changes on first start and uses the authoring time', async () => {
+  const f = fixture();
+  try {
+    const old = f.getRows();
+    const baseline = { version: 1, revision: await priceRevision(old), rows: old };
+    f.price('25K');
+    f.setMetadata({ revision: await priceRevision(f.getRows()), updatedAt: '2026-10-01T12:17:41Z', baseline });
+    const result = await f.run();
+    assert.equal(result.initialized, true);
+    assert.equal(result.changed, 1);
+    assert.equal(result.sent, 1);
+    assert.equal(result.feedSource, '/data/price-feed.json');
+    assert.equal(result.priceUpdatedAt, '2026-10-01T12:17:41.000Z');
+    assert.match(f.requests[0].url, /data\/price-feed\.json\?check=/);
+    assert.ok(!f.requests.some(request => request.url.includes('/api/price-feed')));
+    assert.equal(f.messages[0].embeds[0].timestamp, '2026-10-01T12:17:41.000Z');
+    assert.match(f.messages[0].embeds[0].footer.text, /czas aktualizacji cen/);
+    f.advance(); assert.equal((await f.run()).changed, 0);
+    assert.equal(f.messages.length, 1);
+  } finally { f.close(); }
+});
+
+test('initialized D1 takes precedence over a publication baseline', async () => {
+  const f = fixture();
+  try {
+    await f.run();
+    const baselineRows = f.getRows().map(row => ({ ...row, value: '90K' }));
+    f.price('25K');
+    f.setMetadata({ revision: await priceRevision(f.getRows()), baseline: { version: 1, revision: await priceRevision(baselineRows), rows: baselineRows } });
+    f.advance(); await f.run();
+    assert.match(f.messages[0].embeds[0].description, /30K → 25K/);
+  } finally { f.close(); }
+});
+
+test('mismatched current or previous revision cannot overwrite the D1 snapshot', async () => {
+  const f = fixture();
+  try {
+    await f.run(); f.price(25000);
+    f.setMetadata({ revision: 'wrong-revision' });
+    await assert.rejects(f.run, /revision/);
+    f.setMetadata({ revision: await priceRevision(f.getRows()), baseline: { version: 1, revision: 'wrong', rows: f.getRows() } });
+    await assert.rejects(f.run, /previous price revision/);
+    const saved = await f.env.MONITOR_DB.prepare('SELECT price_key FROM monitor_prices').first();
+    assert.equal(saved.price_key, 'number:30000');
+    assert.equal(f.messages.length, 0);
+    f.setMetadata({}); f.advance(); assert.equal((await f.run()).sent, 1);
+  } finally { f.close(); }
+});
+
+test('this full prices import recovers all changed streams and drains its outbox once', async () => {
+  const f = fixture();
+  try {
+    const feed = JSON.parse(await readFile(new URL('../public/data/price-feed.json', import.meta.url), 'utf8'));
+    assert.ok(feed.baseline, 'the previous project prices must travel with this import');
+    const previous = new Map(feed.baseline.rows.map(row => [row.key, normalizePrice(row.value).key]));
+    const expected = feed.rows.filter(row => previous.has(row.key) && previous.get(row.key) !== normalizePrice(row.value).key).length;
+    assert.ok(expected > 10, 'the supplied prices contain a real update, not just a new timestamp');
+    f.setRows(feed.rows);
+    f.setMetadata({ revision: feed.revision, updatedAt: feed.updatedAt, baseline: feed.baseline });
+    const first = await f.run();
+    assert.equal(first.changed, expected);
+    assert.equal(first.sent, 8);
+    assert.equal(first.pending, expected - 8);
+    let pending = first.pending;
+    while (pending) { f.advance(); const next = await f.run(); assert.equal(next.changed, 0); pending = next.pending; }
+    assert.equal(f.messages.length, expected);
+    assert.equal(new Set(f.messages.map(message => message.embeds[0].title)).size, expected);
+    f.advance(); assert.equal((await f.run()).sent, 0);
+    assert.ok(f.env.MONITOR_DB.queryCount < 50);
+  } finally { f.close(); }
+});
+
+
+test('successful repair test releases old retry cooldown without losing queued messages', async () => {
+  const f = fixture(); const original = globalThis.fetch;
+  try {
+    await f.run(); f.price(25000); f.failure({status:404}); f.advance();
+    assert.equal((await f.run()).pending, 1);
+    const future = Date.now() + 3600000;
+    await f.env.MONITOR_DB.prepare("UPDATE monitor_meta SET value=? WHERE name='discord_retry_after'").bind(String(future)).run();
+    await f.env.MONITOR_DB.prepare('UPDATE monitor_outbox SET next_attempt_at=? WHERE sent_at IS NULL').bind(future).run();
+    let diagnostics = 0;
+    globalThis.fetch = async (url, options) => {
+      if (new URL(url).hostname === 'petuniverse-values.pl') return Response.json({version:1,rows:f.getRows()});
+      diagnostics++; assert.match(JSON.parse(options.body).embeds[0].title, /test monitora/);
+      return Response.json({id:'diagnostic-message'});
+    };
+    f.env.MONITOR_DB.resetBudget();
+    const response = await monitor.fetch(new Request('https://monitor.example/test', {method:'POST',headers:{authorization:'Bearer test-secret-key'}}),f.env);
+    assert.equal(response.status,200);
+    const result = await response.json(); assert.equal(result.testSent,true); assert.equal(result.retryScheduled,true);
+    assert.equal(diagnostics,1);
+    assert.equal(await f.env.MONITOR_DB.prepare("SELECT value FROM monitor_meta WHERE name='discord_retry_after'").first(),null);
+    f.failure(null); f.advance(); assert.equal((await f.run()).sent,1);
+    f.advance(); assert.equal((await f.run()).sent,0);
+  } finally { globalThis.fetch=original; f.close(); }
 });

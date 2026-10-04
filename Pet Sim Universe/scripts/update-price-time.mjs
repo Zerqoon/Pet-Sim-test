@@ -31,6 +31,7 @@ async function committedPriceTime(root, revision) {
     const pricePath = `${prefix}public/data/prices.js`;
     const history = git(['log', '--format=%H%x09%cI', '--', 'public/data/prices.js']);
     let timestamp = null;
+    let previousChangeAt = null;
     // Cloudflare builds do not commit generated metadata. Walk the price-file
     // history so comment edits, equivalent numbers and reverts are dated right.
     for (const entry of history.split('\n').filter(Boolean)) {
@@ -42,10 +43,10 @@ async function committedPriceTime(root, revision) {
         const historical = await import(`data:text/javascript;base64,${Buffer.from(source).toString('base64')}`);
         historicalRevision = priceRevision(historical.PRICES);
       } catch { break; }
-      if (historicalRevision !== revision) break;
+      if (historicalRevision !== revision) { previousChangeAt = new Date(committedAt).toISOString(); break; }
       timestamp = new Date(committedAt).toISOString();
     }
-    return timestamp;
+    return timestamp ? { updatedAt: timestamp, previousChangeAt } : null;
   } catch {
     return null;
   }
@@ -66,21 +67,21 @@ export async function updatePriceTime(root) {
 
   let updatedAt = null;
   let timestampSource = 'unavailable';
-  const committedAt = await committedPriceTime(root, revision);
-  if (committedAt) {
-    updatedAt = committedAt;
-    timestampSource = 'git';
-  } else if (previous?.revision === revision && validTime(previous.updatedAt)) {
+  const committed = await committedPriceTime(root, revision);
+  const recorded = previous?.revision === revision && validTime(previous.updatedAt);
+  // Keep an imported authoring time through shallow clones and unrelated builds.
+  // Still detect an A -> B -> A revert when Git proves B occurred after it.
+  const revertedAfterRecording = recorded && committed?.previousChangeAt
+    && Date.parse(committed.previousChangeAt) > Date.parse(previous.updatedAt);
+  if (recorded && !revertedAfterRecording) {
     updatedAt = previous.updatedAt;
     timestampSource = previous.source;
-  } else {
-    if (previous?.revision && previous.revision !== revision) {
-      // A local editor can publish without Git: use the actual file save time.
-      updatedAt = (await stat(pricePath)).mtime.toISOString();
-      timestampSource = 'file';
-    }
-    // An archive with no history cannot prove when its prices were edited.
-    // Leave that time unknown until the first commit or real price change.
+  } else if (committed) {
+    updatedAt = committed.updatedAt;
+    timestampSource = 'git';
+  } else if (previous?.revision && previous.revision !== revision) {
+    updatedAt = (await stat(pricePath)).mtime.toISOString();
+    timestampSource = 'file';
   }
 
   const metadata = { version: 1, revision, updatedAt, source: timestampSource };

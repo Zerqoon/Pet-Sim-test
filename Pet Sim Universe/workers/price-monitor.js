@@ -1,4 +1,5 @@
 import { changePayload, discordUrl, validateFeed } from '../server/pricing.js';
+import { loadPriceFeed } from '../public/data/price-feed-client.js';
 
 export const MONITOR_SCHEMA = [
   `CREATE TABLE IF NOT EXISTS monitor_prices (item_key TEXT PRIMARY KEY, price_key TEXT NOT NULL, payload TEXT NOT NULL)`,
@@ -28,15 +29,19 @@ export async function runMonitor(env, { fetcher = fetch, clock = Date.now } = {}
   if (!lock.meta?.changes) return { busy: true, sent: 0 };
 
   try {
-    const feedUrl = new URL('/api/price-feed', site);
-    feedUrl.searchParams.set('check', String(now));
-    const response = await fetcher(feedUrl.href, { headers: { accept: 'application/json', 'cache-control': 'no-cache' }, cache: 'no-store', redirect: 'manual', signal: AbortSignal.timeout(12000) });
-    if (!response.ok) throw new Error(`Price feed HTTP ${response.status}.`);
-    const feed = await response.json();
-    const rows = validateFeed(feed, site);
+    const { feed, rows, revision, updatedAt, source } = await loadPriceFeed(site, { fetcher, now });
     const stored = await db.prepare('SELECT item_key, price_key, payload FROM monitor_prices').all();
     const previous = new Map(stored.results.map(row => [row.item_key, row]));
     const seeded = await db.prepare("SELECT value FROM monitor_meta WHERE name = 'initialized'").first();
+    // A newly configured monitor can recover this publication's real changes
+    // from the previous build snapshot, rather than silently seeding new prices.
+    if (!seeded && feed.baseline) {
+      for (const row of validateFeed(feed.baseline, site)) {
+        previous.set(row.key, { price_key: row.price.key, payload: JSON.stringify(row) });
+      }
+    }
+    const canCompare = Boolean(seeded || feed.baseline);
+    const changeTime = updatedAt && Date.parse(updatedAt) <= now + 300000 ? updatedAt : null;
     const statements = [];
     const priceWrites = [];
     const events = [];
@@ -44,11 +49,11 @@ export async function runMonitor(env, { fetcher = fetch, clock = Date.now } = {}
     for (const row of rows) {
       const old = previous.get(row.key);
       const payload = JSON.stringify(row);
-      if (seeded && old && old.price_key !== row.price.key) {
+      if (canCompare && old && old.price_key !== row.price.key) {
         changed++;
-        events.push([crypto.randomUUID(), JSON.stringify(changePayload(JSON.parse(old.payload), row, now)), now]);
+        events.push([crypto.randomUUID(), JSON.stringify(changePayload(JSON.parse(old.payload), row, now, changeTime)), now]);
       }
-      if (!old || old.payload !== payload) {
+      if (!seeded || !old || old.payload !== payload) {
         priceWrites.push([row.key, row.price.key, payload]);
       }
     }
@@ -74,6 +79,7 @@ export async function runMonitor(env, { fetcher = fetch, clock = Date.now } = {}
     const queue = Number(cooldown?.value || 0) > clock() ? { results: [] }
       : await db.prepare('SELECT * FROM monitor_outbox WHERE sent_at IS NULL AND next_attempt_at <= ? ORDER BY created_at, rowid LIMIT 8').bind(clock()).all();
     let sent = 0;
+    let webhookStatus = null;
     for (const event of queue.results) {
       let result;
       let status = 0;
@@ -81,6 +87,7 @@ export async function runMonitor(env, { fetcher = fetch, clock = Date.now } = {}
       try {
         result = await fetcher(webhook.href, { method: 'POST', headers: { 'content-type': 'application/json' }, body: event.payload, redirect: 'manual', signal: AbortSignal.timeout(15000) });
         status = result.status;
+        webhookStatus = status;
         if (status === 429) {
           const rate = await result.json().catch(() => ({}));
           retryAfter = Math.max(60000, Number(rate.retry_after || result.headers.get('retry-after') || 60) * 1000);
@@ -101,7 +108,7 @@ export async function runMonitor(env, { fetcher = fetch, clock = Date.now } = {}
     }
     await db.prepare('DELETE FROM monitor_outbox WHERE sent_at IS NOT NULL AND sent_at < ?').bind(clock() - 30 * 86400000).run();
     const pending = await db.prepare('SELECT COUNT(*) AS count FROM monitor_outbox WHERE sent_at IS NULL').first();
-    return { initialized: !seeded, checked: rows.length, changed, sent, pending: pending.count, checkedAt: new Date(now).toISOString() };
+    return { initialized: !seeded, checked: rows.length, changed, sent, pending: pending.count, checkedAt: new Date(now).toISOString(), revision, priceUpdatedAt: updatedAt, feedSource: source, webhookStatus };
   } finally {
     await db.prepare("DELETE FROM monitor_locks WHERE name='prices' AND token=?").bind(token).run();
   }
@@ -136,7 +143,7 @@ export default {
   },
   async fetch(request, env) {
     const path = new URL(request.url).pathname;
-    if (path === '/health' && request.method === 'GET') return json({ version: 90, configured: Boolean(env.MONITOR_DB && env.DISCORD_WEBHOOK_URL && env.MONITOR_KEY) });
+    if (path === '/health' && request.method === 'GET') return json({ version: 114, configured: Boolean(env.MONITOR_DB && env.DISCORD_WEBHOOK_URL && env.MONITOR_KEY) });
     if (path !== '/check' && path !== '/test') return json({ error: 'Not found.' }, 404);
     if (request.method !== 'POST') return json({ error: 'Use POST.' }, 405);
     if (!matchesKey(request, env.MONITOR_KEY)) return json({ error: 'Unauthorized.' }, 401);
@@ -153,6 +160,15 @@ export default {
         if (!response.ok) throw new Error(`Discord test HTTP ${response.status}.`);
         await response.text();
         result.testSent = true;
+        // A confirmed repair can retry failed queued changes on the next tick,
+        // rather than inheriting an hour-long cooldown from a broken webhook.
+        if (result.pending) {
+          await env.MONITOR_DB.batch([
+            env.MONITOR_DB.prepare("DELETE FROM monitor_meta WHERE name='discord_retry_after'"),
+            env.MONITOR_DB.prepare('UPDATE monitor_outbox SET next_attempt_at=0 WHERE sent_at IS NULL'),
+          ]);
+          result.retryScheduled = true;
+        }
       }
       return json(result);
     }

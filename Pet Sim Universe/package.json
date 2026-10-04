@@ -1,5 +1,5 @@
 {
-  "name": "pet-universe-values-v113",
+  "name": "pet-universe-values-v114",
   "private": true,
   "type": "module",
   "scripts": {
@@ -7,8 +7,9 @@
     "validate": "node scripts/validate.mjs",
     "dev": "npm run build && node scripts/serve.mjs",
     "preview": "node scripts/serve.mjs",
-    "test": "node --test tests/price-monitor.test.mjs",
-    "setup:discord": "node scripts/setup-discord.mjs"
+    "test": "node --test tests/*.test.mjs",
+    "setup:discord": "node scripts/setup-discord.mjs",
+    "repair:discord": "node scripts/repair-discord.mjs"
   },
   "engines": {
     "node": ">=22"

@@ -2,9 +2,11 @@ import {readFile,writeFile,mkdir,rm,readdir} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
 import { updatePriceTime } from './update-price-time.mjs';
+import { buildPriceFeed } from './build-price-feed.mjs';
 const root = path.resolve(import.meta.dirname, '..');
 const publicRoot = path.join(root,'public');
-await updatePriceTime(root);
+const metadata = await updatePriceTime(root);
+await buildPriceFeed(root, metadata);
 let html = await readFile(path.join(root,'src/index.html'),'utf8');
 html = html.replace(/(<div class="home-v40-orbit"[\s\S]*?<img)\s/, '$1 data-orbit-image="true" ');
 const hash = text => createHash('sha256').update(text).digest('hex').slice(0,14);
@@ -33,10 +35,8 @@ const imageModule = `const IMAGE_ASSETS = ${JSON.stringify(assets)};`;
 // Prices remain in prices.js, imported through the editable catalog. A price-only GitHub commit must
 // work even when Pages publishes the existing bundle without running a build.
 const app = (await readFile(path.join(publicRoot,'app.js'),'utf8'))
-  .replace(/from (['"])\.\/data\/catalog\.js\1/g, "from '../data/catalog.js'")
-  .replace(/from (['"])\.\/data\/price-updates\.js\1/g, "from '../data/price-updates.js'")
-  .replace(/from (['"])\.\/data\/trade-export\.js\1/g, "from '../data/trade-export.js'")
-  .replace(/^import .*? from (['"])\.\/data\/image-assets\.js\1;\s*$/gm, '');
+  .replace(/from (['"])\.\/data\/([^'"\n]+)\1/g, "from '../data/$2'")
+  .replace(/^import .*? from (['"])\.\.?\/data\/image-assets\.js\1;\s*$/gm, '');
 const javascript = `// Generated from data/image-assets.js and app.js; prices import ../data/catalog.js.\n${imageModule}\n${app}`;
 const cssName=`styles-${hash(css)}.css`;
 const jsName=`app-${hash(javascript)}.js`;

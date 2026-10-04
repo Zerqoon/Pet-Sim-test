@@ -1,44 +1,78 @@
-# START — Pet Universe: Categories i aktualne ceny
+# Pet Universe Values — nowe ceny, data i Discord
 
-1. Rozpakuj ZIP. W środku jest cały folder `Pet Sim Universe`.
-2. Otwórz ten folder w PowerShellu i uruchom:
+Cała paczka zawiera dokładnie Twój przesłany `prices (6).js` jako
+`public/data/prices.js`. Nic nie trzeba ręcznie przepisywać.
+
+## Wgranie projektu
+
+Rozpakuj ZIP. Otwórz PowerShell w folderze `Pet Sim Universe` i uruchom:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\Upload-GitHub.ps1
 ```
 
-Ta komenda wysyła cały folder do `Zerqoon/Pet-Sim-test`, przebudowuje stronę i używa cen dołączonych do tej paczki. Plik `public/data/prices.js` jest dokładną kopią przesłanego `prices(2).js`, z Twoimi cenami petów, jajek, charms i Items.
+Skrypt wysyła cały projekt do `Zerqoon/Pet-Sim-test`, przebudowuje stronę
+i domyślnie używa cen z tej paczki. `-UseRemotePrices` to opcjonalny, jawny
+wybór cen z GitHuba. Cloudflare Pages: root `Pet Sim Universe`, build
+`npm run build`, output `public`. Poczekaj na udane wdrożenie.
 
-Skrypt domyślnie korzysta z cen z tej paczki. Opcjonalne `-UseLocalPrices` nadal działa. Tylko jawne `-UseRemotePrices` zachowuje ceny aktualnie zapisane na GitHubie.
+## Naprawa Discorda
 
-3. Poczekaj na udane wdrożenie Cloudflare Pages. Ustawienia: root `Pet Sim Universe`, build `npm run build`, output `public`.
-4. Późniejsze ceny edytuj w `public/data/prices.js`. Wszystkie 35 petów, 16 charms, 4 jajka i 12 Items mają wpisy. Warianty petów mają osobne ceny `normal`, `golden`, `diamond`.
+Jeśli zachowałeś swój prywatny folder `.cloudflare` w tym folderze,
+`Upload-GitHub.ps1` automatycznie wdroży nowy monitor i wykona test Discorda.
+Możesz też uruchomić go osobno:
 
-Tytuły Pet Values, Charm Values, Egg Values, Item Values i Codes są wyśrodkowane nad filtrami. Nagłówek Trade Calculator jest również wyśrodkowany. W Items przyciski All Items / General / Fishing są w nagłówku przy wyszukiwarce, pod etykietą Categories. Mają większe napisy, jednakową wysokość i wyraźnie zaznaczoną aktywną kategorię. Pet Variant pojawia się w Pet Values. Jajka mają równy układ czterech kart na komputerze i dwóch kolumn na mniejszych ekranach; przy szerokości poniżej 360 px jest jedna kolumna. Zachowano pięć itemów Fishing oraz poprawioną grafikę Moon Chest.
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\Upgrade-Discord.ps1
+```
 
-Nie trzeba ponownie konfigurować Discorda. Zachowaj swoje sekrety i prywatny folder `.cloudflare`. Instrukcje monitora: `README-CLOUDFLARE.md`.
+Jeśli konfiguracja została w poprzednim projekcie, podaj jego folder:
 
-Poprzednie pliki `START-v*.md` opisują starsze wersje projektu.
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\Upgrade-Discord.ps1 -ProjectPath "C:\Twoj-poprzedni-folder\Pet Sim Universe"
+```
+
+Bez zapisanej konfiguracji uruchom:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\Setup-Discord.ps1
+```
+
+Setup poprosi o aktualny adres webhooka i logowanie Cloudflare. Wykorzystuje
+istniejącą bazę monitora o tej samej nazwie. Upgrade zachowuje istniejącą bazę
+oraz zdalny sekret webhooka. Wdraża kod z NOWEJ paczki, czeka na jej ceny na
+stronie i sprawdza odpowiedź Discorda. Po sukcesie na kanale pojawi się
+`Pet Universe — test monitora`. Błąd konfiguracji, webhooka lub wdrożenia
+przerywa skrypt z opisem przyczyny.
+
+Sam upload strony nie aktualizuje osobnego Workera. Dlatego przy tej
+naprawie potrzebne jest również wykonanie Setup/Upgrade lub automatycznego
+testu z Upload. Następne ceny monitor sprawdza co minutę, bez otwierania strony.
 
 ## Data aktualizacji cen
 
-W lewym panelu, bezpośrednio pod `Stop Animations`, jest większa karta
-`VALUES UPDATED`: duży czas `… ago`, ikona zegara oraz dokładna data i godzina
-w strefie `Europe/Warsaw`. Na telefonie jest pod przyciskiem animacji i nad
-listą Values. Pet Values, Charm Values, Egg Values i Item Values używają tej
-samej karty; mały napis w nagłówku został przeniesiony do niej.
-To wspólna data ostatniej aktualizacji wszystkich cen; Codes jej nie pokazuje.
+Duży panel `VALUES UPDATED` pozostaje pod `Stop Animations`. Pokazuje czas
+`… ago` i dokładną datę do sekund w strefie `Europe/Warsaw`. Ta paczka zapisuje
+moment otrzymania Twojego nowego pliku: **04 Oct 2026, 14:17:41 CEST**.
+Nie jest to deklaracja, kiedy pierwotnie edytowałeś go na swoim komputerze.
 
-Nadal edytuj tylko `public/data/prices.js`. `npm run build` automatycznie
-zapisuje czas commita zmieniającego ten plik; przy lokalnej zmianie cen używa
-czasu zapisania pliku. Odświeżanie strony i build bez zmiany wartości nie
-zerują daty. Równoważne zapisy, np. `30000` i `"30K"`, również jej nie zerują.
-W Cloudflare zostaw build command `npm run build` — bez wykonania buildu
-ceny mogą się zmienić, ale zapisany czas nie będzie zaktualizowany.
+Data jest związana z konkretnymi wartościami. Po zmianie cen build zapisuje
+czas commita, a przy lokalnej edycji — zapisania pliku. Build bez zmiany cen,
+rozpakowanie ZIP-a, otwieranie strony i równoważne zapisy `30000` / `"30K"`
+nie zerują licznika. Nieaktualna data dla innych cen nie jest wyświetlana.
+Strona pobiera świeże ceny i datę co minutę oraz po powrocie do karty.
+Licznik odświeża się co sekundę; nie zaokrągla godzin w górę.
+Otwarte oferty w kalkulatorze pozostają zachowane przy aktualizacji.
 
-W tej paczce zachowano datę aktualizacji widoczną na przesłanym zrzucie:
-`03 Oct 2026, 16:49 CEST`. Dołączone `prices(2).js` ma te same wartości;
-przeniesienie panelu i rozpakowanie ZIP-a nie zmieniają tej daty.
-Skrypt `Upload-GitHub.ps1` wykonuje build w repozytorium, więc kolejne faktyczne
-zmiany cen dostaną właściwą datę automatycznie. Gdy brakuje historii i zapisanej
-daty, panel pokazuje `Not recorded yet` zamiast daty rozpakowania ZIP-a.
+Edytuj wyłącznie `public/data/prices.js`. Zostaw build `npm run build` na
+Cloudflare. Bez buildu nie powstanie nowy zapis daty ani statyczny feed monitora.
+
+## Zachowane funkcje
+
+Zachowano wszystkie grafiki, 35 petów, 16 charms, 4 jajka i 12 Items,
+Fishing / General przy wyszukiwarce, Moon Chest, wyrównane jajka,
+wyśrodkowane nagłówki i układ Codes. Kody to wyłącznie:
+DroverQ, Russo, DarkRose, AG64, Cupcake, E11opoppet, Olopomidoro,
+Ostrichh, 1mvisits, Update3, Smidl155.
+
+Szczegóły: `README-CLOUDFLARE.md`. Starsze `START-v*.md` opisują poprzednie wersje.

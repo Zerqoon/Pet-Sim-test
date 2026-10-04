@@ -1,4 +1,4 @@
-param([string]$SiteUrl = "https://petuniverse-values.pl")
+﻿param([string]$SiteUrl = "https://petuniverse-values.pl")
 $ErrorActionPreference = "Stop"
 
 if (-not (Get-Command node -ErrorAction SilentlyContinue)) {
@@ -8,7 +8,7 @@ if (-not (Get-Command npx -ErrorAction SilentlyContinue)) {
     throw "Brakuje npx. Zainstaluj Node.js razem z npm."
 }
 
-Write-Host "Najpierw wgraj v89 na GitHub i poczekaj na udany deploy Cloudflare." -ForegroundColor Cyan
+Write-Host "Najpierw wgraj z tej paczki na GitHub i poczekaj na udany deploy Cloudflare." -ForegroundColor Cyan
 Write-Host "Adres webhooka zostanie zapisany jako sekret Cloudflare, poza GitHubem."
 $secret = Read-Host "Wklej adres webhooka Discord z rozmowy" -AsSecureString
 $pointer = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secret)

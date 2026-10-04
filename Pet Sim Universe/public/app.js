@@ -2,6 +2,13 @@ import { renderTradePage, tradePageCount, tradeSummary } from './data/trade-expo
 import { PETS, CHARMS, EGGS, ITEMS, CODES, RARITY_ORDER, LAST_UPDATED } from './data/catalog.js';
 import { IMAGE_ASSETS } from './data/image-assets.js';
 import { PRICE_UPDATE } from './data/price-updates.js';
+import { catalogPriceRows, priceRevision, selectPriceUpdate, formatPriceAge, applyFeedPrices } from './data/price-core.js';
+import { loadPriceFeed } from './data/price-feed-client.js';
+
+const priceCatalogs = { pets: PETS, charms: CHARMS, eggs: EGGS, items: ITEMS };
+let currentPriceRevision = null;
+let currentPriceUpdate = null;
+let priceSyncBusy = false;
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -276,7 +283,7 @@ function refreshHomeUpdated() {
 
 const priceUpdateDateFormat = new Intl.DateTimeFormat('en-GB', {
   timeZone: 'Europe/Warsaw', day: '2-digit', month: 'short', year: 'numeric',
-  hour: '2-digit', minute: '2-digit', hourCycle: 'h23', timeZoneName: 'short',
+  hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23', timeZoneName: 'short',
 });
 
 function refreshPricesUpdated() {
@@ -286,11 +293,11 @@ function refreshPricesUpdated() {
   if (label.hidden) return;
   const relative = $('#valuesUpdatedRelative');
   const exact = $('#valuesUpdatedTime');
-  const date = PRICE_UPDATE.updatedAt ? new Date(PRICE_UPDATE.updatedAt) : null;
+  const date = currentPriceUpdate?.updatedAt ? new Date(currentPriceUpdate.updatedAt) : null;
   const known = date && Number.isFinite(date.getTime());
   label.dataset.recorded = String(Boolean(known));
   relative.textContent = known
-    ? formatRelativeTime(date).replace(/^Updated /, '')
+    ? formatPriceAge(date.toISOString())
     : 'Not recorded yet';
   exact.hidden = !known;
   if (known) {
@@ -301,6 +308,54 @@ function refreshPricesUpdated() {
     exact.textContent = '';
     exact.removeAttribute('datetime');
     label.removeAttribute('title');
+  }
+}
+
+async function syncPublishedPrices() {
+  if (priceSyncBusy) return;
+  priceSyncBusy = true;
+  try {
+    if (!currentPriceRevision) {
+      currentPriceRevision = await priceRevision(catalogPriceRows(priceCatalogs));
+      currentPriceUpdate = selectPriceUpdate(currentPriceRevision, PRICE_UPDATE);
+      refreshPricesUpdated();
+    }
+    const latest = await loadPriceFeed(location.origin);
+    // A price-only edit without a build must not inherit the old feed's date
+    // or roll the already loaded prices back to that older publication.
+    if (!currentPriceUpdate && PRICE_UPDATE.revision !== currentPriceRevision && latest.revision === PRICE_UPDATE.revision) return;
+    if (currentPriceUpdate && latest.updatedAt && Date.parse(latest.updatedAt) < Date.parse(currentPriceUpdate.updatedAt)) return;
+    const changed = applyFeedPrices(priceCatalogs, latest.rows);
+    const sameRevision = currentPriceRevision === latest.revision;
+    currentPriceRevision = latest.revision;
+    currentPriceUpdate = selectPriceUpdate(latest.revision, { revision: latest.revision, updatedAt: latest.updatedAt })
+      || (sameRevision ? currentPriceUpdate : null);
+    if (changed) {
+      for (const [key, view] of catalogViews) {
+        const [category, variant] = key.split(':');
+        for (const [id, node] of view.cards) {
+          const item = priceCatalogs[category]?.find(item => item.id === id);
+          const value = $('.set-value strong', node);
+          if (item && value) value.textContent = formatItemValue(item, variant);
+        }
+      }
+      catalogRenderSignature = '';
+      // These views also cache DOM nodes. Rebuild their value labels while
+      // preserving the actual offers, quantities and selected variants.
+      pickerCards.clear();
+      for (const side of ['left', 'right']) {
+        calcNodes[side].clear();
+        calcListSignatures[side] = null;
+      }
+      render();
+      if ($('#calcPickerModal').open) renderCalcPicker();
+      if ($('#detailModal').open) renderModalVariant();
+    }
+  } catch {
+    // Keep the last verified prices and time during a temporary outage.
+  } finally {
+    priceSyncBusy = false;
+    refreshPricesUpdated();
   }
 }
 
@@ -1501,7 +1556,7 @@ reducedMotion.addEventListener('change', event => { if (event.matches) { animati
 document.addEventListener('visibilitychange', () => {
   document.documentElement.toggleAttribute('data-page-hidden', document.hidden);
   if (document.hidden) resetTilt();
-  else refreshPricesUpdated();
+  else { refreshPricesUpdated(); syncPublishedPrices(); }
 });
 // Keep the same effects; pause decorative motion briefly while touch scrolling.
 let touchScrollTimer;
@@ -1546,8 +1601,12 @@ refreshHomeUpdated();
 refreshPricesUpdated();
 setInterval(() => {
   refreshHomeUpdated();
-  if (!document.hidden && state.view === 'values') refreshPricesUpdated();
+  if (!document.hidden) syncPublishedPrices();
 }, 60000);
+setInterval(() => {
+  if (!document.hidden && state.view === 'values') refreshPricesUpdated();
+}, 1000);
+syncPublishedPrices();
 render();
 
 let exportMessageTimer;

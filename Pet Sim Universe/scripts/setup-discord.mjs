@@ -1,11 +1,10 @@
-import { spawn } from 'node:child_process';
-import { existsSync } from 'node:fs';
 import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { randomBytes } from 'node:crypto';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { createInterface } from 'node:readline/promises';
-import { discordUrl, validateFeed } from '../server/pricing.js';
+import { discordUrl } from '../server/pricing.js';
+import { createWrangler, parseJsonList, waitForPublishedPrices, testMonitor } from './discord-tools.mjs';
 
 const root = path.resolve(import.meta.dirname, '..');
 const secret = process.env.PET_UNIVERSE_WEBHOOK?.trim();
@@ -13,30 +12,7 @@ const site = new URL(process.env.PET_UNIVERSE_SITE || 'https://petuniverse-value
 let privateDirectory;
 const hide = value => String(value).split(secret || '\0').join('[hidden webhook]');
 
-// Calling the npm CLI through Node also works with spaces in Windows paths.
-// A webhook is never a command-line argument or part of the Wrangler config.
-const npxCli = process.env.PET_UNIVERSE_NPX_CLI || path.join(path.dirname(process.execPath), 'node_modules/npm/bin/npx-cli.js');
-function wrangler(args, { capture = false } = {}) {
-  const command = existsSync(npxCli) ? process.execPath : process.platform === 'win32' ? null : 'npx';
-  if (!command) throw new Error('Nie znaleziono npx-cli.js. Zainstaluj standardowy Node.js z npm.');
-  const argumentsList = [...(command === process.execPath ? [npxCli] : []), '--yes', 'wrangler@4', ...args];
-  return new Promise((resolve, reject) => {
-    const child = spawn(command, argumentsList, { cwd: root, shell: false, stdio: ['inherit', 'pipe', 'pipe'], env: { ...process.env, WRANGLER_SEND_METRICS: 'false' } });
-    let output = '';
-    child.stdout.on('data', bytes => { output += bytes; if (!capture) process.stdout.write(hide(bytes)); });
-    child.stderr.on('data', bytes => process.stderr.write(hide(bytes)));
-    child.once('error', () => reject(new Error('Nie udalo sie uruchomic Wrangler. Sprawdz Node.js i dostep do internetu.')));
-    child.once('close', code => code === 0 ? resolve(output) : reject(new Error(`Wrangler zakonczyl sie bledem (${code}).`)));
-  });
-}
-
-function parseList(text) {
-  try { return JSON.parse(text); } catch {
-    const start = text.indexOf('[\n');
-    if (start >= 0) return JSON.parse(text.slice(start));
-    throw new Error('Nie udalo sie odczytac listy baz D1.');
-  }
-}
+const wrangler = createWrangler([secret]);
 
 try {
   if (Number(process.versions.node.split('.')[0]) < 22) throw new Error('Wymagany jest Node.js 22 lub nowszy.');
@@ -46,9 +22,7 @@ try {
   const webhookInfo = await webhookResponse.json();
   if (webhookInfo.type !== 1) throw new Error('Ten adres nie jest webhookiem przychodzacym Discorda.');
   if (site.protocol !== 'https:' || site.username || site.password) throw new Error('Adres strony musi zaczynac sie od https://.');
-  const feedResponse = await fetch(new URL('/api/price-feed', site), { cache: 'no-store', redirect: 'error', signal: AbortSignal.timeout(15000) });
-  if (!feedResponse.ok) throw new Error('Najpierw wdroz caly projekt v89 na Cloudflare. Endpoint /api/price-feed jeszcze nie dziala.');
-  validateFeed(await feedResponse.json(), site.origin);
+  await waitForPublishedPrices(site.origin);
   console.log('Ceny z wdrozonej strony sa dostepne. Konfiguracja Cloudflare...');
 
   const configDirectory = path.join(root, '.cloudflare');
@@ -71,11 +45,11 @@ try {
     } else throw new Error('Ustaw CLOUDFLARE_ACCOUNT_ID na Account ID widoczny w panelu Cloudflare, potem uruchom ponownie.');
   }
   const databaseName = 'pet-universe-price-monitor';
-  let databases = parseList(await wrangler(['d1', 'list', '--json'], { capture: true }));
+  let databases = parseJsonList(await wrangler(['d1', 'list', '--json'], { capture: true }));
   let database = databases.find(item => item.name === databaseName);
   if (!database) {
     await wrangler(['d1', 'create', databaseName, '--update-config=false']);
-    databases = parseList(await wrangler(['d1', 'list', '--json'], { capture: true }));
+    databases = parseJsonList(await wrangler(['d1', 'list', '--json'], { capture: true }));
     database = databases.find(item => item.name === databaseName);
   }
   if (!database?.uuid) throw new Error('Nie znaleziono identyfikatora bazy D1.');
@@ -94,19 +68,11 @@ try {
   await writeFile(secretsPath, JSON.stringify({ DISCORD_WEBHOOK_URL: secret, MONITOR_KEY: monitorKey }), { mode: 0o600 });
   const output = await wrangler(['deploy', '--config', configPath, '--secrets-file', secretsPath]);
   const workerUrl = output.match(/https:\/\/[a-z0-9.-]+\.workers\.dev\b/i)?.[0];
-  if (workerUrl) {
-    // Seed the real production prices. There is no fake price-change message.
-    try {
-      const response = await fetch(workerUrl + '/check', { method: 'POST', headers: { authorization: `Bearer ${monitorKey}` }, signal: AbortSignal.timeout(20000) });
-      if (!response.ok) throw new Error(`Pierwszy odczyt: HTTP ${response.status}. ${await response.text()}`);
-      const status = await response.json();
-      if (status.busy) console.log('Monitor jest juz uruchomiony przez cron.');
-      else console.log(`Sprawdzono ${status.checked ?? 0} cen. Kolejka powiadomien: ${status.pending ?? 0}.`);
-    } catch (error) { throw new Error(`Worker wdrozony, ale odczyt NIE zostal potwierdzony: ${error.message}`); }
-    await writeFile(path.join(configDirectory, 'monitor-info.json'), JSON.stringify({ url: workerUrl, site: site.origin }, null, 2) + '\n');
-  }
-  console.log('GOTOWE: monitor jest wdrozony. Cron sprawdza ceny co minute.');
-  console.log('Pierwszy odczyt zapamietuje aktualne ceny. Kolejne zmiany po deployu trafiaja na Discord.');
+  if (!workerUrl) throw new Error('Nie znaleziono adresu wdrozonego Workera. Test nie zostal potwierdzony.');
+  await testMonitor(workerUrl, monitorKey);
+  await writeFile(path.join(configDirectory, 'monitor-info.json'), JSON.stringify({ url: workerUrl, site: site.origin }, null, 2) + '\n');
+  console.log('GOTOWE: monitor wdrozony, Discord potwierdzil test. Cron sprawdza ceny co minute.');
+  console.log('Monitor zachowuje kolejke zmian i ponawia nieudane wiadomosci.');
   console.log('Nowy cron Cloudflare moze potrzebowac do 15 minut na pierwsze uruchomienie.');
 } catch (error) {
   console.error(hide(error instanceof Error ? error.message : 'Konfiguracja nie powiodla sie.'));

@@ -13,7 +13,7 @@ function Run-Git {
 if (-not (Get-Command git -ErrorAction SilentlyContinue)) { throw "Zainstaluj Git for Windows i otworz ponownie PowerShell." }
 if (-not (Get-Command node -ErrorAction SilentlyContinue)) { throw "Zainstaluj Node.js 22 lub nowszy i otworz ponownie PowerShell." }
 foreach ($file in @("package.json", "public\data\prices.js", "public\data\catalog.js", "public\v89.css", "public\phone.css", "public\collections.css", "public\calculator.css", "public\assets\items\1m-lucky-block.png", "public\assets\pets\gummy-bear.png", "public\assets\eggs\gummy-egg.png", "public\assets\pets\sunken-eel-diamond.png", "public\assets\pets\blobfish-diamond.png", "src\index.html", "functions\api\price-feed.js", "workers\price-monitor.js", "scripts\build.mjs")) {
-    if (-not (Test-Path -LiteralPath (Join-Path $Source $file) -PathType Leaf)) { throw "Brakuje $file. Rozpakuj caly ZIP v113 do jednego folderu." }
+    if (-not (Test-Path -LiteralPath (Join-Path $Source $file) -PathType Leaf)) { throw "Brakuje $file. Rozpakuj caly ZIP v114 do jednego folderu." }
 }
 $work = Join-Path $env:TEMP ("Pet-Universe-Upload-" + [guid]::NewGuid().ToString("N"))
 Run-Git clone --single-branch --branch $Branch $RepoUrl $work
@@ -48,9 +48,18 @@ try {
         Write-Host "GitHub ma juz identyczne pliki." -ForegroundColor Green
     } elseif ($diffResult -eq 1) {
         Run-Git diff --cached --stat
-        Run-Git commit -m "Update Pet Universe: item categories, aligned eggs and current prices"
+        Run-Git commit -m "Update Pet Universe: current prices, accurate update time and Discord monitor"
         Run-Git push origin $Branch
         Write-Host "GOTOWE - projekt wyslany. Poczekaj na udane wdrozenie Cloudflare." -ForegroundColor Green
-        Write-Host "Kategorie Items, jajka i ceny sa wyslane. Nie trzeba ponownie konfigurowac Discorda."
+        Write-Host "Ceny i monitor sa wyslane. Wdrozenie Workera potwierdzi ponizszy test."
     } else { throw "Nie udalo sie sprawdzic zmian." }
 } finally { Pop-Location }
+
+# Worker jest osobna usluga od Pages. Konfiguracja pozostaje tylko lokalnie.
+$monitorConfig = Join-Path $Source ".cloudflare\price-monitor.json"
+if (Test-Path -LiteralPath $monitorConfig -PathType Leaf) {
+    & node (Join-Path $Source "scripts\repair-discord.mjs") --config-directory (Join-Path $Source ".cloudflare")
+    if ($LASTEXITCODE -ne 0) { throw "Projekt jest na GitHubie, ale test Discorda nie zostal potwierdzony. Sprawdz komunikat powyzej." }
+} else {
+    Write-Host "Po wdrozeniu Pages uruchom Setup-Discord.ps1 albo Upgrade-Discord.ps1 -ProjectPath ze swoim poprzednim folderem konfiguracji." -ForegroundColor Yellow
+}
