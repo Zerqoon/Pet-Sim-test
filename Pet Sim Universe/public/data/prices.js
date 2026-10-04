@@ -71,9 +71,9 @@ export const PRICES = {
     // Exquisite Peacock
     "exquisite-peacock": {"normal":5,"golden":25,"diamond":115},
     // Blobfish
-    "blobfish": {"normal":null,"golden":null,"diamond":null},
+    "blobfish": {"normal":75,"golden":null,"diamond":null},
     // Sunken Eel
-    "sunken-eel": {"normal":150,"golden":null,"diamond":null},
+    "sunken-eel": {"normal":100,"golden":500,"diamond":null},
   },
 
   charms: {
@@ -132,9 +132,9 @@ export const PRICES = {
     // Globe
     "globe": 20,
     // Ball
-    "ball": 3,
+    "ball": 1,
     // Squeaky
-    "squeaky": 3,
+    "squeaky": 1,
     // 1M luckyblock
     "1m-lucky-block": 15,
     // Canned Tuna
@@ -142,9 +142,9 @@ export const PRICES = {
     // Universe Worm
     "universeworm": null,
     // Worm
-    "worm": 1,
+    "worm": 0.1,
     // Golden Fish Hook
-    "golden-fish-hook": 25,
+    "golden-fish-hook": 10,
     // Fish Hook
     "fishhook": 3,
   },
