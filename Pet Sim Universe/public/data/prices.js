@@ -51,13 +51,13 @@ export const PRICES = {
     // Pop Cat
     "pop-cat": 30,
     // Queen Bee
-    "queen-bee": {"normal":650,"golden":"No Price","diamond":"No Price"},
+    "queen-bee": {"normal":800,"golden":"No Price","diamond":"No Price"},
     // Blaze Phoenix
-    "blaze-phoenix": {"normal":750,"golden":2750,"diamond":6100},
+    "blaze-phoenix": {"normal":1000,"golden":3250,"diamond":9000},
     // Mossy Mushroom
-    "mossy-mushroom": {"normal":600,"golden":1250,"diamond":5000},
+    "mossy-mushroom": {"normal":700,"golden":2100,"diamond":6000},
     // Throne Dragon
-    "throne-dragon": {"normal":325,"golden":"No Price","diamond":"No Price"},
+    "throne-dragon": {"normal":600,"golden":"No Price","diamond":"No Price"},
     // Ruby Majesty
     "ruby-majesty": {"normal":55,"golden":275,"diamond":950},
     // Ember Monster
@@ -113,13 +113,13 @@ export const PRICES = {
 
   eggs: {
     // Gummy Egg
-    "gummy-egg": 110,
+    "gummy-egg": 140,
     // Alien Egg
-    "alien-egg": 3,
+    "alien-egg": 4,
     // Party Egg
     "party-egg": 1.5,
     // Galaxy Egg
-    "galaxy-egg": 185,
+    "galaxy-egg": 225,
   },
 
   items: {
@@ -136,9 +136,9 @@ export const PRICES = {
     // Squeaky
     "squeaky": 1,
     // 1M luckyblock
-    "1m-lucky-block": 15,
+    "1m-lucky-block": 10,
     // Canned Tuna
-    "canned-tuna": 50,
+    "canned-tuna": 25,
     // Universe Worm
     "universeworm": null,
     // Worm
