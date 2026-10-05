@@ -9,7 +9,7 @@ export const PRICES = {
     // Ruby Nebula Star
     "ruby-nebula-star": "15K",
     // Universe Capybara
-    "universe-capybara": "O/C",
+    "universe-capybara": "25k",
     // Gummy Bear
     "gummy-bear": "18K",
     // Alien Emperor
@@ -51,13 +51,13 @@ export const PRICES = {
     // Pop Cat
     "pop-cat": 30,
     // Queen Bee
-    "queen-bee": {"normal":800,"golden":"No Price","diamond":"No Price"},
+    "queen-bee": {"normal":725,"golden":"No Price","diamond":"No Price"},
     // Blaze Phoenix
-    "blaze-phoenix": {"normal":1000,"golden":3250,"diamond":9000},
+    "blaze-phoenix": {"normal":800,"golden":2750,"diamond":7500},
     // Mossy Mushroom
-    "mossy-mushroom": {"normal":700,"golden":2100,"diamond":6000},
+    "mossy-mushroom": {"normal":675,"golden":2100,"diamond":6000},
     // Throne Dragon
-    "throne-dragon": {"normal":600,"golden":"No Price","diamond":"No Price"},
+    "throne-dragon": {"normal":575,"golden":"No Price","diamond":"No Price"},
     // Ruby Majesty
     "ruby-majesty": {"normal":55,"golden":275,"diamond":950},
     // Ember Monster
