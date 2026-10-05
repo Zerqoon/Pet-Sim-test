@@ -3,7 +3,7 @@ $ErrorActionPreference = "Stop"
 if (-not (Get-Command node -ErrorAction SilentlyContinue)) { throw "Zainstaluj Node.js 22.13 lub nowszy z npm." }
 Write-Host "Najpierw uruchom Upload-GitHub.ps1 z tej paczki i poczekaj na udany deploy Pages." -ForegroundColor Cyan
 Write-Host "Token GitHub: Fine-grained, repo Zerqoon/Pet-Sim-test, Contents: Read and write."
-Write-Host "Panel wymaga Workers Paid (wiekszy limit CPU dla logowania i sprawdzania PNG). Skrypt nie wlacza platnosci."
+Write-Host "Panel jest dostosowany do Workers Free. Nie musisz kupowac zadnego planu." -ForegroundColor Green
 Write-Host "Konta i nowy webhook sa juz przygotowane. Konfiguracja utworzy osobny adres panelu."
 $secret = Read-Host "GitHub token (ukryty)" -AsSecureString
 $pointer = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secret)

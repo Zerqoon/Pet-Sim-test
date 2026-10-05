@@ -1,10 +1,12 @@
-# Separate admin panel — v122
+# Separate admin panel — v123
 
 Main website pages, artwork, layout and existing values are unchanged. The new admin is a separate Cloudflare Worker with its own address and login page. It does not require enabling Pages Functions.
 
-## Hosting requirement
+## Workers Free — no paid plan
 
-The separate admin is configured with a 1000 ms CPU cap and requires **Cloudflare Workers Paid**. The Free plan has a 10 ms CPU budget, which is too tight to rely on for password hashing and larger PNG checks. The setup script does not enable a paid subscription or change billing; enable Workers Paid yourself before deploying the admin. Main Pages hosting and layout remain as they were. Official limits: https://developers.cloudflare.com/workers/platform/limits/ and https://developers.cloudflare.com/workers/platform/pricing/.
+This version is designed for **Cloudflare Workers Free**. There are no paid-only CPU or subrequest overrides. You do not need to upgrade or enter payment details. Cloudflare Free quotas still apply; this package cannot remove provider limits.
+
+If your v122 install stopped with error 100328, extract this version over the existing local project, keeping the existing .cloudflare and private-setup folders. Then run **Setup-Admin.ps1** again. The same random login passwords are retained. The existing D1 database and Discord monitor configuration are reused. You do not need to rerun Upload-GitHub just to repair the separate panel.
 
 ## First installation (Windows)
 
@@ -14,15 +16,15 @@ The separate admin is configured with a 1000 ms CPU cap and requires **Cloudflar
 4. Run `powershell -ExecutionPolicy Bypass -File .\Setup-Admin.ps1`. Enter that token in the hidden prompt and sign in to Cloudflare when asked. The supplied new webhook and both accounts are already included in the private setup files.
 5. Open the admin address printed at the end. It is also saved in private-setup/ADMIN-ADDRESS.private.txt. Passwords are in **private-setup/LOGIN.private.txt**.
 
-The script checks GitHub access, deploys the existing price monitor with the new webhook, confirms a real Discord test, creates the admin database, publishes the separate editor and installs secrets. If a step fails, it stops and reports it. Running it again reuses the databases and accounts. This ZIP alone does not deploy anything: Cloudflare login and the GitHub token are needed once on your computer.
+The script checks GitHub access, reuses existing monitor configuration or configures the monitor on a new installation, creates or reuses the admin database, publishes the separate editor and installs secrets. It then waits for the Free version, verifies an actual admin login and authenticated catalog read, and closes the temporary setup session. If a step fails, it stops and reports it. Running it again reuses the databases and accounts. This ZIP alone does not deploy anything: Cloudflare login and the GitHub token are needed once on your computer.
 
 ## Editing
 
 - Sign in as Zerqoon or Pioterek. Both accounts may edit the catalog.
 - Select Pets, Charms, Eggs, Items or Codes. Search, edit details and values, then **Add to review**. New entries use **Add new**.
-- For a new pet, Golden & Diamond enables all three price/artwork fields. Existing variant support stays as defined in the catalog. Upload a normal PNG and optionally golden/diamond artwork, or enter an existing image path. PNGs must be below 1 MB and at most 4096 pixels per side.
+- For a new pet, Golden & Diamond enables all three price/artwork fields. Existing variant support stays as defined in the catalog. Upload a normal PNG and optionally golden/diamond artwork, or enter an existing image path. Choose PNG artwork up to 16 MB and 8192 pixels per side. The browser prepares a transparent PNG at up to 512 pixels and 128 KB, scaling down further if needed. Each image is checked and staged separately. The final publish attaches the staged blobs in one commit. Wait for the artwork-ready message before adding an entry to review.
 - Use numeric values, 25K, O/C, Not Price, ??? or Null. Unknown values are saved as null and displayed as Not Price. Zero is a real price.
-- Review the changes, then **Publish changes**. One commit updates catalog.js, prices.js, any uploaded PNGs and generated timestamp metadata. Main page files are never written by the panel.
+- Review up to 20 changes and six prepared artwork uploads per publish, then **Publish changes**. One commit updates catalog.js, prices.js, any uploaded PNGs and generated timestamp metadata. Main page files are never written by the panel.
 - A changed GitHub version blocks a stale save. **Refresh** discards pending changes, loads the latest version and lets you review again. Drafts remain only in this browser tab until publishing or refreshing; avoid closing it with unfinished work.
 - A network interruption can happen after a successful GitHub save. Retry the same publish first: its operation identifier lets the server recover the previous result instead of creating a second commit.
 
@@ -42,7 +44,9 @@ Upload-GitHub.ps1 detects an existing admin installation and preserves remote ca
 
 ## Private configuration
 
-Do not manually upload the private-setup or .cloudflare folders to GitHub or Pages. The included upload script excludes them, and .gitignore ignores them. Keep this ZIP and the login file private. Password hashes, the GitHub token and webhook live in Cloudflare Worker secrets; they are never embedded in frontend JavaScript. The temporary token deployment file is removed after use.
+Do not manually upload the private-setup or .cloudflare folders to GitHub or Pages. The included upload script excludes them, and .gitignore ignores them. Keep this ZIP and the login file private. Login verifiers, the independent server key, the GitHub token and webhook live in Cloudflare Worker secrets; they are never embedded in frontend JavaScript. The temporary token deployment file is removed after use.
+
+Both login passwords are machine-generated 24-character base64url secrets (144 bits of entropy). Free-mode verification uses native HMAC-SHA-256 with unique salts and an independent 256-bit server secret; this is deliberately for generated secrets, not human-chosen passwords. Do not replace them with a memorable or repeated password. The local reset script generates new random secrets. Artwork decoding and sizing run in the browser, while each small prepared PNG is checked by the server. Staged artwork expires after 24 hours if not published.
 
 Sessions use secure HttpOnly cookies, expire after eight hours and are revoked on logout. Server APIs enforce session authentication, request origin and CSRF tokens. Failed logins are rate limited. Edits use a server publish lock plus a non-forced GitHub update, and all successful saves have an audit entry. Catalog source is parsed as literals without eval or dynamic execution; PNG checks include chunk checksums. These controls reduce common failures; they cannot prevent Cloudflare/GitHub/Discord outages.
 
@@ -50,4 +54,4 @@ To replace passwords, run `node scripts/reset-admin-passwords.mjs` locally, then
 
 ## Checks
 
-Run `npm test` and `npm run build` with Node.js 22.13 or newer. Tests use mocked GitHub/Discord HTTP and real SQLite for auth, sessions, locks, audits and retry state. They do not send messages to your Discord channel. Live installation is confirmed by Setup-Admin.ps1 on your authenticated machine.
+All 70 tests passed. Run `npm test` and `npm run build` with Node.js 22.13 or newer. Tests use mocked GitHub/Discord HTTP and real SQLite for auth, sessions, locks, audits and retry state. They do not send messages to your Discord channel. Live installation is confirmed by Setup-Admin.ps1 on your authenticated machine.

@@ -1,6 +1,8 @@
-﻿NOWE v122: osobny panel z logowaniem. Instrukcja: ADMIN-START.md. Hasla: private-setup/LOGIN.private.txt. Uruchom Setup-Admin.ps1 po Upload-GitHub.ps1. Nie wrzucaj private-setup na GitHub.
+﻿Po bledzie 100328: podmien pliki z tej paczki w tym samym folderze projektu, zachowaj .cloudflare i private-setup, uruchom ponownie Setup-Admin.ps1. Hasla pozostaja te same; glowna strona i dzialajacy Discord nie wymagaja ponownego wdrozenia.
 
-# Pet Universe Values — v122
+POPRAWIONE v123 — WORKERS FREE: osobny panel z logowaniem. Instrukcja: ADMIN-START.md. Hasla: private-setup/LOGIN.private.txt. Uruchom Setup-Admin.ps1 po Upload-GitHub.ps1. Nie wrzucaj private-setup na GitHub.
+
+# Pet Universe Values — v123
 
 Cały projekt, gotowy build i wszystkie grafiki są w tej paczce.
 Strona jest po angielsku. Zachowano dokładnie ceny z Twojej paczki v118.
@@ -45,7 +47,7 @@ Edytujesz nadal tylko jeden **public/data/prices.js**.
 
 ## Dodawanie petów
 
-Paczka zawiera osobna strone administracyjna z logowaniem dla Zerqoon i Pioterek. Dodaje i edytuje pety, ceny, opisy i PNG bez zmieniania glownych stron. Instrukcja instalacji: **ADMIN-START.md**. Losowe hasla: **private-setup/LOGIN.private.txt**. Panel wymaga Workers Paid; skrypt nie wlacza platnosci.
+Paczka zawiera osobna strone administracyjna z logowaniem dla Zerqoon i Pioterek. Dodaje i edytuje pety, ceny, opisy i PNG bez zmieniania glownych stron. Instrukcja instalacji: **ADMIN-START.md**. Losowe hasla: **private-setup/LOGIN.private.txt**. Panel dziala w ramach Workers Free; nie trzeba kupowac planu.
 
 Uruchom **Upload-GitHub.ps1**, poczekaj na Pages, a potem **Setup-Admin.ps1**. Podasz tylko token GitHuba i zalogujesz sie do Cloudflare. Nowy webhook jest przygotowany w prywatnej konfiguracji. Po wdrozeniu skrypt poda adres panelu.
 
@@ -70,7 +72,7 @@ Przy braku właściwej metryki monitor zapisuje czas wykrycia, oznaczony
 ## Discord
 
 Monitor zachowuje wersję 116 z poprawkami autoryzacji, kolejki i limitów Discorda.
-Numer v122 dotyczy strony; protokół monitora pozostaje v116. Nie musisz edytować drugiego pliku cen.
+Numer v123 dotyczy strony; protokół monitora pozostaje v116. Nie musisz edytować drugiego pliku cen.
 
 Jeśli konfiguracja została w poprzednim folderze:
 

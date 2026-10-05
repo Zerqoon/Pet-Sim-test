@@ -13,7 +13,7 @@ function Run-Git {
 if (-not (Get-Command git -ErrorAction SilentlyContinue)) { throw "Zainstaluj Git for Windows i otworz ponownie PowerShell." }
 if (-not (Get-Command node -ErrorAction SilentlyContinue)) { throw "Zainstaluj Node.js 22 lub nowszy i otworz ponownie PowerShell." }
 foreach ($file in @("package.json", "public\data\prices.js", "public\data\catalog.js", "public\redesign.css", "public\data\trade-math.js", "public\assets\items\1m-lucky-block.png", "public\assets\pets\gummy-bear.png", "public\assets\eggs\gummy-egg.png", "public\assets\pets\sunken-eel-diamond.png", "public\assets\pets\blobfish-diamond.png", "src\index.html", "public\data\value-loader.js", "scripts\discord-deploy.mjs", "workers\price-monitor.js", "scripts\build.mjs")) {
-    if (-not (Test-Path -LiteralPath (Join-Path $Source $file) -PathType Leaf)) { throw "Brakuje $file. Rozpakuj caly ZIP v122 do jednego folderu." }
+    if (-not (Test-Path -LiteralPath (Join-Path $Source $file) -PathType Leaf)) { throw "Brakuje $file. Rozpakuj caly ZIP v123 do jednego folderu." }
 }
 $work = Join-Path $env:TEMP ("Pet-Universe-Upload-" + [guid]::NewGuid().ToString("N"))
 Run-Git clone --single-branch --branch $Branch $RepoUrl $work
@@ -72,7 +72,7 @@ try {
 # Worker jest osobna usluga od Pages. Konfiguracja pozostaje tylko lokalnie.
 $monitorConfig = Join-Path $Source ".cloudflare\price-monitor.json"
 if (Test-Path -LiteralPath $monitorConfig -PathType Leaf) {
-    & node (Join-Path $Source "scripts\repair-discord.mjs") --config-directory (Join-Path $Source ".cloudflare")
+    & node (Join-Path $Source "scripts\repair-discord.mjs") --config-directory (Join-Path $Source ".cloudflare") --expected-project $destination
     if ($LASTEXITCODE -ne 0) { throw "Projekt jest na GitHubie, ale test Discorda nie zostal potwierdzony. Sprawdz komunikat powyzej." }
 } else {
     Write-Host "Po wdrozeniu Pages uruchom Setup-Discord.ps1 albo Upgrade-Discord.ps1 -ProjectPath ze swoim poprzednim folderem konfiguracji." -ForegroundColor Yellow

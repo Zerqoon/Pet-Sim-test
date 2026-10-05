@@ -21,16 +21,16 @@ function price(v) {
   throw new Problem(400,'Use a number, 25K, O/C or Not Price.');
 }
 export function decodePNG(base64) {
-  if(typeof base64 !== 'string' || base64.length>1400000 || !/^[A-Za-z0-9+/]+={0,2}$/.test(base64)) throw new Problem(400,'Upload a PNG smaller than 1 MB.');
+  if(typeof base64 !== 'string' || base64.length>175000 || !/^[A-Za-z0-9+/]+={0,2}$/.test(base64)) throw new Problem(400,'Prepared PNG must be smaller than 128 KB.');
   let bytes; try { bytes=Uint8Array.from(atob(base64),c=>c.charCodeAt(0)); } catch { throw new Problem(400,'Invalid PNG.'); }
-  if(bytes.length>1048576 || bytes.length<45 || [137,80,78,71,13,10,26,10].some((v,i)=>bytes[i]!==v)) throw new Problem(400,'Invalid PNG.');
+  if(bytes.length>131072 || bytes.length<45 || [137,80,78,71,13,10,26,10].some((v,i)=>bytes[i]!==v)) throw new Problem(400,'Invalid PNG.');
   const d=new DataView(bytes.buffer); let pos=8, ended=false, hasPixels=false;
   while(pos+12<=bytes.length) {
     const n=d.getUint32(pos), type=String.fromCharCode(...bytes.slice(pos+4,pos+8));
     if(n>1048576 || pos+12+n>bytes.length) throw new Problem(400,'Invalid PNG chunks.');
     if(type==='IHDR' && pos!==8) throw new Problem(400,'Duplicate PNG header.');
     if(type==='IDAT' && n>0) hasPixels=true;
-    if(pos===8 && (type!=='IHDR' || n!==13 || d.getUint32(pos+8)<1 || d.getUint32(pos+12)<1 || d.getUint32(pos+8)>4096 || d.getUint32(pos+12)>4096)) throw new Problem(400,'PNG dimensions must be 1–4096 pixels.');
+    if(pos===8 && (type!=='IHDR' || n!==13 || d.getUint32(pos+8)<1 || d.getUint32(pos+12)<1 || d.getUint32(pos+8)>512 || d.getUint32(pos+12)>512)) throw new Problem(400,'Prepared PNG dimensions must be 1–512 pixels.');
     // Verify each checksum; reject damaged uploads before committing any files.
     let crc=0xffffffff;
     for(let j=pos+4;j<pos+8+n;j++) crc=(crc>>>8)^crcTable[(crc^bytes[j])&255];
@@ -45,11 +45,12 @@ export function decodeSnapshot(catalogSource,priceSource) {
   rowsFromPrices(catalogGroups(catalog),prices);
   return {catalog,prices};
 }
-export async function editSnapshot(snapshot,input,now=new Date().toISOString()) {
+export async function editSnapshot(snapshot,input,now=new Date().toISOString(),staged=new Map()) {
   const {catalog,prices}=structuredClone(snapshot);
-  if(!Array.isArray(input.changes) || !input.changes.length || input.changes.length>50) throw new Problem(400,'Publish between 1 and 50 changes.');
+  if(!Array.isArray(input.changes) || !input.changes.length || input.changes.length>20) throw new Problem(400,'Publish between 1 and 20 changes.');
   const summary=[], files=[], seen=new Set();
   for(const change of input.changes) {
+    if(!change || typeof change!=='object' || Array.isArray(change)) throw new Problem(400,'Invalid entry edit.');
     if(!Object.hasOwn(groups,change.category) || !safeId.test(change.id || '')) throw new Problem(400,'Invalid entry identifier.');
     const key=change.category+'/'+change.id; if(seen.has(key)) throw new Problem(400,'Duplicate edit.'); seen.add(key);
     const entries=catalog[groups[change.category]], index=entries.findIndex(x=>x.id===change.id), old=entries[index];
@@ -70,12 +71,15 @@ export async function editSnapshot(snapshot,input,now=new Date().toISOString()) 
       if(!['Exclusive','Secret','Mythical','Legendary','Epic','Rare','Basic'].includes(item.rarity)) throw new Problem(400,'Choose a rarity.');
       if(change.category==='items' && item.itemGroup && !['general','fishing'].includes(item.itemGroup)) throw new Problem(400,'Choose General or Fishing.');
       if(change.add && change.supportsVariants) { if(change.category!=='pets') throw new Problem(400,'Only pets support variants.'); item.supportsVariants=true; }
-      if(change.images && Object.keys(change.images).length) {
-        if(typeof change.images !== 'object' || Array.isArray(change.images)) throw new Problem(400,'Invalid images.');
-        for(const [variant,base64] of Object.entries(change.images)) {
+      if(change.images) throw new Problem(400,'Upload artwork separately before publishing.');
+      if(change.artwork && Object.keys(change.artwork).length) {
+        if(typeof change.artwork !== 'object' || Array.isArray(change.artwork)) throw new Problem(400,'Invalid artwork references.');
+        for(const [variant,uploadId] of Object.entries(change.artwork)) {
           if(!['normal','golden','diamond'].includes(variant) || variant!=='normal' && !item.supportsVariants) throw new Problem(400,'Unsupported artwork.');
+          const sha=staged.get(uploadId);
+          if(!/^[a-f0-9]{40}$/.test(sha || '')) throw new Problem(400,'Artwork upload expired. Select the PNG again.');
           const path=`assets/${change.category}/${item.id}${variant==='normal'?'':'-'+variant}.png`;
-          files.push({path:'public/'+path,content:decodePNG(base64),encoding:'base64'});
+          files.push({path:'public/'+path,sha});
           if(variant==='normal') item.image=path; if(item.supportsVariants) item.variantImages={...item.variantImages,[variant]:path};
         }
       }
@@ -87,7 +91,7 @@ export async function editSnapshot(snapshot,input,now=new Date().toISOString()) 
       if(Object.keys(values).some(k=>!variants.includes(k)) || variants.some(k=>!Object.hasOwn(values,k))) throw new Problem(400,'Check every price field.');
       prices[change.category][change.id]=item.supportsVariants?Object.fromEntries(variants.map(k=>[k,price(values[k])])):price(values.normal);
     }
-    if(old && JSON.stringify(old)===JSON.stringify(item) && (change.category==='codes' || JSON.stringify(snapshot.prices[change.category][change.id])===JSON.stringify(prices[change.category][change.id])) && !Object.keys(change.images || {}).length) continue;
+    if(old && JSON.stringify(old)===JSON.stringify(item) && (change.category==='codes' || JSON.stringify(snapshot.prices[change.category][change.id])===JSON.stringify(prices[change.category][change.id])) && !Object.keys(change.artwork || {}).length) continue;
     if(old) entries[index]=item; else entries.push(item);
     summary.push(`${change.add?'Added':'Updated'} ${item.name}`);
   }

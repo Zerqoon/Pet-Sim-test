@@ -1,4 +1,4 @@
-# Pet Universe Values v122
+# Pet Universe Values v123
 
 A complete English value list and trade calculator with a responsive desktop
 layout, three-column mobile collections, item details, code copying and local
@@ -9,7 +9,7 @@ For the existing owner's upload workflow, see `START-TUTAJ.md`.
 
 ## Centered Home
 
-The v121 Home layout is retained unchanged in v122. The sidebar is hidden on Home, which fills the available page width; it returns in Values and Calculator. The title, update badge and exactly two buttons,
+The v121 Home layout is retained unchanged in v123. The sidebar is hidden on Home, which fills the available page width; it returns in Values and Calculator. The title, update badge and exactly two buttons,
 **Values** and **Calculator**, are centered. Collection shortcuts, community
 links and tool descriptions have been removed from this view. Credits remain
 as quiet, static text. The existing navigation and other page layouts are retained.
@@ -24,9 +24,9 @@ are retained. The monitor now reads the deployed catalog and sends short English
 
 ## Catalog editing
 
-v122 includes a separate authenticated Cloudflare Worker admin site for Zerqoon and Pioterek. It publishes catalog, price and PNG updates in a single GitHub commit. Main page files are not writable through the panel. See **ADMIN-START.md** for installation, hosting requirements and usage.
+v123 includes a separate authenticated Cloudflare Worker admin site for Zerqoon and Pioterek. It publishes catalog, price and PNG updates in a single GitHub commit. Main page files are not writable through the panel. See **ADMIN-START.md** for installation, hosting requirements and usage.
 
-After uploading the main project and waiting for Pages, run **Setup-Admin.ps1**. Provide a repository-scoped GitHub token and authenticate to Cloudflare. The new webhook and both accounts are already prepared privately. The panel requires Workers Paid for its CPU budget; the script does not enable billing. Passwords are in **private-setup/LOGIN.private.txt**, excluded from GitHub uploads.
+After uploading the main project and waiting for Pages, run **Setup-Admin.ps1**. Provide a repository-scoped GitHub token and authenticate to Cloudflare. The new webhook and both accounts are already prepared privately. The panel is designed for Workers Free, with no paid CPU overrides. Browser-prepared PNGs are staged in separate requests; generated random login secrets use a keyed native verifier. Existing passwords are retained. Passwords are in **private-setup/LOGIN.private.txt**, excluded from GitHub uploads.
 
 ## Development
 
@@ -91,7 +91,7 @@ Values refresh every 30 seconds and when returning to the browser tab.
 
 ## Discord deployment and delivery
 
-The site release is v122; the compatible monitor protocol remains v116.
+The site release is v123; the compatible monitor protocol remains v116.
 Pages and the monitor are deployed separately. The included PowerShell tools
 reuse the existing private configuration and database; the ZIP itself does
 not change a Cloudflare account.
@@ -142,4 +142,4 @@ Old cascading styles and outdated version guides have been removed.
 Automated tests exercise real SQLite, Git timestamp histories, safe data parsing,
 cache validation, price transitions, complete history snapshots, delivery retries,
 Discord rate limits, authorization, deployment checks and trade arithmetic.
-HTTP responses are simulated; tests do not send Discord messages. All 64 tests and the main-site build passed for v122. New tests exercise admin logins, sessions, CSRF and origin checks, rate limits, PNG checksums, stale GitHub heads, publish locks, idempotent saves, recovery after post-commit storage failures and notification retry. Main pages, existing prices, their timestamp and main-site assets were compared byte-for-byte against v121. No visual browser or physical-phone QA was performed; a browser capable of local preview was unavailable. Live GitHub/Cloudflare/Discord setup requires authentication on the owner's computer and is verified by Setup-Admin.ps1.
+HTTP responses are simulated; tests do not send Discord messages. All 70 tests and the main-site build passed for v123. New tests exercise admin logins, sessions, CSRF and origin checks, rate limits, PNG checksums, separate image staging, Free configuration migration, deployment login checks, stale GitHub heads, publish locks, idempotent saves, recovery after post-commit storage failures and notification retry. Main pages, existing prices, their timestamp and main-site assets were compared byte-for-byte against v122. No visual browser or physical-phone QA was performed; a browser capable of local preview was unavailable. Live GitHub/Cloudflare/Discord setup requires authentication on the owner's computer and is verified by Setup-Admin.ps1.

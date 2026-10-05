@@ -3,7 +3,7 @@
 <body>
 <main id="login-view" class="login-wrap">
   <section class="login-card"><div class="brand-mark">PU</div><p class="eyebrow">PET UNIVERSE</p><h1>Your workspace.<br>Your values.</h1><p class="muted">Sign in to manage the catalog and publish updates.</p>
-  <form id="login-form"><label>Username<input name="username" autocomplete="username" required placeholder="Zerqoon or Pioterek" maxlength="80"></label><label>Password<input name="password" type="password" autocomplete="current-password" required maxlength="200"></label><button class="primary" type="submit">Sign in <span>→</span></button><p id="login-message" role="status"></p></form><small>Private editor · Main website stays separate</small></section>
+  <form id="login-form"><label>Username<input name="username" autocomplete="username" required placeholder="Zerqoon or Pioterek" maxlength="80"></label><label>Password<input name="password" type="password" autocomplete="current-password" required maxlength="200"></label><button class="primary" type="submit">Sign in <span>→</span></button><p id="login-message" role="status"></p></form><small>Private editor · Free hosting</small></section>
 </main>
 <div id="workspace" hidden>
   <header class="topbar"><a class="brand" href="/">PU <span>Pet Universe <small>ADMIN WORKSPACE</small></span></a><div class="account"><span id="account-name"></span><button id="logout" class="subtle">Sign out</button></div></header>
@@ -20,7 +20,7 @@
         <div id="code-fields" class="field-pair" hidden><label>Code<input name="code" maxlength="200"></label><label>Status<select name="status"><option value="active">Active</option><option value="expired">Expired</option></select></label></div>
         <label>Source<input name="source" maxlength="200" placeholder="Gummy Egg, Fishing…"></label><label>Description<textarea name="description" maxlength="1000" rows="2"></textarea></label>
         <section id="values-fields"><div class="section-label"><h3>Values</h3><label id="variants-toggle" class="check"><input type="checkbox" name="supportsVariants">Golden & Diamond</label></div><p class="hint">Use 25K, a number, O/C or Not Price. ??? and Null become Not Price.</p><div id="price-inputs" class="price-inputs"></div></section>
-        <section id="artwork-fields"><div class="section-label"><h3>Artwork</h3><span class="hint">PNG · max 1 MB · 4096 px</span></div><label>Existing image path<input name="image" maxlength="200" placeholder="assets/pets/new-pet.png"></label><div id="artwork-inputs" class="artwork-inputs"></div></section>
+        <section id="artwork-fields"><div class="section-label"><h3>Artwork</h3><span class="hint">PNG · automatically prepared</span></div><label>Existing image path<input name="image" maxlength="200" placeholder="assets/pets/new-pet.png"></label><div id="artwork-inputs" class="artwork-inputs"></div></section>
         <div class="form-actions"><button class="primary" type="submit">Add to review →</button><button id="remove-draft" type="button" class="subtle" hidden>Remove from review</button></div>
       </form></section>
     </section>

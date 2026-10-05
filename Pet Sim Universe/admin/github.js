@@ -25,7 +25,7 @@ export function github(env,fetcher=fetch) {
     // Blobs and trees are unreachable until a single fast-forward publishes the commit.
     for(const file of files) {
       if(!/^public\/(?:data\/(?:catalog|prices|price-updates)\.js|assets\/(?:pets|eggs|items|charms)\/[a-z0-9-]+\.png)$/.test(file.path)) throw new Problem(400,'Write path is not allowed.');
-      const blob=await request('git/blobs','POST',{content:file.content,encoding:file.encoding});
+      const blob=file.sha ? {sha:file.sha} : await request('git/blobs','POST',{content:file.content,encoding:file.encoding});
       tree.push({path:root+'/'+file.path,mode:'100644',type:'blob',sha:blob.sha});
     }
     const built=await request('git/trees','POST',{base_tree:parent.tree.sha,tree});
@@ -42,5 +42,6 @@ export function github(env,fetcher=fetch) {
     const asset=await request(`contents/${encodePath(root+'/public/'+path)}?ref=${sha}`);
     if(asset.type!=='file') throw new Problem(400,'The image does not exist in the repository. Upload a PNG first.');
   }
-  return {snapshot,publish,head,request,assertAsset};
+  async function upload(content) {return request('git/blobs','POST',{content,encoding:'base64'});}
+  return {snapshot,publish,head,request,assertAsset,upload};
 }

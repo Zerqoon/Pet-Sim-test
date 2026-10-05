@@ -8,10 +8,15 @@ import {readCatalog,writeCatalog} from '../server/catalog-data.js';
 import {github} from '../admin/github.js';
 import {readDataModule} from '../public/data/value-loader.js';
 import {selectPriceUpdate,priceRevision} from '../public/data/price-core.js';
+import {prepareFreeAccounts,adminConfig} from '../scripts/free-admin-config.mjs';
+import {mkdtemp,writeFile,rm} from 'node:fs/promises';
+import {tmpdir} from 'node:os';
+import path from 'node:path';
+import {verifyFreeAdmin} from '../scripts/admin-deploy-check.mjs';
 const catalogSource=await readFile(new URL('../public/data/catalog.js',import.meta.url),'utf8');
 const priceSource=await readFile(new URL('../public/data/prices.js',import.meta.url),'utf8');
 const snapshot=decodeSnapshot(catalogSource,priceSource);
-const png=(await readFile(new URL('../public/assets/pets/gummy-bear.png',import.meta.url))).toString('base64');
+const png=(await readFile(new URL('./fixtures/admin-artwork.png',import.meta.url))).toString('base64');
 const head='a'.repeat(40),changedHead='b'.repeat(40);
 function database() {
   const sql=new DatabaseSync(':memory:');
@@ -19,8 +24,9 @@ function database() {
 }
 async function fixture() {
   const db=database(), salt='random-test-salt', password='a-long-private-test-password';
-  const account={username:'Zerqoon',salt,hash:await passwordHash(password,salt)};
-  const env={ADMIN_DB:db,ADMIN_USERS:JSON.stringify([account]),GITHUB_TOKEN:'private-github-token',DISCORD_WEBHOOK_URL:'https://discord.com/api/webhooks/123456789012345678/test_token'};
+  const pepper='f'.repeat(64);
+  const account={username:'Zerqoon',salt,scheme:'random-hmac-v1',hash:await passwordHash(password,salt,pepper)};
+  const env={ADMIN_DB:db,ADMIN_USERS:JSON.stringify([account]),AUTH_PEPPER:pepper,GITHUB_TOKEN:'private-github-token',DISCORD_WEBHOOK_URL:'https://discord.com/api/webhooks/123456789012345678/test_token'};
   let sha=head,message='',refFailure=false,discordFailure=0;const calls=[],pending=[],blobs=[];
   const fetcher=async(url,options={})=> {
     calls.push({url,options});
@@ -41,7 +47,7 @@ async function fixture() {
   const request=(route,body,extra={})=>new Request('https://admin.example/api/'+route,{method:body===undefined?'GET':'POST',headers:{...(body===undefined?{}:{origin:'https://admin.example','content-type':'application/json'}),...(cookie?{cookie}:{}),...(csrf?{'x-csrf-token':csrf}:{}),'cf-connecting-ip':'192.0.2.3',...extra},body:body===undefined?undefined:JSON.stringify(body)});
   const send=(route,body,extra)=>handle(request(route,body,extra),env,{waitUntil:p=>pending.push(p)},fetcher);
   async function login(){const r=await send('login',{username:'Zerqoon',password});assert.equal(r.status,200);cookie=r.headers.get('set-cookie').split(';')[0];csrf=(await r.json()).csrf;return r;}
-  return {env,db,calls,blobs,send,login,request,pending,setHead:v=>sha=v,setRefFailure:()=>refFailure=true,setDiscordFailure:v=>discordFailure=v,close:async()=>{await Promise.all(pending);db.sql.close();}};
+  return {env,db,calls,blobs,send,login,request,pending,fetcher,setHead:v=>sha=v,setRefFailure:()=>refFailure=true,setDiscordFailure:v=>discordFailure=v,close:async()=>{await Promise.all(pending);db.sql.close();}};
 }
 function edit(overrides={}) {return {category:'pets',id:'gummy-bear',metadata:{name:'Gummy Bear',rarity:'Exclusive',source:'Gummy Egg',description:'Updated description.',image:'assets/pets/gummy-bear.png'},prices:{normal:'20K'},...overrides};}
 
@@ -72,7 +78,7 @@ test('metadata-only and equivalent-price edits do not reset the price timestamp'
   const r2=await editSnapshot(snapshot,{changes:[edit({prices:{normal:'18K'}})]});assert.ok(!r2.files.some(x=>x.path.endsWith('prices.js')));
 });
 test('new variants pet saves catalog, prices and matching artwork atomically',async()=> {
-  const result=await editSnapshot(snapshot,{changes:[edit({id:'test-new-pet',add:true,supportsVariants:true,metadata:{name:'Test New Pet',rarity:'Exclusive',source:'Test',description:'New pet',image:''},prices:{normal:'???',golden:'Null',diamond:0},images:{normal:png,golden:png}})]});
+  const result=await editSnapshot(snapshot,{changes:[edit({id:'test-new-pet',add:true,supportsVariants:true,metadata:{name:'Test New Pet',rarity:'Exclusive',source:'Test',description:'New pet',image:''},prices:{normal:'???',golden:'Null',diamond:0},artwork:{normal:'upload-normal',golden:'upload-golden'}})]},undefined,new Map([['upload-normal','c'.repeat(40)],['upload-golden','d'.repeat(40)]]));
   const item=result.catalog.PETS.find(x=>x.id==='test-new-pet');assert.equal(item.variantImages.normal,'assets/pets/test-new-pet.png');assert.equal(item.variantImages.golden,'assets/pets/test-new-pet-golden.png');assert.deepEqual(result.prices.pets['test-new-pet'],{normal:null,golden:null,diamond:0});
   assert.equal(result.files.length,5);decodeSnapshot(result.files.find(x=>x.path.endsWith('catalog.js')).content,result.files.find(x=>x.path.endsWith('prices.js')).content);
   await assert.rejects(()=>editSnapshot(snapshot,{changes:[edit({id:'../escape'})]}));
@@ -142,4 +148,74 @@ test('Discord failure remains queued and later delivery uses the same notificati
 });
 test('GitHub writes are restricted to data files and validated asset paths',async()=> {
   const f=await fixture();try{const api=github(f.env,async(url,opts)=>f.calls.push({url,opts})&&Response.json(url.includes('ref/')?{object:{sha:head}}:{tree:{sha:head}}));await assert.rejects(()=>api.publish(head,[{path:'src/index.html',content:'bad',encoding:'utf-8'}],'Zerqoon','id'));assert.equal(f.blobs.length,0);}finally{await f.close();}
+});
+
+test('Free deployment removes paid-only overrides and migrates existing random logins unchanged',async()=> {
+  const directory=await mkdtemp(path.join(tmpdir(),'pet-free-accounts-'));
+  try {
+    const logins='PRIVATE\nZerqoon: ABCDEFGHIJKLMNOPQRSTUVWX\nPioterek: 0123456789abcdefghijklmn\n';
+    await writeFile(path.join(directory,'LOGIN.private.txt'),logins);
+    await writeFile(path.join(directory,'admin-secrets.private.json'),JSON.stringify({ADMIN_USERS:JSON.stringify([{username:'Zerqoon',salt:'old-salt',hash:'legacy'}]),DISCORD_WEBHOOK_URL:'test'}));
+    const first=await prepareFreeAccounts(directory),second=await prepareFreeAccounts(directory);
+    assert.deepEqual(first,second);assert.equal(await readFile(path.join(directory,'LOGIN.private.txt'),'utf8'),logins);
+    for(const user of JSON.parse(first.ADMIN_USERS))assert.equal(user.hash,await passwordHash(logins.split('\n').find(x=>x.startsWith(user.username+': ')).split(': ')[1],user.salt,first.AUTH_PEPPER));
+    const config=adminConfig({accountId:'a'.repeat(32),databaseId:'db-id'});assert.equal(config.limits,undefined);assert.equal(config.d1_databases[0].database_id,'db-id');
+    assert.equal(config.assets.run_worker_first,true);
+    await writeFile(path.join(directory,'LOGIN.private.txt'),'Zerqoon: password123\nPioterek: 0123456789abcdefghijklmn\n');
+    await assert.rejects(()=>prepareFreeAccounts(directory),/generated 24-character/);
+  } finally {await rm(directory,{recursive:true,force:true});}
+});
+
+test('artwork staging is idempotent and never publishes a branch before review',async()=> {
+  const f=await fixture();try {
+    await f.login();const id=crypto.randomUUID();
+    assert.equal((await f.send('artwork',{id,content:png})).status,200);
+    assert.equal((await f.send('artwork',{id,content:png})).status,200);
+    assert.equal(f.blobs.length,1);assert.equal(f.calls.filter(x=>x.url.endsWith('/git/refs/heads/main')).length,0);
+    const input={head,id:crypto.randomUUID(),changes:[edit({id:'free-upload-pet',add:true,metadata:{name:'Free Upload Pet',rarity:'Exclusive',source:'Test',description:'Test',image:''},prices:{normal:'Null'},artwork:{normal:id}})]};
+    const publish=await f.send('publish',input);assert.equal(publish.status,200);
+    const tree=JSON.parse(f.calls.find(x=>x.url.endsWith('/git/trees')).options.body);
+    assert.deepEqual(tree.tree.find(x=>x.path.endsWith('free-upload-pet.png')),{path:'Pet Sim Universe/public/assets/pets/free-upload-pet.png',mode:'100644',type:'blob',sha:'c'.repeat(40)});
+    assert.equal(f.blobs.length,4,'one staged PNG plus catalog, prices and timestamp; publishing does not re-upload PNG');
+    assert.equal(f.calls.filter(x=>x.url.endsWith('/git/refs/heads/main')).length,1);
+  } finally {await f.close();}
+});
+
+test('expired, missing or another account artwork cannot enter a publish',async()=> {
+  const f=await fixture();try {
+    await f.login();const id=crypto.randomUUID();await f.send('artwork',{id,content:png});
+    const input=()=>({head,id:crypto.randomUUID(),changes:[edit({artwork:{normal:id}})]});
+    f.db.sql.prepare('UPDATE artwork_uploads SET username=?').run('Pioterek');
+    assert.equal((await f.send('publish',input())).status,400);assert.equal((await f.send('artwork',{id,content:png})).status,409);
+    f.db.sql.exec("UPDATE artwork_uploads SET username='Zerqoon',expires=0");
+    assert.equal((await f.send('publish',input())).status,400);
+    assert.equal(f.calls.filter(x=>x.url.endsWith('/git/refs/heads/main')).length,0);
+    assert.equal((await f.send('publish',{head,id:crypto.randomUUID(),changes:[edit({images:{normal:png}})]})).status,400);
+  } finally {await f.close();}
+});
+
+test('invalid or oversized artwork fails before GitHub; server key is never returned',async()=> {
+  const f=await fixture();try {
+    await f.login();assert.equal((await f.send('artwork',{id:crypto.randomUUID(),content:Buffer.from('not a PNG').toString('base64')})).status,400);
+    assert.equal((await f.send('artwork',{id:crypto.randomUUID(),content:'A'.repeat(200000)})).status,413);
+    assert.equal(f.calls.length,0);
+    assert.ok(!(await (await f.send('session')).text()).includes(f.env.AUTH_PEPPER));
+    f.env.AUTH_PEPPER='e'.repeat(64);assert.equal((await f.send('login',{username:'Zerqoon',password:'a-long-private-test-password'})).status,401);
+  } finally {await f.close();}
+});
+
+test('deployment verifies the actual Free login and catalog then revokes its setup session',async()=> {
+  const f=await fixture();try {
+    const result=await verifyFreeAdmin('https://admin.example',{username:'Zerqoon',password:'a-long-private-test-password'},{fetcher:(url,options)=>handle(new Request(url,options),f.env,{waitUntil:p=>f.pending.push(p)},f.fetcher)});
+    assert.equal(result.confirmed,true);assert.equal(result.petCount,35);
+    assert.equal(f.db.sql.prepare('SELECT COUNT(*) n FROM sessions').get().n,0);
+    assert.equal(f.calls.filter(x=>x.url.startsWith('https://discord.com')).length,0);
+    assert.equal(f.calls.filter(x=>x.options.method==='POST').length,0,'setup check never changes repository contents');
+  } finally {await f.close();}
+});
+
+test('activation timeout stops before sending any login credentials',async()=> {
+  let time=0,logins=0;
+  await assert.rejects(()=>verifyFreeAdmin('https://admin.example',{username:'Zerqoon',password:'private'},{clock:()=>time,timeout:10,delay:5,wait:async()=>{time+=5;},fetcher:async(url,options)=>{if(options.method==='POST')logins++;return Response.json({ready:false,version:122});}}),/not confirmed/);
+  assert.equal(logins,0);
 });

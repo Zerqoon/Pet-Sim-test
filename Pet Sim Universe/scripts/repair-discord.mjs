@@ -21,7 +21,9 @@ try {
     throw new Error('Niekompletna konfiguracja monitora. Uruchom Setup-Discord.ps1; istniejaca baza o tej samej nazwie zostanie wykorzystana.');
   }
   const site = publicSite(config.vars?.SITE_URL);
-  await waitForPublishedPrices(site);
+  const expectedIndex=process.argv.indexOf('--expected-project');
+  const expectedRoot=expectedIndex>=0?path.resolve(process.argv[expectedIndex+1]):root;
+  await waitForPublishedPrices(site,{expectedRoot});
   if (config.account_id && !process.env.CLOUDFLARE_ACCOUNT_ID) process.env.CLOUDFLARE_ACCOUNT_ID = config.account_id;
   if (!process.env.CLOUDFLARE_API_TOKEN) await wrangler(['login']);
   // Always deploy THIS project's module. Keep the existing database, remote

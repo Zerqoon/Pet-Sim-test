@@ -1,14 +1,15 @@
 import {readFile,writeFile} from 'node:fs/promises';
 import {randomBytes} from 'node:crypto';
-import {passwordHash} from '../admin/worker.js';
+import {passwordHash} from '../admin/auth.js';
 import {root} from './discord-tools.mjs';
 import path from 'node:path';
 const directory=path.join(root,'private-setup'),file=path.join(directory,'admin-secrets.private.json');
 const secrets=JSON.parse(await readFile(file,'utf8'));
+secrets.AUTH_PEPPER=randomBytes(32).toString('hex');
 const users=[],lines=['PET UNIVERSE — PRIVATE ADMIN LOGINS','Keep this file private. Do not upload it to GitHub or the public website.',''];
 for(const username of ['Zerqoon','Pioterek']) {
   const password=randomBytes(18).toString('base64url'),salt=randomBytes(24).toString('hex');
-  users.push({username,salt,hash:await passwordHash(password,salt)});
+  users.push({username,salt,scheme:'random-hmac-v1',hash:await passwordHash(password,salt,secrets.AUTH_PEPPER)});
   lines.push(username+': '+password);
 }
 secrets.ADMIN_USERS=JSON.stringify(users);
