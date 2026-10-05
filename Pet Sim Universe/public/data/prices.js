@@ -99,9 +99,9 @@ export const PRICES = {
     "lucky-charm-iii": 35,
     "rubies-charm-iii": 45,
     "coins-charm-iii": 30,
-    "fishing-charm-i": 5,
-    "fishing-charm-ii": null,
-    "fishing-charm-iii": null
+    "fishing-charm-i": "1",
+    "fishing-charm-ii": "8",
+    "fishing-charm-iii": "40"
   },
   "eggs": {
     "gummy-egg": 140,
@@ -113,11 +113,11 @@ export const PRICES = {
     "vip-voucher": 10,
     "universe-shard": 25,
     "vip-key": 0.4,
-    "globe": 20,
+    "globe": "15",
     "ball": 1,
     "squeaky": 1,
     "1m-lucky-block": 10,
-    "canned-tuna": 25,
+    "canned-tuna": "10",
     "universeworm": null,
     "worm": 0.1,
     "golden-fish-hook": 10,

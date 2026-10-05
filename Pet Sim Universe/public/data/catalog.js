@@ -448,7 +448,7 @@ export const CHARMS = [
     "rarity": "Rare",
     "source": "Charm",
     "description": "+10% Fishing Luck and +5% Fishing Speed.",
-    "image": "assets/items/FishingCharm I.png"
+    "image": "assets/charms/fishing-charm-i.png"
   },
   {
     "id": "fishing-charm-ii",
@@ -456,7 +456,7 @@ export const CHARMS = [
     "rarity": "Epic",
     "source": "Charm",
     "description": "+20% Fishing Luck and +10% Fishing Speed.",
-    "image": "assets/items/FishingCharm II.png"
+    "image": "assets/charms/fishing-charm-ii.png"
   },
   {
     "id": "fishing-charm-iii",
@@ -464,7 +464,7 @@ export const CHARMS = [
     "rarity": "Legendary",
     "source": "Charm",
     "description": "+35% Fishing Luck and +15% Fishing Speed.",
-    "image": "assets/items/FishingCharm III.png"
+    "image": "assets/charms/fishing-charm-iii.png"
   },
   {
     "id": "lightning-charm",
@@ -856,7 +856,8 @@ export const ITEMS = [
         "name": "PlayTime Rewards",
         "image": "assets/sources/playtime-rewards.png"
       }
-    ]
+    ],
+    "itemGroup": "general"
   },
   {
     "id": "ball",
