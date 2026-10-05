@@ -271,7 +271,8 @@ export const PETS = [
       "normal": "assets/pets/queen-bee-normal.png",
       "golden": "assets/pets/queen-bee-golden.png",
       "diamond": "assets/pets/queen-bee-diamond.png"
-    }
+    },
+    "image": "assets/pets/queen-bee-normal.png"
   },
   {
     "id": "blaze-phoenix",
@@ -286,7 +287,8 @@ export const PETS = [
       "normal": "assets/pets/blaze-phoenix.png",
       "golden": "assets/pets/blaze-phoenix-golden.png",
       "diamond": "assets/pets/blaze-phoenix-diamond.png"
-    }
+    },
+    "image": "assets/pets/blaze-phoenix.png"
   },
   {
     "id": "mossy-mushroom",
@@ -301,7 +303,8 @@ export const PETS = [
       "normal": "assets/pets/mossy-mushroom-normal.png",
       "golden": "assets/pets/mossy-mushroom-gold.png",
       "diamond": "assets/pets/mossy-mushroom-diamond.png"
-    }
+    },
+    "image": "assets/pets/mossy-mushroom-normal.png"
   },
   {
     "id": "throne-dragon",
@@ -316,7 +319,8 @@ export const PETS = [
       "normal": "assets/pets/throne-dragon-normal.png",
       "golden": "assets/pets/throne-dragon-gold.png",
       "diamond": "assets/pets/throne-dragon-diamond.png"
-    }
+    },
+    "image": "assets/pets/throne-dragon-normal.png"
   },
   {
     "id": "sunken-eel",
@@ -356,7 +360,8 @@ export const PETS = [
       "normal": "assets/pets/ruby-majesty-normal.png",
       "golden": "assets/pets/ruby-majesty-golden.png",
       "diamond": "assets/pets/ruby-majesty-diamond.png"
-    }
+    },
+    "image": "assets/pets/ruby-majesty-normal.png"
   },
   {
     "id": "ember-monster",
@@ -371,7 +376,8 @@ export const PETS = [
       "normal": "assets/pets/ember-monster.png",
       "golden": "assets/pets/ember-monster-golden.png",
       "diamond": "assets/pets/ember-monster-diamond.png"
-    }
+    },
+    "image": "assets/pets/ember-monster.png"
   },
   {
     "id": "shadow-dominus",

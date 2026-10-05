@@ -1,7 +1,7 @@
 // Generated price timestamp. Do not edit.
 export const PRICE_UPDATE = {
   "version": 1,
-  "revision": "f6246b7b5c824866ff03d6dbbba681527085af25a6d0b1868f2f1ddd6a4bcf15",
-  "updatedAt": "2026-10-05T21:54:28.103Z",
+  "revision": "f42149c1fc9ad9ef19fc00ae5792c3c2d6335f7f2670ecafd690b24a66cdf2a5",
+  "updatedAt": "2026-10-05T22:40:33.933Z",
   "source": "admin"
 };

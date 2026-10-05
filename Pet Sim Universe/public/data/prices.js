@@ -7,52 +7,52 @@ export const PRICES = {
     "gummy-bear": "18K",
     "alien-emperor": "6.5K",
     "kraken": "7K",
-    "agent-sheep": 200,
+    "agent-sheep": "180",
     "caaaaat": "5K",
     "exquisite-cat": "2.15K",
-    "happy-cupcake": "2.25K",
+    "happy-cupcake": "2.15K",
     "six-seven": "2.45K",
     "void-owl": 450,
     "gummy-gubby": 375,
-    "gummy-penguin": 110,
+    "gummy-penguin": "125",
     "sun-deer": 135,
     "spaceship-alien": 90,
-    "fallen-angel": 500,
-    "job-cat": 250,
+    "fallen-angel": "450",
+    "job-cat": "200",
     "gummy-capybara": 25,
     "galaxy-bunny": 25,
     "galaxy-cat": 15,
     "gummy-frog": 10,
     "pop-cat": 30,
     "queen-bee": {
-      "normal": 725,
-      "golden": "No Price",
-      "diamond": "No Price"
+      "normal": "680",
+      "golden": null,
+      "diamond": null
     },
     "blaze-phoenix": {
-      "normal": 800,
-      "golden": 2750,
-      "diamond": 7500
+      "normal": "750",
+      "golden": "2200",
+      "diamond": "5500"
     },
     "mossy-mushroom": {
-      "normal": 675,
-      "golden": 2100,
-      "diamond": 6000
+      "normal": "575",
+      "golden": "1900",
+      "diamond": "4750"
     },
     "throne-dragon": {
-      "normal": 575,
-      "golden": "No Price",
-      "diamond": "No Price"
+      "normal": "425",
+      "golden": null,
+      "diamond": null
     },
     "ruby-majesty": {
-      "normal": 55,
-      "golden": 275,
-      "diamond": 950
+      "normal": "55",
+      "golden": "300",
+      "diamond": "950"
     },
     "ember-monster": {
-      "normal": 40,
-      "golden": 190,
-      "diamond": 750
+      "normal": "45",
+      "golden": "190",
+      "diamond": "750"
     },
     "shadow-dominus": {
       "normal": 15,
