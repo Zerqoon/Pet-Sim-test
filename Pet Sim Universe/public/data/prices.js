@@ -2,7 +2,7 @@
 export const PRICES = {
   "pets": {
     "rich-bee": "3.5k",
-    "ruby-nebula-star": "15K",
+    "ruby-nebula-star": "14K",
     "universe-capybara": "25k",
     "gummy-bear": "18K",
     "alien-emperor": "6.5K",
