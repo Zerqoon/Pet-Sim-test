@@ -5,10 +5,10 @@ export async function verifyFreeAdmin(url,{username,password},{fetcher=fetch,clo
   do {
     try {
       const response=await fetcher(new URL('/api/ready',origin),{redirect:'error',cache:'no-store',signal:AbortSignal.timeout(10000)});
-      const info=await response.json();ready=response.ok&&info.ready&&info.version===123&&info.hosting==='free';
+      const info=await response.json();ready=response.ok&&info.ready&&info.version===125&&info.hosting==='free';
     } catch {}
     if(ready) break;
-    if(clock()-start>=timeout) throw new Error('New Free admin version was not confirmed. Rerun Setup-Admin.ps1.');
+    if(clock()-start>=timeout) throw new Error('New Free admin version was not confirmed. Wait for the address to activate, then rerun the admin update.');
     console.log('Waiting for Free admin code and secrets to activate...');await wait(delay);
   } while(clock()-start<timeout);
   if(!ready) throw new Error('Free admin activation was not confirmed.');
@@ -18,7 +18,7 @@ export async function verifyFreeAdmin(url,{username,password},{fetcher=fetch,clo
   if(!cookie || !session.csrf)throw new Error('Admin did not confirm a secure login session.');
   try {
     const response=await fetcher(new URL('/api/catalog',origin),{headers:{cookie},redirect:'error',cache:'no-store',signal:AbortSignal.timeout(30000)});
-    if(!response.ok)throw new Error(`Authenticated catalog check failed (HTTP ${response.status}). Check the repository token.`);
+    if(!response.ok){let detail='';try{detail=(await response.json()).error||'';}catch{}throw new Error(`Catalog check failed (HTTP ${response.status}). ${detail||'Check the admin logs.'}`);}
     const data=await response.json();if(!data.head || !data.catalog?.PETS || !data.prices?.pets)throw new Error('Admin catalog response is incomplete.');
     return {confirmed:true,username:session.username,petCount:data.catalog.PETS.length};
   } finally {

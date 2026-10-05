@@ -43,21 +43,21 @@ async function rate(db,key,max=10) {
   if(row.attempts>max) throw new Problem(429,'Too many attempts. Try again in 15 minutes.');
 }
 export async function flushNotifications(env,fetcher=fetch) {
-  if(!env.ADMIN_DB || !env.DISCORD_WEBHOOK_URL) return;
+  if(!env.ADMIN_DB || !env.ADMIN_WEBHOOK_URL) return;
   const db=env.ADMIN_DB; await init(db); const token=random(),now=Date.now();
   const lock=await db.prepare("INSERT INTO locks(name,token,expires) VALUES('delivery',?,?) ON CONFLICT(name) DO UPDATE SET token=excluded.token,expires=excluded.expires WHERE expires<?").bind(token,now+60000,now).run();
   if(!lock.meta?.changes) return;
   try {
     const entries=await db.prepare('SELECT * FROM notifications WHERE sent IS NULL AND next_attempt<=? ORDER BY rowid LIMIT 3').bind(now).all();
     for(const row of entries.results) {
-      const result=await sendDiscord(fetcher,discordUrl(env.DISCORD_WEBHOOK_URL).href,JSON.parse(row.payload));
+      const result=await sendDiscord(fetcher,discordUrl(env.ADMIN_WEBHOOK_URL).href,JSON.parse(row.payload));
       await db.prepare('UPDATE notifications SET sent=?,attempts=attempts+1,next_attempt=?,status=? WHERE id=?').bind(result.ok?Date.now():null,Date.now()+Math.max(result.retryMs,Math.min(3600000,60000*2**Math.min(row.attempts,6))),result.status,row.id).run();
       if(result.status===429 || !result.ok) break;
     }
   } finally {await db.prepare("DELETE FROM locks WHERE name='delivery' AND token=?").bind(token).run();}
 }
 async function complete(db,id,user,result) {
-  const payload={username:'Pet Universe Values',allowed_mentions:{parse:[]},embeds:[{title:'Catalog update saved',description:result.summary.slice(0,20).map(s=>'• '+s.replace(/[\\*_~`|<>@]/g,'')).join('\n')+(result.summary.length>20?`\n+ ${result.summary.length-20} more changes`:''),url:result.url,color:0xa66bff,footer:{text:`By ${user} • Website updates after deployment`},timestamp:new Date(result.created).toISOString()}]};
+  const payload={username:'Pet Universe Admin',allowed_mentions:{parse:[]},embeds:[{title:'GitHub updated',description:`**Updated by ${user}**\n\n`+result.summary.slice(0,20).map(s=>'• '+s.replace(/[\\*_~`|<>@]/g,'')).join('\n')+(result.summary.length>20?`\n+ ${result.summary.length-20} more changes`:''),url:result.url,color:0xa66bff,footer:{text:'petuniverse-values.pl • GitHub update'},timestamp:new Date(result.created).toISOString()}]};
   await db.batch([
     db.prepare("UPDATE operations SET status='done',result=? WHERE id=?").bind(JSON.stringify(result),id),
     db.prepare('INSERT OR IGNORE INTO audit(id,username,summary,sha,created) VALUES(?,?,?,?,?)').bind(id,user,JSON.stringify(result.summary),result.sha,result.created),
@@ -75,8 +75,8 @@ export async function handle(request,env,ctx={waitUntil:()=>{}},fetcher=fetch) {
     const db=env.ADMIN_DB; await init(db);
     if(url.pathname==='/api/ready' && request.method==='GET') {
       const accounts=JSON.parse(env.ADMIN_USERS);
-      if(!env.GITHUB_TOKEN || !env.DISCORD_WEBHOOK_URL || !accounts.length || accounts.some(x=>x.scheme!=='random-hmac-v1')) throw new Problem(503,'Free admin secrets are not active yet.');
-      return json({ready:true,version:123,hosting:'free'});
+      if(!env.GITHUB_TOKEN || !env.ADMIN_WEBHOOK_URL || !accounts.length || accounts.some(x=>x.scheme!=='random-hmac-v1')) throw new Problem(503,'Free admin secrets are not active yet.');
+      return json({ready:true,version:125,hosting:'free'});
     }
     if(request.method!=='GET') {
       if(request.method!=='POST') throw new Problem(405,'Method is not allowed.');
@@ -120,7 +120,7 @@ export async function handle(request,env,ctx={waitUntil:()=>{}},fetcher=fetch) {
     }
     if(url.pathname==='/api/discord-test' && request.method==='POST') {
       await rate(db,'discord-test:'+user.username);
-      const id=crypto.randomUUID(), payload={username:'Pet Universe Values',allowed_mentions:{parse:[]},embeds:[{title:'Connection ready',description:'Admin notifications are connected. Value changes will arrive after the website deploys.',color:0x5de2ae,timestamp:new Date().toISOString()}]};
+      const id=crypto.randomUUID(), payload={username:'Pet Universe Admin',allowed_mentions:{parse:[]},embeds:[{title:'Connection ready',description:'GitHub update notifications are connected. Price alerts use a separate channel.',color:0x5de2ae,timestamp:new Date().toISOString()}]};
       await db.prepare('INSERT INTO notifications(id,payload) VALUES(?,?)').bind(id,JSON.stringify(payload)).run();
       await flushNotifications(env,fetcher);
       const sent=await db.prepare('SELECT sent,status FROM notifications WHERE id=?').bind(id).first();

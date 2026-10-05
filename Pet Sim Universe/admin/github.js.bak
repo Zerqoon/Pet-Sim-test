@@ -5,9 +5,7 @@ export function github(env,fetcher=fetch) {
   if(!/^[\w.-]+\/[\w.-]+$/.test(repo) || !env.GITHUB_TOKEN) throw new Problem(503,'GitHub is not configured.');
   async function request(path,method='GET',body) {
     let response;
-    // Workers accepts manual/follow. Never follow a redirect with repository credentials.
-    try {response=await fetcher(`https://api.github.com/repos/${repo}/${path}`,{method,headers:{accept:'application/vnd.github+json',authorization:`Bearer ${env.GITHUB_TOKEN}`,'user-agent':'Pet-Universe-Admin','x-github-api-version':'2026-03-10',...(body?{'content-type':'application/json'}:{})},body:body?JSON.stringify(body):undefined,redirect:'manual',signal:AbortSignal.timeout(20000)});} catch {throw new Problem(502,'GitHub did not respond. Reload before retrying.');}
-    if(response.status>=300 && response.status<400) throw new Problem(502,'GitHub returned a redirect. Check the configured repository name.');
+    try {response=await fetcher(`https://api.github.com/repos/${repo}/${path}`,{method,headers:{accept:'application/vnd.github+json',authorization:`Bearer ${env.GITHUB_TOKEN}`,'user-agent':'Pet-Universe-Admin','x-github-api-version':'2026-03-10',...(body?{'content-type':'application/json'}:{})},body:body?JSON.stringify(body):undefined,redirect:'error',signal:AbortSignal.timeout(20000)});} catch {throw new Problem(502,'GitHub did not respond. Reload before retrying.');}
     if(!response.ok) throw new Problem([409,422].includes(response.status)?409:502,[409,422].includes(response.status)?'Another change was published. Reload and review your edits.':`GitHub returned HTTP ${response.status}. Check repository access.`);
     return response.json();
   }

@@ -3,17 +3,18 @@ const $=selector=>document.querySelector(selector);
 const categories={pets:'Pets',charms:'Charms',eggs:'Eggs',items:'Items',codes:'Codes'}, exports={pets:'PETS',charms:'CHARMS',eggs:'EGGS',items:'ITEMS',codes:'CODES'};
 let auth=null,snapshot=null,category='pets',selected=null,editingNew=false,drafts=new Map(),previews=new Map(),images={},operation=null,publishing=false;
 const node=(tag,text,className)=> {const el=document.createElement(tag); if(text!=null) el.textContent=text; if(className) el.className=className; return el;};
+const dialog=$('#editor-dialog');
 const form=$('#entry-form'), field=name=>form.elements.namedItem(name);
 const escapePath=p=>p.split('/').map(encodeURIComponent).join('/');
 const imageURL=path=> /^assets\/[\w./-]+\.png$/.test(path||'')?'https://petuniverse-values.pl/'+escapePath(path):'';
-function notice(text,error=false) {$('#message').textContent=text;$('#message').classList.toggle('error',error);$('#message').hidden=!text;}
+function notice(text,error=false) {$('#message').textContent=text;$('#message').classList.toggle('error',error);$('#message').hidden=!text;$('#editor-message').textContent=text;$('#editor-message').classList.toggle('error',error);$('#editor-message').hidden=!text;}
 async function api(path,body) {
   let response;try {response=await fetch('/api/'+path,{method:body===undefined?'GET':'POST',credentials:'same-origin',headers:body===undefined?{}:{'content-type':'application/json',...(auth?{'x-csrf-token':auth.csrf}:{})},body:body===undefined?undefined:JSON.stringify(body)});} catch {throw new Error('Connection interrupted. If you were publishing, retry the same publish to check its result.');}
-  const data=await response.json();
+  let data;try{data=await response.json();}catch{throw new Error(`Server returned HTTP ${response.status}. Refresh and try again.`);}
   if(!response.ok) {if(response.status===401 && path!=='login') showLogin();const error=new Error(data.error||'Request failed.');error.status=response.status;throw error;}
   return data;
 }
-function showLogin() {auth=null;$('#workspace').hidden=true;$('#login-view').hidden=false;}
+function showLogin() {if(dialog.open)dialog.close();auth=null;$('#workspace').hidden=true;$('#login-view').hidden=false;}
 async function start(session) {auth=session;$('#account-name').textContent=auth.username;$('#login-view').hidden=true;$('#workspace').hidden=false;await reload();}
 function entries() {return snapshot?.catalog[exports[category]]||[];}
 function variants(item) {return item.supportsVariants?['normal','golden','diamond']:['normal'];}
@@ -21,15 +22,18 @@ function values(item,cat=category) {const price=snapshot.prices[cat]?.[item.id];
 const label=v=>v===null || v===undefined || /^(?:\?\?\?|null|not price|no price|n\/a|unknown)?$/i.test(String(v).trim())?'Not Price':String(v);
 function renderCatalog() {
   $('#tabs').replaceChildren();for(const [key,title] of Object.entries(categories)) {const b=node('button',title);b.type='button';b.setAttribute('aria-pressed',String(key===category));b.addEventListener('click',()=>{category=key;selected=null;form.hidden=true;$('#editor-empty').hidden=false;$('#editor-title').textContent='Select an entry';renderCatalog();});$('#tabs').append(b);}
+  $('#item-filter').hidden=category!=='items';
   const list=$('#catalog-list');list.replaceChildren();const term=$('#search').value.toLowerCase();
   const listed=entries().concat([...drafts.values()].filter(x=>x.category===category&&x.add).map(x=>({...x.metadata,id:x.id,supportsVariants:x.supportsVariants})));
   for(const original of listed) {
     const draft=drafts.get(category+'/'+original.id),item={...original,...draft?.metadata};
     if(![item.name,item.id,item.source||''].join(' ').toLowerCase().includes(term)) continue;
-    const button=node('button',null,'entry'+(selected?.id===item.id?' selected':''));button.type='button';
-    if(item.image) {const img=node('img');img.src=imageURL(item.image);img.alt='';img.loading='lazy';img.addEventListener('error',()=>{img.hidden=true;});button.append(img);}
+    if(category==='items' && $('#item-filter').value!=='all' && (item.itemGroup||'general')!==$('#item-filter').value)continue;
+    const button=node('button',null,'entry'+(selected?.id===item.id?' selected':''));button.type='button';button.style.setProperty('--rarity',({Exclusive:'#a66bff',Secret:'#d8dde8',Mythical:'#ff4e9a',Legendary:'#ffd33f',Epic:'#34d8ff',Rare:'#7ef23a',Basic:'#8f98a8'})[item.rarity]||'#65d8ff');
+    if(item.image || previews.get(category+'/'+item.id)?.normal?.preview) {const img=node('img');img.src=previews.get(category+'/'+item.id)?.normal?.preview||imageURL(item.image);img.alt='';img.loading='lazy';img.addEventListener('error',()=>{img.hidden=true;});button.append(img);}
     const desc=node('span',null,'entry-text');desc.append(node('strong',item.name),node('small',category==='codes'?item.status:item.rarity));button.append(desc);
     if(category!=='codes') button.append(node('span',label(draft?.prices && Object.hasOwn(draft.prices,'normal')?draft.prices.normal:values(original).normal),'value'));
+    button.append(node('span',draft?'Pending update':'Click to edit','card-action'));
     if(draft) {const dot=node('span',null,'pending');dot.title='Pending change';button.append(dot);}
     button.addEventListener('click',()=>openEntry(original,!!draft?.add));list.append(button);
   }
@@ -60,13 +64,14 @@ function buildVariants(item) {
   }
 }
 function openEntry(original,isNew) {
-  editingNew=isNew;selected=original;const draft=drafts.get(category+'/'+original.id),item={...original,...draft?.metadata};images={...previews.get(category+'/'+original.id)};
+  $('#editor-message').hidden=true;editingNew=isNew;selected=original;const draft=drafts.get(category+'/'+original.id),item={...original,...draft?.metadata};images={...previews.get(category+'/'+original.id)};
   form.reset();form.hidden=false;$('#editor-empty').hidden=true;$('#editor-title').textContent=isNew?'Add '+categories[category].slice(0,-1):item.name;$('#entry-badge').textContent=isNew?'NEW ENTRY':'EDIT ENTRY';
   for(const key of ['name','id','rarity','source','description','image','bestPct','itemGroup','code','status']) field(key).value=item[key]??(key==='rarity'?'Exclusive':key==='status'?'active':key==='itemGroup'?'general':'');
   field('id').disabled=!isNew;field('supportsVariants').checked=!!(item.supportsVariants||draft?.supportsVariants);
   const codes=category==='codes';$('#code-fields').hidden=!codes;$('#metadata-row').hidden=codes;$('#group-label').hidden=category!=='items';$('#best-label').hidden=category!=='pets';$('#values-fields').hidden=codes;$('#artwork-fields').hidden=codes;$('#variants-toggle').hidden=category!=='pets'||!isNew;
   $('#price-inputs').replaceChildren();buildVariants({...item,supportsVariants:field('supportsVariants').checked});$('#remove-draft').hidden=!draft;renderCatalog();
-  if(matchMedia('(max-width:900px)').matches) $('.detail').scrollIntoView({behavior:'smooth',block:'start'});
+  $('#new-category-label').hidden=!isNew;$('#new-category').value=category;
+  if(!dialog.open){dialog.showModal();document.body.classList.add('modal-open');}
 }
 function renderReview() {
   const list=$('#review-list');list.replaceChildren();$('#draft-count').textContent=drafts.size;$('#publish').disabled=!drafts.size||publishing;
@@ -90,7 +95,13 @@ $('#login-form').addEventListener('submit',async e=> {e.preventDefault();const b
 $('#logout').addEventListener('click',async()=> {if(drafts.size&&!confirm('Discard your pending changes and sign out?'))return;try{await api('logout',{});drafts.clear();previews.clear();showLogin();}catch(e){notice(e.message,true);}});
 $('#reload').addEventListener('click',async()=> {if(drafts.size&&!confirm('Refresh the catalog and discard pending changes?'))return;drafts.clear();previews.clear();operation=null;try{await reload();notice('Latest catalog loaded.');}catch(e){notice(e.message,true);}});
 $('#search').addEventListener('input',renderCatalog);
-$('#add').addEventListener('click',()=>openEntry({id:'',name:'',rarity:'Exclusive',source:'',description:'',image:'',status:'active'},true));
+function addEntry(){openEntry({id:'',name:'',rarity:'Exclusive',source:'',description:'',image:'',status:'active'},true);}
+$('#add').addEventListener('click',addEntry);
+$('#item-filter').addEventListener('change',renderCatalog);
+$('#new-category').addEventListener('change',e=>{if(Object.values(images).some(x=>!x.ready)){e.target.value=category;notice('Wait for artwork to finish uploading.',true);return;}if(confirm('Switch category and clear this new entry form?')){category=e.target.value;addEntry();}else e.target.value=category;});
+$('#close-editor').addEventListener('click',()=>dialog.close());
+dialog.addEventListener('close',()=>document.body.classList.remove('modal-open'));
+dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close();}});
 field('name').addEventListener('input',()=> {if(editingNew)field('id').value=field('name').value.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,80);});
 field('supportsVariants').addEventListener('change',()=>buildVariants({...selected,supportsVariants:field('supportsVariants').checked}));
 $('#remove-draft').addEventListener('click',()=>{drafts.delete(category+'/'+selected.id);previews.delete(category+'/'+selected.id);operation=null;renderReview();renderCatalog();$('#remove-draft').hidden=true;});
@@ -111,7 +122,7 @@ form.addEventListener('submit',e=> {e.preventDefault();try{
   }
   if(!drafts.has(category+'/'+id)&&drafts.size>=20)throw new Error('Publish at most 20 changes at a time.');
   if(editingNew&&selected.id&&selected.id!==id){drafts.delete(category+'/'+selected.id);previews.delete(category+'/'+selected.id);}
-  drafts.set(category+'/'+id,change);previews.set(category+'/'+id,{...images});selected={...selected,...metadata,id};operation=null;renderReview();renderCatalog();$('#remove-draft').hidden=false;notice(`${metadata.name} added to review. Publish when ready.`);
+  drafts.set(category+'/'+id,change);previews.set(category+'/'+id,{...images});selected={...selected,...metadata,id};operation=null;renderReview();renderCatalog();$('#remove-draft').hidden=false;dialog.close();notice(`${metadata.name} saved to review. Publish when ready.`);
 }catch(e){notice(e.message,true);}});
 $('#publish').addEventListener('click',async()=> {
   if(publishing||!drafts.size)return;
@@ -120,5 +131,5 @@ $('#publish').addEventListener('click',async()=> {
 });
 $('#discord-test').addEventListener('click',async e=>{e.target.disabled=true;try{const result=await api('discord-test',{});notice(result.sent?'Discord confirmed delivery.':`Discord test queued for retry${result.status?' (HTTP '+result.status+')':''}.`,!result.sent);await activity();}catch(e){notice(e.message,true);}finally{e.target.disabled=false;}});
 window.addEventListener('beforeunload',e=>{if(drafts.size){e.preventDefault();e.returnValue='';}});
-try{await start(await api('session'));}catch(e){showLogin();if(e.status!==401)$('#login-message').textContent=e.message;}
+try{const session=await api('session');try{await start(session);}catch(e){notice(e.message,true);}}catch(e){showLogin();if(e.status!==401)$('#login-message').textContent=e.message;}
 setInterval(()=>{if(auth&&!publishing)activity().catch(()=>{});},30000);

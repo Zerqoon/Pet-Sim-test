@@ -22,16 +22,16 @@ function database() {
   const sql=new DatabaseSync(':memory:');
   return {sql,prepare(text) {let args=[];const s={bind(...values){args=values;return s;},async run(){return {meta:{changes:Number(sql.prepare(text).run(...args).changes)}};},async first(){return sql.prepare(text).get(...args)||null;},async all(){return {results:sql.prepare(text).all(...args)};}};return s;},async batch(statements){sql.exec('BEGIN');try{const result=statements.map(s=>s.run());sql.exec('COMMIT');return Promise.all(result);}catch(e){sql.exec('ROLLBACK');throw e;}}};
 }
-async function fixture() {
+async function fixture(username='Zerqoon') {
   const db=database(), salt='random-test-salt', password='a-long-private-test-password';
   const pepper='f'.repeat(64);
-  const account={username:'Zerqoon',salt,scheme:'random-hmac-v1',hash:await passwordHash(password,salt,pepper)};
-  const env={ADMIN_DB:db,ADMIN_USERS:JSON.stringify([account]),AUTH_PEPPER:pepper,GITHUB_TOKEN:'private-github-token',DISCORD_WEBHOOK_URL:'https://discord.com/api/webhooks/123456789012345678/test_token'};
+  const account={username,salt,scheme:'random-hmac-v1',hash:await passwordHash(password,salt,pepper)};
+  const env={ADMIN_DB:db,ADMIN_USERS:JSON.stringify([account]),AUTH_PEPPER:pepper,GITHUB_TOKEN:'private-github-token',DISCORD_WEBHOOK_URL:'https://discord.com/api/webhooks/123456789012345678/value_token',ADMIN_WEBHOOK_URL:'https://discord.com/api/webhooks/987654321098765432/admin_token'};
   let sha=head,message='',refFailure=false,discordFailure=0;const calls=[],pending=[],blobs=[];
   const fetcher=async(url,options={})=> {
     calls.push({url,options});
-    if(new URL(url).hostname==='discord.com')return Response.json({}, {status:discordFailure||200});
-    assert.equal(options.headers.authorization,'Bearer private-github-token');assert.equal(options.redirect,'error');
+    if(new URL(url).hostname==='discord.com'){assert.equal(new URL(url).origin+new URL(url).pathname,env.ADMIN_WEBHOOK_URL,'admin audit must use only the audit webhook');return Response.json({}, {status:discordFailure||200});}
+    assert.equal(options.headers.authorization,'Bearer private-github-token');assert.equal(options.redirect,'manual');
     const path=decodeURIComponent(new URL(url).pathname);const body=options.body?JSON.parse(options.body):null;
     if(path.includes('/contents/'))return Response.json({type:'file',size:30000,encoding:'base64',content:Buffer.from(path.endsWith('catalog.js')?catalogSource:priceSource).toString('base64')});
     if(path.endsWith('/git/ref/heads/main'))return Response.json({object:{sha}});
@@ -46,10 +46,22 @@ async function fixture() {
   let cookie='',csrf='';
   const request=(route,body,extra={})=>new Request('https://admin.example/api/'+route,{method:body===undefined?'GET':'POST',headers:{...(body===undefined?{}:{origin:'https://admin.example','content-type':'application/json'}),...(cookie?{cookie}:{}),...(csrf?{'x-csrf-token':csrf}:{}),'cf-connecting-ip':'192.0.2.3',...extra},body:body===undefined?undefined:JSON.stringify(body)});
   const send=(route,body,extra)=>handle(request(route,body,extra),env,{waitUntil:p=>pending.push(p)},fetcher);
-  async function login(){const r=await send('login',{username:'Zerqoon',password});assert.equal(r.status,200);cookie=r.headers.get('set-cookie').split(';')[0];csrf=(await r.json()).csrf;return r;}
+  async function login(){const r=await send('login',{username,password});assert.equal(r.status,200);cookie=r.headers.get('set-cookie').split(';')[0];csrf=(await r.json()).csrf;return r;}
   return {env,db,calls,blobs,send,login,request,pending,fetcher,setHead:v=>sha=v,setRefFailure:()=>refFailure=true,setDiscordFailure:v=>discordFailure=v,close:async()=>{await Promise.all(pending);db.sql.close();}};
 }
 function edit(overrides={}) {return {category:'pets',id:'gummy-bear',metadata:{name:'Gummy Bear',rarity:'Exclusive',source:'Gummy Egg',description:'Updated description.',image:'assets/pets/gummy-bear.png'},prices:{normal:'20K'},...overrides};}
+
+test('GitHub requests use a Workers-supported redirect mode and reject redirects without forwarding credentials',async()=> {
+  let calls=0;
+  const api=github({GITHUB_TOKEN:'private-github-token'},async(url,options)=> {
+    calls++;
+    if(!['manual','follow'].includes(options.redirect))throw new TypeError('Invalid redirect value');
+    assert.equal(options.redirect,'manual');
+    return new Response(null,{status:302,headers:{location:'https://other.example/private'}});
+  });
+  await assert.rejects(()=>api.head(),error=>error.status===502 && /redirect/.test(error.message));
+  assert.equal(calls,1,'no second request may receive the GitHub credential');
+});
 
 test('catalog parser preserves every export, preset and value without executing source',()=> {
   const data=readCatalog(catalogSource);assert.equal(JSON.stringify(readCatalog(writeCatalog(data))),JSON.stringify(data));
@@ -113,7 +125,7 @@ test('publish creates one commit, audit and delivery; repeat operation does not 
     const repeated=await f.send('publish',input);assert.equal(repeated.status,200);assert.deepEqual(await repeated.json(),result);
     assert.equal(f.calls.filter(x=>x.url.endsWith('/git/commits')).length,1);assert.equal(f.db.sql.prepare('SELECT COUNT(*) n FROM audit').get().n,1);
     await Promise.all(f.pending);assert.ok(f.db.sql.prepare('SELECT sent FROM notifications').get().sent);
-    const message=JSON.parse(f.calls.find(x=>x.url.startsWith('https://discord.com')).options.body);assert.equal(message.embeds[0].title,'Catalog update saved');assert.match(message.embeds[0].footer.text,/after deployment/);
+    const message=JSON.parse(f.calls.find(x=>x.url.startsWith('https://discord.com')).options.body);assert.equal(message.embeds[0].title,'GitHub updated');assert.match(message.embeds[0].description,/Updated by Zerqoon/);assert.match(message.embeds[0].footer.text,/petuniverse-values/);
     assert.ok(f.blobs.every(x=>!x.content.includes('private-github-token')));assert.ok(!JSON.stringify(result).includes('webhook'));
   }finally{await f.close();}
 });
@@ -218,4 +230,24 @@ test('activation timeout stops before sending any login credentials',async()=> {
   let time=0,logins=0;
   await assert.rejects(()=>verifyFreeAdmin('https://admin.example',{username:'Zerqoon',password:'private'},{clock:()=>time,timeout:10,delay:5,wait:async()=>{time+=5;},fetcher:async(url,options)=>{if(options.method==='POST')logins++;return Response.json({ready:false,version:122});}}),/not confirmed/);
   assert.equal(logins,0);
+});
+
+
+test('Pioterek saves are attributed to Pioterek and sent only to the separate GitHub audit webhook',async()=> {
+  const f=await fixture('Pioterek');try {
+    await f.login();const response=await f.send('publish',{head,id:crypto.randomUUID(),changes:[edit()]});assert.equal(response.status,200);
+    await Promise.all(f.pending);const notification=f.calls.find(x=>x.url.startsWith('https://discord.com'));
+    assert.match(JSON.parse(notification.options.body).embeds[0].description,/Updated by Pioterek/);
+    assert.equal(new URL(notification.url).pathname,new URL(f.env.ADMIN_WEBHOOK_URL).pathname);
+    assert.ok(!f.calls.some(x=>x.url.includes('/value_token')));
+  }finally{await f.close();}
+});
+
+test('missing admin audit configuration never falls back to the value webhook',async()=> {
+  const f=await fixture();try{delete f.env.ADMIN_WEBHOOK_URL;assert.equal((await f.send('ready')).status,503);await flushNotifications(f.env,f.fetcher);assert.equal(f.calls.length,0);}finally{await f.close();}
+});
+
+test('custom admin domain uses only its own hostname and retains the workers.dev fallback',()=> {
+  const config=adminConfig({accountId:'account',databaseId:'database',domain:'admin.petuniverse-values.pl'});
+  assert.deepEqual(config.routes,[{pattern:'admin.petuniverse-values.pl',custom_domain:true}]);assert.equal(config.workers_dev,true);assert.equal(config.limits,undefined);
 });

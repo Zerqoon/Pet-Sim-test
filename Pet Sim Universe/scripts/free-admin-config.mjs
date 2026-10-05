@@ -23,11 +23,12 @@ export async function prepareFreeAccounts(directory) {
   return secrets;
 }
 
-export function adminConfig({accountId,databaseId,site='https://petuniverse-values.pl'}) {
+export function adminConfig({accountId,databaseId,site='https://petuniverse-values.pl',domain=''}) {
   return {name:'pet-universe-admin',account_id:accountId,main:'../admin/worker.js',compatibility_date:'2026-10-01',workers_dev:true,
     // No paid-only CPU or subrequest overrides. Use the account's Free limits.
     assets:{directory:'../admin/public',binding:'ASSETS',run_worker_first:true},
     d1_databases:[{binding:'ADMIN_DB',database_name:'pet-universe-admin',database_id:databaseId}],
     vars:{GITHUB_REPO:'Zerqoon/Pet-Sim-test',GITHUB_BRANCH:'main',PROJECT_PATH:'Pet Sim Universe',SITE_URL:site},
+    ...(domain?{routes:[{pattern:domain,custom_domain:true}]}:{}),
     triggers:{crons:['* * * * *']},observability:{enabled:true}};
 }
