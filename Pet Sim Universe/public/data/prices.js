@@ -40,7 +40,7 @@ export const PRICES = {
       "diamond": "4750"
     },
     "throne-dragon": {
-      "normal": "425",
+      "normal": "495",
       "golden": null,
       "diamond": null
     },
