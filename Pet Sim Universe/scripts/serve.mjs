@@ -6,7 +6,7 @@ import {onRequestGet as health} from '../functions/api/health.js';
 import {onRequestPost as snapshot} from '../functions/api/snapshot.js';
 const root=path.resolve(import.meta.dirname,'../public');
 const port=Number(process.env.PORT || 4173);
-const mime={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'text/javascript; charset=utf-8','.png':'image/png','.webp':'image/webp','.json':'application/json'};
+const mime={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'text/javascript; charset=utf-8','.png':'image/png','.webp':'image/webp','.svg':'image/svg+xml','.ttf':'font/ttf','.woff2':'font/woff2','.json':'application/json'};
 const server=http.createServer(async(req,res)=>{
  try {
   const url=new URL(req.url,`http://127.0.0.1:${port}`);

@@ -1,4 +1,5 @@
 // Local PNG export. No uploads or links are generated.
+import { normalizePrice } from './price-core.js';
 const pageSize = 18;
 const numberFormat = new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 });
 export function tradeSummary(model) {
@@ -7,10 +8,11 @@ export function tradeSummary(model) {
   const empty = !model.left.entries.length && !model.right.entries.length && !model.left.tickets && !model.right.tickets;
   const gain = right - left;
   const tied = Math.abs(gain) <= Math.max(1, Math.abs(left), Math.abs(right)) * Number.EPSILON * 4;
-  const suffix = model.left.unpriced || model.right.unpriced ? ' O/C and unpriced items excluded.' : '';
+  if (model.left.overflow || model.right.overflow) return { verdict: 'partial', title: 'VALUE INCOMPLETE', detail: 'An offer total is too large. Reduce its quantities.', color: '#f4d08b' };
+  if (model.left.unpriced || model.right.unpriced) return { verdict: 'partial', title: 'VALUE INCOMPLETE', detail: 'Not Price or O/C items are present. Totals show known values only.', color: '#f4d08b' };
   if (empty) return { verdict: 'fair', title: 'FAIR TRADE', detail: 'Add items or tickets to compare offers.', color: '#ba9aff' };
-  if (tied) return { verdict: 'fair', title: 'FAIR TRADE', detail: 'Known values are equal.' + suffix, color: '#ba9aff' };
-  return { verdict: gain > 0 ? 'win' : 'lose', title: gain > 0 ? 'W — WIN FOR YOU' : 'L — LOSS FOR YOU', detail: `You ${gain > 0 ? 'receive' : 'give'} ${numberFormat.format(Math.abs(gain))} more in listed value.` + suffix, color: gain > 0 ? '#7cddb0' : '#ff96a6' };
+  if (tied) return { verdict: 'fair', title: 'FAIR TRADE', detail: 'Both offers have the same listed value.', color: '#ba9aff' };
+  return { verdict: gain > 0 ? 'win' : 'lose', title: gain > 0 ? 'W — WIN FOR YOU' : 'L — LOSS FOR YOU', detail: `You ${gain > 0 ? 'receive' : 'give'} ${normalizePrice(Math.abs(gain)).label} more in listed value.`, color: gain > 0 ? '#7cddb0' : '#ff96a6' };
 }
 
 function browserImage(url) {
@@ -52,7 +54,7 @@ export async function renderTradePage(model, page = 0, adapters = {}) {
   for (let sideIndex=0;sideIndex<2;sideIndex++) {
     const side=sideIndex?'right':'left';const offer=model[side];const entries=chunks[sideIndex];const x=32+sideIndex*784,y=180;
     box(x,y,752,panelHeight,'#100e18','#45315e');
-    text(sideIndex?'OTHER OFFER':'MY OFFER',x+24,y+42,28,'#f5f0ff',800);
+    text(sideIndex?'THEIR OFFER':'MY OFFER',x+24,y+42,28,'#f5f0ff',800);
     text(sideIndex?'What you receive':'What you give',x+24,y+72,20,'#b5a7c5',500);
     text(`${offer.entries.reduce((sum,e)=>sum+e.qty,0)} items`,x+568,y+42,20,'#be9ceb');
     if (!entries.length) {box(x+24,y+106,704,172,'#181320','#352943');text('No items on this page',x+48,y+182,26,'#c6b6d7');}
@@ -68,7 +70,7 @@ export async function renderTradePage(model, page = 0, adapters = {}) {
     const footerY=y+panelHeight-84;
     box(x+24,footerY,704,62,'#20182c','#49305e',12);
     text(`Tickets: ${numberFormat.format(offer.tickets)}`,x+40,footerY+25,18,'#c9b9d8');
-    text(`Total: ${numberFormat.format(offer.total)}${offer.unpriced?' + unpriced items':''}`,x+40,footerY+49,22,'#fff',800);
+    fit(`Known total: ${offer.overflow ? 'Too large' : normalizePrice(offer.total).label}${offer.unpriced?' + items without a fixed price':''}`,x+40,footerY+49,670,22,'#fff');
   }
   const summary=tradeSummary(model),sy=panelHeight+202;
   box(32,sy,1536,104,'#181320','#674594');

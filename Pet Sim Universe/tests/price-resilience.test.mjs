@@ -64,17 +64,18 @@ test('Discord groups obey embed character budget and use fractional server retry
  assert.equal(accepted.resetMs,2500);assert.equal(accepted.ok,true);
 });
 
-test('all 76 numeric history streams fit one insert and only real changes add records',async()=>{
+test('every numeric history stream fits one insert and only real changes add records',async()=>{
  const sql=new DatabaseSync(':memory:');let queries=0;
  const db={prepare(text){let args=[];const statement={bind(...values){args=values;return statement;},async run(){queries++;const result=sql.prepare(text).run(...args);return {meta:{changes:Number(result.changes)}};}};return statement;}};
  let prices=readDataModule(await readFile(new URL('../public/data/prices.js',import.meta.url),'utf8'),'PRICES');
+ const expectedCount=rowsFromPrices(fullCatalogs,prices).filter(row=>normalizePrice(row.value).number!=null).length;
  const context={env:{VALUES_DB:db},request:new Request(site+'/api/snapshot',{method:'POST'}),fetcher:async url=>new Response(new URL(url).pathname==='/data/prices.js'?`export const PRICES=${JSON.stringify(prices)};`:'export const PRICE_UPDATE={};')};
  try{
-  const initial=await (await onRequestPost(context)).json();assert.equal(initial.inserted,76);assert.equal(initial.checked,76);assert.ok(queries<50);
+  const initial=await (await onRequestPost(context)).json();assert.equal(initial.inserted,expectedCount);assert.equal(initial.checked,expectedCount);assert.ok(queries<50);
   queries=0;assert.equal((await (await onRequestPost(context)).json()).inserted,0);
   prices.items['golden-fish-hook']=26;assert.equal((await (await onRequestPost(context)).json()).inserted,1);
-  const count=Number(sql.prepare('SELECT count(*) n FROM value_history').get().n);assert.equal(count,77);
+  const count=Number(sql.prepare('SELECT count(*) n FROM value_history').get().n);assert.equal(count,expectedCount+1);
   context.fetcher=async()=>new Response('export const PRICES = (()=>1)();');assert.equal((await (await onRequestPost(context)).json()).available,false);
-  assert.equal(Number(sql.prepare('SELECT count(*) n FROM value_history').get().n),77);
+  assert.equal(Number(sql.prepare('SELECT count(*) n FROM value_history').get().n),expectedCount+1);
  }finally{sql.close();}
 });

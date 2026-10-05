@@ -2,86 +2,41 @@
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="theme-color" content="#0b0709" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#0b0c16" />
   <meta name="description" content="Pet Universe Values — community value list for pets, charms, eggs and items." />
   <title>Pet Universe Values</title>
   <script>
     try {
       document.documentElement.dataset.theme = 'dark';
+      document.documentElement.dataset.cols = localStorage.getItem('pet-universe-cols') === '2' ? '2' : '3';
       document.documentElement.dataset.motion = localStorage.getItem('pet-universe-motion') === 'off' || matchMedia('(prefers-reduced-motion: reduce)').matches ? 'off' : 'on';
     } catch (_) {}
   </script>
   <link rel="icon" type="image/png" href="assets/ui/category-pets.png" />
-  <link rel="stylesheet" href="./styles.css" />
-  <link rel="stylesheet" href="./refinements.css" />
-  <link rel="stylesheet" href="./v35.css" />
-  <link rel="stylesheet" href="./v36.css" />
-  <link rel="stylesheet" href="./v37.css" />
-  <link rel="stylesheet" href="./v38.css" />
-  <link rel="stylesheet" href="./v40.css" />
-  <link rel="stylesheet" href="./v41.css" />
-  <link rel="stylesheet" href="./v42.css" />
-  <link rel="stylesheet" href="./v43.css" />
-  <link rel="stylesheet" href="./v44.css" />
-  <link rel="stylesheet" href="./v45.css" />
-  <link rel="stylesheet" href="./v46.css" />
-  <link rel="stylesheet" href="./v47.css" />
-  <link rel="stylesheet" href="./v48.css" />
-  <link rel="stylesheet" href="./v49.css" />
-  <link rel="stylesheet" href="./v50.css" />
-  <link rel="stylesheet" href="./v52.css" />
-  <link rel="stylesheet" href="./v53.css" />
-  <link rel="stylesheet" href="./v55.css" />
-  <link rel="stylesheet" href="./v56.css" />
-  <link rel="stylesheet" href="./v57.css" />
-  <link rel="stylesheet" href="./v58.css" />
-  <link rel="stylesheet" href="./mobile.css" />
-  <link rel="stylesheet" href="./v68.css" />
-  <link rel="stylesheet" href="./v69.css" />
-  <link rel="stylesheet" href="./v70.css" />
-  <link rel="stylesheet" href="./v71.css" />
-  <link rel="stylesheet" href="./v72.css" />
-  <link rel="stylesheet" href="./v73.css" />
-  <link rel="stylesheet" href="./v74.css" />
-  <link rel="stylesheet" href="./v75.css" />
-  <link rel="stylesheet" href="./v76.css" />
-  <link rel="stylesheet" href="./v77.css" />
-  <link rel="stylesheet" href="./v78.css" />
-  <link rel="stylesheet" href="./v82.css" />
-  <link rel="stylesheet" href="./v83.css" />
-  <link rel="stylesheet" href="./v87.css" />
-  <link rel="stylesheet" href="./v88.css" />
-  <link rel="stylesheet" href="./v89.css" />
-  <link rel="stylesheet" href="./phone.css" />
-  <link rel="stylesheet" href="./collections.css" />
-  <link rel="stylesheet" href="./calculator.css" />
-  <link rel="stylesheet" href="./headers.css" />
-  <link rel="stylesheet" href="./price-update-panel.css" />
+  <link rel="preload" href="./assets/fonts/fredoka-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="./assets/fonts/nunito-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="./redesign.css" />
   <link rel="modulepreload" href="./data/catalog.js" />
-  <link rel="modulepreload" href="./data/prices.js" />
 </head>
-<body>
-  <div class="world-bg" aria-hidden="true">
-    <div class="world-image"></div>
-    <div class="world-overlay"></div>
-    <div class="lava-orb lava-orb-a"></div>
-    <div class="lava-orb lava-orb-b"></div>
-    <div class="star-layer star-layer-a"></div>
-    <div class="star-layer star-layer-b"></div>
-    <div class="ember-layer ember-layer-a"></div>
-    <div class="ember-layer ember-layer-b"></div>
-  </div>
-
+<body data-view="home">
   <div class="app-layout">
     <aside class="sidebar" aria-label="Pet Universe navigation">
-      <a class="side-card brand-card" href="#top">
+      <a class="side-card brand-card" href="#top" data-view-target="home" aria-label="Pet Universe Values home">
         <span class="brand-icon"><img src="assets/ui/category-pets.png" alt="" /></span>
         <span class="brand-copy">
           <strong>Pet Universe</strong>
           <small>VALUES</small>
         </span>
       </a>
+
+
+      <nav class="primary-nav" aria-label="Main navigation">
+        <button type="button" data-view-target="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg>Home</button>
+        <button type="button" data-view-target="values"><img src="assets/items/value-ticket.png" alt="" />Values</button>
+        <button type="button" data-view-target="calculator"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16m-4-4 4 4-4 4M20 17H4m4-4-4 4 4 4"/></svg>Trade Calculator</button>
+      </nav>
+      <button type="button" class="mobile-settings" id="openSettings" aria-label="Open display settings" aria-haspopup="dialog"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="3"/><circle cx="15" cy="17" r="3"/></svg></button>
 
       <nav class="side-nav" id="categoryNav" aria-label="Catalog categories">
         <button class="side-card nav-btn active" data-category="pets" type="button">
@@ -106,7 +61,7 @@
         </button>
       </nav>
 
-      <div class="appearance-tools">
+      <div class="appearance-tools" id="desktopSettings">
       <button class="side-card motion-toggle" id="motionToggle" type="button" aria-label="Stop Animations" aria-pressed="false" title="Stop Animations">Stop Animations</button>
       </div>
       <section class="price-update-panel" id="valuesUpdated" aria-labelledby="valuesUpdatedHeading" hidden>
@@ -126,73 +81,32 @@
     </aside>
 
     <main class="main" id="top">
-      <section id="homeView" class="page-view home-v40">
-        <div class="credits-marquee credits-marquee-top" aria-label="Community credits">
-          <div class="credits-marquee-track">
-            <span>VALUE HELP <b>Sparklie</b> <i>•</i> <b>Pioterek</b></span>
-            <span>ASSETS HELP <b>Lipto</b> <i>•</i> <b>K45HII</b></span>
-            <span>WEBSITE CREATOR <b>B3sttiee</b></span>
-            <span>PET UNIVERSE VALUES</span>
-            <span aria-hidden="true">VALUE HELP <b>Sparklie</b> <i>•</i> <b>Pioterek</b></span>
-            <span aria-hidden="true">ASSETS HELP <b>Lipto</b> <i>•</i> <b>K45HII</b></span>
-            <span aria-hidden="true">WEBSITE CREATOR <b>B3sttiee</b></span>
-            <span aria-hidden="true">PET UNIVERSE VALUES</span>
+      <section id="homeView" class="page-view home-menu" aria-labelledby="homeTitle">
+        <div class="home-menu-stage">
+          <div class="home-menu-decor" aria-hidden="true">
+            <span class="home-menu-art art-pet"><img src="assets/ui/category-pets.png" alt="" data-home-art="true" /></span>
+            <span class="home-menu-art art-egg"><img src="assets/eggs/gummy-egg.png" alt="" data-home-art="true" /></span>
           </div>
-        </div>
-
-        <section class="content-card home-v40-hero">
-          <div class="home-v40-copy">
-            <h1>Pet Universe Values</h1>
+          <div class="home-menu-content">
+            <h1 id="homeTitle">Pet Universe <span>Values</span></h1>
             <p class="home-updated" id="homeUpdated">Price update not recorded yet</p>
-            <div class="home-v42-credits home-v52-links home-links-v72" aria-label="Pet Universe links">
-              <a class="home-v42-mini-btn home-link-btn home-link-discord" href="https://discord.gg/lipbuilds" target="_blank" rel="noreferrer">
-                <img src="assets/ui/home-link-lipbuilds.png" alt="" />
-                <span><small>COMMUNITY</small><strong>Discord Server</strong></span>
-              </a>
-              <a class="home-v42-mini-btn home-link-btn home-link-game-v72" href="https://www.roblox.com/games/74629631798007/Pets-Universe" target="_blank" rel="noreferrer">
-                <img src="assets/ui/home-link-game.png" alt="" />
-                <span><small>PLAY</small><strong>Game Link</strong></span>
-              </a>
-              <a class="home-v42-mini-btn home-link-btn home-link-group" href="https://www.roblox.com/communities/35939768/Lip-Builds#!/about" target="_blank" rel="noreferrer">
-                <img src="assets/ui/home-link-lipbuilds.png" alt="" />
-                <span><small>ROBLOX GROUP</small><strong>Group Roblox - Lip Builds</strong></span>
-              </a>
-            </div>
+            <nav class="home-menu-actions" aria-label="Main menu">
+              <button class="home-menu-button menu-values" type="button" data-view-target="values">
+                <img src="assets/items/value-ticket.png" alt="" />
+                <strong>Values</strong>
+              </button>
+              <button class="home-menu-button menu-calculator" type="button" data-view-target="calculator">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16m-4-4 4 4-4 4M20 17H4m4-4-4 4 4 4"/></svg>
+                <strong>Calculator</strong>
+              </button>
+            </nav>
           </div>
-          <div class="home-v40-orbit" aria-hidden="true">
-            <div class="home-orbit-ring ring-a"></div>
-            <div class="home-orbit-ring ring-b"></div>
-            <img src="assets/ui/category-pets.png" alt="" />
-          </div>
-        </section>
-
-        <div class="home-v40-grid">
-          <button class="content-card home-v40-card" type="button" data-view-target="values">
-            <span class="home-v40-icon"><img src="assets/items/value-ticket.png" alt="" /></span>
-            <div><span class="tool-label">VALUES</span><strong>Browse Value List</strong><small>Pets, charms, eggs, items and codes.</small></div>
-            <b>→</b>
-          </button>
-          <button class="content-card home-v40-card" type="button" data-view-target="calculator">
-            <span class="home-v40-icon"><img src="assets/ui/category-items.png" alt="" /></span>
-            <div><span class="tool-label">CALCULATOR</span><strong>Compare a Trade</strong><small>Add both offers and instantly see W / L.</small></div>
-            <b>→</b>
-          </button>
+          <footer class="home-menu-credits" aria-label="Community credits">
+            <span>Website <b>B3sttiee</b></span>
+            <span>Values <b>Sparklie · Pioterek</b></span>
+            <span>Assets <b>Lipto · K45HII</b></span>
+          </footer>
         </div>
-
-        <div class="credits-marquee credits-marquee-bottom" aria-hidden="true">
-          <div class="credits-marquee-track">
-            <span>WEBSITE CREATOR <b>B3sttiee</b></span>
-            <span>ASSETS HELP <b>Lipto</b> <i>•</i> <b>K45HII</b></span>
-            <span>VALUE HELP <b>Sparklie</b> <i>•</i> <b>Pioterek</b></span>
-            <span>PET UNIVERSE VALUES</span>
-            <span>WEBSITE CREATOR <b>B3sttiee</b></span>
-            <span>ASSETS HELP <b>Lipto</b> <i>•</i> <b>K45HII</b></span>
-            <span>VALUE HELP <b>Sparklie</b> <i>•</i> <b>Pioterek</b></span>
-            <span>PET UNIVERSE VALUES</span>
-          </div>
-        </div>
-
-
       </section>
 
       <section id="valuesView" class="page-view" hidden>
@@ -200,49 +114,59 @@
           <div class="page-title-wrap">
             <span class="eyebrow" id="sectionKicker">PET COLLECTION</span>
             <h1 id="sectionTitle">Pet Values</h1>
-          </div>
-
-          <div class="page-tools page-tools-v40">
-            <label class="search-box" for="searchInput">
-              <span>⌕</span>
-              <input id="searchInput" type="search" placeholder="Search pets..." aria-label="Search collection" autocomplete="off" />
-            </label>
-
-            <div class="custom-sort" id="customSort">
-              <button class="sort-trigger" id="sortTrigger" type="button" aria-haspopup="listbox" aria-expanded="false">
-                <span id="sortLabel">Featured</span>
-                <span class="sort-chevron">⌄</span>
-              </button>
-              <div class="sort-popover" id="sortPopover" role="listbox" hidden>
-                <button class="sort-option active" type="button" data-sort="featured" role="option" aria-selected="true">Featured</button>
-                <button class="sort-option" type="button" data-sort="name" role="option">Name A-Z</button>
-                <button class="sort-option" type="button" data-sort="best-desc" role="option">Best % high-low</button>
-                <button class="sort-option" type="button" data-sort="best-asc" role="option">Best % low-high</button>
-                <button class="sort-option" type="button" data-sort="rarity" role="option">Rarity</button>
-              </div>
-            </div>
-
-            <div class="pet-variant-tools" id="variantTools">
-              <span class="tool-label">Pet Variant</span>
-              <div class="variant-switch">
-                <button class="variant-btn active" data-variant="normal" type="button"><i></i>Normal</button>
-                <button class="variant-btn golden" data-variant="golden" type="button"><i></i>Golden</button>
-                <button class="variant-btn diamond" data-variant="diamond" type="button"><i></i>Diamond</button>
-              </div>
-            </div>
-
-            <div class="item-category-tools" id="itemGroupTabs" hidden>
-              <span class="tool-label">Categories</span>
-              <div class="item-category-switch" role="group" aria-label="Item categories">
-                <button type="button" data-item-group="all" aria-pressed="true">All Items</button>
-                <button type="button" data-item-group="general" aria-pressed="false">General</button>
-                <button type="button" data-item-group="fishing" aria-pressed="false">Fishing</button>
-              </div>
-            </div>
-
-            <button class="home-corner-btn" type="button" data-view-target="home">Home</button>
+            <div class="collection-updated" id="collectionUpdated" role="status"><span class="update-dot" aria-hidden="true"></span><span id="collectionUpdatedText">Loading values…</span><time id="collectionUpdatedTime" hidden></time></div>
           </div>
         </header>
+        <div class="catalog-toolbar" id="catalogToolbar">
+          <div id="mobileCategorySlot"></div>
+          <div class="page-tools">
+            <label class="search-box" for="searchInput">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>
+              <input id="searchInput" type="search" placeholder="Search pets..." aria-label="Search collection" autocomplete="off" />
+              <kbd aria-hidden="true">/</kbd>
+            </label>
+            <button type="button" class="filter-toggle" id="filterToggle" aria-controls="filterPanel" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4"/></svg><span id="filterToggleLabel">Filters</span><i id="filterActiveDot" hidden aria-label="Filters applied"></i></button>
+            <div class="value-filters" id="filterPanel">
+              <div class="custom-sort" id="customSort">
+                <span class="tool-label">Sort by</span>
+                <button class="sort-trigger" id="sortTrigger" type="button" aria-haspopup="listbox" aria-expanded="false"><span id="sortLabel">Featured</span><span class="sort-chevron" aria-hidden="true">⌄</span></button>
+                <div class="sort-popover" id="sortPopover" role="listbox" aria-label="Sort collection" hidden>
+                  <button class="sort-option active" type="button" data-sort="featured" role="option" aria-selected="true">Featured</button>
+                  <button class="sort-option" type="button" data-sort="name" role="option" aria-selected="false">Name A–Z</button>
+                  <button class="sort-option" type="button" data-sort="price-desc" role="option" aria-selected="false">Value: high to low</button>
+                  <button class="sort-option" type="button" data-sort="price-asc" role="option" aria-selected="false">Value: low to high</button>
+                  <button class="sort-option" type="button" data-sort="best-desc" role="option" aria-selected="false">Best %: high to low</button>
+                  <button class="sort-option" type="button" data-sort="best-asc" role="option" aria-selected="false">Best %: low to high</button>
+                  <button class="sort-option" type="button" data-sort="rarity" role="option" aria-selected="false">Rarity</button>
+                </div>
+              </div>
+              <div class="pet-variant-tools" id="variantTools">
+                <span class="tool-label">Pet variant</span>
+                <div class="variant-switch" role="group" aria-label="Pet variant">
+                  <button class="variant-btn active" data-variant="normal" type="button" aria-pressed="true"><i aria-hidden="true"></i>Normal</button>
+                  <button class="variant-btn golden" data-variant="golden" type="button" aria-pressed="false"><i aria-hidden="true"></i>Golden</button>
+                  <button class="variant-btn diamond" data-variant="diamond" type="button" aria-pressed="false"><i aria-hidden="true"></i>Diamond</button>
+                </div>
+              </div>
+              <div class="layout-tools" id="layoutTools">
+                <span class="tool-label">Cards per row</span>
+                <div class="layout-switch" role="group" aria-label="Cards per row">
+                  <button type="button" data-cols-btn="3" aria-pressed="true">3 compact</button>
+                  <button type="button" data-cols-btn="2" aria-pressed="false">2 large</button>
+                </div>
+              </div>
+              <div class="item-category-tools" id="itemGroupTabs" hidden>
+                <span class="tool-label">Categories</span>
+                <div class="item-category-switch" role="group" aria-label="Item categories">
+                  <button type="button" data-item-group="all" aria-pressed="true">All Items</button>
+                  <button type="button" data-item-group="general" aria-pressed="false">General</button>
+                  <button type="button" data-item-group="fishing" aria-pressed="false">Fishing</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="active-filter-label" id="activeFilterLabel" hidden></p>
+        </div>
 
         <section class="content-card catalog-card">
           <div class="catalog-meta">
@@ -259,7 +183,7 @@
       <section id="calculatorView" class="page-view calculator-v55" hidden>
         <header class="calculator-v55-header">
           <div class="calculator-v55-title">
-            <h1>Trade Calculator <span>⇄</span></h1>
+            <span class="eyebrow">BUILD YOUR NEXT TRADE</span><h1>Trade Calculator</h1>
             <p>Build both offers, compare their values, and save your trade as an image.</p>
           </div>
           <div class="calculator-v55-actions">
@@ -274,19 +198,23 @@
           </div>
         </header>
 
-        <section class="calculator-v55-panel">
+        <div class="offer-tabs" role="group" aria-label="Select offer">
+          <button type="button" data-offer-side="left" aria-pressed="true">My Offer <span id="leftTabCount">0</span></button>
+          <button type="button" data-offer-side="right" aria-pressed="false">Their Offer <span id="rightTabCount">0</span></button>
+        </div>
+        <section class="calculator-v55-panel" id="calculatorPanel" data-active-offer="left">
           <div class="trade-v55-grid">
             <section class="trade-v55-side" data-side="left">
               <div class="trade-v55-side-head">
                 <div>
                   <span class="tool-label">YOU GIVE</span>
                   <h2>My Offer</h2><span id="calcLeftCount" class="trade-count-v88">0 items</span>
-                  <small class="trade-oc-note" id="calcLeftOcNote" hidden>Includes O/C or unpriced items</small>
+                  <small class="trade-oc-note" id="calcLeftOcNote" hidden>Includes items without a fixed price</small>
                 </div>
                 <span class="trade-v40-total"><img src="assets/items/value-ticket.png" alt="" /><strong id="calcLeftTotal">0</strong></span>
               </div>
               <div class="trade-v55-bottom">
-                <label class="trade-v55-ticket"><img src="assets/items/value-ticket.png" alt="" /><span>Tickets</span><input id="calcLeftTickets" type="number" min="0" value="0" inputmode="numeric" /></label>
+                <label class="trade-v55-ticket"><img src="assets/items/value-ticket.png" alt="" /><span>Tickets</span><input id="calcLeftTickets" type="number" min="0" max="1000000000000000" step="any" value="0" inputmode="decimal" /></label>
               </div>
               <div class="trade-v55-items" id="calcLeftList"></div>
             </section>
@@ -297,7 +225,7 @@
                 <strong id="calcDifferenceVerdict">FAIR</strong>
                 <div class="trade-v42-diff-value"><img src="assets/items/value-ticket.png" alt="Ticket" /><b id="calcDifference">0</b></div>
                 <small id="calcDifferenceLabel">Add items or tickets to compare offers.</small>
-                <p id="calcUnpricedNotice" class="trade-unpriced-v88" hidden>Known values only · O/C is not included.</p>
+                <p id="calcUnpricedNotice" class="trade-unpriced-v88" hidden>Not Price and O/C items are excluded from numeric totals.</p>
               </div>
               <button type="button" class="trade-swap-btn" data-swap-trade>⇄ <span>Swap Sides</span></button>
             </aside>
@@ -307,49 +235,34 @@
                 <div>
                   <span class="tool-label">YOU RECEIVE</span>
                   <h2>Their Offer</h2><span id="calcRightCount" class="trade-count-v88">0 items</span>
-                  <small class="trade-oc-note" id="calcRightOcNote" hidden>Includes O/C or unpriced items</small>
+                  <small class="trade-oc-note" id="calcRightOcNote" hidden>Includes items without a fixed price</small>
                 </div>
                 <span class="trade-v40-total"><img src="assets/items/value-ticket.png" alt="" /><strong id="calcRightTotal">0</strong></span>
               </div>
               <div class="trade-v55-bottom">
-                <label class="trade-v55-ticket"><img src="assets/items/value-ticket.png" alt="" /><span>Tickets</span><input id="calcRightTickets" type="number" min="0" value="0" inputmode="numeric" /></label>
+                <label class="trade-v55-ticket"><img src="assets/items/value-ticket.png" alt="" /><span>Tickets</span><input id="calcRightTickets" type="number" min="0" max="1000000000000000" step="any" value="0" inputmode="decimal" /></label>
               </div>
               <div class="trade-v55-items" id="calcRightList"></div>
             </section>
           </div>
         </section>
 
-        <div class="credits-marquee credits-marquee-calculator" aria-hidden="true">
-          <div class="credits-marquee-track">
-            <span>VALUE HELP <b>Sparklie</b> <i>•</i> <b>Pioterek</b></span>
-            <span>ASSETS HELP <b>Lipto</b> <i>•</i> <b>K45HII</b></span>
-            <span>WEBSITE CREATOR <b>B3sttiee</b></span>
-            <span>PET UNIVERSE VALUES</span>
-            <span aria-hidden="true">VALUE HELP <b>Sparklie</b> <i>•</i> <b>Pioterek</b></span>
-            <span aria-hidden="true">ASSETS HELP <b>Lipto</b> <i>•</i> <b>K45HII</b></span>
-            <span aria-hidden="true">WEBSITE CREATOR <b>B3sttiee</b></span>
-            <span aria-hidden="true">PET UNIVERSE VALUES</span>
-          </div>
-        </div>
+
       </section>
 
     </main>
   </div>
 
   <dialog id="detailModal" class="detail-modal" aria-labelledby="modalTitle">
-    <button class="modal-close" type="button" data-close-modal aria-label="Close details">×</button>
-
+    <div class="dialog-bar"><span>ITEM DETAILS</span><button class="modal-close" type="button" data-close-modal aria-label="Close details" autofocus>×</button></div>
     <div class="modal-grid">
       <section class="modal-visual">
-        <div class="modal-volcano-glow"></div>
-        <div class="modal-particles" aria-hidden="true"></div>
         <div class="modal-badges-left">
           <span id="modalRarity" class="modal-rarity">Item</span>
           <span id="modalEventBadge" class="modal-event-badge" hidden></span>
           <span id="modalBest" class="modal-best"></span>
         </div>
         <button type="button" class="modal-art-shell" id="modalArtShell" aria-label="Animate pet" title="Click to animate">
-          <div class="modal-art-ring"></div>
           <img id="modalImage" class="modal-image" alt="" />
           <div id="modalAnimatedArt" class="modal-animated-art" hidden>
             <img class="pop-frame normal" src="assets/pets/pop-cat-normal-v30.png" alt="Pop Cat normal" />
@@ -358,40 +271,26 @@
         </button>
         <span id="modalAnimatedBadge" class="animated-badge" hidden>▶ Animated</span>
       </section>
-
       <section class="modal-info">
+        <div class="modal-heading">
         <span class="modal-kicker" id="modalKicker">PET DETAILS</span>
         <h2 id="modalTitle"></h2>
-        <p id="modalDescription"></p>
-
-        <div class="detail-grid">
-          <div class="detail-box"><span>Source</span><strong id="modalSource">—</strong></div>
-          <div class="detail-box" id="modalMapRow"><span>Map</span><strong id="modalMap">—</strong></div>
-          <div class="detail-box" id="modalChanceRow"><span>Egg Chance</span><strong id="modalChance">—</strong></div>
         </div>
-
-        <section id="modalDropArea" class="detail-section" hidden>
-          <span class="tool-label">Drop Sources</span>
-          <div id="modalSourceGallery" class="drop-source-grid"></div>
+        <section class="value-panel">
+          <span id="modalValueLabel">Listed value</span>
+          <div><img id="modalValueIcon" src="assets/items/value-ticket.png" alt="Ticket" /><strong id="modalValue">Not Price</strong></div>
         </section>
-
         <section id="modalVariantArea" class="detail-section" hidden>
           <span class="tool-label">Variant</span>
           <div id="modalVariantButtons" class="variant-switch"></div>
         </section>
-
-        <section class="value-panel">
-          <span id="modalValueLabel">Value</span>
-          <div><img id="modalValueIcon" src="assets/items/value-ticket.png" alt="Ticket" /><strong id="modalValue">Not priced</strong></div>
-        </section>
-
+        <p id="modalPriceHint" class="modal-price-hint" hidden></p>
+        <div class="modal-trade-actions" id="modalTradeActions"><button type="button" data-modal-add="left">+ My Offer</button><button type="button" data-modal-add="right">+ Their Offer</button></div>
         <section id="modalHistoryArea" class="history-panel market-panel-v68 market-panel-v69" aria-labelledby="historyTitle">
-          <div class="market-v69-glow" aria-hidden="true"></div>
-          <span class="market-scan" aria-hidden="true"></span>
           <div class="history-head market-head-v68 market-head-v69">
             <div>
-              <span class="tool-label">Market pulse</span>
-              <h3 id="historyTitle">Value Movement</h3>
+              <span class="tool-label">Price history</span>
+              <h3 id="historyTitle">Recent movement</h3>
             </div>
             <span id="historyStatus" class="history-status is-loading">Loading</span>
           </div>
@@ -412,7 +311,7 @@
           </div>
 
           <p id="historyHint" class="history-explanation">No previous price changes.</p>
-          <div class="market-hidden-utility" aria-hidden="true">
+          <div class="market-hidden-utility" hidden aria-hidden="true">
             <span id="historyCurrentMeta">Current catalog value</span>
             <span id="historyPrevious">—</span>
             <span id="historyHigh">—</span>
@@ -429,7 +328,16 @@
             </div>
           </div>
         </section>
-
+        <div class="detail-grid">
+          <div class="detail-box"><span>Source</span><strong id="modalSource">—</strong></div>
+          <div class="detail-box" id="modalMapRow"><span>Map</span><strong id="modalMap">—</strong></div>
+          <div class="detail-box" id="modalChanceRow"><span>Egg Chance</span><strong id="modalChance">—</strong></div>
+        </div>
+        <p id="modalDescription"></p>
+        <section id="modalDropArea" class="detail-section" hidden>
+          <span class="tool-label">Drop Sources</span>
+          <div id="modalSourceGallery" class="drop-source-grid"></div>
+        </section>
         <p id="modalNote" class="modal-note" hidden></p>
       </section>
     </div>
@@ -437,10 +345,10 @@
 
 
   <dialog id="calcPickerModal" class="calc-picker-modal" aria-labelledby="calcPickerTitle">
-    <button class="calc-picker-close" type="button" data-close-calc-picker aria-label="Close picker">×</button>
+    <div class="dialog-bar"><span>BUILD YOUR OFFER</span><button class="calc-picker-close" type="button" data-close-calc-picker aria-label="Close picker" autofocus>×</button></div>
     <div class="calc-picker-head">
       <div><span class="tool-label" id="calcPickerOfferLabel">MY OFFER · ADD ITEMS</span><h2 id="calcPickerTitle">Choose an item</h2></div>
-      <label class="calc-picker-search"><span>⌕</span><input id="calcPickerSearch" type="search" placeholder="Search pets, charms, eggs, items..." /></label>
+      <label class="calc-picker-search"><span>⌕</span><input id="calcPickerSearch" aria-label="Search items to add to an offer" type="search" placeholder="Search pets, charms, eggs, items..." /></label>
     </div>
     <div class="calc-picker-toolbar">
       <div class="calc-picker-tabs" id="calcPickerTabs" role="group" aria-label="Item category">
@@ -460,7 +368,20 @@
     </div>
     <div class="calc-picker-summary"><span id="calcPickerOrderHint">O/C first · Value high to low</span><span id="calcPickerCount" role="status">26 results</span></div>
     <div class="calc-picker-grid" id="calcPickerGrid"></div>
+    <div class="calc-picker-footer"><strong id="pickerOfferTotal">My Offer · 0</strong><button type="button" data-close-calc-picker>Done</button></div>
   </dialog>
+
+  <nav class="mobile-nav" aria-label="Main navigation">
+    <button type="button" data-view-target="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m3 11 9-8 9 8M5 10v11h5v-6h4v6h5V10"/></svg><span>Home</span></button>
+    <button type="button" data-view-target="values"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 5h16v5a2 2 0 0 0 0 4v5H4v-5a2 2 0 0 0 0-4V5Z"/><path d="M12 8v8"/></svg><span>Values</span></button>
+    <button type="button" data-view-target="calculator"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 7h16l-4-4M21 17H5l4 4"/></svg><span>Trade</span></button>
+  </nav>
+  <aside class="mobile-trade-summary" id="mobileTradeSummary" aria-label="Offer totals and trade result" hidden>
+    <div><span>My Offer</span><strong id="mobileLeftTotal">0</strong></div>
+    <div><span>Their Offer</span><strong id="mobileRightTotal">0</strong></div>
+    <p><strong id="mobileTradeVerdict">FAIR</strong><span id="mobileTradeHint">Add items or tickets to compare offers.</span></p>
+  </aside>
+  <dialog class="settings-dialog" id="settingsDialog" aria-labelledby="settingsTitle"><div class="dialog-bar"><h2 id="settingsTitle">Display settings</h2><button type="button" id="closeSettings" aria-label="Close settings" autofocus>×</button></div><p>Control decorative motion and pet animations.</p><div id="mobileSettings"></div></dialog>
 
   <script type="module" src="./app.js"></script>
 <p id="exportStatus" class="export-status" role="status" hidden></p>

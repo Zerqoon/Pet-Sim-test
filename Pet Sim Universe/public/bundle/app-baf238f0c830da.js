@@ -1,7 +1,8 @@
 // Generated from data/image-assets.js and app.js; prices load from ../data/prices.js.
-const IMAGE_ASSETS = {"assets/eggs/alien-egg.png":{"src":"assets/optimized/alien-egg-e25eaba12d65.webp","width":1080,"height":1080,"srcset":"assets/optimized/alien-egg-e25eaba12d65.webp 1080w"},"assets/eggs/galaxy-egg.png":{"src":"assets/optimized/galaxy-egg-24d49daa318c.webp","width":1080,"height":1080,"srcset":"assets/optimized/galaxy-egg-24d49daa318c.webp 1080w"},"assets/eggs/party-egg.png":{"src":"assets/optimized/party-egg-91515a6114cf.webp","width":1080,"height":1080,"srcset":"assets/optimized/party-egg-91515a6114cf.webp 1080w"},"assets/items/ball-v30.png":{"src":"assets/optimized/ball-v30-55bad19a743f.webp","width":512,"height":512,"srcset":"assets/optimized/ball-v30-55bad19a743f.webp 512w"},"assets/items/bone-v30.png":{"src":"assets/optimized/bone-v30-2deccfcfe2d4.webp","width":512,"height":512,"srcset":"assets/optimized/bone-v30-2deccfcfe2d4.webp 512w"},"assets/items/coins-charm-iii-v30.png":{"src":"assets/optimized/coins-charm-iii-v30-7d98126d5bda.webp","width":512,"height":512,"srcset":"assets/optimized/coins-charm-iii-v30-7d98126d5bda.webp 512w"},"assets/items/coins-charm-iv.png":{"src":"assets/optimized/coins-charm-iv-b24176491794.webp","width":512,"height":512,"srcset":"assets/optimized/coins-charm-iv-b24176491794.webp 512w"},"assets/items/cookie-v30.png":{"src":"assets/optimized/cookie-v30-e4da6b88a0a5.webp","width":512,"height":512,"srcset":"assets/optimized/cookie-v30-e4da6b88a0a5.webp 512w"},"assets/items/critical-charm-iii-v30.png":{"src":"assets/optimized/critical-charm-iii-v30-d3e0712e0b63.webp","width":512,"height":512,"srcset":"assets/optimized/critical-charm-iii-v30-d3e0712e0b63.webp 512w"},"assets/items/critical-charm-iv.png":{"src":"assets/optimized/critical-charm-iv-cfe21cda4b43.webp","width":512,"height":512,"srcset":"assets/optimized/critical-charm-iv-cfe21cda4b43.webp 512w"},"assets/items/globe-v30.png":{"src":"assets/optimized/globe-v30-bed905130cb2.webp","width":512,"height":512,"srcset":"assets/optimized/globe-v30-bed905130cb2.webp 512w"},"assets/items/hatch-charm-iii.png":{"src":"assets/optimized/hatch-charm-iii-9091e2fa0bf6.webp","width":512,"height":512,"srcset":"assets/optimized/hatch-charm-iii-9091e2fa0bf6.webp 512w"},"assets/items/hatch-charm-iv.png":{"src":"assets/optimized/hatch-charm-iv-66f40d29480f.webp","width":512,"height":512,"srcset":"assets/optimized/hatch-charm-iv-66f40d29480f.webp 512w"},"assets/items/lightning-charm-v30.png":{"src":"assets/optimized/lightning-charm-v30-327069005294.webp","width":512,"height":512,"srcset":"assets/optimized/lightning-charm-v30-327069005294.webp 512w"},"assets/items/luck-charm-iv.png":{"src":"assets/optimized/luck-charm-iv-3b165a5d5f27.webp","width":512,"height":512,"srcset":"assets/optimized/luck-charm-iv-3b165a5d5f27.webp 512w"},"assets/items/lucky-charm-iii-v30.png":{"src":"assets/optimized/lucky-charm-iii-v30-122d89cdc820.webp","width":512,"height":512,"srcset":"assets/optimized/lucky-charm-iii-v30-122d89cdc820.webp 512w"},"assets/items/moon-charm.png":{"src":"assets/optimized/moon-charm-412b4e351f2a.webp","width":512,"height":512,"srcset":"assets/optimized/moon-charm-412b4e351f2a.webp 512w"},"assets/items/rubies-charm-iii-v30.png":{"src":"assets/optimized/rubies-charm-iii-v30-3104982086db.webp","width":512,"height":512,"srcset":"assets/optimized/rubies-charm-iii-v30-3104982086db.webp 512w"},"assets/items/rubies-charm-iv.png":{"src":"assets/optimized/rubies-charm-iv-f472b1e37df5.webp","width":512,"height":512,"srcset":"assets/optimized/rubies-charm-iv-f472b1e37df5.webp 512w"},"assets/items/secret-charm-v30.png":{"src":"assets/optimized/secret-charm-v30-109751022a5a.webp","width":512,"height":512,"srcset":"assets/optimized/secret-charm-v30-109751022a5a.webp 512w"},"assets/items/squeaky-v30.png":{"src":"assets/optimized/squeaky-v30-6281fbd2c141.webp","width":512,"height":512,"srcset":"assets/optimized/squeaky-v30-6281fbd2c141.webp 512w"},"assets/items/toys-hammer-v30.png":{"src":"assets/optimized/toys-hammer-v30-21139af7a5e8.webp","width":1080,"height":1080,"srcset":"assets/optimized/toys-hammer-v30-21139af7a5e8.webp 1080w"},"assets/items/universe-shard-v30.png":{"src":"assets/optimized/universe-shard-v30-bceb7c813af3.webp","width":512,"height":512,"srcset":"assets/optimized/universe-shard-v30-bceb7c813af3.webp 512w"},"assets/items/value-ticket.png":{"src":"assets/optimized/value-ticket-ed249abc2d85.webp","width":384,"height":384,"srcset":"assets/optimized/value-ticket-ed249abc2d85-64.webp 64w, assets/optimized/value-ticket-ed249abc2d85-128.webp 128w, assets/optimized/value-ticket-ed249abc2d85-256.webp 256w, assets/optimized/value-ticket-ed249abc2d85.webp 384w"},"assets/items/vip-key.png":{"src":"assets/optimized/vip-key-54055c35487b.webp","width":512,"height":512,"srcset":"assets/optimized/vip-key-54055c35487b.webp 512w"},"assets/items/vip-voucher.png":{"src":"assets/optimized/vip-voucher-89248fc148c0.webp","width":512,"height":512,"srcset":"assets/optimized/vip-voucher-89248fc148c0.webp 512w"},"assets/pets/alien-emperor.png":{"src":"assets/optimized/alien-emperor-f55d19b2eb57.webp","width":436,"height":443,"srcset":"assets/optimized/alien-emperor-f55d19b2eb57.webp 436w"},"assets/pets/blaze-phoenix-diamond.png":{"src":"assets/optimized/blaze-phoenix-diamond-ac6f293fd8ee.webp","width":512,"height":512,"srcset":"assets/optimized/blaze-phoenix-diamond-ac6f293fd8ee.webp 512w"},"assets/pets/blaze-phoenix-golden.png":{"src":"assets/optimized/blaze-phoenix-golden-0e8d2aac9007.webp","width":512,"height":512,"srcset":"assets/optimized/blaze-phoenix-golden-0e8d2aac9007.webp 512w"},"assets/pets/blaze-phoenix.png":{"src":"assets/optimized/blaze-phoenix-97e3b607053e.webp","width":420,"height":420,"srcset":"assets/optimized/blaze-phoenix-97e3b607053e.webp 420w"},"assets/pets/caaaaat-v30.png":{"src":"assets/optimized/caaaaat-v30-53703ef235e1.webp","width":512,"height":512,"srcset":"assets/optimized/caaaaat-v30-53703ef235e1.webp 512w"},"assets/pets/ember-monster-diamond.png":{"src":"assets/optimized/ember-monster-diamond-d44dd5c5a2d2.webp","width":512,"height":512,"srcset":"assets/optimized/ember-monster-diamond-d44dd5c5a2d2.webp 512w"},"assets/pets/ember-monster-golden.png":{"src":"assets/optimized/ember-monster-golden-7b4865aaa294.webp","width":512,"height":512,"srcset":"assets/optimized/ember-monster-golden-7b4865aaa294.webp 512w"},"assets/pets/ember-monster.png":{"src":"assets/optimized/ember-monster-55f232233041.webp","width":512,"height":512,"srcset":"assets/optimized/ember-monster-55f232233041.webp 512w"},"assets/pets/exquisite-cat.png":{"src":"assets/optimized/exquisite-cat-1b4424d45854.webp","width":446,"height":446,"srcset":"assets/optimized/exquisite-cat-1b4424d45854.webp 446w"},"assets/pets/exquisite-peacock-diamond.png":{"src":"assets/optimized/exquisite-peacock-diamond-0fb8bb78d2f8.webp","width":512,"height":512,"srcset":"assets/optimized/exquisite-peacock-diamond-0fb8bb78d2f8.webp 512w"},"assets/pets/exquisite-peacock-golden.png":{"src":"assets/optimized/exquisite-peacock-golden-eb551ee2d43e.webp","width":512,"height":512,"srcset":"assets/optimized/exquisite-peacock-golden-eb551ee2d43e.webp 512w"},"assets/pets/exquisite-peacock.png":{"src":"assets/optimized/exquisite-peacock-b625684c4042.webp","width":512,"height":512,"srcset":"assets/optimized/exquisite-peacock-b625684c4042.webp 512w"},"assets/pets/fallen-angel.png":{"src":"assets/optimized/fallen-angel-b0c721b62ade.webp","width":512,"height":512,"srcset":"assets/optimized/fallen-angel-b0c721b62ade.webp 512w"},"assets/pets/galaxy-bunny.png":{"src":"assets/optimized/galaxy-bunny-66a7061f089b.webp","width":1254,"height":1254,"srcset":"assets/optimized/galaxy-bunny-66a7061f089b.webp 1254w"},"assets/pets/galaxy-cat-v30.png":{"src":"assets/optimized/galaxy-cat-v30-1d1ec1ab42a4.webp","width":512,"height":512,"srcset":"assets/optimized/galaxy-cat-v30-1d1ec1ab42a4.webp 512w"},"assets/pets/grove-seeker-diamond.png":{"src":"assets/optimized/grove-seeker-diamond-f9ce5bc7cdd4.webp","width":512,"height":512,"srcset":"assets/optimized/grove-seeker-diamond-f9ce5bc7cdd4.webp 512w"},"assets/pets/grove-seeker-golden.png":{"src":"assets/optimized/grove-seeker-golden-c774e25a225f.webp","width":512,"height":512,"srcset":"assets/optimized/grove-seeker-golden-c774e25a225f.webp 512w"},"assets/pets/grove-seeker.png":{"src":"assets/optimized/grove-seeker-28766f15f789.webp","width":512,"height":512,"srcset":"assets/optimized/grove-seeker-28766f15f789.webp 512w"},"assets/pets/happy-cupcake.png":{"src":"assets/optimized/happy-cupcake-2d0126e07b00.webp","width":446,"height":452,"srcset":"assets/optimized/happy-cupcake-2d0126e07b00.webp 446w"},"assets/pets/imp-diamond.png":{"src":"assets/optimized/imp-diamond-6252443ebb61.webp","width":512,"height":512,"srcset":"assets/optimized/imp-diamond-6252443ebb61.webp 512w"},"assets/pets/imp-golden.png":{"src":"assets/optimized/imp-golden-c05dca1e4605.webp","width":512,"height":512,"srcset":"assets/optimized/imp-golden-c05dca1e4605.webp 512w"},"assets/pets/imp.png":{"src":"assets/optimized/imp-017243db3be0.webp","width":512,"height":512,"srcset":"assets/optimized/imp-017243db3be0.webp 512w"},"assets/pets/job-cat-v30.png":{"src":"assets/optimized/job-cat-v30-5ff5d574db2c.webp","width":512,"height":512,"srcset":"assets/optimized/job-cat-v30-5ff5d574db2c.webp 512w"},"assets/pets/mossy-mushroom-diamond.png":{"src":"assets/optimized/mossy-mushroom-diamond-68d540dd364d.webp","width":520,"height":520,"srcset":"assets/optimized/mossy-mushroom-diamond-68d540dd364d.webp 520w"},"assets/pets/mossy-mushroom-gold.png":{"src":"assets/optimized/mossy-mushroom-gold-5d30cb0b60a2.webp","width":520,"height":520,"srcset":"assets/optimized/mossy-mushroom-gold-5d30cb0b60a2.webp 520w"},"assets/pets/mossy-mushroom-normal.png":{"src":"assets/optimized/mossy-mushroom-normal-7e3b86f0f9cd.webp","width":512,"height":512,"srcset":"assets/optimized/mossy-mushroom-normal-7e3b86f0f9cd.webp 512w"},"assets/pets/pop-cat-normal-v30.png":{"src":"assets/optimized/pop-cat-normal-v30-c67b404e8a3c.webp","width":512,"height":512,"srcset":"assets/optimized/pop-cat-normal-v30-c67b404e8a3c.webp 512w"},"assets/pets/pop-cat-scream-v30.png":{"src":"assets/optimized/pop-cat-scream-v30-9f7302ef979c.webp","width":512,"height":512,"srcset":"assets/optimized/pop-cat-scream-v30-9f7302ef979c.webp 512w"},"assets/pets/queen-bee-diamond.png":{"src":"assets/optimized/queen-bee-diamond-d3e4995d81dc.webp","width":420,"height":420,"srcset":"assets/optimized/queen-bee-diamond-d3e4995d81dc.webp 420w"},"assets/pets/queen-bee-golden.png":{"src":"assets/optimized/queen-bee-golden-6c82f614d32d.webp","width":434,"height":450,"srcset":"assets/optimized/queen-bee-golden-6c82f614d32d.webp 434w"},"assets/pets/queen-bee-normal.png":{"src":"assets/optimized/queen-bee-normal-d1eaeecae388.webp","width":434,"height":450,"srcset":"assets/optimized/queen-bee-normal-d1eaeecae388.webp 434w"},"assets/pets/rich-bee.png":{"src":"assets/optimized/rich-bee-9c3544a6a35c.webp","width":512,"height":512,"srcset":"assets/optimized/rich-bee-9c3544a6a35c.webp 512w"},"assets/pets/ruby-majesty-diamond.png":{"src":"assets/optimized/ruby-majesty-diamond-f9e135666201.webp","width":512,"height":512,"srcset":"assets/optimized/ruby-majesty-diamond-f9e135666201.webp 512w"},"assets/pets/ruby-majesty-golden.png":{"src":"assets/optimized/ruby-majesty-golden-f4bd240be79d.webp","width":512,"height":512,"srcset":"assets/optimized/ruby-majesty-golden-f4bd240be79d.webp 512w"},"assets/pets/ruby-majesty-normal.png":{"src":"assets/optimized/ruby-majesty-normal-b13a35f8a5fd.webp","width":512,"height":512,"srcset":"assets/optimized/ruby-majesty-normal-b13a35f8a5fd.webp 512w"},"assets/pets/ruby-nebula-star.png":{"src":"assets/optimized/ruby-nebula-star-1e8139df1126.webp","width":512,"height":512,"srcset":"assets/optimized/ruby-nebula-star-1e8139df1126.webp 512w"},"assets/pets/shadow-dominus-diamond-v30.png":{"src":"assets/optimized/shadow-dominus-diamond-v30-50d333030fec.webp","width":512,"height":512,"srcset":"assets/optimized/shadow-dominus-diamond-v30-50d333030fec.webp 512w"},"assets/pets/shadow-dominus-golden-v30.png":{"src":"assets/optimized/shadow-dominus-golden-v30-835f619bfce6.webp","width":512,"height":512,"srcset":"assets/optimized/shadow-dominus-golden-v30-835f619bfce6.webp 512w"},"assets/pets/shadow-dominus.png":{"src":"assets/optimized/shadow-dominus-6e01be62b0ee.webp","width":512,"height":512,"srcset":"assets/optimized/shadow-dominus-6e01be62b0ee.webp 512w"},"assets/pets/six-seven.png":{"src":"assets/optimized/six-seven-4af44f064466.webp","width":520,"height":520,"srcset":"assets/optimized/six-seven-4af44f064466.webp 520w"},"assets/pets/spaceship-alien-v30.png":{"src":"assets/optimized/spaceship-alien-v30-60204c2d9bf5.webp","width":512,"height":512,"srcset":"assets/optimized/spaceship-alien-v30-60204c2d9bf5.webp 512w"},"assets/pets/sun-deer-v30.png":{"src":"assets/optimized/sun-deer-v30-7f81f01d9da8.webp","width":512,"height":512,"srcset":"assets/optimized/sun-deer-v30-7f81f01d9da8.webp 512w"},"assets/pets/throne-dragon-diamond.png":{"src":"assets/optimized/throne-dragon-diamond-fb818b8c8d1d.webp","width":520,"height":520,"srcset":"assets/optimized/throne-dragon-diamond-fb818b8c8d1d.webp 520w"},"assets/pets/throne-dragon-gold.png":{"src":"assets/optimized/throne-dragon-gold-ce43bcff833f.webp","width":520,"height":520,"srcset":"assets/optimized/throne-dragon-gold-ce43bcff833f.webp 520w"},"assets/pets/throne-dragon-normal.png":{"src":"assets/optimized/throne-dragon-normal-34ad90878d2c.webp","width":512,"height":512,"srcset":"assets/optimized/throne-dragon-normal-34ad90878d2c.webp 512w"},"assets/pets/universe-capybara.png":{"src":"assets/optimized/universe-capybara-536078f998b9.webp","width":520,"height":520,"srcset":"assets/optimized/universe-capybara-536078f998b9.webp 520w"},"assets/pets/void-owl-v30.png":{"src":"assets/optimized/void-owl-v30-0929129e4ed8.webp","width":512,"height":512,"srcset":"assets/optimized/void-owl-v30-0929129e4ed8.webp 512w"},"assets/sources/moon-chest.png":{"src":"assets/optimized/moon-chest-81ced8a61aec.webp","width":512,"height":512,"srcset":"assets/optimized/moon-chest-81ced8a61aec.webp 512w"},"assets/sources/playtime-rewards.png":{"src":"assets/optimized/playtime-rewards-b131b207e2af.webp","width":400,"height":400,"srcset":"assets/optimized/playtime-rewards-b131b207e2af.webp 400w"},"assets/sources/vip-chest.png":{"src":"assets/optimized/vip-chest-73a6f4d507c1.webp","width":512,"height":512,"srcset":"assets/optimized/vip-chest-73a6f4d507c1.webp 512w"},"assets/ui/category-charms.png":{"src":"assets/optimized/category-charms-f527f93e8d1a.webp","width":1254,"height":1254,"srcset":"assets/optimized/category-charms-f527f93e8d1a-64.webp 64w, assets/optimized/category-charms-f527f93e8d1a-128.webp 128w, assets/optimized/category-charms-f527f93e8d1a-256.webp 256w, assets/optimized/category-charms-f527f93e8d1a-512.webp 512w, assets/optimized/category-charms-f527f93e8d1a.webp 1254w"},"assets/ui/category-codes.png":{"src":"assets/optimized/category-codes-58ccc0457e14.webp","width":1308,"height":1203,"srcset":"assets/optimized/category-codes-58ccc0457e14-64.webp 64w, assets/optimized/category-codes-58ccc0457e14-128.webp 128w, assets/optimized/category-codes-58ccc0457e14-256.webp 256w, assets/optimized/category-codes-58ccc0457e14-512.webp 512w, assets/optimized/category-codes-58ccc0457e14.webp 1308w"},"assets/ui/category-eggs.png":{"src":"assets/optimized/category-eggs-c760bcb45695.webp","width":1254,"height":1254,"srcset":"assets/optimized/category-eggs-c760bcb45695-64.webp 64w, assets/optimized/category-eggs-c760bcb45695-128.webp 128w, assets/optimized/category-eggs-c760bcb45695-256.webp 256w, assets/optimized/category-eggs-c760bcb45695-512.webp 512w, assets/optimized/category-eggs-c760bcb45695.webp 1254w"},"assets/ui/category-items.png":{"src":"assets/optimized/category-items-1d10b97790e7.webp","width":1254,"height":1254,"srcset":"assets/optimized/category-items-1d10b97790e7-64.webp 64w, assets/optimized/category-items-1d10b97790e7-128.webp 128w, assets/optimized/category-items-1d10b97790e7-256.webp 256w, assets/optimized/category-items-1d10b97790e7-512.webp 512w, assets/optimized/category-items-1d10b97790e7.webp 1254w"},"assets/ui/category-pets.png":{"src":"assets/optimized/category-pets-122dca91115b.webp","width":1254,"height":1254,"srcset":"assets/optimized/category-pets-122dca91115b-64.webp 64w, assets/optimized/category-pets-122dca91115b-128.webp 128w, assets/optimized/category-pets-122dca91115b-256.webp 256w, assets/optimized/category-pets-122dca91115b-512.webp 512w, assets/optimized/category-pets-122dca91115b.webp 1254w"},"assets/ui/home-link-game.png":{"src":"assets/optimized/home-link-game-df6436e911ce.webp","width":150,"height":150,"srcset":"assets/optimized/home-link-game-df6436e911ce-64.webp 64w, assets/optimized/home-link-game-df6436e911ce-128.webp 128w, assets/optimized/home-link-game-df6436e911ce.webp 150w"},"assets/ui/home-link-lipbuilds.png":{"src":"assets/optimized/home-link-lipbuilds-9543aa46994d.webp","width":150,"height":150,"srcset":"assets/optimized/home-link-lipbuilds-9543aa46994d-64.webp 64w, assets/optimized/home-link-lipbuilds-9543aa46994d-128.webp 128w, assets/optimized/home-link-lipbuilds-9543aa46994d.webp 150w"},"assets/ui/sky-world.png":{"src":"assets/optimized/sky-world-00957c8f2b5b.webp","width":768,"height":432,"srcset":"assets/optimized/sky-world-00957c8f2b5b.webp 768w"},"assets/items/1m-lucky-block.png":{"src":"assets/optimized/1m-lucky-block-bb41e8426d0c.webp","width":1080,"height":1080,"srcset":"assets/optimized/1m-lucky-block-bb41e8426d0c.webp 1080w"},"assets/pets/gummy-bear.png":{"src":"assets/optimized/gummy-bear-3f92f90b3ec7.webp","width":512,"height":512,"srcset":"assets/optimized/gummy-bear-3f92f90b3ec7.webp 512w"},"assets/pets/gummy-gubby.png":{"src":"assets/optimized/gummy-gubby-98a261b15771.webp","width":512,"height":512,"srcset":"assets/optimized/gummy-gubby-98a261b15771.webp 512w"},"assets/pets/gummy-penguin.png":{"src":"assets/optimized/gummy-penguin-033852ed4242.webp","width":512,"height":512,"srcset":"assets/optimized/gummy-penguin-033852ed4242.webp 512w"},"assets/pets/gummy-capybara.png":{"src":"assets/optimized/gummy-capybara-17700120c4f9.webp","width":512,"height":512,"srcset":"assets/optimized/gummy-capybara-17700120c4f9.webp 512w"},"assets/pets/gummy-frog.png":{"src":"assets/optimized/gummy-frog-a20d8677b3c9.webp","width":512,"height":512,"srcset":"assets/optimized/gummy-frog-a20d8677b3c9.webp 512w"},"assets/eggs/gummy-egg.png":{"src":"assets/optimized/gummy-egg-89555b670755.webp","width":1080,"height":1080,"srcset":"assets/optimized/gummy-egg-89555b670755.webp 1080w"},"assets/pets/sunken-eel-normal.png":{"src":"assets/optimized/sunken-eel-normal-c9f89c12bc73.webp","width":512,"height":512,"srcset":"assets/optimized/sunken-eel-normal-c9f89c12bc73.webp 512w"},"assets/pets/sunken-eel-golden.png":{"src":"assets/optimized/sunken-eel-golden-fa4655a70080.webp","width":512,"height":512,"srcset":"assets/optimized/sunken-eel-golden-fa4655a70080.webp 512w"},"assets/pets/sunken-eel-diamond.png":{"src":"assets/optimized/sunken-eel-diamond-bade9b072988.webp","width":512,"height":512,"srcset":"assets/optimized/sunken-eel-diamond-bade9b072988.webp 512w"},"assets/pets/blobfish-normal.png":{"src":"assets/optimized/blobfish-normal-92e14e90bf90.webp","width":512,"height":512,"srcset":"assets/optimized/blobfish-normal-92e14e90bf90.webp 512w"},"assets/pets/blobfish-golden.png":{"src":"assets/optimized/blobfish-golden-3fc579fcfaf1.webp","width":512,"height":512,"srcset":"assets/optimized/blobfish-golden-3fc579fcfaf1.webp 512w"},"assets/pets/blobfish-diamond.png":{"src":"assets/optimized/blobfish-diamond-5a6edd4fc80e.webp","width":512,"height":512,"srcset":"assets/optimized/blobfish-diamond-5a6edd4fc80e.webp 512w"}};
+const IMAGE_ASSETS = {"assets/eggs/alien-egg.png":{"src":"assets/optimized/alien-egg-e25eaba12d65.webp","width":1080,"height":1080,"srcset":"assets/optimized/alien-egg-e25eaba12d65.webp 1080w","thumb":"assets/optimized/alien-egg-e25eaba12d65-t400.webp"},"assets/eggs/galaxy-egg.png":{"src":"assets/optimized/galaxy-egg-24d49daa318c.webp","width":1080,"height":1080,"srcset":"assets/optimized/galaxy-egg-24d49daa318c.webp 1080w","thumb":"assets/optimized/galaxy-egg-24d49daa318c-t400.webp"},"assets/eggs/party-egg.png":{"src":"assets/optimized/party-egg-91515a6114cf.webp","width":1080,"height":1080,"srcset":"assets/optimized/party-egg-91515a6114cf.webp 1080w","thumb":"assets/optimized/party-egg-91515a6114cf-t400.webp"},"assets/items/ball-v30.png":{"src":"assets/optimized/ball-v30-55bad19a743f.webp","width":512,"height":512,"srcset":"assets/optimized/ball-v30-55bad19a743f.webp 512w","thumb":"assets/optimized/ball-v30-55bad19a743f-t400.webp"},"assets/items/bone-v30.png":{"src":"assets/optimized/bone-v30-2deccfcfe2d4.webp","width":512,"height":512,"srcset":"assets/optimized/bone-v30-2deccfcfe2d4.webp 512w","thumb":"assets/optimized/bone-v30-2deccfcfe2d4-t400.webp"},"assets/items/coins-charm-iii-v30.png":{"src":"assets/optimized/coins-charm-iii-v30-7d98126d5bda.webp","width":512,"height":512,"srcset":"assets/optimized/coins-charm-iii-v30-7d98126d5bda.webp 512w","thumb":"assets/optimized/coins-charm-iii-v30-7d98126d5bda-t400.webp"},"assets/items/coins-charm-iv.png":{"src":"assets/optimized/coins-charm-iv-b24176491794.webp","width":512,"height":512,"srcset":"assets/optimized/coins-charm-iv-b24176491794.webp 512w","thumb":"assets/optimized/coins-charm-iv-b24176491794-t400.webp"},"assets/items/cookie-v30.png":{"src":"assets/optimized/cookie-v30-e4da6b88a0a5.webp","width":512,"height":512,"srcset":"assets/optimized/cookie-v30-e4da6b88a0a5.webp 512w","thumb":"assets/optimized/cookie-v30-e4da6b88a0a5-t400.webp"},"assets/items/critical-charm-iii-v30.png":{"src":"assets/optimized/critical-charm-iii-v30-d3e0712e0b63.webp","width":512,"height":512,"srcset":"assets/optimized/critical-charm-iii-v30-d3e0712e0b63.webp 512w","thumb":"assets/optimized/critical-charm-iii-v30-d3e0712e0b63-t400.webp"},"assets/items/critical-charm-iv.png":{"src":"assets/optimized/critical-charm-iv-cfe21cda4b43.webp","width":512,"height":512,"srcset":"assets/optimized/critical-charm-iv-cfe21cda4b43.webp 512w","thumb":"assets/optimized/critical-charm-iv-cfe21cda4b43-t400.webp"},"assets/items/globe-v30.png":{"src":"assets/optimized/globe-v30-bed905130cb2.webp","width":512,"height":512,"srcset":"assets/optimized/globe-v30-bed905130cb2.webp 512w","thumb":"assets/optimized/globe-v30-bed905130cb2-t400.webp"},"assets/items/hatch-charm-iii.png":{"src":"assets/optimized/hatch-charm-iii-9091e2fa0bf6.webp","width":512,"height":512,"srcset":"assets/optimized/hatch-charm-iii-9091e2fa0bf6.webp 512w","thumb":"assets/optimized/hatch-charm-iii-9091e2fa0bf6-t400.webp"},"assets/items/hatch-charm-iv.png":{"src":"assets/optimized/hatch-charm-iv-66f40d29480f.webp","width":512,"height":512,"srcset":"assets/optimized/hatch-charm-iv-66f40d29480f.webp 512w","thumb":"assets/optimized/hatch-charm-iv-66f40d29480f-t400.webp"},"assets/items/lightning-charm-v30.png":{"src":"assets/optimized/lightning-charm-v30-327069005294.webp","width":512,"height":512,"srcset":"assets/optimized/lightning-charm-v30-327069005294.webp 512w","thumb":"assets/optimized/lightning-charm-v30-327069005294-t400.webp"},"assets/items/luck-charm-iv.png":{"src":"assets/optimized/luck-charm-iv-3b165a5d5f27.webp","width":512,"height":512,"srcset":"assets/optimized/luck-charm-iv-3b165a5d5f27.webp 512w","thumb":"assets/optimized/luck-charm-iv-3b165a5d5f27-t400.webp"},"assets/items/lucky-charm-iii-v30.png":{"src":"assets/optimized/lucky-charm-iii-v30-122d89cdc820.webp","width":512,"height":512,"srcset":"assets/optimized/lucky-charm-iii-v30-122d89cdc820.webp 512w","thumb":"assets/optimized/lucky-charm-iii-v30-122d89cdc820-t400.webp"},"assets/items/moon-charm.png":{"src":"assets/optimized/moon-charm-412b4e351f2a.webp","width":512,"height":512,"srcset":"assets/optimized/moon-charm-412b4e351f2a.webp 512w","thumb":"assets/optimized/moon-charm-412b4e351f2a-t400.webp"},"assets/items/rubies-charm-iii-v30.png":{"src":"assets/optimized/rubies-charm-iii-v30-3104982086db.webp","width":512,"height":512,"srcset":"assets/optimized/rubies-charm-iii-v30-3104982086db.webp 512w","thumb":"assets/optimized/rubies-charm-iii-v30-3104982086db-t400.webp"},"assets/items/rubies-charm-iv.png":{"src":"assets/optimized/rubies-charm-iv-f472b1e37df5.webp","width":512,"height":512,"srcset":"assets/optimized/rubies-charm-iv-f472b1e37df5.webp 512w","thumb":"assets/optimized/rubies-charm-iv-f472b1e37df5-t400.webp"},"assets/items/secret-charm-v30.png":{"src":"assets/optimized/secret-charm-v30-109751022a5a.webp","width":512,"height":512,"srcset":"assets/optimized/secret-charm-v30-109751022a5a.webp 512w","thumb":"assets/optimized/secret-charm-v30-109751022a5a-t400.webp"},"assets/items/squeaky-v30.png":{"src":"assets/optimized/squeaky-v30-6281fbd2c141.webp","width":512,"height":512,"srcset":"assets/optimized/squeaky-v30-6281fbd2c141.webp 512w","thumb":"assets/optimized/squeaky-v30-6281fbd2c141-t400.webp"},"assets/items/toys-hammer-v30.png":{"src":"assets/optimized/toys-hammer-v30-21139af7a5e8.webp","width":1080,"height":1080,"srcset":"assets/optimized/toys-hammer-v30-21139af7a5e8.webp 1080w","thumb":"assets/optimized/toys-hammer-v30-21139af7a5e8-t400.webp"},"assets/items/universe-shard-v30.png":{"src":"assets/optimized/universe-shard-v30-bceb7c813af3.webp","width":512,"height":512,"srcset":"assets/optimized/universe-shard-v30-bceb7c813af3.webp 512w","thumb":"assets/optimized/universe-shard-v30-bceb7c813af3-t400.webp"},"assets/items/value-ticket.png":{"src":"assets/optimized/value-ticket-ed249abc2d85.webp","width":384,"height":384,"srcset":"assets/optimized/value-ticket-ed249abc2d85-64.webp 64w, assets/optimized/value-ticket-ed249abc2d85-128.webp 128w, assets/optimized/value-ticket-ed249abc2d85-256.webp 256w, assets/optimized/value-ticket-ed249abc2d85.webp 384w","thumb":"assets/optimized/value-ticket-ed249abc2d85.webp"},"assets/items/vip-key.png":{"src":"assets/optimized/vip-key-54055c35487b.webp","width":512,"height":512,"srcset":"assets/optimized/vip-key-54055c35487b.webp 512w","thumb":"assets/optimized/vip-key-54055c35487b-t400.webp"},"assets/items/vip-voucher.png":{"src":"assets/optimized/vip-voucher-89248fc148c0.webp","width":512,"height":512,"srcset":"assets/optimized/vip-voucher-89248fc148c0.webp 512w","thumb":"assets/optimized/vip-voucher-89248fc148c0-t400.webp"},"assets/pets/alien-emperor.png":{"src":"assets/optimized/alien-emperor-f55d19b2eb57.webp","width":436,"height":443,"srcset":"assets/optimized/alien-emperor-f55d19b2eb57.webp 436w","thumb":"assets/optimized/alien-emperor-f55d19b2eb57-t400.webp"},"assets/pets/blaze-phoenix-diamond.png":{"src":"assets/optimized/blaze-phoenix-diamond-ac6f293fd8ee.webp","width":512,"height":512,"srcset":"assets/optimized/blaze-phoenix-diamond-ac6f293fd8ee.webp 512w","thumb":"assets/optimized/blaze-phoenix-diamond-ac6f293fd8ee-t400.webp"},"assets/pets/blaze-phoenix-golden.png":{"src":"assets/optimized/blaze-phoenix-golden-0e8d2aac9007.webp","width":512,"height":512,"srcset":"assets/optimized/blaze-phoenix-golden-0e8d2aac9007.webp 512w","thumb":"assets/optimized/blaze-phoenix-golden-0e8d2aac9007-t400.webp"},"assets/pets/blaze-phoenix.png":{"src":"assets/optimized/blaze-phoenix-97e3b607053e.webp","width":420,"height":420,"srcset":"assets/optimized/blaze-phoenix-97e3b607053e.webp 420w","thumb":"assets/optimized/blaze-phoenix-97e3b607053e-t400.webp"},"assets/pets/caaaaat-v30.png":{"src":"assets/optimized/caaaaat-v30-53703ef235e1.webp","width":512,"height":512,"srcset":"assets/optimized/caaaaat-v30-53703ef235e1.webp 512w","thumb":"assets/optimized/caaaaat-v30-53703ef235e1-t400.webp"},"assets/pets/ember-monster-diamond.png":{"src":"assets/optimized/ember-monster-diamond-d44dd5c5a2d2.webp","width":512,"height":512,"srcset":"assets/optimized/ember-monster-diamond-d44dd5c5a2d2.webp 512w","thumb":"assets/optimized/ember-monster-diamond-d44dd5c5a2d2-t400.webp"},"assets/pets/ember-monster-golden.png":{"src":"assets/optimized/ember-monster-golden-7b4865aaa294.webp","width":512,"height":512,"srcset":"assets/optimized/ember-monster-golden-7b4865aaa294.webp 512w","thumb":"assets/optimized/ember-monster-golden-7b4865aaa294-t400.webp"},"assets/pets/ember-monster.png":{"src":"assets/optimized/ember-monster-55f232233041.webp","width":512,"height":512,"srcset":"assets/optimized/ember-monster-55f232233041.webp 512w","thumb":"assets/optimized/ember-monster-55f232233041-t400.webp"},"assets/pets/exquisite-cat.png":{"src":"assets/optimized/exquisite-cat-1b4424d45854.webp","width":446,"height":446,"srcset":"assets/optimized/exquisite-cat-1b4424d45854.webp 446w","thumb":"assets/optimized/exquisite-cat-1b4424d45854-t400.webp"},"assets/pets/exquisite-peacock-diamond.png":{"src":"assets/optimized/exquisite-peacock-diamond-0fb8bb78d2f8.webp","width":512,"height":512,"srcset":"assets/optimized/exquisite-peacock-diamond-0fb8bb78d2f8.webp 512w","thumb":"assets/optimized/exquisite-peacock-diamond-0fb8bb78d2f8-t400.webp"},"assets/pets/exquisite-peacock-golden.png":{"src":"assets/optimized/exquisite-peacock-golden-eb551ee2d43e.webp","width":512,"height":512,"srcset":"assets/optimized/exquisite-peacock-golden-eb551ee2d43e.webp 512w","thumb":"assets/optimized/exquisite-peacock-golden-eb551ee2d43e-t400.webp"},"assets/pets/exquisite-peacock.png":{"src":"assets/optimized/exquisite-peacock-b625684c4042.webp","width":512,"height":512,"srcset":"assets/optimized/exquisite-peacock-b625684c4042.webp 512w","thumb":"assets/optimized/exquisite-peacock-b625684c4042-t400.webp"},"assets/pets/fallen-angel.png":{"src":"assets/optimized/fallen-angel-b0c721b62ade.webp","width":512,"height":512,"srcset":"assets/optimized/fallen-angel-b0c721b62ade.webp 512w","thumb":"assets/optimized/fallen-angel-b0c721b62ade-t400.webp"},"assets/pets/galaxy-bunny.png":{"src":"assets/optimized/galaxy-bunny-66a7061f089b.webp","width":1254,"height":1254,"srcset":"assets/optimized/galaxy-bunny-66a7061f089b.webp 1254w","thumb":"assets/optimized/galaxy-bunny-66a7061f089b-t400.webp"},"assets/pets/galaxy-cat-v30.png":{"src":"assets/optimized/galaxy-cat-v30-1d1ec1ab42a4.webp","width":512,"height":512,"srcset":"assets/optimized/galaxy-cat-v30-1d1ec1ab42a4.webp 512w","thumb":"assets/optimized/galaxy-cat-v30-1d1ec1ab42a4-t400.webp"},"assets/pets/grove-seeker-diamond.png":{"src":"assets/optimized/grove-seeker-diamond-f9ce5bc7cdd4.webp","width":512,"height":512,"srcset":"assets/optimized/grove-seeker-diamond-f9ce5bc7cdd4.webp 512w","thumb":"assets/optimized/grove-seeker-diamond-f9ce5bc7cdd4-t400.webp"},"assets/pets/grove-seeker-golden.png":{"src":"assets/optimized/grove-seeker-golden-c774e25a225f.webp","width":512,"height":512,"srcset":"assets/optimized/grove-seeker-golden-c774e25a225f.webp 512w","thumb":"assets/optimized/grove-seeker-golden-c774e25a225f-t400.webp"},"assets/pets/grove-seeker.png":{"src":"assets/optimized/grove-seeker-28766f15f789.webp","width":512,"height":512,"srcset":"assets/optimized/grove-seeker-28766f15f789.webp 512w","thumb":"assets/optimized/grove-seeker-28766f15f789-t400.webp"},"assets/pets/happy-cupcake.png":{"src":"assets/optimized/happy-cupcake-2d0126e07b00.webp","width":446,"height":452,"srcset":"assets/optimized/happy-cupcake-2d0126e07b00.webp 446w","thumb":"assets/optimized/happy-cupcake-2d0126e07b00-t400.webp"},"assets/pets/imp-diamond.png":{"src":"assets/optimized/imp-diamond-6252443ebb61.webp","width":512,"height":512,"srcset":"assets/optimized/imp-diamond-6252443ebb61.webp 512w","thumb":"assets/optimized/imp-diamond-6252443ebb61-t400.webp"},"assets/pets/imp-golden.png":{"src":"assets/optimized/imp-golden-c05dca1e4605.webp","width":512,"height":512,"srcset":"assets/optimized/imp-golden-c05dca1e4605.webp 512w","thumb":"assets/optimized/imp-golden-c05dca1e4605-t400.webp"},"assets/pets/imp.png":{"src":"assets/optimized/imp-017243db3be0.webp","width":512,"height":512,"srcset":"assets/optimized/imp-017243db3be0.webp 512w","thumb":"assets/optimized/imp-017243db3be0-t400.webp"},"assets/pets/job-cat-v30.png":{"src":"assets/optimized/job-cat-v30-5ff5d574db2c.webp","width":512,"height":512,"srcset":"assets/optimized/job-cat-v30-5ff5d574db2c.webp 512w","thumb":"assets/optimized/job-cat-v30-5ff5d574db2c-t400.webp"},"assets/pets/mossy-mushroom-diamond.png":{"src":"assets/optimized/mossy-mushroom-diamond-68d540dd364d.webp","width":520,"height":520,"srcset":"assets/optimized/mossy-mushroom-diamond-68d540dd364d.webp 520w","thumb":"assets/optimized/mossy-mushroom-diamond-68d540dd364d-t400.webp"},"assets/pets/mossy-mushroom-gold.png":{"src":"assets/optimized/mossy-mushroom-gold-5d30cb0b60a2.webp","width":520,"height":520,"srcset":"assets/optimized/mossy-mushroom-gold-5d30cb0b60a2.webp 520w","thumb":"assets/optimized/mossy-mushroom-gold-5d30cb0b60a2-t400.webp"},"assets/pets/mossy-mushroom-normal.png":{"src":"assets/optimized/mossy-mushroom-normal-7e3b86f0f9cd.webp","width":512,"height":512,"srcset":"assets/optimized/mossy-mushroom-normal-7e3b86f0f9cd.webp 512w","thumb":"assets/optimized/mossy-mushroom-normal-7e3b86f0f9cd-t400.webp"},"assets/pets/pop-cat-normal-v30.png":{"src":"assets/optimized/pop-cat-normal-v30-c67b404e8a3c.webp","width":512,"height":512,"srcset":"assets/optimized/pop-cat-normal-v30-c67b404e8a3c.webp 512w","thumb":"assets/optimized/pop-cat-normal-v30-c67b404e8a3c-t400.webp"},"assets/pets/pop-cat-scream-v30.png":{"src":"assets/optimized/pop-cat-scream-v30-9f7302ef979c.webp","width":512,"height":512,"srcset":"assets/optimized/pop-cat-scream-v30-9f7302ef979c.webp 512w","thumb":"assets/optimized/pop-cat-scream-v30-9f7302ef979c-t400.webp"},"assets/pets/queen-bee-diamond.png":{"src":"assets/optimized/queen-bee-diamond-d3e4995d81dc.webp","width":420,"height":420,"srcset":"assets/optimized/queen-bee-diamond-d3e4995d81dc.webp 420w","thumb":"assets/optimized/queen-bee-diamond-d3e4995d81dc-t400.webp"},"assets/pets/queen-bee-golden.png":{"src":"assets/optimized/queen-bee-golden-6c82f614d32d.webp","width":434,"height":450,"srcset":"assets/optimized/queen-bee-golden-6c82f614d32d.webp 434w","thumb":"assets/optimized/queen-bee-golden-6c82f614d32d-t400.webp"},"assets/pets/queen-bee-normal.png":{"src":"assets/optimized/queen-bee-normal-d1eaeecae388.webp","width":434,"height":450,"srcset":"assets/optimized/queen-bee-normal-d1eaeecae388.webp 434w","thumb":"assets/optimized/queen-bee-normal-d1eaeecae388-t400.webp"},"assets/pets/rich-bee.png":{"src":"assets/optimized/rich-bee-9c3544a6a35c.webp","width":512,"height":512,"srcset":"assets/optimized/rich-bee-9c3544a6a35c.webp 512w","thumb":"assets/optimized/rich-bee-9c3544a6a35c-t400.webp"},"assets/pets/ruby-majesty-diamond.png":{"src":"assets/optimized/ruby-majesty-diamond-f9e135666201.webp","width":512,"height":512,"srcset":"assets/optimized/ruby-majesty-diamond-f9e135666201.webp 512w","thumb":"assets/optimized/ruby-majesty-diamond-f9e135666201-t400.webp"},"assets/pets/ruby-majesty-golden.png":{"src":"assets/optimized/ruby-majesty-golden-f4bd240be79d.webp","width":512,"height":512,"srcset":"assets/optimized/ruby-majesty-golden-f4bd240be79d.webp 512w","thumb":"assets/optimized/ruby-majesty-golden-f4bd240be79d-t400.webp"},"assets/pets/ruby-majesty-normal.png":{"src":"assets/optimized/ruby-majesty-normal-b13a35f8a5fd.webp","width":512,"height":512,"srcset":"assets/optimized/ruby-majesty-normal-b13a35f8a5fd.webp 512w","thumb":"assets/optimized/ruby-majesty-normal-b13a35f8a5fd-t400.webp"},"assets/pets/ruby-nebula-star.png":{"src":"assets/optimized/ruby-nebula-star-1e8139df1126.webp","width":512,"height":512,"srcset":"assets/optimized/ruby-nebula-star-1e8139df1126.webp 512w","thumb":"assets/optimized/ruby-nebula-star-1e8139df1126-t400.webp"},"assets/pets/shadow-dominus-diamond-v30.png":{"src":"assets/optimized/shadow-dominus-diamond-v30-50d333030fec.webp","width":512,"height":512,"srcset":"assets/optimized/shadow-dominus-diamond-v30-50d333030fec.webp 512w","thumb":"assets/optimized/shadow-dominus-diamond-v30-50d333030fec-t400.webp"},"assets/pets/shadow-dominus-golden-v30.png":{"src":"assets/optimized/shadow-dominus-golden-v30-835f619bfce6.webp","width":512,"height":512,"srcset":"assets/optimized/shadow-dominus-golden-v30-835f619bfce6.webp 512w","thumb":"assets/optimized/shadow-dominus-golden-v30-835f619bfce6-t400.webp"},"assets/pets/shadow-dominus.png":{"src":"assets/optimized/shadow-dominus-6e01be62b0ee.webp","width":512,"height":512,"srcset":"assets/optimized/shadow-dominus-6e01be62b0ee.webp 512w","thumb":"assets/optimized/shadow-dominus-6e01be62b0ee-t400.webp"},"assets/pets/six-seven.png":{"src":"assets/optimized/six-seven-4af44f064466.webp","width":520,"height":520,"srcset":"assets/optimized/six-seven-4af44f064466.webp 520w","thumb":"assets/optimized/six-seven-4af44f064466-t400.webp"},"assets/pets/spaceship-alien-v30.png":{"src":"assets/optimized/spaceship-alien-v30-60204c2d9bf5.webp","width":512,"height":512,"srcset":"assets/optimized/spaceship-alien-v30-60204c2d9bf5.webp 512w","thumb":"assets/optimized/spaceship-alien-v30-60204c2d9bf5-t400.webp"},"assets/pets/sun-deer-v30.png":{"src":"assets/optimized/sun-deer-v30-7f81f01d9da8.webp","width":512,"height":512,"srcset":"assets/optimized/sun-deer-v30-7f81f01d9da8.webp 512w","thumb":"assets/optimized/sun-deer-v30-7f81f01d9da8-t400.webp"},"assets/pets/throne-dragon-diamond.png":{"src":"assets/optimized/throne-dragon-diamond-fb818b8c8d1d.webp","width":520,"height":520,"srcset":"assets/optimized/throne-dragon-diamond-fb818b8c8d1d.webp 520w","thumb":"assets/optimized/throne-dragon-diamond-fb818b8c8d1d-t400.webp"},"assets/pets/throne-dragon-gold.png":{"src":"assets/optimized/throne-dragon-gold-ce43bcff833f.webp","width":520,"height":520,"srcset":"assets/optimized/throne-dragon-gold-ce43bcff833f.webp 520w","thumb":"assets/optimized/throne-dragon-gold-ce43bcff833f-t400.webp"},"assets/pets/throne-dragon-normal.png":{"src":"assets/optimized/throne-dragon-normal-34ad90878d2c.webp","width":512,"height":512,"srcset":"assets/optimized/throne-dragon-normal-34ad90878d2c.webp 512w","thumb":"assets/optimized/throne-dragon-normal-34ad90878d2c-t400.webp"},"assets/pets/universe-capybara.png":{"src":"assets/optimized/universe-capybara-536078f998b9.webp","width":520,"height":520,"srcset":"assets/optimized/universe-capybara-536078f998b9.webp 520w","thumb":"assets/optimized/universe-capybara-536078f998b9-t400.webp"},"assets/pets/void-owl-v30.png":{"src":"assets/optimized/void-owl-v30-0929129e4ed8.webp","width":512,"height":512,"srcset":"assets/optimized/void-owl-v30-0929129e4ed8.webp 512w","thumb":"assets/optimized/void-owl-v30-0929129e4ed8-t400.webp"},"assets/sources/moon-chest.png":{"src":"assets/optimized/moon-chest-81ced8a61aec.webp","width":512,"height":512,"srcset":"assets/optimized/moon-chest-81ced8a61aec.webp 512w","thumb":"assets/optimized/moon-chest-81ced8a61aec-t400.webp"},"assets/sources/playtime-rewards.png":{"src":"assets/optimized/playtime-rewards-b131b207e2af.webp","width":400,"height":400,"srcset":"assets/optimized/playtime-rewards-b131b207e2af.webp 400w","thumb":"assets/optimized/playtime-rewards-b131b207e2af.webp"},"assets/sources/vip-chest.png":{"src":"assets/optimized/vip-chest-73a6f4d507c1.webp","width":512,"height":512,"srcset":"assets/optimized/vip-chest-73a6f4d507c1.webp 512w","thumb":"assets/optimized/vip-chest-73a6f4d507c1-t400.webp"},"assets/ui/category-charms.png":{"src":"assets/optimized/category-charms-f527f93e8d1a.webp","width":1254,"height":1254,"srcset":"assets/optimized/category-charms-f527f93e8d1a-64.webp 64w, assets/optimized/category-charms-f527f93e8d1a-128.webp 128w, assets/optimized/category-charms-f527f93e8d1a-256.webp 256w, assets/optimized/category-charms-f527f93e8d1a-512.webp 512w, assets/optimized/category-charms-f527f93e8d1a.webp 1254w"},"assets/ui/category-codes.png":{"src":"assets/optimized/category-codes-58ccc0457e14.webp","width":1308,"height":1203,"srcset":"assets/optimized/category-codes-58ccc0457e14-64.webp 64w, assets/optimized/category-codes-58ccc0457e14-128.webp 128w, assets/optimized/category-codes-58ccc0457e14-256.webp 256w, assets/optimized/category-codes-58ccc0457e14-512.webp 512w, assets/optimized/category-codes-58ccc0457e14.webp 1308w"},"assets/ui/category-eggs.png":{"src":"assets/optimized/category-eggs-c760bcb45695.webp","width":1254,"height":1254,"srcset":"assets/optimized/category-eggs-c760bcb45695-64.webp 64w, assets/optimized/category-eggs-c760bcb45695-128.webp 128w, assets/optimized/category-eggs-c760bcb45695-256.webp 256w, assets/optimized/category-eggs-c760bcb45695-512.webp 512w, assets/optimized/category-eggs-c760bcb45695.webp 1254w"},"assets/ui/category-items.png":{"src":"assets/optimized/category-items-1d10b97790e7.webp","width":1254,"height":1254,"srcset":"assets/optimized/category-items-1d10b97790e7-64.webp 64w, assets/optimized/category-items-1d10b97790e7-128.webp 128w, assets/optimized/category-items-1d10b97790e7-256.webp 256w, assets/optimized/category-items-1d10b97790e7-512.webp 512w, assets/optimized/category-items-1d10b97790e7.webp 1254w"},"assets/ui/category-pets.png":{"src":"assets/optimized/category-pets-122dca91115b.webp","width":1254,"height":1254,"srcset":"assets/optimized/category-pets-122dca91115b-64.webp 64w, assets/optimized/category-pets-122dca91115b-128.webp 128w, assets/optimized/category-pets-122dca91115b-256.webp 256w, assets/optimized/category-pets-122dca91115b-512.webp 512w, assets/optimized/category-pets-122dca91115b.webp 1254w"},"assets/ui/home-link-game.png":{"src":"assets/optimized/home-link-game-df6436e911ce.webp","width":150,"height":150,"srcset":"assets/optimized/home-link-game-df6436e911ce-64.webp 64w, assets/optimized/home-link-game-df6436e911ce-128.webp 128w, assets/optimized/home-link-game-df6436e911ce.webp 150w"},"assets/ui/home-link-lipbuilds.png":{"src":"assets/optimized/home-link-lipbuilds-9543aa46994d.webp","width":150,"height":150,"srcset":"assets/optimized/home-link-lipbuilds-9543aa46994d-64.webp 64w, assets/optimized/home-link-lipbuilds-9543aa46994d-128.webp 128w, assets/optimized/home-link-lipbuilds-9543aa46994d.webp 150w"},"assets/ui/sky-world.png":{"src":"assets/optimized/sky-world-00957c8f2b5b.webp","width":768,"height":432,"srcset":"assets/optimized/sky-world-00957c8f2b5b.webp 768w"},"assets/items/1m-lucky-block.png":{"src":"assets/optimized/1m-lucky-block-bb41e8426d0c.webp","width":1080,"height":1080,"srcset":"assets/optimized/1m-lucky-block-bb41e8426d0c.webp 1080w","thumb":"assets/optimized/1m-lucky-block-bb41e8426d0c-t400.webp"},"assets/pets/gummy-bear.png":{"src":"assets/optimized/gummy-bear-3f92f90b3ec7.webp","width":512,"height":512,"srcset":"assets/optimized/gummy-bear-3f92f90b3ec7.webp 512w","thumb":"assets/optimized/gummy-bear-3f92f90b3ec7-t400.webp"},"assets/pets/gummy-gubby.png":{"src":"assets/optimized/gummy-gubby-98a261b15771.webp","width":512,"height":512,"srcset":"assets/optimized/gummy-gubby-98a261b15771.webp 512w","thumb":"assets/optimized/gummy-gubby-98a261b15771-t400.webp"},"assets/pets/gummy-penguin.png":{"src":"assets/optimized/gummy-penguin-033852ed4242.webp","width":512,"height":512,"srcset":"assets/optimized/gummy-penguin-033852ed4242.webp 512w","thumb":"assets/optimized/gummy-penguin-033852ed4242-t400.webp"},"assets/pets/gummy-capybara.png":{"src":"assets/optimized/gummy-capybara-17700120c4f9.webp","width":512,"height":512,"srcset":"assets/optimized/gummy-capybara-17700120c4f9.webp 512w","thumb":"assets/optimized/gummy-capybara-17700120c4f9-t400.webp"},"assets/pets/gummy-frog.png":{"src":"assets/optimized/gummy-frog-a20d8677b3c9.webp","width":512,"height":512,"srcset":"assets/optimized/gummy-frog-a20d8677b3c9.webp 512w","thumb":"assets/optimized/gummy-frog-a20d8677b3c9-t400.webp"},"assets/eggs/gummy-egg.png":{"src":"assets/optimized/gummy-egg-89555b670755.webp","width":1080,"height":1080,"srcset":"assets/optimized/gummy-egg-89555b670755.webp 1080w","thumb":"assets/optimized/gummy-egg-89555b670755-t400.webp"},"assets/pets/sunken-eel-normal.png":{"src":"assets/optimized/sunken-eel-normal-c9f89c12bc73.webp","width":512,"height":512,"srcset":"assets/optimized/sunken-eel-normal-c9f89c12bc73.webp 512w","thumb":"assets/optimized/sunken-eel-normal-c9f89c12bc73-t400.webp"},"assets/pets/sunken-eel-golden.png":{"src":"assets/optimized/sunken-eel-golden-fa4655a70080.webp","width":512,"height":512,"srcset":"assets/optimized/sunken-eel-golden-fa4655a70080.webp 512w","thumb":"assets/optimized/sunken-eel-golden-fa4655a70080-t400.webp"},"assets/pets/sunken-eel-diamond.png":{"src":"assets/optimized/sunken-eel-diamond-bade9b072988.webp","width":512,"height":512,"srcset":"assets/optimized/sunken-eel-diamond-bade9b072988.webp 512w","thumb":"assets/optimized/sunken-eel-diamond-bade9b072988-t400.webp"},"assets/pets/blobfish-normal.png":{"src":"assets/optimized/blobfish-normal-92e14e90bf90.webp","width":512,"height":512,"srcset":"assets/optimized/blobfish-normal-92e14e90bf90.webp 512w","thumb":"assets/optimized/blobfish-normal-92e14e90bf90-t400.webp"},"assets/pets/blobfish-golden.png":{"src":"assets/optimized/blobfish-golden-3fc579fcfaf1.webp","width":512,"height":512,"srcset":"assets/optimized/blobfish-golden-3fc579fcfaf1.webp 512w","thumb":"assets/optimized/blobfish-golden-3fc579fcfaf1-t400.webp"},"assets/pets/blobfish-diamond.png":{"src":"assets/optimized/blobfish-diamond-5a6edd4fc80e.webp","width":512,"height":512,"srcset":"assets/optimized/blobfish-diamond-5a6edd4fc80e.webp 512w","thumb":"assets/optimized/blobfish-diamond-5a6edd4fc80e-t400.webp"}};
 import { readPriceCache, savePriceCache } from '../data/price-cache.js';
 import { renderTradePage, tradePageCount, tradeSummary } from '../data/trade-export.js';
+import { calculateOffer, sanitizeTickets, MAX_QUANTITY } from '../data/trade-math.js';
 import { PETS, CHARMS, EGGS, ITEMS, CODES, RARITY_ORDER } from '../data/catalog.js';
 
 import { MONITOR } from '../data/monitor-settings.js';
@@ -19,14 +20,13 @@ let priceSyncError = false;
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 const ticket = 'assets/items/value-ticket.png';
-const integerFormat = new Intl.NumberFormat('en-US');
 const decimalFormat = new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 });
-const compactValueFormat = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 9 });
-function imageSource(source) { return IMAGE_ASSETS[source]?.src || source; }
-function imageAttributes(source, { sizes = '', eager = false } = {}) {
+// `thumb` = 400 px WebP for cards, picker and trade tiles (≈7x lighter than the full art).
+function imageSource(source, thumb = false) { const asset = IMAGE_ASSETS[source]; return (thumb && asset?.thumb) || asset?.src || source; }
+function imageAttributes(source, { sizes = '', eager = false, thumb = false } = {}) {
   const asset = IMAGE_ASSETS[source];
-  const responsive = asset && sizes ? ` srcset="${asset.srcset}" sizes="${sizes}"` : '';
-  return `src="${imageSource(source)}"${responsive} decoding="async" loading="${eager ? 'eager' : 'lazy'}" draggable="false"`;
+  const responsive = asset && sizes && !(thumb && asset.thumb) ? ` srcset="${asset.srcset}" sizes="${sizes}"` : '';
+  return `src="${imageSource(source, thumb)}"${responsive} decoding="async" loading="${eager ? 'eager' : 'lazy'}"${eager ? ' fetchpriority="high"' : ''} draggable="false"`;
 }
 function setImageSource(element, source) {
   element.removeAttribute('srcset');
@@ -117,7 +117,9 @@ const categoryMeta = {
 
 const sortNames = {
   featured: 'Featured',
-  name: 'Name A-Z',
+  name: 'Name A–Z',
+  'price-desc': 'Value: high to low',
+  'price-asc': 'Value: low to high',
   'best-desc': 'Best % high-low',
   'best-asc': 'Best % low-high',
   rarity: 'Rarity',
@@ -133,6 +135,8 @@ const state = {
   modalItem: null,
   modalVariant: 'normal',
   modalRange: '24h',
+  filtersOpen: false,
+  calcActiveSide: 'left',
   calcPickerSide: 'left',
   calcPickerCategory: 'pets',
   calcPickerVariant: 'normal',
@@ -140,6 +144,8 @@ const state = {
   calc: { left: [], right: [], leftTickets: 0, rightTickets: 0 },
 };
 
+const smallLayout = matchMedia('(max-width: 900px)');
+let tradeExportBusy = false;
 let historyController = null;
 let historyRequestId = 0;
 let calcMotionCache = { leftTotal: null, rightTotal: null, diff: null, leftTickets: 0, rightTickets: 0, verdict: 'fair' };
@@ -164,6 +170,14 @@ function switchView(view) {
   state.view = view;
   render();
   if (changed) window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+}
+
+function focusViewHeading() {
+  const heading = $('.page-view:not([hidden]) h1');
+  if (heading) {
+    heading.tabIndex = -1;
+    heading.focus({ preventScroll: true });
+  }
 }
 
 async function copyText(text) {
@@ -212,9 +226,7 @@ function rarityLetterMarkup(item) {
   const rarity = rarityFor(item);
   const style = rarityLetterStyles[rarity];
   if (!style) return `<span class="rarity-text rarity-solid">${rarity}</span>`;
-  const id = `rarity-letter-${++rarityPaintId}`;
-  const stops = style.colors.map((color,index) => `<stop offset="${index/(style.colors.length-1)*100}%" stop-color="${color}"/>`).join('');
-  return `<span class="rarity-text rarity-lettering"><svg class="rarity-letter-svg" viewBox="0 0 ${style.width} 22" style="--letter-width:${style.width/16}em" role="img" aria-label="${rarity}" focusable="false"><defs><linearGradient id="${id}" x2="${style.horizontal ? '100%' : '0%'}" y2="${style.horizontal ? '0%' : '100%'}">${stops}</linearGradient></defs><text x="${style.width/2}" y="16" text-anchor="middle" fill="url(#${id})">${rarity}</text></svg></span>`;
+  return `<span class="rarity-text rarity-lettering" style="--rg:linear-gradient(${style.horizontal ? '90deg' : '180deg'},${style.colors.join(',')})">${rarity}</span>`;
 }
 
 function rarityIndex(item) {
@@ -231,17 +243,18 @@ function raritySlug(item) {
 }
 
 function formatValue(value) {
-  if (value == null) return 'Not priced';
-  if (typeof value === 'string') return value;
-  return integerFormat.format(value);
+  try { return normalizePrice(value).label; } catch { return 'Not Price'; }
+}
+function priceStateFor(item, variant = state.variant) {
+  if (!pricesReady) return 'loading';
+  try { const price = normalizePrice(valueFor(item, variant)); return price.number != null ? 'number' : price.key; }
+  catch { return 'unpriced'; }
 }
 
 function formatItemValue(item, variant = state.variant) {
   if (!pricesReady) return priceSyncError ? 'Unavailable' : 'Loading…';
   const value = valueFor(item, variant);
-  // Keep compact labels such as RICH BEE's 2K, but derive them from the live
-  // value so a stored label cannot hide a price edit or an O/C change.
-  if (!item.supportsVariants && item.compactValue && typeof value === 'number') return compactValueFormat.format(value);
+  // Labels always come from the live price, including Not Price and O/C.
   return formatValue(value);
 }
 
@@ -263,8 +276,11 @@ function formatSignedValue(value) {
 function refreshHomeUpdated() {
   const el = $('#homeUpdated');
   if (!el) return;
+  el.dataset.state = priceSyncError ? 'error' : !pricesReady ? 'loading' : currentPriceUpdate?.updatedAt ? 'ready' : 'unrecorded';
+  const saved = priceSyncError && pricesReady ? 'Saved values · ' : '';
   el.textContent = currentPriceUpdate?.updatedAt
-    ? `${currentPriceUpdate.source === 'detected' ? 'Change detected' : 'Values updated'} ${formatPriceAge(currentPriceUpdate.updatedAt)}`
+    ? `${saved}${currentPriceUpdate.source === 'detected' ? 'Change detected' : 'Values updated'} ${formatPriceAge(currentPriceUpdate.updatedAt)}`
+    : priceSyncError ? (pricesReady ? 'Saved values · Update time unavailable' : 'Prices unavailable')
     : pricesReady ? 'Update time unavailable' : 'Loading values…';
 }
 
@@ -276,29 +292,28 @@ const priceUpdateDateFormat = new Intl.DateTimeFormat('en-GB', {
 function refreshPricesUpdated() {
   refreshHomeUpdated();
   const label = $('#valuesUpdated');
-  if (!label) return;
-  label.hidden = state.view !== 'values' || state.category === 'codes';
-  if (label.hidden) return;
-  const heading = $('h2', label);
-  if (heading) heading.textContent = priceSyncError && pricesReady ? 'SAVED VALUES' : currentPriceUpdate?.source === 'detected' ? 'CHANGE DETECTED' : 'VALUES UPDATED';
-  const relative = $('#valuesUpdatedRelative');
-  const exact = $('#valuesUpdatedTime');
+  const badge = $('#collectionUpdated');
   const date = currentPriceUpdate?.updatedAt ? new Date(currentPriceUpdate.updatedAt) : null;
   const known = date && Number.isFinite(date.getTime());
+  const detected = currentPriceUpdate?.source === 'detected';
+  const age = known ? formatPriceAge(date.toISOString()) : priceSyncError
+    ? (pricesReady ? 'Connection unavailable' : 'Prices unavailable')
+    : pricesReady ? 'Update time unavailable' : 'Loading values…';
+  label.hidden = state.view !== 'values' || state.category === 'codes';
   label.dataset.recorded = String(Boolean(known));
-  relative.textContent = known
-    ? formatPriceAge(date.toISOString())
-    : priceSyncError ? (pricesReady ? 'Connection unavailable' : 'Prices unavailable') : pricesReady ? 'Update time unavailable' : 'Loading values…';
-  exact.hidden = !known;
-  if (known) {
-    exact.dateTime = date.toISOString();
-    exact.textContent = priceUpdateDateFormat.format(date);
-    label.title = `${currentPriceUpdate?.source === 'detected' ? 'Change detected' : 'Last price update'}: ${exact.textContent} (Europe/Warsaw)${priceSyncError ? ' — saved values, connection unavailable' : ''}`;
-  } else {
-    exact.textContent = '';
-    exact.removeAttribute('datetime');
-    label.removeAttribute('title');
+  $('#valuesUpdatedHeading').textContent = priceSyncError && pricesReady ? 'SAVED VALUES' : detected ? 'CHANGE DETECTED' : 'VALUES UPDATED';
+  $('#valuesUpdatedRelative').textContent = age;
+  badge.hidden = state.category === 'codes';
+  badge.dataset.state = priceSyncError ? 'error' : pricesReady ? 'ready' : 'loading';
+  $('#collectionUpdatedText').textContent = known
+    ? `${priceSyncError ? 'Saved values · ' : ''}${detected ? 'Change detected' : 'Last updated'} ${age}` : age;
+  for (const time of [$('#valuesUpdatedTime'), $('#collectionUpdatedTime')]) {
+    time.hidden = !known;
+    if (known) { time.dateTime = date.toISOString(); time.textContent = priceUpdateDateFormat.format(date); }
+    else { time.textContent = ''; time.removeAttribute('datetime'); }
   }
+  const title = known ? `${detected ? 'Change detected' : 'Last price update'}: ${priceUpdateDateFormat.format(date)} (Europe/Warsaw)${priceSyncError ? ' — saved values, connection unavailable' : ''}` : '';
+  label.title = title; badge.title = title; $('#homeUpdated').title = title;
 }
 
 function refreshPriceViews() {
@@ -307,7 +322,7 @@ function refreshPriceViews() {
         for (const [id, node] of view.cards) {
           const item = priceCatalogs[category]?.find(item => item.id === id);
           const value = $('.set-value strong', node);
-          if (item && value) value.textContent = formatItemValue(item, variant);
+          if (item && value) { value.textContent = formatItemValue(item, variant); node.dataset.priceState = priceStateFor(item, variant); }
         }
       }
       catalogRenderSignature = '';
@@ -366,12 +381,11 @@ function fallbackHistoryPoint(item, variant = state.modalVariant) {
 }
 
 function normalizeHistoryPoints(points = []) {
-  return points
-    .map(point => ({
-      timestamp: Number(point.timestamp ?? point.captured_at),
-      value: Number(point.value),
-    }))
-    .filter(point => Number.isFinite(point.timestamp) && Number.isFinite(point.value))
+  if (!Array.isArray(points)) return [];
+  return points.slice(-10000)
+    .filter(point => point && point.value != null && (point.timestamp ?? point.captured_at) != null)
+    .map(point => ({ timestamp: Number(point.timestamp ?? point.captured_at), value: Number(point.value) }))
+    .filter(point => Number.isFinite(point.timestamp) && Number.isFinite(point.value) && point.value >= 0)
     .sort((a, b) => a.timestamp - b.timestamp);
 }
 
@@ -440,17 +454,20 @@ async function loadValueHistory() {
   if (!item || state.category === 'codes') return;
 
   const historyArea = $('#modalHistoryArea');
-  historyArea.hidden = false;
+  historyController?.abort();
+  const requestId = ++historyRequestId;
   const currentValue = parseNumericValue(valueFor(item, state.modalVariant));
+  historyArea.hidden = !pricesReady || currentValue == null;
+  if (historyArea.hidden) return;
   const fallback = fallbackHistoryPoint(item, state.modalVariant);
   renderHistoryStats(fallback, currentValue);
   updateHistoryTimestamp(fallback);
   $('#historyHint').textContent = 'Connecting to value history…';
   setHistoryStatus('Loading', 'loading');
 
-  historyController?.abort();
-  historyController = new AbortController();
-  const requestId = ++historyRequestId;
+  const controller = new AbortController();
+  historyController = controller;
+  const timeout = setTimeout(() => controller.abort(), 6000);
 
   try {
     const params = new URLSearchParams({
@@ -459,7 +476,7 @@ async function loadValueHistory() {
       variant: state.modalVariant,
       range: state.modalRange,
     });
-    const response = await fetch(`/api/history?${params}`, { signal: historyController.signal, headers: { accept: 'application/json' } });
+    const response = await fetch(`/api/history?${params}`, { signal: controller.signal, headers: { accept: 'application/json' } });
     if (!response.ok) throw new Error(`History API ${response.status}`);
     const payload = await response.json();
     if (requestId !== historyRequestId || state.modalItem?.id !== item.id) return;
@@ -474,7 +491,7 @@ async function loadValueHistory() {
       setHistoryStatus('History unavailable', 'offline');
       $('#historyHint').textContent = 'The current listed value is shown above. Price history is not available yet.';
     } else if (!Number.isFinite(apiCurrent)) {
-      setHistoryStatus(valueFor(item, state.modalVariant) === 'O/C' ? 'Owner’s Choice' : 'Not priced', 'offline');
+      setHistoryStatus(valueFor(item, state.modalVariant) === 'O/C' ? 'Owner’s Choice' : 'Not Price', 'offline');
       $('#historyHint').textContent = 'This item has no fixed numeric price. Agree on its value with the owner.';
     } else if (points.length <= 1) {
       setHistoryStatus('No previous price changes', 'neutral');
@@ -487,11 +504,10 @@ async function loadValueHistory() {
       $('#historyHint').textContent = `Price movement over ${state.modalRange.toUpperCase()}. Change compares the two latest records.`;
     }
   } catch (error) {
-    if (error?.name === 'AbortError') return;
-    if (requestId !== historyRequestId) return;
+    if (requestId !== historyRequestId || !$('#detailModal').open) return;
     setHistoryStatus('History unavailable', 'offline');
     $('#historyHint').textContent = 'The current listed value is shown above. Price history could not be loaded.';
-  }
+  } finally { clearTimeout(timeout); }
 }
 
 
@@ -507,6 +523,7 @@ function imageFor(item, variant = state.variant) {
 }
 
 function valueFor(item, variant = state.variant) {
+  if (!item) return null;
   if (item.supportsVariants) {
     if (item.values && Object.prototype.hasOwnProperty.call(item.values, variant)) return item.values[variant];
     return item.values?.normal ?? null;
@@ -545,6 +562,14 @@ function filtered() {
 
   if (state.sort === 'name') {
     list.sort((a, b) => a.name.localeCompare(b.name));
+  } else if (state.sort === 'price-desc' || state.sort === 'price-asc') {
+    const direction = state.sort === 'price-desc' ? -1 : 1;
+    list.sort((a, b) => {
+      const first = parseNumericValue(valueFor(a));
+      const second = parseNumericValue(valueFor(b));
+      if (first == null || second == null) return first == null && second == null ? a.name.localeCompare(b.name) : first == null ? 1 : -1;
+      return (first - second) * direction || a.name.localeCompare(b.name);
+    });
   } else if (state.sort === 'best-desc') {
     list.sort((a, b) => (b.bestPct ?? -1) - (a.bestPct ?? -1) || rarityIndex(a) - rarityIndex(b));
   } else if (state.sort === 'best-asc') {
@@ -573,30 +598,23 @@ function card(item, index = 0) {
   const color = rarityColor(item);
   const art = isAnimated(item)
     ? animatedPopMarkup('card')
-    : `<img class="card-image" ${imageAttributes(imageFor(item), { eager: index < 8 })} alt="${item.name}">`;
+    : `<img class="card-image" ${imageAttributes(imageFor(item), { eager: index < 8, thumb: true })} alt="${item.name}">`;
 
-  return `<article class="value-card rarity-${raritySlug(item)}" data-id="${item.id}" data-rarity="${raritySlug(item)}" style="--rarity:${color};--rarity-gradient:${gradientFor(item)};--delay:${Math.min(index, 12) * 24}ms;">
+  return `<article class="value-card rarity-${raritySlug(item)}" data-id="${item.id}" data-rarity="${raritySlug(item)}" data-price-state="${priceStateFor(item)}" style="--rarity:${color};--delay:${Math.min(index, 12) * 24}ms;">
     <button class="card-button" type="button" aria-label="Open ${item.name}">
-      <span class="rarity-sheen" aria-hidden="true"></span>
-      <div class="card-art">
-        <div class="card-ambient"></div>
-        <span class="render-reflection" aria-hidden="true"></span>
-        <span class="render-floor" aria-hidden="true"></span>
-        <div class="card-badges">
-          <span class="rarity-badge"><i></i>${rarityLetterMarkup(item)}</span>
-          ${item.eventBadge ? `<span class="event-badge">${item.eventBadge}</span>` : ''}
-          ${item.bestPct != null ? `<span class="best-badge">${item.bestPct}% Best Pet</span>` : ''}
-        </div>
+      <span class="card-chips">
+        <span class="rarity-badge">${rarityLetterMarkup(item)}</span>
+        ${item.bestPct != null ? `<span class="best-badge">${item.bestPct}%<span class="best-full"> Best</span></span>` : ''}
+        ${item.eventBadge ? `<span class="event-badge">${item.eventBadge}</span>` : ''}
+      </span>
+      <span class="card-art">
         ${isAnimated(item) ? '<span class="animated-badge card-animated-badge">▶ Animated</span>' : ''}
         ${art}
-      </div>
-      <div class="card-bottom">
-        <div class="card-title">${item.name}</div>
-        <div class="card-value-row">
-          <span>VALUE</span>
-          <span class="set-value"><img ${imageAttributes(ticket, { sizes: '22px' })} alt=""><strong>${formatItemValue(item)}</strong></span>
-        </div>
-      </div>
+      </span>
+      <span class="card-bottom">
+        <span class="card-title">${item.name}</span>
+        <span class="card-value-row"><span class="set-value"><img ${imageAttributes(ticket, { sizes: '24px' })} alt=""><strong>${formatItemValue(item)}</strong></span></span>
+      </span>
     </button>
   </article>`;
 }
@@ -700,7 +718,7 @@ const tileObserver = 'IntersectionObserver' in window ? new IntersectionObserver
 }, { rootMargin: touchLayout.matches ? '80px 0px' : '200px 0px' }) : null;
 function syncVisibleAnimations() {
   if (!tileObserver) return;
-  const tiles = new Set($$('#cardsGrid .value-card, #calcPickerGrid .calc-picker-card'));
+  const tiles = new Set($$('#cardsGrid .animated-pop-card').map(node => node.closest('.value-card')).filter(Boolean));
   for (const tile of observedTiles) {
     if (!tiles.has(tile)) { tileObserver.unobserve(tile); observedTiles.delete(tile); }
   }
@@ -776,6 +794,12 @@ function render() {
   valuesView.hidden = state.view !== 'values';
   calculatorView.hidden = state.view !== 'calculator';
   categoryNav.hidden = state.view !== 'values';
+  $('#mobileTradeSummary').hidden = state.view !== 'calculator';
+  $$('.primary-nav [data-view-target], .mobile-nav [data-view-target]').forEach(button => {
+    const active = button.dataset.viewTarget === state.view;
+    button.classList.toggle('active', active);
+    if (active) button.setAttribute('aria-current', 'page'); else button.removeAttribute('aria-current');
+  });
 
   refreshHomeUpdated();
 
@@ -797,15 +821,6 @@ function render() {
     button.setAttribute('aria-pressed', String(button.dataset.itemGroup === state.itemGroup));
   });
 
-  // Size the panel for its largest visible section, rather than both groups combined.
-  if (itemsMode) {
-    const panel = $('.catalog-card', valuesView);
-    const largestGroup = Math.max(...Object.keys(itemGroups).map(group => list.filter(item => itemGroupFor(item) === group).length));
-    for (const columns of [2, 4, 7]) {
-      panel.style.setProperty(`--items-columns-${columns}`, Math.min(columns, largestGroup || columns));
-    }
-  }
-
   $('#sectionKicker').textContent = kicker;
   $('#sectionTitle').textContent = title;
   $('#searchInput').placeholder = placeholder;
@@ -815,11 +830,18 @@ function render() {
   variantTools.hidden = !petsMode;
   $('.page-tools').classList.toggle('no-variants', !petsMode && !itemsMode);
   $('#customSort').hidden = codesMode;
-  // Codes has a single search row; keep Home in the title corner.
-  const homeButton = $('.home-corner-btn', valuesView);
-  const homeHost = $(codesMode ? '.page-header' : '.page-tools', valuesView);
-  if (homeButton.parentElement !== homeHost) homeHost.append(homeButton);
-
+  $('#filterToggle').hidden = codesMode;
+  $('#filterPanel').hidden = codesMode;
+  $('#catalogToolbar').dataset.filtersOpen = String(state.filtersOpen);
+  $('#filterToggle').setAttribute('aria-expanded', String(state.filtersOpen));
+  const activeFilters = [];
+  if (petsMode && state.variant !== 'normal') activeFilters.push(state.variant[0].toUpperCase() + state.variant.slice(1));
+  if (itemsMode && state.itemGroup !== 'all') activeFilters.push(itemGroups[state.itemGroup]);
+  if (!codesMode && state.sort !== 'featured') activeFilters.push(sortNames[state.sort]);
+  $('#filterToggleLabel').textContent = itemsMode ? 'Categories' : 'Filters';
+  $('#filterActiveDot').hidden = !activeFilters.length;
+  $('#activeFilterLabel').textContent = activeFilters.join(' · ');
+  $('#activeFilterLabel').hidden = !activeFilters.length || state.filtersOpen;
   const catalogLabel = $('#catalogLabel');
   catalogLabel.textContent = codesMode ? 'Game codes' : (petsMode ? 'Pet Collection' : title);
   catalogLabel.hidden = false;
@@ -846,37 +868,28 @@ function render() {
 }
 
 function calcSideInfo(side) {
-  const entries = state.calc[side] || [];
-  const hasOC = entries.some(entry => {
-    const item = calcFindItem(entry.category, entry.id);
-    return parseNumericValue(valueFor(item, entry.variant)) == null;
-  });
-  const items = entries.reduce((sum, entry) => {
-    const item = calcFindItem(entry.category, entry.id);
-    return sum + calcNumericValue(item, entry.variant) * entry.qty;
-  }, 0);
-  const tickets = Math.max(0, Number(state.calc[`${side}Tickets`]) || 0);
-  return { total: items + tickets, hasOC };
+  const entries = (state.calc[side] || []).map(entry => ({ value: valueFor(calcFindItem(entry.category, entry.id), entry.variant), qty: entry.qty }));
+  const result = calculateOffer(entries, state.calc[`${side}Tickets`]);
+  return { ...result, hasOC: result.incomplete };
 }
 
 function calcEntryPrice(item, entry) {
+  if (!pricesReady) return formatItemValue(item, entry.variant);
   const raw = valueFor(item, entry.variant);
   if (parseNumericValue(raw) == null) return formatValue(raw);
   const total = calcNumericValue(item, entry.variant) * entry.qty;
-  return item.compactValue ? compactValueFormat.format(total) : formatValue(total);
+  return Number.isFinite(total) ? formatValue(total) : 'Too large';
 }
 
 function calcEntryMarkup(side, entry) {
   const item = calcFindItem(entry.category, entry.id);
   if (!item) return '';
-  const rawValue = valueFor(item, entry.variant);
-  const numericValue = calcNumericValue(item, entry.variant) * entry.qty;
-  const displayValue = parseNumericValue(rawValue) == null ? formatValue(rawValue) : (item.compactValue ? compactValueFormat.format(numericValue) : formatValue(numericValue));
+  const displayValue = calcEntryPrice(item, entry);
   const image = imageFor(item, entry.variant);
   const variantName = entry.category === 'pets' ? entry.variant[0].toUpperCase() + entry.variant.slice(1) : '';
   return `<article class="trade-item-v40 trade-entry-new" data-entry-category="${entry.category}" data-entry-id="${entry.id}" data-entry-variant="${entry.variant}">
     <div class="trade-item-art-v40">
-      <img ${imageAttributes(image)} alt="${item.name}">
+      <img ${imageAttributes(image, { thumb: true })} alt="${item.name}">
       <span class="trade-item-qty-v40">x${entry.qty}</span>
     </div>
     <div class="trade-item-copy-v40">
@@ -972,8 +985,8 @@ function renderCalculator() {
       input.value = state.calc[`${side}Tickets`];
     }
   }
-  animateMetric('#calcLeftTotal', leftInfo.hasOC ? `${formatValue(left)} + O/C` : formatValue(left), calcMotionCache.leftTotal == null ? 'neutral' : left > calcMotionCache.leftTotal ? 'up' : left < calcMotionCache.leftTotal ? 'down' : 'neutral');
-  animateMetric('#calcRightTotal', rightInfo.hasOC ? `${formatValue(right)} + O/C` : formatValue(right), calcMotionCache.rightTotal == null ? 'neutral' : right > calcMotionCache.rightTotal ? 'up' : right < calcMotionCache.rightTotal ? 'down' : 'neutral');
+  animateMetric('#calcLeftTotal', leftInfo.overflow ? 'Too large' : formatValue(left), calcMotionCache.leftTotal == null ? 'neutral' : left > calcMotionCache.leftTotal ? 'up' : left < calcMotionCache.leftTotal ? 'down' : 'neutral');
+  animateMetric('#calcRightTotal', rightInfo.overflow ? 'Too large' : formatValue(right), calcMotionCache.rightTotal == null ? 'neutral' : right > calcMotionCache.rightTotal ? 'up' : right < calcMotionCache.rightTotal ? 'down' : 'neutral');
   animateMetric('#calcDifference', formatValue(gap), calcMotionCache.diff == null ? 'neutral' : gap > calcMotionCache.diff ? 'up' : gap < calcMotionCache.diff ? 'down' : 'neutral');
   $('#calcLeftOcNote').hidden = !leftInfo.hasOC;
   $('#calcRightOcNote').hidden = !rightInfo.hasOC;
@@ -990,18 +1003,28 @@ function renderCalculator() {
     });
   };
 
-  // One rule shared with PNG export: compare known values, keep O/C separate.
-  const summary = tradeSummary({ left: { total: left, entries: state.calc.left, tickets: state.calc.leftTickets, unpriced: leftInfo.hasOC }, right: { total: right, entries: state.calc.right, tickets: state.calc.rightTickets, unpriced: rightInfo.hasOC } });
+  // The same rule is used by PNG export: incomplete offers have no W/F/L rating.
+  const summary = tradeSummary({ left: { total: left, entries: state.calc.left, tickets: state.calc.leftTickets, unpriced: leftInfo.hasOC, overflow: leftInfo.overflow }, right: { total: right, entries: state.calc.right, tickets: state.calc.rightTickets, unpriced: rightInfo.hasOC, overflow: rightInfo.overflow } });
   const verdictState = summary.verdict;
   setTradeStatus(verdictState);
   centerVerdict.className = `is-${verdictState}`;
   label.className = `is-${verdictState}`;
-  animateMetric(centerVerdict, verdictState === 'win' ? 'W' : verdictState === 'lose' ? 'L' : 'FAIR', verdictState === 'win' ? 'up' : verdictState === 'lose' ? 'down' : 'neutral');
+  animateMetric(centerVerdict, verdictState === 'win' ? 'WIN' : verdictState === 'lose' ? 'LOSS' : verdictState === 'partial' ? 'INCOMPLETE' : 'FAIR', verdictState === 'win' ? 'up' : verdictState === 'lose' ? 'down' : 'neutral');
   animateMetric(label, summary.detail, verdictState === 'win' ? 'up' : verdictState === 'lose' ? 'down' : 'neutral');
   $('#calcUnpricedNotice').hidden = !hasAnyOC;
   const countText = side => { const count = state.calc[side].reduce((sum, entry) => sum + entry.qty, 0); return `${count} ${count === 1 ? 'item' : 'items'}`; };
   $('#calcLeftCount').textContent = countText('left');
   $('#calcRightCount').textContent = countText('right');
+  $('#leftTabCount').textContent = state.calc.left.reduce((sum, entry) => sum + entry.qty, 0);
+  $('#rightTabCount').textContent = state.calc.right.reduce((sum, entry) => sum + entry.qty, 0);
+  $('#calculatorPanel').dataset.activeOffer = state.calcActiveSide;
+  $$('[data-offer-side]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.offerSide === state.calcActiveSide)));
+  $('#mobileLeftTotal').textContent = leftInfo.overflow ? 'Too large' : formatValue(left);
+  $('#mobileRightTotal').textContent = rightInfo.overflow ? 'Too large' : formatValue(right);
+  $('#mobileTradeVerdict').textContent = verdictState === 'partial' ? 'INCOMPLETE' : verdictState === 'win' ? 'WIN' : verdictState === 'lose' ? 'LOSS' : 'FAIR';
+  $('#mobileTradeHint').textContent = summary.detail;
+  $('#mobileTradeSummary').dataset.verdict = verdictState;
+  $('#saveTradeImage').disabled = tradeExportBusy || !pricesReady;
 
   calcMotionCache.leftTotal = left;
   calcMotionCache.rightTotal = right;
@@ -1029,6 +1052,7 @@ function clearCalcTrade() {
 }
 
 function openCalcPicker(side) {
+  if (!['left', 'right'].includes(side)) return;
   state.calcPickerSide = side;
   state.calcPickerCategory = 'pets';
   state.calcPickerVariant = 'normal';
@@ -1043,6 +1067,8 @@ function openCalcPicker(side) {
 const pickerCards = new Map();
 function syncPickerAddedCounts() {
   const quantities = new Map(state.calc[state.calcPickerSide].map(entry => [`${entry.category}/${entry.id}/${entry.variant}`, entry.qty]));
+  const info = calcSideInfo(state.calcPickerSide);
+  $('#pickerOfferTotal').textContent = `${state.calcPickerSide === 'left' ? 'My Offer' : 'Their Offer'} · ${info.overflow ? 'Too large' : formatValue(info.total)}${info.hasOC ? ' · Incomplete' : ''}`;
   $$('#calcPickerGrid [data-calc-pick]').forEach(button => {
     const key = `${button.dataset.calcCategoryPick}/${button.dataset.calcPick}/${button.dataset.calcVariant}`;
     const quantity = quantities.get(key) || 0;
@@ -1093,7 +1119,7 @@ function renderCalcPicker() {
           ${item.eventBadge ? `<span class="calc-picker-event">${item.eventBadge}</span>` : ''}
           ${item.bestPct != null ? `<span class="calc-picker-best">${item.bestPct}% Best Pet</span>` : ''}
         </div>
-        <img class="calc-picker-image" ${imageAttributes(imageFor(item, variant), { eager: index < 8, sizes: '140px' })} alt="${item.name}${petsMode ? ` (${variantLabel})` : ''}">
+        <img class="calc-picker-image" ${imageAttributes(imageFor(item, variant), { eager: index < 8, thumb: true })} alt="${item.name}${petsMode ? ` (${variantLabel})` : ''}">
       </div>
       <div class="calc-picker-body">
         <strong class="calc-picker-name">${item.name}</strong>
@@ -1119,6 +1145,7 @@ function addCalcItem(side, category, id, variant = 'normal') {
   if (category === 'pets' ? !supportsVariant(item, variant) : variant !== 'normal') return;
   const entries = state.calc[side];
   const existing = entries.find(entry => entry.category === category && entry.id === id && entry.variant === variant);
+  if (existing && existing.qty >= MAX_QUANTITY) { showExportMessage(`Maximum quantity is ${MAX_QUANTITY.toLocaleString('en-US')} per item.`); return; }
   if (existing) existing.qty += 1;
   else entries.push({ category, id, variant, qty: 1 });
   renderCalculator();
@@ -1133,56 +1160,14 @@ function removeCalcItem(side, category, id, variant) {
   renderCalculator();
 }
 
-// Delegated hover: a single listener/RAF and a rect cached between scrolls.
-const finePointer = matchMedia('(hover: hover) and (pointer: fine)');
-let tiltButton = null;
-let tiltRect = null;
-let tiltFrame = 0;
-let pointerX = 0;
-let pointerY = 0;
-function resetTilt() {
-  cancelAnimationFrame(tiltFrame);
-  tiltFrame = 0;
-  if (tiltButton) {
-    tiltButton.style.setProperty('--rx', '0deg');
-    tiltButton.style.setProperty('--ry', '0deg');
-  }
-  tiltButton = null;
-  tiltRect = null;
-}
-$('#cardsGrid').addEventListener('pointermove', event => {
-  if (!motionAllowed() || !finePointer.matches || event.pointerType === 'touch') return;
-  const button = event.target.closest('.card-button');
-  if (!button) { resetTilt(); return; }
-  if (button !== tiltButton) { resetTilt(); tiltButton = button; }
-  pointerX = event.clientX; pointerY = event.clientY;
-  if (tiltFrame) return;
-  tiltFrame = requestAnimationFrame(() => {
-    tiltFrame = 0;
-    if (!tiltButton?.isConnected || !motionAllowed()) { resetTilt(); return; }
-    tiltRect ||= tiltButton.getBoundingClientRect();
-    if (!tiltRect.width || !tiltRect.height) return;
-    const x = Math.max(0, Math.min(1, (pointerX - tiltRect.left) / tiltRect.width));
-    const y = Math.max(0, Math.min(1, (pointerY - tiltRect.top) / tiltRect.height));
-    tiltButton.style.setProperty('--mx', `${(x * 100).toFixed(2)}%`);
-    tiltButton.style.setProperty('--my', `${(y * 100).toFixed(2)}%`);
-    tiltButton.style.setProperty('--rx', `${((0.5 - y) * 6).toFixed(3)}deg`);
-    tiltButton.style.setProperty('--ry', `${((x - 0.5) * 7).toFixed(3)}deg`);
-  });
-}, { passive: true });
-$('#cardsGrid').addEventListener('pointerout', event => {
-  if (tiltButton && !tiltButton.contains(event.relatedTarget)) resetTilt();
-}, { passive: true });
-document.addEventListener('scroll', () => { tiltRect = null; }, { passive: true, capture: true });
-window.addEventListener('resize', () => { tiltRect = null; }, { passive: true });
-
 function switchCategory(category) {
   if (!catalogs[category]) return;
   const main = $('.main');
-  resetTilt();
+
   state.view = 'values';
   state.category = category;
   state.itemGroup = 'all';
+  state.filtersOpen = false;
   state.query = '';
   if (category !== 'pets') state.variant = 'normal';
   if (category !== 'pets' && state.sort.startsWith('best-')) {
@@ -1225,10 +1210,14 @@ function openModal(item) {
   $('#modalEventBadge').textContent = item.eventBadge || '';
   $('#modalEventBadge').hidden = !item.eventBadge;
   $('#modalTitle').textContent = item.name;
-  $('#modalDescription').textContent = item.description || item.source || '';
+  $('#modalArtShell').setAttribute('aria-label', `Animate ${item.name}`);
+  const description = item.description === `${item.name}.` ? '' : (item.description || '');
+  $('#modalDescription').textContent = description;
+  $('#modalDescription').hidden = !description;
   $('#modalSource').textContent = item.source || '—';
 
   const isCode = state.category === 'codes';
+  $('#modalTradeActions').hidden = isCode;
   $('#modalHistoryArea').hidden = isCode;
   if (!isCode) {
     state.modalRange = '24h';
@@ -1250,7 +1239,7 @@ function openModal(item) {
   $('#modalNote').hidden = !(item.note || isCode);
   $('#modalNote').textContent = isCode ? 'Use the copy button on the code card, then redeem it in game.' : (item.note || '');
 
-  $('#modalValueLabel').textContent = isCode ? 'Code' : 'Value';
+  $('#modalValueLabel').textContent = isCode ? 'Code' : 'Listed value';
   setImageSource($('#modalValueIcon'), isCode ? 'assets/ui/category-codes.png' : ticket);
   $('#modalValueIcon').alt = isCode ? 'Code badge' : 'Ticket';
 
@@ -1289,11 +1278,18 @@ function renderModalVariant() {
   }
 
   $('#modalValue').textContent = state.category === 'codes' ? item.code : formatItemValue(item, state.modalVariant);
+  const priceState = priceStateFor(item, state.modalVariant);
+  $('.value-panel').dataset.priceState = priceState;
+  const hint = $('#modalPriceHint');
+  hint.hidden = state.category === 'codes' || priceState === 'number';
+  hint.textContent = !pricesReady ? (priceSyncError ? 'Prices could not be loaded. Please refresh to try again.' : 'Prices are loading. Offer totals will update automatically.')
+    : priceState === 'oc' ? 'Owner’s Choice — agree on a value with the owner.' : 'Value not listed yet.';
   if (state.category !== 'codes') loadValueHistory();
 }
 
 function closeModal() {
   historyController?.abort();
+  ++historyRequestId;
   $('#detailModal').close();
   document.body.classList.remove('modal-open');
 }
@@ -1322,6 +1318,21 @@ function toggleSortMenu(forceOpen = null) {
 
 const copyFeedbackTimers = new WeakMap();
 document.addEventListener('click', event => {
+  const offerTab = event.target.closest('[data-offer-side]');
+  if (offerTab) { state.calcActiveSide = offerTab.dataset.offerSide; renderCalculator(); return; }
+  const modalAdd = event.target.closest('[data-modal-add]');
+  if (modalAdd && state.modalItem && state.category !== 'codes') {
+    const side = modalAdd.dataset.modalAdd;
+    const item = state.modalItem;
+    addCalcItem(side, state.category, item.id, state.modalVariant);
+    state.calcActiveSide = side;
+    closeModal(); switchView('calculator');
+    return;
+  }
+  if (event.target.closest('#filterToggle')) {
+    state.filtersOpen = !state.filtersOpen;
+    toggleSortMenu(false); render(); return;
+  }
   if (event.target.closest('#clearFilters')) {
     state.query = ''; state.variant = 'normal'; state.itemGroup = 'all';
     $('#searchInput').value = ''; render(); $('#searchInput').focus(); return;
@@ -1350,8 +1361,10 @@ document.addEventListener('click', event => {
 
   const viewTarget = event.target.closest('[data-view-target]');
   if (viewTarget) {
+    event.preventDefault();
     toggleSortMenu(false);
     switchView(viewTarget.dataset.viewTarget);
+    if (viewTarget.closest('#homeView')) focusViewHeading();
     return;
   }
 
@@ -1367,7 +1380,7 @@ document.addEventListener('click', event => {
     const group = itemGroupButton.dataset.itemGroup;
     if (group !== 'all' && !Object.hasOwn(itemGroups, group)) return;
     toggleSortMenu(false);
-    resetTilt();
+  
     state.itemGroup = group;
     render();
     return;
@@ -1470,14 +1483,14 @@ $('#calcPickerSearch').addEventListener('input', event => {
 });
 
 $('#calcLeftTickets').addEventListener('input', event => {
-  const next = Number.isFinite(Number(event.target.value)) ? Math.max(0, Number(event.target.value)) : 0;
+  const next = sanitizeTickets(event.target.value);
   flashTicketInput(event.target, next > state.calc.leftTickets ? 'up' : next < state.calc.leftTickets ? 'down' : 'neutral');
   state.calc.leftTickets = next;
   scheduleCalculatorRender();
 });
 
 $('#calcRightTickets').addEventListener('input', event => {
-  const next = Number.isFinite(Number(event.target.value)) ? Math.max(0, Number(event.target.value)) : 0;
+  const next = sanitizeTickets(event.target.value);
   flashTicketInput(event.target, next > state.calc.rightTickets ? 'up' : next < state.calc.rightTickets ? 'down' : 'neutral');
   state.calc.rightTickets = next;
   scheduleCalculatorRender();
@@ -1551,38 +1564,12 @@ $('#modalArtShell').addEventListener('click', () => {
 });
 $('#motionToggle').addEventListener('click', () => {
   animationsPaused = !animationsPaused; syncMotion(); writeSetting('pet-universe-motion', animationsPaused ? 'off' : 'on');
-  resetTilt();
+
 });
 reducedMotion.addEventListener('change', event => { if (event.matches) { animationsPaused = true; syncMotion(); } });
 document.addEventListener('visibilitychange', () => {
   document.documentElement.toggleAttribute('data-page-hidden', document.hidden);
-  if (document.hidden) resetTilt();
-  else { refreshPricesUpdated(); syncPublishedPrices(); }
-});
-// Keep the same effects; pause decorative motion briefly while touch scrolling.
-let touchScrollTimer;
-document.addEventListener('scroll', () => {
-  if (!touchLayout.matches || !motionAllowed()) return;
-  if (!document.documentElement.hasAttribute('data-mobile-scrolling')) document.documentElement.setAttribute('data-mobile-scrolling', '');
-  clearTimeout(touchScrollTimer);
-  touchScrollTimer = setTimeout(() => document.documentElement.removeAttribute('data-mobile-scrolling'), 160);
-}, { passive: true, capture: true });
-document.addEventListener('pointerdown', event => {
-  if (!motionAllowed() || !event.target.closest('button')) return;
-  const dialog = event.target.closest('dialog');
-  const rect = dialog?.getBoundingClientRect();
-  const fragment = document.createDocumentFragment();
-  const sparks = [];
-  const count = event.pointerType === 'touch' ? 3 : 5;
-  for (let i = 0; i < count; i++) {
-    const spark = document.createElement('i'); spark.className = 'click-ember';
-    const angle = Math.PI * 2 * i / count;
-    spark.style.cssText = `left:${event.clientX}px;top:${event.clientY}px;--sx:${Math.cos(angle)*25}px;--sy:${Math.sin(angle)*25}px`;
-    if (dialog) { spark.style.position = 'absolute'; spark.style.left = `${event.clientX-rect.left}px`; spark.style.top = `${event.clientY-rect.top+dialog.scrollTop}px`; }
-    fragment.append(spark); sparks.push(spark);
-  }
-  (dialog || document.body).append(fragment);
-  setTimeout(() => sparks.forEach(spark => spark.remove()), 550);
+  if (!document.hidden) { refreshPricesUpdated(); syncPublishedPrices(); }
 });
 $('#sortTrigger').addEventListener('keydown', event => {
   if (event.key === 'ArrowDown') { event.preventDefault(); toggleSortMenu(true); $('.sort-option:not([hidden])')?.focus(); }
@@ -1596,7 +1583,42 @@ $('#sortPopover').addEventListener('keydown', event => {
   if (event.key === 'Home') { event.preventDefault(); options[0]?.focus(); }
   if (event.key === 'End') { event.preventDefault(); options.at(-1)?.focus(); }
 });
+function syncResponsiveShell() {
+  const mobile = smallLayout.matches;
+  const categoryHost = mobile ? $('#mobileCategorySlot') : $('.sidebar');
+  const nav = $('#categoryNav');
+  if (mobile) categoryHost.append(nav);
+  else $('.primary-nav').after(nav);
+  const motion = $('#motionToggle');
+  (mobile ? $('#mobileSettings') : $('#desktopSettings')).append(motion);
+  if (!mobile && $('#settingsDialog').open) $('#settingsDialog').close();
+}
+smallLayout.addEventListener('change', () => { syncResponsiveShell(); render(); });
+$('#openSettings').addEventListener('click', () => $('#settingsDialog').showModal());
+$('#closeSettings').addEventListener('click', () => $('#settingsDialog').close());
+$('#settingsDialog').addEventListener('click', event => {
+  if (event.target !== event.currentTarget) return;
+  const rect = event.currentTarget.getBoundingClientRect();
+  if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) event.currentTarget.close();
+});
+syncResponsiveShell();
 syncMotion();
+// Phone grid density: 3 compact cards or 2 large cards per row.
+function setCols(value, save = true) {
+  const cols = value === '2' ? '2' : '3';
+  document.documentElement.dataset.cols = cols;
+  $$('[data-cols-btn]').forEach(button => {
+    const on = button.dataset.colsBtn === cols;
+    button.classList.toggle('active', on);
+    button.setAttribute('aria-pressed', String(on));
+  });
+  if (save) writeSetting('pet-universe-cols', cols);
+}
+$('#layoutTools').addEventListener('click', event => {
+  const button = event.target.closest('[data-cols-btn]');
+  if (button) setCols(button.dataset.colsBtn);
+});
+setCols(readSetting('pet-universe-cols'), false);
 
 refreshHomeUpdated();
 refreshPricesUpdated();
@@ -1623,13 +1645,15 @@ function exportTradeModel() {
     const info = calcSideInfo(side);
     const entries = state.calc[side].map(entry => {
       const item = calcFindItem(entry.category, entry.id);
-      return { name: item.name, qty: entry.qty, image: imageSource(imageFor(item, entry.variant)), color: rarityColor(item), variantLabel: entry.variant[0].toUpperCase()+entry.variant.slice(1), valueLabel: parseNumericValue(valueFor(item, entry.variant)) == null ? formatItemValue(item, entry.variant) : formatValue(calcNumericValue(item, entry.variant)*entry.qty) };
+      return { name: item.name, qty: entry.qty, image: imageSource(imageFor(item, entry.variant)), color: rarityColor(item), variantLabel: entry.variant[0].toUpperCase()+entry.variant.slice(1), valueLabel: calcEntryPrice(item, entry) };
     });
-    model[side] = { entries, tickets: Math.max(0, Number(state.calc[`${side}Tickets`]) || 0), total: info.total, unpriced: info.hasOC };
+    model[side] = { entries, tickets: sanitizeTickets(state.calc[`${side}Tickets`]), total: info.total, unpriced: info.hasOC, overflow: info.overflow };
   }
   return model;
 }
 $('#saveTradeImage').addEventListener('click', async event => {
+  if (tradeExportBusy || !pricesReady) return;
+  tradeExportBusy = true;
   const button = event.currentTarget;
   button.disabled = true; button.textContent = 'Creating image…';
   try {
@@ -1655,7 +1679,7 @@ $('#saveTradeImage').addEventListener('click', async event => {
     $('#tradeExportDialog').showModal();
   } catch (error) {
     showExportMessage(error.message || 'Could not create the image. Please try again.');
-  } finally { button.disabled = false; button.textContent = 'Save Trade Image'; }
+  } finally { tradeExportBusy = false; button.disabled = !pricesReady; button.textContent = 'Save Trade Image'; }
 });
 let exportObjectUrls = [];
 $('#closeTradeExport').addEventListener('click', () => $('#tradeExportDialog').close());
@@ -1665,7 +1689,7 @@ fetch('/api/snapshot', { method: 'POST', headers: { accept: 'application/json' }
 
 
 function enableAssetProtection() {
-  const protectedSelector = '.brand-card img, .card-art, .card-art img, .modal-art-shell, .modal-art-shell img, .calc-picker-art, .calc-picker-art img, .home-v40-orbit img, .drop-source-card img';
+  const protectedSelector = '.brand-card img, .card-art, .card-art img, .modal-art-shell, .modal-art-shell img, .calc-picker-art, .calc-picker-art img, .home-menu-decor img, .drop-source-card img';
   document.querySelectorAll('img').forEach(img => {
     img.setAttribute('draggable', 'false');
     img.setAttribute('decoding', 'async');
@@ -1674,7 +1698,7 @@ function enableAssetProtection() {
     if (event.target.closest(protectedSelector)) event.preventDefault();
   });
   document.addEventListener('contextmenu', event => {
-    event.preventDefault();
+    if (event.target.closest(protectedSelector)) event.preventDefault();
   });
   document.addEventListener('copy', event => {
     if (document.activeElement && document.activeElement.closest && document.activeElement.closest(protectedSelector)) event.preventDefault();

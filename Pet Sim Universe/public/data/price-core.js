@@ -3,8 +3,8 @@ const decimal = new Intl.NumberFormat('en-US', { maximumFractionDigits: 9 });
 
 // Compare values, not spelling: 30000, "30K" and "30k" are the same price.
 export function normalizePrice(value) {
-  if (value == null || (typeof value === 'string' && /^(?:no\s*price|unpriced|unknown|\?+|n\/?a|[-—]|)$/i.test(value.trim()))) {
-    return { key: 'unpriced', number: null, label: 'No Price' };
+  if (value == null || (typeof value === 'string' && /^(?:no\s*price|not\s*price(?:d)?|null|undefined|unpriced|unknown|\?+|n\/?a|[-—]|)$/i.test(value.trim()))) {
+    return { key: 'unpriced', number: null, label: 'Not Price' };
   }
   if (typeof value === 'string' && /^(?:o\s*\/\s*c|oc)$/i.test(value.trim())) {
     return { key: 'oc', number: null, label: 'O/C' };
@@ -21,7 +21,8 @@ export function normalizePrice(value) {
   }
   if (typeof number !== 'number' || !Number.isFinite(number) || number < 0) throw new Error('Invalid numeric price in feed.');
   const unit = Object.entries(UNITS).reverse().find(([, multiplier]) => number >= multiplier);
-  const label = unit ? `${decimal.format(number / unit[1])}${unit[0]}` : decimal.format(number);
+  const label = number >= 1e33 ? number.toExponential(3).replace(/\.?(0+)(?=e)/, '')
+    : unit ? `${decimal.format(number / unit[1])}${unit[0]}` : decimal.format(number);
   return { key: `number:${number}`, number, label };
 }
 

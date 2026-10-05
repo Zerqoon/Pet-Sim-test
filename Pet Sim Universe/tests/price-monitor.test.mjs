@@ -155,10 +155,10 @@ test('O/C ↔ numeric and unpriced transitions notify; variant uses its own imag
     assert.match(f.messages[0].embeds[0].thumbnail.url, /imp-diamond\.png$/);
     assert.match(f.messages[0].embeds[0].title, /Diamond/);
     f.price('No Price'); f.advance(); await f.run();
-    assert.match(f.messages[1].embeds[0].description, /30K → No Price/);
+    assert.match(f.messages[1].embeds[0].description, /30K → Not Price/);
     f.price(null); f.advance(); assert.equal((await f.run()).changed, 0);
     f.price('O/C'); f.advance(); await f.run();
-    assert.match(f.messages[2].embeds[0].description, /No Price → O\/C/);
+    assert.match(f.messages[2].embeds[0].description, /Not Price → O\/C/);
   } finally { f.close(); }
 });
 

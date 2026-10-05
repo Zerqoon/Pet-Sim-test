@@ -1,106 +1,111 @@
-# Pet Universe Values — jeden plik cen i poprawiony Discord
+# Pet Universe Values — v121
 
-Cały projekt zawiera dokładnie przesłany `prices (8).js` pod nazwą
-`public/data/prices.js`. To jedyny plik, w którym zmieniasz ceny.
-Strona i monitor czytają go bezpośrednio. Kopia cen i dodatkowy feed zostały usunięte.
+Cały projekt, gotowy build i wszystkie grafiki są w tej paczce.
+Strona jest po angielsku. Zachowano dokładnie ceny z Twojej paczki v118.
+**Edytujesz tylko `public/data/prices.js`.**
 
-## Wgranie do Twojego projektu
+## Wgranie całego projektu
 
-Skopiuj zawartość folderu `Pet Sim Universe` z ZIP-a do swojego folderu:
-`C:\Users\zerqo\Desktop\Pet Sim Universe`. Zastąp pliki projektu,
-a prywatny folder `.cloudflare` z poprzedniego setupu zachowaj.
+Rozpakuj folder `Pet Sim Universe`. Skopiuj jego zawartość do swojego projektu,
+np. `C:\Users\zerqo\Desktop\Pet Sim Universe`, zastępując pliki.
+Zachowaj prywatny folder `.cloudflare` z wcześniejszej konfiguracji Discorda.
 
-Otwórz PowerShell i uruchom:
+W PowerShell uruchom:
 
 ```powershell
 Set-Location "C:\Users\zerqo\Desktop\Pet Sim Universe"
 powershell -NoProfile -ExecutionPolicy Bypass -File .\Upload-GitHub.ps1
 ```
 
-Skrypt wgrywa cały projekt do `Zerqoon/Pet-Sim-test`, wykonuje build i używa
-cen z tej paczki. Jeśli zachowałeś `.cloudflare/price-monitor.json`, następnie
-czeka na opublikowane ceny, naprawia Workera i wysyła wiadomość testową na Discord.
-Wszystko wykonujesz jednym poleceniem z folderu projektu, a nie z `System32`.
+Upload wgrywa cały projekt do `Zerqoon/Pet-Sim-test` i używa cen z tej paczki.
+Wykonuje walidację i build przed commitem. Przy zachowanej konfiguracji Discorda
+czeka na opublikowane ceny, wdraża monitor i potwierdza test na Twoim kanale.
 
-Cloudflare Pages: root `Pet Sim Universe`, build `npm run build`, output `public`.
+Cloudflare Pages: **Root `Pet Sim Universe`**, **Build `npm run build`**, **Output `public`**.
+Ceny działają także bez Pages Functions. Historia wymaga opcjonalnego bindingu
+D1 `VALUES_DB`; przy jego braku dialog pokazuje aktualną cenę i informację,
+że historia jest niedostępna.
 
-## Co poprawiono w błędzie 401
+## Co zmieniło się w v121
 
-Setup usuwa stary klucz z jawnych zmiennych, zapisuje nowy klucz jako sekret,
-sprawdza obecność sekretu webhooka i czeka na potwierdzenie nowej wersji Workera.
-Dopiero po poprawnej autoryzacji wykonuje test Discorda. Zachowuje istniejącą
-bazę D1, zapisane ceny i kolejkę powiadomień.
+Home zajmuje całą szerokość — panel boczny jest w nim ukryty, a w Values i Calculator nadal działa. Menu jest wyśrodkowane i ma dokładnie dwa przyciski:
+**Values** oraz **Calculator**. Usunięto dodatkowe kategorie, kafelki, linki
+i opisy. Zachowano czas aktualizacji cen oraz dyskretne podpisy twórców.
 
-Naprawę możesz też uruchomić osobno:
+Tło korzysta z istniejących sky-world.png, category-pets.png oraz
+gummy-egg.png. Grafiki są przyciemnione warstwami CSS i umieszczone za menu;
+nie zmieniano oryginalnych plików. Build korzysta z istniejących wariantów WebP.
+Na telefonie dwa przyciski układają się pionowo. Tło jest statyczne.
+
+Pozostałe widoki i nawigacja, wszystkie 331 plików grafik i fontów, ceny,
+ich data aktualizacji, katalog oraz Discord pochodzą bez zmian z v120.
+Edytujesz nadal tylko jeden **public/data/prices.js**.
+
+## Dodawanie petów
+
+Ta paczka nie zawiera panelu administracyjnego ani strony logowania do edycji
+GitHuba. Dodajesz dane peta w **public/data/catalog.js**, jego cenę w
+**public/data/prices.js** i obraz w **public/assets/pets/**. Następnie uruchamiasz
+**Upload-GitHub.ps1**, który sprawdza i publikuje projekt. Wywołania administracyjne
+monitora Discorda służą do diagnostyki; nie są edytorem katalogu.
+
+## Ceny i czas aktualizacji
+
+`???`, `null`, `"null"`, `No Price`, `Not Price`, `N/A` oraz puste wartości
+wyświetlają **Not Price**. Prawdziwe zero pozostaje ceną **0**. **O/C** pozostaje O/C.
+Oferta z Not Price lub O/C ma wynik **INCOMPLETE**, a suma obejmuje znane ceny.
+Strona i eksport PNG stosują tę samą zasadę.
+
+Zestaw zawiera 91 wycen, w tym 79 liczbowych i 12 bez ceny. W porównaniu z v116
+zmieniły się 22 wyceny. Data startowa **05 Oct 2026, 10:33:51 CEST** oznacza czas
+otrzymania Twojego załącznika; jego oryginalna godzina edycji nie jest dostępna.
+
+Kolejne zmiany: zapisujesz `public/data/prices.js` i wgrywasz projekt albo
+commitujesz ten plik na GitHubie. Build sam zapisuje datę i SHA-256 wartości
+w `price-updates.js`. To metryka bez cen, której nie edytujesz.
+Wizyty, rozpakowanie, zmiana wyglądu i build tych samych wartości nie zerują daty.
+Przy braku właściwej metryki monitor zapisuje czas wykrycia, oznaczony
+**CHANGE DETECTED**. Panel nie podaje starej daty dla nowego zestawu cen.
+
+## Discord
+
+Monitor zachowuje wersję 116 z poprawkami autoryzacji, kolejki i limitów Discorda.
+Numer v121 dotyczy strony; protokół monitora pozostaje v116. Nie musisz edytować drugiego pliku cen.
+
+Jeśli konfiguracja została w poprzednim folderze:
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\Upgrade-Discord.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File .\Upgrade-Discord.ps1 -ProjectPath "C:\Poprzedni-projekt\Pet Sim Universe"
 ```
 
-Jeżeli konfigurację zostawiłeś w innym folderze, wskaż go przez
-`-ProjectPath "C:\Twoj-poprzedni-folder\Pet Sim Universe"`.
-Bez zapisanej konfiguracji albo aby ustawić inny webhook uruchom:
+Przy pierwszej konfiguracji lub zmianie webhooka:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\Setup-Discord.ps1
 ```
 
-Po sukcesie kanał dostanie `Pet Universe — test monitora`. Skrypt zgłasza sukces
-po potwierdzeniu Discorda. Rzeczywiste zmiany cen mają miniaturę, starą i nową cenę
-oraz czas aktualizacji. Cron sprawdza je co minutę, również gdy strona jest zamknięta.
-Przy pierwszym uruchomieniu pustej bazy zapisuje ceny początkowe; przy naprawie
-istniejącej bazy porównuje je z jej zachowanym stanem.
+Cron sprawdza ceny co minutę. Rzeczywiste zmiany są zapisane w trwałej kolejce,
+wysyłane grupami z osobnymi embedami i ponawiane po przejściowym błędzie.
+Setup/Upgrade zgłasza sukces dopiero po odpowiedzi Discorda.
+Testy w paczce symulują HTTP; nie oznaczają testu na Twoim kanale.
 
-## Kolejne zmiany cen
+## Uruchomienie lokalne
 
-Edytujesz tylko `public/data/prices.js`, zapisujesz go i uruchamiasz
-`Upload-GitHub.ps1` albo zapisujesz zmianę na GitHubie z włączonym buildem Pages.
-Nie zmieniasz żadnego drugiego pliku cen ani konfiguracji webhooka.
+Node.js 22.13 lub nowszy:
 
-Build automatycznie zapisuje samą datę i identyfikator wartości w
-`price-updates.js`. Ten plik nie zawiera cen i nie wymaga ręcznej edycji.
-Panel `VALUES UPDATED` pod `Stop Animations` pokazuje dokładną datę do sekund
-w strefie `Europe/Warsaw` oraz aktualizowany licznik `… ago`.
-Strona odczytuje ceny co 30 sekund i po powrocie do karty. Kalkulator zachowuje ofertę.
+```text
+npm run dev
+```
 
-Data jest powiązana z SHA-256 wartości. Build zapisuje czas zmiany pliku lub
-commita; ponowny build, wizyty i równoważne zapisy cen nie zerują licznika.
-W tej paczce jest **25 zmienionych wycen** z `prices (8).js`. Znacznik
-**04 Oct 2026, 15:55:37 CEST** to czas otrzymania załącznika; plik nie udostępnia
-oryginalnej godziny edycji na Twoim komputerze.
+Otwórz `http://127.0.0.1:4173`. Nie uruchamiaj `index.html` przez dwuklik.
 
-Gdy publikacja pominie wygenerowaną metrykę, monitor zapisuje w D1 pierwszy
-czas wykrycia zmiany. Panel pokazuje wtedy **CHANGE DETECTED**. Ten czas pozostaje
-stały po odświeżeniu. To czas wykrycia, a nie odtworzona godzina edycji.
-Późniejsza poprawna metryka tej samej wersji ma pierwszeństwo.
+```text
+npm run build
+npm test
+```
 
-## Co zabezpieczono w v116
-
-- Jeden wspólny parser dla builda, strony, historii i monitora. Nie wykonuje
-  kodu z `prices.js`; odrzuca powtórzone ID, brakujące warianty, nieznane itemy,
-  niepoprawne liczby, zbyt duże odpowiedzi i uszkodzone dane.
-- Błędny build przerywa upload. Poprawne metryki są zapisywane atomowo.
-- Strona zachowuje ostatni pełny, zweryfikowany zestaw cen podczas awarii.
-  Przeglądarka może odzyskać swoją zapisaną kopię; panel oznacza ją SAVED VALUES.
-  Ta pamięć nie jest drugim plikiem do edytowania.
-- Ułamki `0,4` i `22,5K` są obsługiwane; `30,000` nadal oznacza trzydzieści tysięcy.
-- Discord otrzymuje do 8 osobnych embedów w jednej wiadomości. 25 zmian mieści
-  się w 4 wiadomościach podczas jednego sprawdzenia, o ile Discord je przyjmuje.
-- Kolejka przetrwa awarię. Monitor przestrzega rzeczywistego `retry_after` i
-  nagłówków limitu. Błędy 401/403/404 zatrzymują próby do skutecznej naprawy.
-  Udany test naprawy od razu podejmuje kolejkę, zamiast czekać na kolejny cron.
-- Historia zapisuje wszystkie 76 liczbowych wycen jednym insertem i pomija
-  niezmienione ceny. Cały monitor mieści się w limicie zapytań D1 sprawdzonym testami.
-
-Build oraz **44 testy automatyczne** przeszły. Testy używają prawdziwego SQLite,
-a odpowiedzi Discorda są symulowane. Test na Twoim kanale wykonuje Upload lub
-Upgrade i potwierdza sukces dopiero po odpowiedzi Discorda.
-
-## Zachowane elementy
-
-Wszystkie grafiki, 35 petów, 16 charms, 4 jajka i 12 Items; Fishing / General
-przy wyszukiwarce, Moon Chest, wyrównane jajka, wyśrodkowane nagłówki i układ Codes.
-Kody: DroverQ, Russo, DarkRose, AG64, Cupcake, E11opoppet, Olopomidoro,
-Ostrichh, 1mvisits, Update3, Smidl155.
-
-Szczegóły konfiguracji i diagnostyki: `README-CLOUDFLARE.md`.
+Sprawdzono build, kompletność grafik i zgodność danych z v120,
+strukturę HTML, dwa wejścia z Home oraz odpowiedzi lokalnego serwera. Nowy wygląd nie
+został sprawdzony wizualnie w przeglądarce ani na prawdziwym telefonie, ponieważ
+w tym środowisku nie ma dostępnej przeglądarki do lokalnego podglądu.
+Nie zmieniano Twojego wdrożenia ani konta Cloudflare.

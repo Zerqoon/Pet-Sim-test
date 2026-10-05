@@ -110,7 +110,7 @@ for (const [category, list] of Object.entries({ pets: PETS, charms: CHARMS, eggs
 for (const [source, image] of Object.entries(IMAGE_ASSETS)) {
   validateImage(source);
   const variants = image.srcset.split(', ').map(part => part.replace(/ \d+w$/, ''));
-  for (const file of new Set([image.src, ...variants])) {
+  for (const file of new Set([image.src, ...variants, ...(image.thumb ? [image.thumb] : [])])) {
     if (!existsSync(path.join(publicRoot, file))) {
       console.error(`[asset] Missing optimized image: ${file}`);
       errors++;
