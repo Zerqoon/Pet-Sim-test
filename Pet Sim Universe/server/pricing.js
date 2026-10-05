@@ -10,22 +10,14 @@ export function changePayload(before, after, observedAt, updatedAt = null) {
   const variant = { normal: 'Normal', golden: 'Golden', diamond: 'Diamond' }[after.variant];
   const numeric = previous.number != null && current.number != null;
   const difference = numeric ? current.number - previous.number : null;
-  const fields = [
-    { name: 'Poprzednia cena', value: `**${previous.label}**`, inline: true },
-    { name: 'Nowa cena', value: `**${current.label}**`, inline: true },
-    { name: 'Wariant', value: `**${variant}**`, inline: true },
-  ];
-  if (difference != null) {
-    const percentage = previous.number > 0 ? ` (${difference >= 0 ? '+' : ''}${percent.format(difference / previous.number * 100)}%)` : '';
-    fields.push({ name: 'Zmiana', value: `**${difference >= 0 ? '+' : '−'}${normalizePrice(Math.abs(difference)).label}${percentage}**`, inline: true });
-  }
-  fields.push({ name: 'Kategoria / Rzadkość', value: `**${({ pets: 'Pet', charms: 'Charm', eggs: 'Egg', items: 'Item' })[after.category]} · ${after.rarity}**`, inline: true });
-  fields.push({ name: 'Godzina zmiany · Polska', value: new Intl.DateTimeFormat('pl-PL', { timeZone: 'Europe/Warsaw', dateStyle: 'short', timeStyle: 'medium' }).format(new Date(changedAt)), inline: false });
+  const change = difference == null ? 'Value updated' : `${difference < 0 ? 'Down' : 'Up'} ${normalizePrice(Math.abs(difference)).label}${previous.number > 0 ? ` (${percent.format(Math.abs(difference / previous.number * 100))}%)` : ''}`;
+  const safeName = after.name.replace(/[\\*_~`|<>@]/g, '').slice(0, 180);
   const embed = {
-    title: `${after.name} · ${variant}`, description: `**${previous.label} → ${current.label}**\n${difference == null ? '🔄 Aktualizacja wyceny' : difference < 0 ? '📉 Spadek wartości' : '📈 Wzrost wartości'}`,
+    title: `${safeName}${after.variant !== 'normal' ? ` · ${variant}` : ''}`,
+    description: `**${previous.label} → ${current.label}**\n${change}`,
     color: difference == null ? 0xA66BFF : difference < 0 ? 0xF4728D : 0x5DE2AE,
-    fields, timestamp: new Date(changedAt).toISOString(),
-    footer: { text: `Pet Universe Values • Ceny z Value List • ${published ? 'czas aktualizacji cen' : 'czas wykrycia zmiany'}` },
+    timestamp: new Date(changedAt).toISOString(),
+    footer: { text: `Pet Universe Values • ${published ? 'Values updated' : 'Change detected'}` },
   };
   if (after.image) embed.thumbnail = { url: after.image };
   return { username: 'Pet Universe Values', allowed_mentions: { parse: [] }, embeds: [embed] };

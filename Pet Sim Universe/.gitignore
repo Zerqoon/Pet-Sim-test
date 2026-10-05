@@ -8,3 +8,5 @@ node_modules/
 *.private.*
 discord-secrets*.json
 *.log
+
+private-setup/

@@ -7,7 +7,9 @@ import { createWrangler, parseJsonList, waitForPublishedPrices, testMonitor, wri
 import { deployMonitor } from './discord-deploy.mjs';
 
 const root = path.resolve(import.meta.dirname, '..');
-const secret = process.env.PET_UNIVERSE_WEBHOOK?.trim();
+let suppliedSecrets = {};
+try { suppliedSecrets = JSON.parse(await readFile(path.join(root, 'private-setup/admin-secrets.private.json'), 'utf8')); } catch {}
+const secret = process.env.PET_UNIVERSE_WEBHOOK?.trim() || suppliedSecrets.DISCORD_WEBHOOK_URL;
 const site = new URL(process.env.PET_UNIVERSE_SITE || 'https://petuniverse-values.pl');
 const hide = value => String(value).split(secret || '\0').join('[hidden webhook]').split(monitorKey).join('[hidden key]');
 

@@ -1,4 +1,6 @@
-# Pet Universe Values — v121
+﻿NOWE v122: osobny panel z logowaniem. Instrukcja: ADMIN-START.md. Hasla: private-setup/LOGIN.private.txt. Uruchom Setup-Admin.ps1 po Upload-GitHub.ps1. Nie wrzucaj private-setup na GitHub.
+
+# Pet Universe Values — v122
 
 Cały projekt, gotowy build i wszystkie grafiki są w tej paczce.
 Strona jest po angielsku. Zachowano dokładnie ceny z Twojej paczki v118.
@@ -26,7 +28,7 @@ Ceny działają także bez Pages Functions. Historia wymaga opcjonalnego binding
 D1 `VALUES_DB`; przy jego braku dialog pokazuje aktualną cenę i informację,
 że historia jest niedostępna.
 
-## Co zmieniło się w v121
+## Zachowany wyglad z v121
 
 Home zajmuje całą szerokość — panel boczny jest w nim ukryty, a w Values i Calculator nadal działa. Menu jest wyśrodkowane i ma dokładnie dwa przyciski:
 **Values** oraz **Calculator**. Usunięto dodatkowe kategorie, kafelki, linki
@@ -38,16 +40,14 @@ nie zmieniano oryginalnych plików. Build korzysta z istniejących wariantów We
 Na telefonie dwa przyciski układają się pionowo. Tło jest statyczne.
 
 Pozostałe widoki i nawigacja, wszystkie 331 plików grafik i fontów, ceny,
-ich data aktualizacji, katalog oraz Discord pochodzą bez zmian z v120.
+ich data aktualizacji oraz katalog zostaly zachowane. Discord ma teraz krotkie angielskie wiadomosci.
 Edytujesz nadal tylko jeden **public/data/prices.js**.
 
 ## Dodawanie petów
 
-Ta paczka nie zawiera panelu administracyjnego ani strony logowania do edycji
-GitHuba. Dodajesz dane peta w **public/data/catalog.js**, jego cenę w
-**public/data/prices.js** i obraz w **public/assets/pets/**. Następnie uruchamiasz
-**Upload-GitHub.ps1**, który sprawdza i publikuje projekt. Wywołania administracyjne
-monitora Discorda służą do diagnostyki; nie są edytorem katalogu.
+Paczka zawiera osobna strone administracyjna z logowaniem dla Zerqoon i Pioterek. Dodaje i edytuje pety, ceny, opisy i PNG bez zmieniania glownych stron. Instrukcja instalacji: **ADMIN-START.md**. Losowe hasla: **private-setup/LOGIN.private.txt**. Panel wymaga Workers Paid; skrypt nie wlacza platnosci.
+
+Uruchom **Upload-GitHub.ps1**, poczekaj na Pages, a potem **Setup-Admin.ps1**. Podasz tylko token GitHuba i zalogujesz sie do Cloudflare. Nowy webhook jest przygotowany w prywatnej konfiguracji. Po wdrozeniu skrypt poda adres panelu.
 
 ## Ceny i czas aktualizacji
 
@@ -70,7 +70,7 @@ Przy braku właściwej metryki monitor zapisuje czas wykrycia, oznaczony
 ## Discord
 
 Monitor zachowuje wersję 116 z poprawkami autoryzacji, kolejki i limitów Discorda.
-Numer v121 dotyczy strony; protokół monitora pozostaje v116. Nie musisz edytować drugiego pliku cen.
+Numer v122 dotyczy strony; protokół monitora pozostaje v116. Nie musisz edytować drugiego pliku cen.
 
 Jeśli konfiguracja została w poprzednim folderze:
 

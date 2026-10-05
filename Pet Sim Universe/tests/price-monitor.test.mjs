@@ -10,8 +10,10 @@ import { readDataModule as parsePrices, rowsFromPrices as priceRows } from '../p
 const PRICES = parsePrices(await readFile(new URL('../public/data/prices.js', import.meta.url), 'utf8'), 'PRICES');
 import { catalogPriceRows } from '../public/data/price-core.js';
 import { loadCurrentPrices } from '../public/data/value-loader.js';
+import {writeCatalog} from '../server/catalog-data.js';
 
 const fullCatalogs = { pets: PETS, charms: CHARMS, eggs: EGGS, items: ITEMS };
+const fullCatalogSource = await readFile(new URL('../public/data/catalog.js',import.meta.url),'utf8');
 const dataModule = (name, data) => `export const ${name} = ${JSON.stringify(data)};`;
 
 function dataForRows(rows) {
@@ -42,6 +44,7 @@ function fullSiteResponse(url, overrides = []) {
     if (item.supportsVariants) prices[row.category][row.id][row.variant] = row.value;
     else prices[row.category][row.id] = row.value;
   }
+  if(new URL(url).pathname === '/data/catalog.js') return new Response(fullCatalogSource);
   return new Response(new URL(url).pathname === '/data/prices.js'
     ? dataModule('PRICES', prices) : dataModule('PRICE_UPDATE', {}));
 }
@@ -121,7 +124,25 @@ test('equivalent price formats, O/C, unpriced and invalid values', () => {
   for (const value of [-1, Infinity, {}, '-30', 'price?']) assert.throws(() => normalizePrice(value));
 });
 
-test('first check seeds prices; one actual change has image, 30K → 25K and Warsaw time; refresh does not resend', async () => {
+test('the deployed monitor reads a changed catalog and tracks added pets without redeployment',async()=> {
+  const f=fixture();let sent=0;
+  const fetcher=async(url,options)=> {
+    const path=new URL(url).pathname;
+    if(new URL(url).hostname==='discord.com') {sent++;return Response.json({id:'delivered'});}
+    const data=dataForRows(f.getRows());
+    if(path==='/data/catalog.js')return new Response(writeCatalog({SOURCE_PRESETS:{},PETS:data.catalogs.pets,CHARMS:data.catalogs.charms,EGGS:data.catalogs.eggs,ITEMS:data.catalogs.items,CODES:[]}));
+    return new Response(path==='/data/prices.js'?dataModule('PRICES',data.prices):dataModule('PRICE_UPDATE',{}));
+  };
+  try {
+    assert.equal((await f.run({catalogs:undefined,fetcher})).checked,1);
+    const row=f.getRows()[0];f.setRows([row,{...row,id:'added-pet',key:'pets/added-pet/normal',name:'Added Pet',value:100}]);f.advance();
+    assert.equal((await f.run({catalogs:undefined,fetcher})).checked,2);assert.equal(sent,0);
+    f.setRows(f.getRows().map(x=>x.id==='added-pet'?{...x,value:150}:x));f.advance();
+    assert.equal((await f.run({catalogs:undefined,fetcher})).changed,1);assert.equal(sent,1);
+  }finally{f.close();}
+});
+
+test('first check seeds prices; one actual change has image, 30K → 25K and exact update time; refresh does not resend', async () => {
   const f = fixture();
   try {
     assert.equal((await f.run()).initialized, true);
@@ -131,10 +152,11 @@ test('first check seeds prices; one actual change has image, 30K → 25K and War
     const embed = f.messages[0].embeds[0];
     assert.match(embed.description, /\*\*30K → 25K\*\*/);
     assert.equal(embed.image, undefined);
-    assert.equal(embed.fields[0].value, '**30K**');
+    assert.equal(embed.fields, undefined);
+    assert.match(embed.description, /Down 5K/);
     assert.equal(embed.thumbnail.url, 'https://petuniverse-values.pl/assets/pets/job-cat-v30.png');
     assert.equal(embed.timestamp, '2026-10-01T12:31:00.000Z');
-    assert.match(embed.fields.find(field => field.name.includes('Polska')).value, /14:31:00/);
+    assert.equal(embed.title, 'Job Cat');
     assert.deepEqual(f.messages[0].allowed_mentions, { parse: [] });
     assert.equal((await f.run()).changed, 0);
     f.price(25000); f.advance(); assert.equal((await f.run()).changed, 0);
@@ -300,7 +322,7 @@ test('authenticated diagnostic confirms prices.js and Discord; reports Discord f
  globalThis.fetch=async(url,options={})=> {
   assert.equal(options.redirect,'manual');
   if(new URL(url).hostname==='petuniverse-values.pl') return fullSiteResponse(url);
-  tests++; const body=JSON.parse(options.body); assert.match(body.embeds[0].title,/test monitora/);
+  tests++; const body=JSON.parse(options.body); assert.match(body.embeds[0].title,/Value alerts connected/);
   return Response.json({}, {status});
  };
  try {
@@ -328,7 +350,7 @@ test('direct prices.js changes use their matching authoring time without any dup
     assert.match(f.requests[0].url, /data\/prices\.js\?check=/);
     assert.ok(!f.requests.some(request => request.url.includes('price-feed')));
     assert.equal(f.messages[0].embeds[0].timestamp, '2026-10-01T12:17:41.000Z');
-    assert.match(f.messages[0].embeds[0].footer.text, /czas aktualizacji cen/);
+    assert.match(f.messages[0].embeds[0].footer.text, /Values updated/);
     f.advance(); assert.equal((await f.run()).changed, 0);
     assert.equal(f.messages.length, 1);
   } finally { f.close(); }
@@ -398,7 +420,7 @@ test('successful repair test releases old retry cooldown without losing queued m
     let diagnostics = 0;
     globalThis.fetch = async (url, options) => {
       if (new URL(url).hostname === 'petuniverse-values.pl') return fullSiteResponse(url, f.getRows());
-      if (/test monitora/.test(JSON.parse(options.body).embeds[0].title)) diagnostics++;
+      if (/Value alerts connected/.test(JSON.parse(options.body).embeds[0].title)) diagnostics++;
       return Response.json({id:'diagnostic-message'});
     };
     f.env.MONITOR_DB.resetBudget();

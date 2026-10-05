@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Pet Universe · Admin</title><link rel="stylesheet" href="/admin.css"><script type="module" src="/admin.js"></script></head>
+<body>
+<main id="login-view" class="login-wrap">
+  <section class="login-card"><div class="brand-mark">PU</div><p class="eyebrow">PET UNIVERSE</p><h1>Your workspace.<br>Your values.</h1><p class="muted">Sign in to manage the catalog and publish updates.</p>
+  <form id="login-form"><label>Username<input name="username" autocomplete="username" required placeholder="Zerqoon or Pioterek" maxlength="80"></label><label>Password<input name="password" type="password" autocomplete="current-password" required maxlength="200"></label><button class="primary" type="submit">Sign in <span>→</span></button><p id="login-message" role="status"></p></form><small>Private editor · Main website stays separate</small></section>
+</main>
+<div id="workspace" hidden>
+  <header class="topbar"><a class="brand" href="/">PU <span>Pet Universe <small>ADMIN WORKSPACE</small></span></a><div class="account"><span id="account-name"></span><button id="logout" class="subtle">Sign out</button></div></header>
+  <main class="workspace">
+    <section class="page-heading"><div><p class="eyebrow">CATALOG & VALUES</p><h1>Make the next update.</h1><p class="muted">Edit, review, then publish. One save updates GitHub.</p></div><a class="outline" href="https://petuniverse-values.pl" target="_blank" rel="noopener noreferrer">Open website ↗</a></section>
+    <div id="message" class="notice" role="status" hidden></div>
+    <section class="stats"><div><span>Catalog entries</span><strong id="entry-count">—</strong></div><div><span>Pending changes</span><strong id="draft-count">0</strong></div><div><span>Publishing to</span><strong>main <small>GitHub</small></strong></div></section>
+    <section class="editor-grid">
+      <section class="panel collection"><div class="panel-heading"><h2>Catalog</h2><button id="reload" class="subtle">Refresh</button></div><div id="tabs" class="tabs" aria-label="Catalog categories"></div><div class="search-row"><input id="search" type="search" placeholder="Search the catalog…" aria-label="Search catalog"><button id="add" class="outline">+ Add new</button></div><div id="catalog-list" class="catalog-list"></div></section>
+      <section class="panel detail"><div class="panel-heading"><h2 id="editor-title">Select an entry</h2><span id="entry-badge" class="pill">EDITOR</span></div><p id="editor-empty" class="empty">Choose an entry to edit its values and details, or add something new.</p>
+      <form id="entry-form" hidden>
+        <div class="field-pair"><label>Name<input name="name" maxlength="180" required></label><label>Identifier<input name="id" maxlength="80" required pattern="[a-z0-9][a-z0-9-]*"></label></div>
+        <div class="field-pair" id="metadata-row"><label>Rarity<select name="rarity"><option>Exclusive</option><option>Secret</option><option>Mythical</option><option>Legendary</option><option>Epic</option><option>Rare</option><option>Basic</option></select></label><label id="group-label">Category<select name="itemGroup"><option value="general">General</option><option value="fishing">Fishing</option></select></label><label id="best-label">Best pet %<input name="bestPct" type="number" min="0" max="100" step="any" placeholder="Optional"></label></div>
+        <div id="code-fields" class="field-pair" hidden><label>Code<input name="code" maxlength="200"></label><label>Status<select name="status"><option value="active">Active</option><option value="expired">Expired</option></select></label></div>
+        <label>Source<input name="source" maxlength="200" placeholder="Gummy Egg, Fishing…"></label><label>Description<textarea name="description" maxlength="1000" rows="2"></textarea></label>
+        <section id="values-fields"><div class="section-label"><h3>Values</h3><label id="variants-toggle" class="check"><input type="checkbox" name="supportsVariants">Golden & Diamond</label></div><p class="hint">Use 25K, a number, O/C or Not Price. ??? and Null become Not Price.</p><div id="price-inputs" class="price-inputs"></div></section>
+        <section id="artwork-fields"><div class="section-label"><h3>Artwork</h3><span class="hint">PNG · max 1 MB · 4096 px</span></div><label>Existing image path<input name="image" maxlength="200" placeholder="assets/pets/new-pet.png"></label><div id="artwork-inputs" class="artwork-inputs"></div></section>
+        <div class="form-actions"><button class="primary" type="submit">Add to review →</button><button id="remove-draft" type="button" class="subtle" hidden>Remove from review</button></div>
+      </form></section>
+    </section>
+    <section class="panel review"><div class="panel-heading"><div><p class="eyebrow">READY WHEN YOU ARE</p><h2>Review & publish</h2></div><button id="publish" class="primary" disabled>Publish changes ↗</button></div><div id="review-list" class="review-list"><p class="muted">Your changes will appear here before they go live.</p></div><p class="hint">Publishing creates one GitHub commit. The website then builds and deploys. Discord value alerts follow the deployed prices.</p></section>
+    <section class="panel activity"><div class="panel-heading"><h2>Recent activity</h2><button id="discord-test" class="outline">Test Discord</button></div><div id="activity-list" class="activity-list"></div></section>
+    <footer>Pet Universe · Private workspace for Zerqoon & Pioterek</footer>
+  </main>
+</div>
+</body></html>

@@ -10,20 +10,27 @@ if (-not (Get-Command npx -ErrorAction SilentlyContinue)) {
 
 Write-Host "Najpierw wgraj z tej paczki na GitHub i poczekaj na udany deploy Cloudflare." -ForegroundColor Cyan
 Write-Host "Adres webhooka zostanie zapisany jako sekret Cloudflare, poza GitHubem."
-$secret = Read-Host "Wklej adres webhooka Discord z rozmowy" -AsSecureString
-$pointer = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secret)
+$privateConfig = Join-Path $PSScriptRoot "private-setup\admin-secrets.private.json"
+$secret = $null
+$pointer = [IntPtr]::Zero
+if (-not (Test-Path -LiteralPath $privateConfig)) {
+    $secret = Read-Host "Wklej adres webhooka Discord" -AsSecureString
+    $pointer = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secret)
+}
 $previousWebhook = $env:PET_UNIVERSE_WEBHOOK
 $previousSite = $env:PET_UNIVERSE_SITE
 Push-Location $PSScriptRoot
 try {
-    $env:PET_UNIVERSE_WEBHOOK = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($pointer)
+    if ($pointer -ne [IntPtr]::Zero) {
+        $env:PET_UNIVERSE_WEBHOOK = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($pointer)
+    } else { $env:PET_UNIVERSE_WEBHOOK = $null }
     $env:PET_UNIVERSE_SITE = $SiteUrl
     & node scripts/setup-discord.mjs
     if ($LASTEXITCODE -ne 0) { throw "Konfiguracja nie zostala zakonczona. Sprawdz komunikat powyzej." }
 }
 finally {
-    [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($pointer)
-    $secret.Dispose()
+    if ($pointer -ne [IntPtr]::Zero) { [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($pointer) }
+    if ($null -ne $secret) { $secret.Dispose() }
     $env:PET_UNIVERSE_WEBHOOK = $previousWebhook
     $env:PET_UNIVERSE_SITE = $previousSite
     Pop-Location

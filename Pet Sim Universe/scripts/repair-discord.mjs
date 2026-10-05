@@ -5,7 +5,10 @@ import { createWrangler, root, publicSite, waitForPublishedPrices, testMonitor, 
 import { deployMonitor } from './discord-deploy.mjs';
 
 const monitorKey = randomBytes(32).toString('base64url');
-const wrangler = createWrangler([monitorKey]);
+let bundled = {};
+try { bundled = JSON.parse(await readFile(path.join(root,'private-setup/admin-secrets.private.json'),'utf8')); } catch {}
+const webhook = bundled.DISCORD_WEBHOOK_URL;
+const wrangler = createWrangler([monitorKey,webhook]);
 try {
   if (Number(process.versions.node.split('.')[0]) < 22) throw new Error('Wymagany jest Node.js 22 lub nowszy.');
   const directoryIndex = process.argv.indexOf('--config-directory');
@@ -30,12 +33,12 @@ try {
   config.vars = { ...config.vars, SITE_URL: site };
   config.observability = { ...config.observability, enabled: true };
   await writeFile(configPath, JSON.stringify(config, null, 2) + '\n');
-  const { url: workerUrl } = await deployMonitor(wrangler, configPath, { MONITOR_KEY: monitorKey });
+  const { url: workerUrl } = await deployMonitor(wrangler, configPath, { MONITOR_KEY: monitorKey, ...(webhook ? {DISCORD_WEBHOOK_URL:webhook} : {}) });
   await testMonitor(workerUrl, monitorKey);
   await writeMonitorSettings(workerUrl);
   await writeFile(path.join(directory, 'monitor-info.json'), JSON.stringify({ url: workerUrl, site }, null, 2) + '\n');
   console.log('GOTOWE: wdrozono aktualny monitor i Discord przyjal test. Kolejne zmiany sprawdza cron co minute.');
 } catch (error) {
-  console.error(String(error.message || 'Naprawa nie powiodla sie.').split(monitorKey).join('[hidden]'));
+  console.error(String(error.message || 'Naprawa nie powiodla sie.').split(monitorKey).join('[hidden]').split(webhook || '\0').join('[hidden]'));
   process.exitCode = 1;
 }

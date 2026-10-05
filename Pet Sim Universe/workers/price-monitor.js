@@ -1,9 +1,8 @@
 import { priceRevision, selectPriceUpdate } from '../public/data/price-core.js';
 import { messageGroups, sendDiscord, wait } from './discord-delivery.js';
 import { changePayload, discordUrl, validateFeed } from '../server/pricing.js';
-import { loadCurrentPrices } from '../public/data/value-loader.js';
-import { PETS, CHARMS, EGGS, ITEMS } from '../public/data/catalog.js';
-const MONITOR_CATALOGS = { pets: PETS, charms: CHARMS, eggs: EGGS, items: ITEMS };
+import { readCatalog, catalogGroups } from '../server/catalog-data.js';
+import { boundedText, loadCurrentPrices } from '../public/data/value-loader.js';
 
 export const MONITOR_SCHEMA = [
   `CREATE TABLE IF NOT EXISTS monitor_prices (item_key TEXT PRIMARY KEY, price_key TEXT NOT NULL, payload TEXT NOT NULL)`,
@@ -19,7 +18,7 @@ function siteOrigin(value) {
   return url.origin;
 }
 
-export async function runMonitor(env, { fetcher = fetch, clock = Date.now, catalogs = MONITOR_CATALOGS, diagnostic = false, pause = wait } = {}) {
+export async function runMonitor(env, { fetcher = fetch, clock = Date.now, catalogs, diagnostic = false, pause = wait } = {}) {
   if (!env.MONITOR_DB) throw new Error('MONITOR_DB binding is missing.');
   const webhook = discordUrl(env.DISCORD_WEBHOOK_URL);
   const site = siteOrigin(env.SITE_URL);
@@ -33,6 +32,12 @@ export async function runMonitor(env, { fetcher = fetch, clock = Date.now, catal
   if (!lock.meta?.changes) return { busy: true, sent: 0 };
 
   try {
+    if (!catalogs) {
+      const catalogUrl = new URL('/data/catalog.js', site); catalogUrl.searchParams.set('check', String(now));
+      const response = await fetcher(catalogUrl.href, {cache:'no-store', redirect:'manual', headers:{'cache-control':'no-cache'}, signal:AbortSignal.timeout(12000)});
+      if (!response.ok) throw new Error(`catalog.js: HTTP ${response.status}.`);
+      catalogs = catalogGroups(readCatalog(await boundedText(response)));
+    }
     const { rows, revision, updatedAt, source } = await loadCurrentPrices(site, { catalogs, fetcher, now });
     const stored = await db.prepare('SELECT item_key, price_key, payload FROM monitor_prices').all();
     const previous = new Map(stored.results.map(row => [row.item_key, row]));
@@ -53,7 +58,7 @@ export async function runMonitor(env, { fetcher = fetch, clock = Date.now, catal
       const payload = JSON.stringify(row);
       if (seeded && old && old.price_key !== row.price.key) {
         changed++;
-        events.push([crypto.randomUUID(), JSON.stringify(changePayload(JSON.parse(old.payload), row, now, changeTime)), now]);
+        events.push([crypto.randomUUID(), JSON.stringify(changePayload(old ? JSON.parse(old.payload) : {value:null}, row, now, changeTime)), now]);
       }
       if (!seeded || !old || old.payload !== payload) {
         priceWrites.push([row.key, row.price.key, payload]);
@@ -79,7 +84,7 @@ export async function runMonitor(env, { fetcher = fetch, clock = Date.now, catal
 
     let testSent = false, retryScheduled = false;
     if (diagnostic) {
-      const payload = { allowed_mentions: { parse: [] }, embeds: [{ title: 'Pet Universe — test monitora', description: 'Ceny odczytane. Discord potwierdzil odbior testu.', color: 3066993, timestamp: new Date(now).toISOString() }] };
+      const payload = { allowed_mentions: { parse: [] }, embeds: [{ title: 'Value alerts connected', description: 'Published values are available. Future price changes will appear here.', color: 3066993, timestamp: new Date(now).toISOString() }] };
       let result = await sendDiscord(fetcher, webhook.href, payload);
       if (result.status === 429 && result.retryMs <= 5000) { await pause(result.retryMs); result = await sendDiscord(fetcher, webhook.href, payload); }
       if (!result.ok) throw new Error(`Discord test HTTP ${result.status}.`);
