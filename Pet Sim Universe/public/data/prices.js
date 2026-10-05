@@ -94,11 +94,11 @@ export const PRICES = {
     "critical-charm-iv": "185",
     "luck-charm-iv": "195",
     "coins-charm-iv": "135",
-    "hatch-charm-iii": 30,
+    "hatch-charm-iii": "25",
     "critical-charm-iii": 30,
     "lucky-charm-iii": 35,
     "rubies-charm-iii": 45,
-    "coins-charm-iii": 30,
+    "coins-charm-iii": "20",
     "fishing-charm-i": "1",
     "fishing-charm-ii": "8",
     "fishing-charm-iii": "40"
@@ -121,6 +121,6 @@ export const PRICES = {
     "universeworm": null,
     "worm": 0.1,
     "golden-fish-hook": 10,
-    "fishhook": 3
+    "fishhook": "2"
   }
 };
