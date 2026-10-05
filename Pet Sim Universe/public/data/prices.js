@@ -6,7 +6,7 @@ export const PRICES = {
     "universe-capybara": "25k",
     "gummy-bear": "18K",
     "alien-emperor": "6.5K",
-    "kraken": "6K",
+    "kraken": "7K",
     "agent-sheep": 200,
     "caaaaat": "5K",
     "exquisite-cat": "2.15K",
