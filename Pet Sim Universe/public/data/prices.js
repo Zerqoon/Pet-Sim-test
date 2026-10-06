@@ -54,25 +54,10 @@ export const PRICES = {
       "golden": "140",
       "diamond": "625"
     },
-    "shadow-dominus": {
-      "normal": "10",
-      "golden": null,
-      "diamond": null
-    },
-    "imp": {
-      "normal": 5,
-      "golden": 25,
-      "diamond": 115
-    },
     "grove-seeker": {
       "normal": "15",
       "golden": "85",
       "diamond": "350"
-    },
-    "exquisite-peacock": {
-      "normal": 5,
-      "golden": 25,
-      "diamond": 115
     },
     "blobfish": {
       "normal": "50",
@@ -99,8 +84,6 @@ export const PRICES = {
     "lucky-charm-iii": "25",
     "rubies-charm-iii": "30",
     "coins-charm-iii": "15",
-    "fishing-charm-i": "1",
-    "fishing-charm-ii": "2",
     "fishing-charm-iii": "20"
   },
   "eggs": {
@@ -114,13 +97,9 @@ export const PRICES = {
     "universe-shard": "15",
     "vip-key": 0.4,
     "globe": "15",
-    "ball": 1,
-    "squeaky": 1,
     "1m-lucky-block": "15",
     "canned-tuna": "10",
     "universeworm": null,
-    "worm": 0.1,
-    "golden-fish-hook": 10,
-    "fishhook": "2"
+    "golden-fish-hook": 10
   }
 };

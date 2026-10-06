@@ -382,35 +382,6 @@ export const PETS = [
     "image": "assets/pets/ember-monster.png"
   },
   {
-    "id": "shadow-dominus",
-    "name": "Shadow Dominus",
-    "rarity": "Mythical",
-    "source": "Mythical Pet",
-    "description": "Mythical pet Shadow Dominus.",
-    "supportsVariants": true,
-    "variantImages": {
-      "normal": "assets/pets/shadow-dominus.png",
-      "golden": "assets/pets/shadow-dominus-golden-v30.png",
-      "diamond": "assets/pets/shadow-dominus-diamond-v30.png"
-    },
-    "image": "assets/pets/shadow-dominus.png"
-  },
-  {
-    "id": "imp",
-    "name": "Imp",
-    "rarity": "Mythical",
-    "source": "Mythical Pet",
-    "description": "Mythical pet Imp.",
-    "map": "Volcano Hollow [World 7]",
-    "hatchChance": "Unknown",
-    "supportsVariants": true,
-    "variantImages": {
-      "normal": "assets/pets/imp.png",
-      "golden": "assets/pets/imp-golden.png",
-      "diamond": "assets/pets/imp-diamond.png"
-    }
-  },
-  {
     "id": "grove-seeker",
     "name": "Grove Seeker",
     "rarity": "Mythical",
@@ -425,21 +396,6 @@ export const PETS = [
       "diamond": "assets/pets/grove-seeker-diamond.png"
     },
     "image": "assets/pets/grove-seeker.png"
-  },
-  {
-    "id": "exquisite-peacock",
-    "name": "Exquisite Peacock",
-    "rarity": "Mythical",
-    "source": "Mythical Pet",
-    "description": "Mythical pet Exquisite Peacock.",
-    "map": "Pet Kingdom [World 5]",
-    "hatchChance": "Unknown",
-    "supportsVariants": true,
-    "variantImages": {
-      "normal": "assets/pets/exquisite-peacock.png",
-      "golden": "assets/pets/exquisite-peacock-golden.png",
-      "diamond": "assets/pets/exquisite-peacock-diamond.png"
-    }
   }
 ];
 
@@ -451,22 +407,6 @@ export const CHARMS = [
     "source": "Charm",
     "description": "Secret Charm.",
     "image": "assets/items/secret-charm-v30.png"
-  },
-  {
-    "id": "fishing-charm-i",
-    "name": "Fishing Charm I",
-    "rarity": "Rare",
-    "source": "Charm",
-    "description": "+10% Fishing Luck and +5% Fishing Speed.",
-    "image": "assets/charms/fishing-charm-i.png"
-  },
-  {
-    "id": "fishing-charm-ii",
-    "name": "Fishing Charm II",
-    "rarity": "Epic",
-    "source": "Charm",
-    "description": "+20% Fishing Luck and +10% Fishing Speed.",
-    "image": "assets/charms/fishing-charm-ii.png"
   },
   {
     "id": "fishing-charm-iii",
@@ -872,56 +812,6 @@ export const ITEMS = [
     "itemGroup": "general"
   },
   {
-    "id": "ball",
-    "name": "Ball",
-    "rarity": "Epic",
-    "source": "Toy Item",
-    "description": "+10% Egg Luck while equipped on a Unique Pet.",
-    "image": "assets/items/ball-v30.png",
-    "dropSources": [
-      {
-        "id": "vipChest",
-        "name": "VIP Chest",
-        "image": "assets/sources/vip-chest.png"
-      },
-      {
-        "id": "moonChest",
-        "name": "Moon Chest",
-        "image": "assets/sources/moon-chest.png"
-      },
-      {
-        "id": "playtimeRewards",
-        "name": "PlayTime Rewards",
-        "image": "assets/sources/playtime-rewards.png"
-      }
-    ]
-  },
-  {
-    "id": "squeaky",
-    "name": "Squeaky",
-    "rarity": "Epic",
-    "source": "Toy Item",
-    "description": "Squeaky toy item.",
-    "image": "assets/items/squeaky-v30.png",
-    "dropSources": [
-      {
-        "id": "vipChest",
-        "name": "VIP Chest",
-        "image": "assets/sources/vip-chest.png"
-      },
-      {
-        "id": "moonChest",
-        "name": "Moon Chest",
-        "image": "assets/sources/moon-chest.png"
-      },
-      {
-        "id": "playtimeRewards",
-        "name": "PlayTime Rewards",
-        "image": "assets/sources/playtime-rewards.png"
-      }
-    ]
-  },
-  {
     "id": "canned-tuna",
     "name": "Canned Tuna",
     "itemGroup": "fishing",
@@ -938,22 +828,6 @@ export const ITEMS = [
     ]
   },
   {
-    "id": "fishhook",
-    "name": "Fish Hook",
-    "itemGroup": "fishing",
-    "rarity": "Epic",
-    "source": "Utility Item",
-    "description": "+50% Fishing Luck for your next 25 catches.",
-    "image": "assets/items/Fishhook.png",
-    "dropSources": [
-      {
-        "id": "fishingmerchant",
-        "name": "Fishing Merchant",
-        "image": "assets/sources/FishingMerchant.png"
-      }
-    ]
-  },
-  {
     "id": "golden-fish-hook",
     "name": "Golden Fish Hook",
     "itemGroup": "fishing",
@@ -961,22 +835,6 @@ export const ITEMS = [
     "source": "Utility Item",
     "description": "Fishing equipment available from the Fishing Merchant.",
     "image": "assets/items/GoldenFishhook.png",
-    "dropSources": [
-      {
-        "id": "fishingmerchant",
-        "name": "Fishing Merchant",
-        "image": "assets/sources/FishingMerchant.png"
-      }
-    ]
-  },
-  {
-    "id": "worm",
-    "name": "Worm",
-    "itemGroup": "fishing",
-    "rarity": "Rare",
-    "source": "Utility Item",
-    "description": "+25% Fishing Luck and +10% Egg Luck.",
-    "image": "assets/items/worm.png",
     "dropSources": [
       {
         "id": "fishingmerchant",
