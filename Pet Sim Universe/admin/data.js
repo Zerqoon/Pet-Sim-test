@@ -1,11 +1,11 @@
 import {readCatalog, catalogGroups, writeCatalog} from '../server/catalog-data.js';
 import {readDataModule, rowsFromPrices} from '../public/data/value-loader.js';
 import {priceRevision, normalizePrice} from '../public/data/price-core.js';
+import {validImagePath} from './public/image-path.js';
 
 export class Problem extends Error { constructor(status,message) { super(message); this.status=status; } }
 export const groups = {pets:'PETS',charms:'CHARMS',eggs:'EGGS',items:'ITEMS',codes:'CODES'};
 const safeId = /^[a-z0-9][a-z0-9-]{0,79}$/;
-const imagePath = /^assets\/(?:pets|charms|eggs|items|sources)\/[A-Za-z0-9_-]+\.png$/;
 const crcTable=Uint32Array.from({length:256},(_,n)=>{for(let b=0;b<8;b++)n=(n>>>1)^((n&1)?0xedb88320:0);return n>>>0;});
 function text(v,max=200,optional=false) {
   if (typeof v !== 'string' || v.length>max || /[\u0000-\u001f\u007f]/.test(v) || (!optional && !v.trim())) throw new Problem(400,'Check the text fields.');
@@ -52,8 +52,17 @@ export async function editSnapshot(snapshot,input,now=new Date().toISOString(),s
   for(const change of input.changes) {
     if(!change || typeof change!=='object' || Array.isArray(change)) throw new Problem(400,'Invalid entry edit.');
     if(!Object.hasOwn(groups,change.category) || !safeId.test(change.id || '')) throw new Problem(400,'Invalid entry identifier.');
+    if(change.action!==undefined && !['upsert','delete'].includes(change.action)) throw new Problem(400,'Unsupported entry action.');
     const key=change.category+'/'+change.id; if(seen.has(key)) throw new Problem(400,'Duplicate edit.'); seen.add(key);
     const entries=catalog[groups[change.category]], index=entries.findIndex(x=>x.id===change.id), old=entries[index];
+    if(change.action==='delete') {
+      if(Object.keys(change).some(key=>!['category','id','action'].includes(key))) throw new Problem(400,'A removal cannot include edits or artwork.');
+      if(!old) throw new Problem(409,'This entry was already removed. Reload the catalog.');
+      entries.splice(index,1);
+      if(change.category!=='codes') delete prices[change.category][change.id];
+      summary.push('Removed '+old.name);
+      continue;
+    }
     if(change.add && old || !change.add && !old) throw new Problem(409,'The entry already exists or was removed. Reload the catalog.');
     const item=old ? {...old} : {id:change.id};
     const allowed=['name','rarity','source','description','image','bestPct','itemGroup','code','status'];
@@ -83,8 +92,9 @@ export async function editSnapshot(snapshot,input,now=new Date().toISOString(),s
           if(variant==='normal') item.image=path; if(item.supportsVariants) item.variantImages={...item.variantImages,[variant]:path};
         }
       }
-      if(item.supportsVariants && (!item.variantImages?.normal || item.image!==old?.image)) item.variantImages={...item.variantImages,normal:item.image};
-      if(!imagePath.test(item.image || '')) throw new Problem(400,'Provide a PNG image or an existing assets path.');
+      const normalImage=item.image||item.variantImages?.normal;
+      if(item.supportsVariants && normalImage && (!item.variantImages?.normal || item.image && item.image!==old?.image)) item.variantImages={...item.variantImages,normal:normalImage};
+      if(!validImagePath(normalImage)) throw new Problem(400,'Provide a PNG image or an existing assets path.');
       const values=change.prices;
       if(!values || typeof values!=='object' || Array.isArray(values)) throw new Problem(400,'Prices are required.');
       const variants=item.supportsVariants?['normal','golden','diamond']:['normal'];

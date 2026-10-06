@@ -2,6 +2,7 @@ import {readFile,writeFile,unlink} from 'node:fs/promises';
 import path from 'node:path';
 import {createWrangler,root} from './discord-tools.mjs';
 import {verifyFreeAdmin} from './admin-deploy-check.mjs';
+import {applyReleaseRemovals} from './apply-release-removals.mjs';
 import {discordUrl} from '../server/pricing.js';
 let audit='';
 try {
@@ -17,8 +18,8 @@ try {
   if(domain)config.routes=[{pattern:domain,custom_domain:true}];else delete config.routes;
   process.env.CLOUDFLARE_ACCOUNT_ID=config.account_id;
   const wrangler=createWrangler([audit]);
-  const backupPath=path.join(root,'.cloudflare/admin-before-v125.json');
-  await writeFile(backupPath,await readFile(configPath,'utf8'));
+  const backupPath=path.join(root,'.cloudflare/admin-before-v127.json');
+  try{await writeFile(backupPath,await readFile(configPath,'utf8'),{flag:'wx'});}catch(error){if(error.code!=='EEXIST')throw error;}
   await writeFile(configPath,JSON.stringify(config,null,2)+'\n');
   const temporary=path.join(root,'.cloudflare/admin-audit.private.json');
   await writeFile(temporary,JSON.stringify({ADMIN_WEBHOOK_URL:audit}),{mode:0o600});
@@ -29,7 +30,9 @@ try {
   if(!url)throw new Error('Cloudflare did not return the admin address.');
   const password=(await readFile(path.join(root,'private-setup/LOGIN.private.txt'),'utf8')).split(/\r?\n/).find(x=>x.startsWith('Zerqoon: '))?.slice(9);
   await verifyFreeAdmin(url,{username:'Zerqoon',password});
+  const cleanup=await applyReleaseRemovals(url,{username:'Zerqoon',password},{configDirectory:path.join(root,'.cloudflare')});
+  console.log(cleanup.removed.length?'Requested card cleanup confirmed: '+cleanup.removed.join(', '):'Requested cleanup is already applied.');
   await writeFile(path.join(root,'.cloudflare/admin-info.json'),JSON.stringify({url,repository:'Zerqoon/Pet-Sim-test'},null,2)+'\n');
   await writeFile(path.join(root,'private-setup/ADMIN-ADDRESS.private.txt'),url+'\n');
-  console.log('\nADMIN READY: '+url+'\nLogin and GitHub catalog verified.');
+  console.log('\nADMIN READY: '+url+'\nLogin, GitHub catalog and image loading verified.');
 }catch(error){console.error(String(error.message||'Admin update failed.').split(audit||'\0').join('[hidden]'));process.exitCode=1;}

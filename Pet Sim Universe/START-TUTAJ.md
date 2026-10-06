@@ -1,113 +1,46 @@
-﻿Po bledzie 100328: podmien pliki z tej paczki w tym samym folderze projektu, zachowaj .cloudflare i private-setup, uruchom ponownie Setup-Admin.ps1. Hasla pozostaja te same; glowna strona i dzialajacy Discord nie wymagaja ponownego wdrozenia.
+# Pet Universe Values — v127
 
-POPRAWIONE v123 — WORKERS FREE: osobny panel z logowaniem. Instrukcja: ADMIN-START.md. Hasla: private-setup/LOGIN.private.txt. Uruchom Setup-Admin.ps1 po Upload-GitHub.ps1. Nie wrzucaj private-setup na GitHub.
+Cały projekt, gotowy build oraz wszystkie grafiki są w tej paczce.
 
-# Pet Universe Values — v123
+Usunięto z katalogu i prices.js: Exquisite Peacock, Imp, Shadow Dominus,
+Fishing Charm I, Fishing Charm II, Squeaky, Ball, Fish Hook oraz Worm.
+Dla trzech petów usunięto także Golden i Diamond.
+Golden Fish Hook, Universe Worm i Fishing Charm III zostają.
+Pozostałe wyceny z v126 są zachowane dokładnie.
 
-Cały projekt, gotowy build i wszystkie grafiki są w tej paczce.
-Strona jest po angielsku. Zachowano dokładnie ceny z Twojej paczki v118.
-**Edytujesz tylko `public/data/prices.js`.**
+Admin ma dopracowany układ, filtry, sortowanie, licznik zmian i czytelniejszy
+edytor. Kliknij kartę → Delete card → Queue removal. Usunięcie trafia do
+podglądu zmian. Undo removal cofa je przed publikacją. Publish changes
+zapisuje całą paczkę dodawania, edycji i usuwania w jednym commicie.
 
-## Wgranie całego projektu
+## Aktualizacja wszystkiego
 
-Rozpakuj folder `Pet Sim Universe`. Skopiuj jego zawartość do swojego projektu,
-np. `C:\Users\zerqo\Desktop\Pet Sim Universe`, zastępując pliki.
-Zachowaj prywatny folder `.cloudflare` z wcześniejszej konfiguracji Discorda.
-
-W PowerShell uruchom:
-
-```powershell
-Set-Location "C:\Users\zerqo\Desktop\Pet Sim Universe"
-powershell -NoProfile -ExecutionPolicy Bypass -File .\Upload-GitHub.ps1
-```
-
-Upload wgrywa cały projekt do `Zerqoon/Pet-Sim-test` i używa cen z tej paczki.
-Wykonuje walidację i build przed commitem. Przy zachowanej konfiguracji Discorda
-czeka na opublikowane ceny, wdraża monitor i potwierdza test na Twoim kanale.
-
-Cloudflare Pages: **Root `Pet Sim Universe`**, **Build `npm run build`**, **Output `public`**.
-Ceny działają także bez Pages Functions. Historia wymaga opcjonalnego bindingu
-D1 `VALUES_DB`; przy jego braku dialog pokazuje aktualną cenę i informację,
-że historia jest niedostępna.
-
-## Zachowany wyglad z v121
-
-Home zajmuje całą szerokość — panel boczny jest w nim ukryty, a w Values i Calculator nadal działa. Menu jest wyśrodkowane i ma dokładnie dwa przyciski:
-**Values** oraz **Calculator**. Usunięto dodatkowe kategorie, kafelki, linki
-i opisy. Zachowano czas aktualizacji cen oraz dyskretne podpisy twórców.
-
-Tło korzysta z istniejących sky-world.png, category-pets.png oraz
-gummy-egg.png. Grafiki są przyciemnione warstwami CSS i umieszczone za menu;
-nie zmieniano oryginalnych plików. Build korzysta z istniejących wariantów WebP.
-Na telefonie dwa przyciski układają się pionowo. Tło jest statyczne.
-
-Pozostałe widoki i nawigacja, wszystkie 331 plików grafik i fontów, ceny,
-ich data aktualizacji oraz katalog zostaly zachowane. Discord ma teraz krotkie angielskie wiadomosci.
-Edytujesz nadal tylko jeden **public/data/prices.js**.
-
-## Dodawanie petów
-
-Paczka zawiera osobna strone administracyjna z logowaniem dla Zerqoon i Pioterek. Dodaje i edytuje pety, ceny, opisy i PNG bez zmieniania glownych stron. Instrukcja instalacji: **ADMIN-START.md**. Losowe hasla: **private-setup/LOGIN.private.txt**. Panel dziala w ramach Workers Free; nie trzeba kupowac planu.
-
-Uruchom **Upload-GitHub.ps1**, poczekaj na Pages, a potem **Setup-Admin.ps1**. Podasz tylko token GitHuba i zalogujesz sie do Cloudflare. Nowy webhook jest przygotowany w prywatnej konfiguracji. Po wdrozeniu skrypt poda adres panelu.
-
-## Ceny i czas aktualizacji
-
-`???`, `null`, `"null"`, `No Price`, `Not Price`, `N/A` oraz puste wartości
-wyświetlają **Not Price**. Prawdziwe zero pozostaje ceną **0**. **O/C** pozostaje O/C.
-Oferta z Not Price lub O/C ma wynik **INCOMPLETE**, a suma obejmuje znane ceny.
-Strona i eksport PNG stosują tę samą zasadę.
-
-Zestaw zawiera 91 wycen, w tym 79 liczbowych i 12 bez ceny. W porównaniu z v116
-zmieniły się 22 wyceny. Data startowa **05 Oct 2026, 10:33:51 CEST** oznacza czas
-otrzymania Twojego załącznika; jego oryginalna godzina edycji nie jest dostępna.
-
-Kolejne zmiany: zapisujesz `public/data/prices.js` i wgrywasz projekt albo
-commitujesz ten plik na GitHubie. Build sam zapisuje datę i SHA-256 wartości
-w `price-updates.js`. To metryka bez cen, której nie edytujesz.
-Wizyty, rozpakowanie, zmiana wyglądu i build tych samych wartości nie zerują daty.
-Przy braku właściwej metryki monitor zapisuje czas wykrycia, oznaczony
-**CHANGE DETECTED**. Panel nie podaje starej daty dla nowego zestawu cen.
-
-## Discord
-
-Monitor zachowuje wersję 116 z poprawkami autoryzacji, kolejki i limitów Discorda.
-Numer v123 dotyczy strony; protokół monitora pozostaje v116. Nie musisz edytować drugiego pliku cen.
-
-Jeśli konfiguracja została w poprzednim folderze:
+Rozpakuj ZIP osobno. Otwórz PowerShell w jego folderze Pet Sim Universe:
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\Upgrade-Discord.ps1 -ProjectPath "C:\Poprzedni-projekt\Pet Sim Universe"
+powershell -NoProfile -ExecutionPolicy Bypass -File .\Update-Project.ps1
 ```
 
-Przy pierwszej konfiguracji lub zmianie webhooka:
+Domyślny obecny projekt: C:\Users\zerqo\Desktop\Pet Sim Universe.
+Inny folder wskazujesz parametrem -ProjectPath:
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\Setup-Discord.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File .\Update-Project.ps1 -ProjectPath "C:\TwojFolder\Pet Sim Universe"
 ```
 
-Cron sprawdza ceny co minutę. Rzeczywiste zmiany są zapisane w trwałej kolejce,
-wysyłane grupami z osobnymi embedami i ponawiane po przejściowym błędzie.
-Setup/Upgrade zgłasza sukces dopiero po odpowiedzi Discorda.
-Testy w paczce symulują HTTP; nie oznaczają testu na Twoim kanale.
+Skrypt kopiuje kod do Twojego obecnego projektu, zachowując pozostałe lokalne ceny,
+grafiki, .cloudflare i private-setup. Usuwa lokalnie wskazane karty i zapisuje kopię
+danych w .cloudflare/v127-local-data-backup. Wdraża admina, sprawdza logowanie,
+katalog i zdjęcia, usuwa wskazane pozycje z aktualnych danych na GitHubie,
+a następnie wgrywa cały projekt z zachowaniem pozostałych zdalnych cen i grafik.
+Skrypt zachowuje istniejący token, konta oraz bazę panelu. Po zakończeniu
+poczekaj na udany build Pages i odśwież panel.
 
-## Uruchomienie lokalne
+Panel: https://admin.petuniverse-values.pl.
+Instrukcja admina: README-ADMIN.md. Pierwsza instalacja: ADMIN-START.md.
+Projekt działa na Workers Free. Edytowalny plik cen to nadal public/data/prices.js.
 
-Node.js 22.13 lub nowszy:
-
-```text
-npm run dev
-```
-
-Otwórz `http://127.0.0.1:4173`. Nie uruchamiaj `index.html` przez dwuklik.
-
-```text
-npm run build
-npm test
-```
-
-Sprawdzono build, kompletność grafik i zgodność danych z v120,
-strukturę HTML, dwa wejścia z Home oraz odpowiedzi lokalnego serwera. Nowy wygląd nie
-został sprawdzony wizualnie w przeglądarce ani na prawdziwym telefonie, ponieważ
-w tym środowisku nie ma dostępnej przeglądarki do lokalnego podglądu.
-Nie zmieniano Twojego wdrożenia ani konta Cloudflare.
+Cloudflare Pages: root Pet Sim Universe, build npm run build, output public.
+Kontrola lokalna: npm test i npm run build. 98 testów przechodzi.
+Publiczny wygląd z v126 jest zachowany. Testy HTTP korzystają z symulacji;
+wdrożenie sprawdzają skrypty na Twoim komputerze.

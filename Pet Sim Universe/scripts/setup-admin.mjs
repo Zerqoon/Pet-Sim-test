@@ -7,6 +7,7 @@ import {github} from '../admin/github.js';
 import {SCHEMA} from '../admin/worker.js';
 import {discordUrl} from '../server/pricing.js';
 import {verifyFreeAdmin} from './admin-deploy-check.mjs';
+import {applyReleaseRemovals} from './apply-release-removals.mjs';
 
 const token=process.env.PET_UNIVERSE_GITHUB_TOKEN;
 let webhook='';
@@ -54,6 +55,8 @@ try {
   const password=loginLines.find(x=>x.startsWith('Zerqoon: '))?.slice(9);
   const adminUrl=process.env.PET_UNIVERSE_ADMIN_DOMAIN?'https://'+process.env.PET_UNIVERSE_ADMIN_DOMAIN:url;
   const verified=await verifyFreeAdmin(adminUrl,{username:'Zerqoon',password});
+  const cleanup=await applyReleaseRemovals(adminUrl,{username:'Zerqoon',password},{configDirectory:dir});
+  console.log(cleanup.removed.length?'Requested cleanup confirmed: '+cleanup.removed.join(', '):'Requested cleanup is already applied.');
   console.log(`Free admin confirmed: login works, GitHub catalog loaded (${verified.petCount} pets), temporary session closed.`);
   await writeFile(path.join(dir,'admin-info.json'),JSON.stringify({url:adminUrl,repository:'Zerqoon/Pet-Sim-test'},null,2)+'\n');
   await writeFile(path.join(privateDirectory,'ADMIN-ADDRESS.private.txt'),adminUrl+'\n');

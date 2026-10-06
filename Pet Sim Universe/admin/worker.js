@@ -76,7 +76,7 @@ export async function handle(request,env,ctx={waitUntil:()=>{}},fetcher=fetch) {
     if(url.pathname==='/api/ready' && request.method==='GET') {
       const accounts=JSON.parse(env.ADMIN_USERS);
       if(!env.GITHUB_TOKEN || !env.ADMIN_WEBHOOK_URL || !accounts.length || accounts.some(x=>x.scheme!=='random-hmac-v1')) throw new Problem(503,'Free admin secrets are not active yet.');
-      return json({ready:true,version:125,hosting:'free'});
+      return json({ready:true,version:127,hosting:'free'});
     }
     if(request.method!=='GET') {
       if(request.method!=='POST') throw new Problem(405,'Method is not allowed.');
@@ -96,6 +96,10 @@ export async function handle(request,env,ctx={waitUntil:()=>{}},fetcher=fetch) {
       return json({username:user.username,csrf,expires},200,{'set-cookie':`__Host-pu_admin=${token}; Path=/; Secure; HttpOnly; SameSite=Strict; Max-Age=28800`});
     }
     const user=await session(request,db,env);
+    if(url.pathname==='/api/image' && request.method==='GET') {
+      const bytes=await github(env,fetcher).image(url.searchParams.get('path'),url.searchParams.get('ref'));
+      return new Response(bytes,{headers:{...headers,'content-type':'image/png','cache-control':'private, max-age=3600, immutable'}});
+    }
     if(request.method==='POST' && !equal(request.headers.get('x-csrf-token'),user.csrf)) throw new Problem(403,'Invalid session request. Reload the panel.');
     if(url.pathname==='/api/session' && request.method==='GET') return json({username:user.username,csrf:user.csrf,expires:user.expires,site:env.SITE_URL||'https://petuniverse-values.pl'});
     if(url.pathname==='/api/logout' && request.method==='POST') {await db.prepare('DELETE FROM sessions WHERE token=?').bind(user.token).run(); return json({ok:true},200,{'set-cookie':'__Host-pu_admin=; Path=/; Secure; HttpOnly; SameSite=Strict; Max-Age=0'});}
@@ -159,7 +163,7 @@ export async function handle(request,env,ctx={waitUntil:()=>{}},fetcher=fetch) {
         const edited=await editSnapshot(snapshot,input,undefined,staged);
         const uploads=new Set(edited.files.map(x=>x.path));
         for(const change of input.changes) {
-          if(change.category==='codes') continue;
+          if(change.category==='codes' || change.action==='delete') continue;
           const item=edited.catalog[{pets:'PETS',charms:'CHARMS',eggs:'EGGS',items:'ITEMS'}[change.category]].find(x=>x.id===change.id);
           const old=snapshot.catalog[{pets:'PETS',charms:'CHARMS',eggs:'EGGS',items:'ITEMS'}[change.category]].find(x=>x.id===change.id);
           if(item.image!==old?.image && !uploads.has('public/'+item.image)) await api.assertAsset(item.image,snapshot.head);

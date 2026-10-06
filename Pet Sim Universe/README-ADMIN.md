@@ -1,37 +1,63 @@
-# Pet Universe Admin v125
+# Pet Universe Admin v127
 
-The public website, its assets, prices and saved price timestamp are unchanged. The admin now uses a full card grid: select a card, edit it in a modal, save to review, then publish. Add card is below the grid. New entries can be assigned to Pets, Charms, Eggs, Items or Codes; Items also support General/Fishing. These are the existing website categories, not a system for inventing new public tabs.
+A separate English admin workspace for Zerqoon and Pioterek. The public website keeps its existing layout. This release adds catalog removal and a redesigned card manager with category counts, search, rarity filtering, sorting, change summaries and a structured card editor.
 
-## Update your existing installation
+## Requested cleanup
 
-Merge this project into your existing project directory. Keep your existing `.cloudflare` directory and login/secret files in `private-setup`. Include the new `private-setup/admin-webhooks.private.json` from this release. Never upload private-setup to GitHub.
+The bundled catalog and sole editable price file already exclude these entries:
 
-Run:
+| Category | Removed cards |
+| --- | --- |
+| Pets | Exquisite Peacock, Imp, Shadow Dominus — including Golden and Diamond prices |
+| Charms | Fishing Charm I, Fishing Charm II |
+| Items | Squeaky, Ball, Fish Hook, Worm |
+
+Golden Fish Hook, Universe Worm and Fishing Charm III remain. The packaged catalog contains 32 pets, 14 charms, 4 eggs, 8 items and 11 codes. Every other value from v126 is preserved exactly. Original artwork files remain available for existing references and later reuse.
+
+## Update an existing installation
+
+Extract the ZIP into a separate folder. Open PowerShell in its Pet Sim Universe folder and run:
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\Upgrade-Admin.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File .\Update-Project.ps1
 ```
 
-The updater keeps the deployed GitHub token and account credentials. It installs only the separate GitHub audit webhook and redeploys the admin, retaining the existing database. It verifies login, catalog access and logout before reporting success.
-
-The default address is https://admin.petuniverse-values.pl. Cloudflare must already manage the active petuniverse-values.pl zone in the same account as your Worker. The script configures a Custom Domain for the admin hostname only; it does not replace the public website. Cloudflare manages the domain record and HTTPS certificate. Initial DNS/certificate activation may take time. The workers.dev address remains available. No paid Workers settings are configured.
-
-To keep only workers.dev instead:
+The default existing project is C:\Users\zerqo\Desktop\Pet Sim Universe. To use a different existing project:
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\Upgrade-Admin.ps1 -WorkersOnly
+powershell -NoProfile -ExecutionPolicy Bypass -File .\Update-Project.ps1 -ProjectPath "C:\YourFolder\Pet Sim Universe"
 ```
 
-For an entirely new installation, run Setup-Admin.ps1. It asks for the GitHub token; the update command does not.
+The updater:
 
-## Notifications
+1. Copies the new project code into the existing installation while retaining its local prices, artwork, Cloudflare configuration and private credentials.
+2. Removes the nine requested entries from the existing local catalog/prices while retaining all other local values and added cards. Original data files are backed up in .cloudflare/v127-local-data-backup.
+3. Deploys admin v127 and verifies login, GitHub catalog access and a PNG response.
+4. Removes only the requested entries from the latest GitHub catalog through the authenticated admin API. Other cards, including cards added after the ZIP was created, and their current prices are retained.
+5. Uploads the whole project with the latest remote catalog, prices and artwork. The existing price monitor is checked by the existing upload workflow.
 
-- GitHub audit: a separate webhook sends **GitHub updated**, the signed-in username (Zerqoon or Pioterek), changed entries, commit link and exact time. These notices describe commits saved through the panel. Direct manual commits made outside the panel are not attributed by this admin service.
-- Prices: the existing price monitor keeps its separate value webhook. Alerts describe actual prices after the website deploys. Uploading artwork or editing descriptions does not generate a false price alert.
-- Test Discord in Recent updates tests the GitHub audit channel. Use Upgrade-Discord.ps1 to check the existing price monitor.
+The cleanup uses the current GitHub head, one atomic publication, the normal server validation and an audit attributed to Zerqoon. It saves its pending operation locally for recovery. Interrupted requests retry the same identifier; rerunning a completed update keeps the cleanup completed. Keep your existing .cloudflare folder between updates. No paid-only Workers settings are added.
 
-Both webhook URLs remain private; they are not included in admin browser files or the public website. Queued admin audit messages retry through the existing database/cron.
+To update only the panel and requested cleanup after copying admin/scripts into the existing project, run Upgrade-Admin.ps1. The default admin domain remains https://admin.petuniverse-values.pl and the workers.dev fallback stays available. The deployed GitHub token, users and database are retained. New installations use ADMIN-START.md.
+
+## Managing cards
+
+Click a card to open its editor. Edit details, values or PNGs, then **Save to review**. **Add card** sits below the collection; new cards can belong to Pets, Charms, Eggs, Items or Codes. Items support General and Fishing. Search, rarity filters and catalog/name/pending sorting help manage larger collections.
+
+To remove a card, open it and select **Delete card**, then **Queue removal**. A pet removal includes its Normal, Golden and Diamond values. The card stays on the public website until publication and appears in red in the admin review. **Undo removal** restores editing before publication. Removing an unpublished new card from review simply discards that draft.
+
+Review supports up to 20 additions, edits or removals and six prepared PNGs per publication. **Publish changes** applies the whole batch in one GitHub commit. A changed repository version blocks a stale save; refresh and review again. If a connection interrupts publication, retry the same publication to recover its result.
+
+There is still one editable price source: public/data/prices.js. ???, Null and other accepted missing-price values become Not Price. Zero remains priced and O/C remains O/C. price-updates.js is generated timestamp metadata. Metadata-only and equivalent-price changes keep the existing price date. Removing priced cards records the resulting catalog/price revision; remaining values are preserved.
+
+## Artwork and notifications
+
+Image paths retain their exact case and filename, including spaces. Normal artwork can come from image or variantImages.normal. The panel first loads an image from the public website, then falls back to an authenticated PNG from the matching GitHub commit if necessary. Failed images keep a clear placeholder. New uploads are prepared to 512 pixels and 128 KB; original repository PNGs can be read up to 8 MB.
+
+The separate audit webhook sends **GitHub updated**, the signed-in editor, added/updated/removed card names and a commit link. The existing value webhook reports actual price changes after the website deployment. Publication history reports delivery or pending retries. Both webhook configurations and login credentials remain private.
 
 ## Verification
 
-74 automated tests pass, including distinct webhook destinations, both editor identities, credential protection, atomic GitHub commits, retries, artwork validation and custom-domain configuration. The main website build passes. Main src/public files and login passwords match the prior release byte for byte. HTML identifiers, form structure and JS selectors were checked. A local browser executable was unavailable, so actual desktop/phone rendering and live Cloudflare deployment must be checked after installation; neither is claimed as verified here.
+98 automated tests pass and the public build passes. Tests cover removals in every category, complete variant-price cleanup, undoable review, stale versions, atomic writes, authenticated image access, retries, both editor identities and recovery of interrupted release cleanup. Main page code, styling, original artwork and private account files match v126; the public data changes are limited to the catalog, prices and generated timestamp.
+
+GitHub/Discord HTTP is mocked in tests. Live Cloudflare/GitHub deployment and desktop/phone browser rendering were not performed here. The setup/update scripts perform live login, catalog and image checks on the owner's computer.

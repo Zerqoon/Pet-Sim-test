@@ -1,6 +1,8 @@
-# Separate admin panel — v123
+# Separate admin panel — v127
 
 Main website pages, artwork, layout and existing values are unchanged. The new admin is a separate Cloudflare Worker with its own address and login page. It does not require enabling Pages Functions.
+
+For an existing installation, follow README-ADMIN.md and run Upgrade-Admin.ps1. This release adds reviewed card removal and a redesigned admin workspace, retaining the existing image fixes. Update-Project.ps1 updates an existing installation and removes the nine requested entries from the latest GitHub data while preserving all other cards, prices and accounts.
 
 ## Workers Free — no paid plan
 
@@ -21,10 +23,11 @@ The script checks GitHub access, reuses existing monitor configuration or config
 ## Editing
 
 - Sign in as Zerqoon or Pioterek. Both accounts may edit the catalog.
-- Select Pets, Charms, Eggs, Items or Codes. Search, edit details and values, then **Add to review**. New entries use **Add new**.
+- Select Pets, Charms, Eggs, Items or Codes. Click a card, edit details and values, then **Add to review**. New entries use **Add card** below the grid.
 - For a new pet, Golden & Diamond enables all three price/artwork fields. Existing variant support stays as defined in the catalog. Upload a normal PNG and optionally golden/diamond artwork, or enter an existing image path. Choose PNG artwork up to 16 MB and 8192 pixels per side. The browser prepares a transparent PNG at up to 512 pixels and 128 KB, scaling down further if needed. Each image is checked and staged separately. The final publish attaches the staged blobs in one commit. Wait for the artwork-ready message before adding an entry to review.
 - Use numeric values, 25K, O/C, Not Price, ??? or Null. Unknown values are saved as null and displayed as Not Price. Zero is a real price.
-- Review up to 20 changes and six prepared artwork uploads per publish, then **Publish changes**. One commit updates catalog.js, prices.js, any uploaded PNGs and generated timestamp metadata. Main page files are never written by the panel.
+- Open an existing card and choose **Delete card**, then **Queue removal** to remove it and its prices. **Undo removal** in review restores it before publication.
+- Review up to 20 additions, edits or removals and six prepared artwork uploads per publish, then **Publish changes**. One commit updates catalog.js, prices.js, any uploaded PNGs and generated timestamp metadata. Main page files are never written by the panel.
 - A changed GitHub version blocks a stale save. **Refresh** discards pending changes, loads the latest version and lets you review again. Drafts remain only in this browser tab until publishing or refreshing; avoid closing it with unfinished work.
 - A network interruption can happen after a successful GitHub save. Retry the same publish first: its operation identifier lets the server recover the previous result instead of creating a second commit.
 
@@ -32,7 +35,7 @@ There is still exactly one editable price file: **public/data/prices.js**. price
 
 ## Discord and timing
 
-The admin sends a short English **Catalog update saved** message after the GitHub commit. It clearly says the website is awaiting deployment. The price monitor sends value alerts only after deployed prices are readable: **Job Cat — 30K → 25K — Down 5K (16.67%)**. Golden/Diamond appears in the title only when needed to identify the changed pet. No Variant, Rarity or repeated old/new fields.
+The admin sends a short English **GitHub updated** message after the GitHub commit, naming the editor, changed cards and commit link. The panel reports that the public website is awaiting deployment. The price monitor sends value alerts only after deployed prices are readable: **Job Cat — 30K → 25K — Down 5K (16.67%)**. Golden/Diamond appears in the title only when needed to identify the changed pet. No Variant, Rarity or repeated old/new fields.
 
 GitHub save → Cloudflare build → published website → next monitor check. The monitor checks every minute; a build adds its own time. A newly configured cron can take up to 15 minutes to activate. There is no promise of instant alerts before deployment. Discord errors and rate limits retain notifications in a persistent retry queue. Recent activity reports whether an admin notification was delivered or is waiting. **Test Discord** checks delivery, with automatic retry if Discord rejects the first attempt.
 
@@ -54,4 +57,4 @@ To replace passwords, run `node scripts/reset-admin-passwords.mjs` locally, then
 
 ## Checks
 
-All 70 tests passed. Run `npm test` and `npm run build` with Node.js 22.13 or newer. Tests use mocked GitHub/Discord HTTP and real SQLite for auth, sessions, locks, audits and retry state. They do not send messages to your Discord channel. Live installation is confirmed by Setup-Admin.ps1 on your authenticated machine.
+All 98 tests passed. Run `npm test` and `npm run build` with Node.js 22.13 or newer. Tests use mocked GitHub/Discord HTTP and real SQLite for auth, sessions, locks, audits and retry state. They do not send messages to your Discord channel. Live login, catalog and PNG loading are confirmed by the setup/update scripts on your authenticated machine.

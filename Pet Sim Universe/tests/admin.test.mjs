@@ -4,9 +4,9 @@ import {readFile} from 'node:fs/promises';
 import {DatabaseSync} from 'node:sqlite';
 import {handle,passwordHash,flushNotifications} from '../admin/worker.js';
 import {decodeSnapshot,editSnapshot,decodePNG} from '../admin/data.js';
-import {readCatalog,writeCatalog} from '../server/catalog-data.js';
+import {readCatalog,writeCatalog,catalogGroups} from '../server/catalog-data.js';
 import {github} from '../admin/github.js';
-import {readDataModule} from '../public/data/value-loader.js';
+import {readDataModule,rowsFromPrices} from '../public/data/value-loader.js';
 import {selectPriceUpdate,priceRevision} from '../public/data/price-core.js';
 import {prepareFreeAccounts,adminConfig} from '../scripts/free-admin-config.mjs';
 import {mkdtemp,writeFile,rm} from 'node:fs/promises';
@@ -33,6 +33,7 @@ async function fixture(username='Zerqoon') {
     if(new URL(url).hostname==='discord.com'){assert.equal(new URL(url).origin+new URL(url).pathname,env.ADMIN_WEBHOOK_URL,'admin audit must use only the audit webhook');return Response.json({}, {status:discordFailure||200});}
     assert.equal(options.headers.authorization,'Bearer private-github-token');assert.equal(options.redirect,'manual');
     const path=decodeURIComponent(new URL(url).pathname);const body=options.body?JSON.parse(options.body):null;
+    if(path.includes('/contents/') && options.headers.accept==='application/vnd.github.raw+json')return new Response(Buffer.from(png,'base64'),{headers:{'content-type':'application/octet-stream'}});
     if(path.includes('/contents/'))return Response.json({type:'file',size:30000,encoding:'base64',content:Buffer.from(path.endsWith('catalog.js')?catalogSource:priceSource).toString('base64')});
     if(path.endsWith('/git/ref/heads/main'))return Response.json({object:{sha}});
     if(path.includes('/git/commits/') && !body)return Response.json({tree:{sha:'t'.repeat(40)},message});
@@ -65,8 +66,8 @@ test('GitHub requests use a Workers-supported redirect mode and reject redirects
 
 test('catalog parser preserves every export, preset and value without executing source',()=> {
   const data=readCatalog(catalogSource);assert.equal(JSON.stringify(readCatalog(writeCatalog(data))),JSON.stringify(data));
-  assert.equal(data.PETS.length,35);assert.equal(data.ITEMS.length,12);
-  for(const injection of ["export const PETS = globalThis.process.exit();",catalogSource+"\nfetch('https://attacker.example');",catalogSource.replace("name: 'Gummy Bear'","name: (() => 'Bad')()"),catalogSource.replace("name: 'Gummy Bear'","__proto__: 'Bad'")])assert.throws(()=>readCatalog(injection));
+  assert.equal(data.PETS.length,32);assert.equal(data.ITEMS.length,8);
+  for(const injection of ["export const PETS = globalThis.process.exit();",catalogSource+"\nfetch('https://attacker.example');",catalogSource.replace('"name": "Gummy Bear"','"name": (() => "Bad")()'),catalogSource.replace('"name": "Gummy Bear"','"__proto__": "Bad"')])assert.throws(()=>readCatalog(injection));
 });
 test('PNG validation rejects corruption, trailing payload and non-PNG files',()=> {
   assert.equal(decodePNG(png),png);const corrupt=Buffer.from(png,'base64');corrupt[35]^=1;
@@ -88,6 +89,21 @@ test('unknown inputs become null, zero stays priced and malformed inputs are rej
 test('metadata-only and equivalent-price edits do not reset the price timestamp',async()=> {
   const r=await editSnapshot(snapshot,{changes:[edit({prices:{normal:18000}})]});assert.ok(!r.files.some(x=>x.path.endsWith('price-updates.js')));
   const r2=await editSnapshot(snapshot,{changes:[edit({prices:{normal:'18K'}})]});assert.ok(!r2.files.some(x=>x.path.endsWith('prices.js')));
+});
+test('every Fishing Charm with spaces in its filename remains editable without changing prices or paths',async()=> {
+  const charms=snapshot.catalog.CHARMS.filter(item=>/^fishing-charm-/.test(item.id));assert.equal(charms.length,1);
+  const changes=charms.map(item=>({category:'charms',id:item.id,metadata:{name:item.name,image:item.image,description:item.description+' Updated.'},prices:{normal:snapshot.prices.charms[item.id]}}));
+  const result=await editSnapshot(snapshot,{changes});
+  for(const item of charms)assert.equal(result.catalog.CHARMS.find(value=>value.id===item.id).image,item.image);
+  assert.deepEqual(result.prices,structuredClone(snapshot.prices));assert.deepEqual(result.files.map(file=>file.path),['public/data/catalog.js']);
+});
+test('pets with artwork only in variantImages.normal can be edited without uploading a second image',async()=> {
+  const pets=snapshot.catalog.PETS.filter(item=>!item.image && item.variantImages?.normal);assert.ok(pets.length>0);
+  const changes=pets.map(item=>({category:'pets',id:item.id,metadata:{description:item.description+' Updated.'},prices:snapshot.prices.pets[item.id]}));
+  const result=await editSnapshot(snapshot,{changes});
+  for(const item of pets)assert.deepEqual(result.catalog.PETS.find(value=>value.id===item.id).variantImages,structuredClone(item.variantImages));
+  assert.equal(result.revision,await priceRevision(rowsFromPrices(catalogGroups(snapshot.catalog),snapshot.prices)));
+  assert.ok(!result.files.some(file=>file.path.endsWith('price-updates.js')),'Normalizing an unpriced spelling must not reset the price timestamp');
 });
 test('new variants pet saves catalog, prices and matching artwork atomically',async()=> {
   const result=await editSnapshot(snapshot,{changes:[edit({id:'test-new-pet',add:true,supportsVariants:true,metadata:{name:'Test New Pet',rarity:'Exclusive',source:'Test',description:'New pet',image:''},prices:{normal:'???',golden:'Null',diamond:0},artwork:{normal:'upload-normal',golden:'upload-golden'}})]},undefined,new Map([['upload-normal','c'.repeat(40)],['upload-golden','d'.repeat(40)]]));
@@ -219,10 +235,38 @@ test('invalid or oversized artwork fails before GitHub; server key is never retu
 test('deployment verifies the actual Free login and catalog then revokes its setup session',async()=> {
   const f=await fixture();try {
     const result=await verifyFreeAdmin('https://admin.example',{username:'Zerqoon',password:'a-long-private-test-password'},{fetcher:(url,options)=>handle(new Request(url,options),f.env,{waitUntil:p=>f.pending.push(p)},f.fetcher)});
-    assert.equal(result.confirmed,true);assert.equal(result.petCount,35);
+    assert.equal(result.confirmed,true);assert.equal(result.petCount,32);assert.equal(result.imageConfirmed,true);
+    assert.ok(f.calls.some(call=>call.url.includes('FishingCharm%20III.png') && call.options.headers.accept==='application/vnd.github.raw+json'));
     assert.equal(f.db.sql.prepare('SELECT COUNT(*) n FROM sessions').get().n,0);
     assert.equal(f.calls.filter(x=>x.url.startsWith('https://discord.com')).length,0);
     assert.equal(f.calls.filter(x=>x.options.method==='POST').length,0,'setup check never changes repository contents');
+  } finally {await f.close();}
+});
+test('deployment rejects broken image delivery and still closes its temporary session',async()=> {
+  const f=await fixture();try {
+    await assert.rejects(()=>verifyFreeAdmin('https://admin.example',{username:'Zerqoon',password:'a-long-private-test-password'},{fetcher:(url,options)=>new URL(url).pathname==='/api/image'?Response.json({error:'Not found'},{status:502}):handle(new Request(url,options),f.env,{waitUntil:p=>f.pending.push(p)},f.fetcher)}),/Image check failed/);
+    assert.equal(f.db.sql.prepare('SELECT COUNT(*) n FROM sessions').get().n,0);
+  } finally {await f.close();}
+});
+test('repository PNG fallback requires login, uses the exact commit and never exposes credentials',async()=> {
+  const f=await fixture(),route='image?'+new URLSearchParams({path:'assets/items/FishingCharm I.png',ref:head});try {
+    assert.equal((await f.send(route)).status,401);assert.equal(f.calls.length,0);
+    await f.login();const response=await f.send(route);
+    assert.equal(response.status,200);assert.equal(response.headers.get('content-type'),'image/png');assert.match(response.headers.get('cache-control'),/^private,/);
+    assert.deepEqual(Buffer.from(await response.arrayBuffer()),Buffer.from(png,'base64'));
+    const call=f.calls.at(-1);assert.match(call.url,/FishingCharm%20I\.png/);assert.equal(new URL(call.url).searchParams.get('ref'),head);
+    assert.ok(!JSON.stringify([...response.headers]).includes(f.env.GITHUB_TOKEN));
+    const before=f.calls.length;
+    for(const path of ['assets/items/../prices.png','assets/items/foo.png?secret','https://other.example/image.png'])assert.equal((await f.send('image?'+new URLSearchParams({path,ref:head}))).status,400);
+    assert.equal((await f.send('image?'+new URLSearchParams({path:'assets/items/worm.png',ref:'main'}))).status,400);assert.equal(f.calls.length,before);
+  } finally {await f.close();}
+});
+test('existing images with spaces pass GitHub metadata validation and publish atomically',async()=> {
+  const f=await fixture();try {
+    const api=github(f.env,f.fetcher);await api.assertAsset('assets/items/FishingCharm II.png',head);
+    assert.match(f.calls.at(-1).url,/FishingCharm%20II\.png/);
+    await f.login();const result=await f.send('publish',{head,id:crypto.randomUUID(),changes:[edit({metadata:{name:'Gummy Bear',image:'assets/items/FishingCharm II.png'}})]});
+    assert.equal(result.status,200);assert.equal(f.calls.filter(call=>call.url.endsWith('/git/commits')).length,1);
   } finally {await f.close();}
 });
 
@@ -250,4 +294,25 @@ test('missing admin audit configuration never falls back to the value webhook',a
 test('custom admin domain uses only its own hostname and retains the workers.dev fallback',()=> {
   const config=adminConfig({accountId:'account',databaseId:'database',domain:'admin.petuniverse-values.pl'});
   assert.deepEqual(config.routes,[{pattern:'admin.petuniverse-values.pl',custom_domain:true}]);assert.equal(config.workers_dev,true);assert.equal(config.limits,undefined);
+});
+
+test('authenticated removal creates one commit and one attributed audit without deleting image blobs',async()=> {
+  const f=await fixture('Pioterek');try {
+    const input={head,id:crypto.randomUUID(),changes:[{category:'pets',id:'queen-bee',action:'delete'},{category:'items',id:'golden-fish-hook',action:'delete'}]};
+    assert.equal((await f.send('publish',input)).status,401);await f.login();
+    assert.equal((await f.send('publish',input,{'x-csrf-token':''})).status,403);assert.equal(f.blobs.length,0);
+    const response=await f.send('publish',input);assert.equal(response.status,200);const result=await response.json();assert.deepEqual(result.summary,['Removed Queen Bee','Removed Golden Fish Hook']);
+    const savedPrices=readDataModule(f.blobs.find(blob=>blob.encoding==='utf-8' && /export const PRICES/.test(blob.content)).content,'PRICES');
+    assert.equal(Object.hasOwn(savedPrices.pets,'queen-bee'),false);assert.equal(Object.hasOwn(savedPrices.items,'golden-fish-hook'),false);assert.equal(savedPrices.pets['gummy-bear'],snapshot.prices.pets['gummy-bear']);
+    const tree=JSON.parse(f.calls.find(call=>call.url.endsWith('/git/trees')).options.body);assert.ok(tree.tree.every(file=>file.path.includes('/public/data/') && file.sha));
+    assert.equal((await f.send('publish',input)).status,200);assert.equal(f.calls.filter(call=>call.url.endsWith('/git/commits')).length,1);
+    await Promise.all(f.pending);const message=JSON.parse(f.calls.find(call=>call.url.startsWith('https://discord.com')).options.body);assert.match(message.embeds[0].description,/Updated by Pioterek/);assert.match(message.embeds[0].description,/Removed Queen Bee/);
+  }finally{await f.close();}
+});
+test('a stale removal or mixed invalid batch makes no GitHub file writes',async()=> {
+  const f=await fixture();try {
+    await f.login();const input={head,id:crypto.randomUUID(),changes:[edit(),{category:'items',id:'does-not-exist',action:'delete'}]};
+    assert.equal((await f.send('publish',input)).status,409);assert.equal(f.blobs.length,0);
+    f.setHead(changedHead);assert.equal((await f.send('publish',{...input,changes:[{category:'pets',id:'queen-bee',action:'delete'}]})).status,409);assert.equal(f.blobs.length,0);
+  }finally{await f.close();}
 });

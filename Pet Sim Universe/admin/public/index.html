@@ -1,32 +1,102 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Pet Universe · Admin</title><link rel="stylesheet" href="/admin.css"><script type="module" src="/admin.js"></script></head>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#10121b">
+  <title>Pet Universe · Admin workspace</title>
+  <link rel="stylesheet" href="/admin.css"><script type="module" src="/admin.js"></script>
+</head>
 <body>
-<main id="login-view" class="login-wrap">
-  <section class="login-card"><div class="brand-mark">PU</div><p class="eyebrow">PET UNIVERSE</p><h1>Your workspace.<br>Your values.</h1><p class="muted">Sign in to manage the catalog and publish updates.</p>
-  <form id="login-form"><label>Username<input name="username" autocomplete="username" required placeholder="Zerqoon or Pioterek" maxlength="80"></label><label>Password<input name="password" type="password" autocomplete="current-password" required maxlength="200"></label><button class="primary" type="submit">Sign in <span>→</span></button><p id="login-message" role="status"></p></form><small>petuniverse-values.pl · Private admin</small></section>
-</main>
-<div id="workspace" hidden>
-  <header class="topbar"><a class="brand" href="/">PU <span>Pet Universe <small>petuniverse-values.pl / Admin</small></span></a><div class="account"><span id="account-name"></span><button id="logout" class="subtle">Sign out</button></div></header>
-  <main class="workspace">
-    <section class="page-heading"><div><p class="eyebrow">PET UNIVERSE · ADMIN</p><h1>Catalog & Values</h1><p class="muted">Choose a card to edit. Review your changes, then publish.</p></div><a class="outline" href="https://petuniverse-values.pl" target="_blank" rel="noopener noreferrer">Open website ↗</a></section>
-    <div id="message" class="notice" role="status" hidden></div>
-    <section class="editor-grid">
-      <section class="panel collection"><div class="panel-heading"><h2>Collection <span id="entry-count" class="collection-count">—</span></h2><button id="reload" class="subtle">Refresh</button></div><div id="tabs" class="tabs" aria-label="Catalog categories"></div><div class="search-row"><input id="search" type="search" placeholder="Search the catalog…" aria-label="Search catalog"><select id="item-filter" aria-label="Item category" hidden><option value="all">All categories</option><option value="general">General</option><option value="fishing">Fishing</option></select></div><div id="catalog-list" class="catalog-list"></div><div class="add-row"><button id="add" class="primary">+ Add card</button><span>Choose a category above, then add a new entry.</span></div></section>
+  <main id="login-view" class="login-wrap">
+    <section class="login-card">
+      <div class="brand-mark" aria-hidden="true">PU<span></span></div>
+      <p class="eyebrow">PET UNIVERSE / PRIVATE WORKSPACE</p>
+      <h1>Your catalog.<br><span>Your control.</span></h1>
+      <p class="muted">Manage cards, keep values current and publish with confidence.</p>
+      <form id="login-form">
+        <label>Username<input name="username" autocomplete="username" required placeholder="Zerqoon or Pioterek" maxlength="80"></label>
+        <label>Password<input name="password" type="password" autocomplete="current-password" required maxlength="200"></label>
+        <button class="primary" type="submit">Sign in <span aria-hidden="true">→</span></button>
+        <p id="login-message" role="status" aria-live="polite"></p>
+      </form>
+      <small>petuniverse-values.pl <span>·</span> Authorized editors only</small>
     </section>
-      <dialog id="editor-dialog" aria-labelledby="editor-title"><section class="panel detail"><div class="panel-heading"><h2 id="editor-title">Select an entry</h2><div class="modal-controls"><span id="entry-badge" class="pill">EDITOR</span><button id="close-editor" type="button" class="subtle" aria-label="Close editor">✕</button></div></div><p id="editor-empty" class="empty">Choose an entry to edit its values and details, or add something new.</p>
-      <div id="editor-message" class="notice" role="status" hidden></div><form id="entry-form" hidden>
-        <label id="new-category-label" hidden>Category<select id="new-category"><option value="pets">Pets</option><option value="charms">Charms</option><option value="eggs">Eggs</option><option value="items">Items</option><option value="codes">Codes</option></select></label><div class="field-pair"><label>Name<input name="name" maxlength="180" required></label><label>Identifier<input name="id" maxlength="80" required pattern="[a-z0-9][a-z0-9-]*"></label></div>
-        <div class="field-pair" id="metadata-row"><label>Rarity<select name="rarity"><option>Exclusive</option><option>Secret</option><option>Mythical</option><option>Legendary</option><option>Epic</option><option>Rare</option><option>Basic</option></select></label><label id="group-label">Category<select name="itemGroup"><option value="general">General</option><option value="fishing">Fishing</option></select></label><label id="best-label">Best pet %<input name="bestPct" type="number" min="0" max="100" step="any" placeholder="Optional"></label></div>
-        <div id="code-fields" class="field-pair" hidden><label>Code<input name="code" maxlength="200"></label><label>Status<select name="status"><option value="active">Active</option><option value="expired">Expired</option></select></label></div>
-        <label>Source<input name="source" maxlength="200" placeholder="Gummy Egg, Fishing…"></label><label>Description<textarea name="description" maxlength="1000" rows="2"></textarea></label>
-        <section id="values-fields"><div class="section-label"><h3>Values</h3><label id="variants-toggle" class="check"><input type="checkbox" name="supportsVariants">Golden & Diamond</label></div><p class="hint">Use 25K, a number, O/C or Not Price. ??? and Null become Not Price.</p><div id="price-inputs" class="price-inputs"></div></section>
-        <section id="artwork-fields"><div class="section-label"><h3>Artwork</h3><span class="hint">PNG · automatically prepared</span></div><label>Existing image path<input name="image" maxlength="200" placeholder="assets/pets/new-pet.png"></label><div id="artwork-inputs" class="artwork-inputs"></div></section>
-        <div class="form-actions"><button class="primary" type="submit">Save to review →</button><button id="remove-draft" type="button" class="subtle" hidden>Remove from review</button></div>
-      </form></section>
-</dialog>
-    <section class="panel review"><div class="panel-heading"><div><p class="eyebrow">READY WHEN YOU ARE</p><h2>Review & publish <span id="draft-count" class="collection-count">0</span></h2></div><button id="publish" class="primary" disabled>Publish changes ↗</button></div><div id="review-list" class="review-list"><p class="muted">Your changes will appear here before they go live.</p></div><p class="hint">Publishing creates one GitHub commit. The website then builds and deploys. Discord value alerts follow the deployed prices.</p></section>
-    <details class="panel activity"><summary>Recent updates & Discord</summary><div class="panel-heading"><h2>Recent activity</h2><button id="discord-test" class="outline">Test Discord</button></div><div id="activity-list" class="activity-list"></div></details>
-    <footer>Pet Universe · petuniverse-values.pl · Admin for Zerqoon & Pioterek</footer>
   </main>
-</div>
-</body></html>
+  <div id="workspace" hidden>
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Pet Universe admin"><span class="brand-monogram">PU</span><span>Pet Universe<small>petuniverse-values.pl / admin</small></span></a>
+      <div class="account"><span class="account-dot" aria-hidden="true"></span><span id="account-name"></span><button id="logout" class="subtle" type="button">Sign out</button></div>
+    </header>
+    <main class="workspace">
+      <section class="page-heading">
+        <p class="eyebrow">PET UNIVERSE · ADMIN WORKSPACE</p>
+        <h1>Catalog & Values</h1>
+        <p class="muted">Edit a card. Review the change. Publish when ready.</p>
+        <div class="heading-links"><a class="outline" href="https://petuniverse-values.pl" target="_blank" rel="noopener noreferrer">Open website ↗</a><a id="head-link" class="revision" target="_blank" rel="noopener noreferrer" hidden></a></div>
+      </section>
+      <div id="message" class="notice" role="status" aria-live="polite" hidden></div>
+      <section class="summary-strip" aria-label="Workspace summary">
+        <div><span>Catalog cards</span><strong id="stat-total">—</strong><small>Across all categories</small></div>
+        <div><span>Pending changes</span><strong id="stat-pending">0</strong><small id="stat-pending-label">Everything is up to date</small></div>
+        <div class="removal-stat"><span>Queued removals</span><strong id="stat-removals">0</strong><small>Review before publishing</small></div>
+      </section>
+      <section class="panel collection" aria-labelledby="collection-title">
+        <div class="panel-heading">
+          <div><p class="eyebrow">YOUR COLLECTION</p><h2 id="collection-title">Manage cards <span id="entry-count" class="collection-count">—</span></h2></div>
+          <div class="collection-actions"><a id="review-jump" class="subtle" href="#review">Review changes</a><button id="reload" class="outline" type="button">↻ Refresh</button></div>
+        </div>
+        <nav id="tabs" class="tabs" aria-label="Catalog categories"></nav>
+        <div class="search-row">
+          <label class="search-field"><span class="sr-only">Search this category</span><span class="search-icon" aria-hidden="true">⌕</span><input id="search" type="search" placeholder="Search pets…"></label>
+          <select id="item-filter" aria-label="Item category" hidden><option value="all">All categories</option><option value="general">General</option><option value="fishing">Fishing</option></select>
+          <select id="rarity-filter" aria-label="Filter by rarity"><option value="all">All rarities</option><option>Exclusive</option><option>Secret</option><option>Mythical</option><option>Legendary</option><option>Epic</option><option>Rare</option><option>Basic</option></select>
+          <select id="sort" aria-label="Sort cards"><option value="catalog">Catalog order</option><option value="name">Name A–Z</option><option value="pending">Pending first</option></select>
+        </div>
+        <div class="collection-caption"><span id="result-count">Loading catalog…</span><button id="reset-filters" class="text-button" type="button" hidden>Reset filters</button></div>
+        <div id="catalog-list" class="catalog-list" aria-busy="true"></div>
+        <div class="add-row"><button id="add" class="primary" type="button"><span aria-hidden="true">＋</span> Add card</button><span>Add pets, items, charms, eggs or reward codes.</span></div>
+      </section>
+      <dialog id="editor-dialog" aria-labelledby="editor-title">
+        <section class="detail">
+          <div class="editor-header"><div><p id="entry-badge" class="eyebrow">EDIT CARD</p><h2 id="editor-title">Select a card</h2></div><button id="close-editor" type="button" class="close-button" aria-label="Close editor">✕</button></div>
+          <p id="editor-empty" class="empty">Choose a card to edit, or add a new entry.</p>
+          <div id="editor-message" class="notice" role="status" aria-live="polite" hidden></div>
+          <form id="entry-form" hidden>
+            <div id="delete-confirm" class="delete-confirm" hidden>
+              <div class="delete-icon" aria-hidden="true">−</div><div><h3 id="delete-title">Remove this card?</h3><p id="delete-description"></p><div class="delete-confirm-actions"><button id="confirm-delete" type="button" class="danger">Queue removal</button><button id="cancel-delete" type="button" class="subtle">Keep card</button><button id="undo-delete" type="button" class="outline" hidden>Undo removal</button></div></div>
+            </div>
+            <fieldset id="editor-details">
+              <section class="editor-section">
+                <div class="section-heading"><span class="section-number">01</span><div><h3>Card details</h3><p>Name, category and information shown on your website.</p></div></div>
+                <label id="new-category-label" hidden>Category<select id="new-category"><option value="pets">Pets</option><option value="charms">Charms</option><option value="eggs">Eggs</option><option value="items">Items</option><option value="codes">Codes</option></select></label>
+                <div class="field-pair"><label>Name<input name="name" maxlength="180" required></label><label>Identifier<input name="id" maxlength="80" required pattern="[a-z0-9][a-z0-9-]*"></label></div>
+                <div class="metadata-row" id="metadata-row"><label>Rarity<select name="rarity"><option>Exclusive</option><option>Secret</option><option>Mythical</option><option>Legendary</option><option>Epic</option><option>Rare</option><option>Basic</option></select></label><label id="group-label">Item category<select name="itemGroup"><option value="general">General</option><option value="fishing">Fishing</option></select></label><label id="best-label">Best pet %<input name="bestPct" type="number" min="0" max="100" step="any" placeholder="Optional"></label></div>
+                <div id="code-fields" class="field-pair" hidden><label>Code<input name="code" maxlength="200"></label><label>Status<select name="status"><option value="active">Active</option><option value="expired">Expired</option></select></label></div>
+                <label>Source<input name="source" maxlength="200" placeholder="Gummy Egg, Fishing Merchant…"></label>
+                <label>Description<textarea name="description" maxlength="1000" rows="3" placeholder="A short description for this card."></textarea></label>
+              </section>
+              <section id="values-fields" class="editor-section">
+                <div class="section-heading"><span class="section-number">02</span><div><h3>Values</h3><p>Use a number, 25K, O/C or Not Price. ??? and Null become Not Price.</p></div><label id="variants-toggle" class="check"><input type="checkbox" name="supportsVariants">Golden & Diamond</label></div>
+                <div id="price-inputs" class="price-inputs"></div>
+              </section>
+              <section id="artwork-fields" class="editor-section">
+                <div class="section-heading"><span class="section-number">03</span><div><h3>Artwork</h3><p>Choose a PNG. It will be prepared for you before publishing.</p></div></div>
+                <div id="artwork-inputs" class="artwork-inputs"></div>
+                <details class="image-path-details"><summary>Use an existing image path</summary><label>Image path<input name="image" maxlength="200" placeholder="assets/pets/new-pet.png"></label></details>
+              </section>
+            </fieldset>
+            <div class="form-actions"><button id="save-entry" class="primary" type="submit">Save to review →</button><button id="remove-draft" type="button" class="subtle" hidden>Discard edit</button><button id="delete-entry" type="button" class="danger-ghost">Delete card</button></div>
+          </form>
+        </section>
+      </dialog>
+      <section id="review" class="panel review" aria-labelledby="review-title">
+        <div class="panel-heading"><div><p class="eyebrow">CHECK BEFORE GOING LIVE</p><h2 id="review-title">Review changes <span id="draft-count" class="collection-count">0</span></h2><p id="review-summary" class="section-hint">No pending changes</p></div><div class="review-actions"><button id="clear-review" class="subtle" type="button" disabled>Clear review</button><button id="publish" class="primary" type="button" disabled>Publish changes ↗</button></div></div>
+        <div id="review-list" class="review-list"></div>
+        <div class="review-footnote"><span class="status-dot" aria-hidden="true"></span>One publication saves all changes together. Your website updates after deployment.</div>
+      </section>
+      <details class="panel activity"><summary><span>Recent updates & Discord</span><span class="summary-chevron" aria-hidden="true">⌄</span></summary><div class="panel-heading"><div><h2>Publication history</h2><p class="section-hint">Who changed the catalog and whether Discord received the update.</p></div><button id="discord-test" class="outline" type="button">Test Discord</button></div><div id="activity-list" class="activity-list"></div></details>
+      <footer><span>Pet Universe <span class="footer-dot">·</span> petuniverse-values.pl</span><span>Private workspace for Zerqoon & Pioterek</span></footer>
+    </main>
+  </div>
+</body>
+</html>
