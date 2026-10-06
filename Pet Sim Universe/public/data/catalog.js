@@ -333,7 +333,8 @@ export const PETS = [
       "normal": "assets/pets/sunken-eel-normal.png",
       "golden": "assets/pets/sunken-eel-golden.png",
       "diamond": "assets/pets/sunken-eel-diamond.png"
-    }
+    },
+    "image": "assets/pets/sunken-eel-normal.png"
   },
   {
     "id": "blobfish",
@@ -346,7 +347,8 @@ export const PETS = [
       "normal": "assets/pets/blobfish-normal.png",
       "golden": "assets/pets/blobfish-golden.png",
       "diamond": "assets/pets/blobfish-diamond.png"
-    }
+    },
+    "image": "assets/pets/blobfish-normal.png"
   },
   {
     "id": "ruby-majesty",
@@ -390,7 +392,8 @@ export const PETS = [
       "normal": "assets/pets/shadow-dominus.png",
       "golden": "assets/pets/shadow-dominus-golden-v30.png",
       "diamond": "assets/pets/shadow-dominus-diamond-v30.png"
-    }
+    },
+    "image": "assets/pets/shadow-dominus.png"
   },
   {
     "id": "imp",
@@ -420,7 +423,8 @@ export const PETS = [
       "normal": "assets/pets/grove-seeker.png",
       "golden": "assets/pets/grove-seeker-golden.png",
       "diamond": "assets/pets/grove-seeker-diamond.png"
-    }
+    },
+    "image": "assets/pets/grove-seeker.png"
   },
   {
     "id": "exquisite-peacock",
