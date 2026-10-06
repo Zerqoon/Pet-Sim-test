@@ -829,7 +829,8 @@ export const ITEMS = [
         "name": "VIP Chest",
         "image": "assets/sources/vip-chest.png"
       }
-    ]
+    ],
+    "itemGroup": "general"
   },
   {
     "id": "vip-key",
@@ -846,7 +847,8 @@ export const ITEMS = [
     "source": "1M Event",
     "description": "A Legendary Lucky Block from the 1M Event.",
     "eventBadge": "1M EVENT",
-    "image": "assets/items/1m-lucky-block.png"
+    "image": "assets/items/1m-lucky-block.png",
+    "itemGroup": "general"
   },
   {
     "id": "globe",
