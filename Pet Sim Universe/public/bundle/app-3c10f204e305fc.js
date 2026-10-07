@@ -8,6 +8,9 @@ import { PETS, CHARMS, EGGS, ITEMS, CODES, RARITY_ORDER } from '../data/catalog.
 import { MONITOR } from '../data/monitor-settings.js';
 import { normalizePrice, selectPriceUpdate, formatPriceAge, applyFeedPrices } from '../data/price-core.js';
 import { loadCurrentPrices } from '../data/value-loader.js';
+import { enablePublicProtection } from '../data/public-protection.js';
+
+enablePublicProtection();
 
 const priceCatalogs = { pets: PETS, charms: CHARMS, eggs: EGGS, items: ITEMS };
 let currentPriceRevision = null;
@@ -1688,21 +1691,4 @@ $('#tradeExportDialog').addEventListener('click', event => { if (event.target ==
 fetch('/api/snapshot', { method: 'POST', headers: { accept: 'application/json' } }).catch(() => {});
 
 
-function enableAssetProtection() {
-  const protectedSelector = '.brand-card img, .card-art, .card-art img, .modal-art-shell, .modal-art-shell img, .calc-picker-art, .calc-picker-art img, .home-menu-decor img, .drop-source-card img';
-  document.querySelectorAll('img').forEach(img => {
-    img.setAttribute('draggable', 'false');
-    img.setAttribute('decoding', 'async');
-  });
-  document.addEventListener('dragstart', event => {
-    if (event.target.closest(protectedSelector)) event.preventDefault();
-  });
-  document.addEventListener('contextmenu', event => {
-    if (event.target.closest(protectedSelector)) event.preventDefault();
-  });
-  document.addEventListener('copy', event => {
-    if (document.activeElement && document.activeElement.closest && document.activeElement.closest(protectedSelector)) event.preventDefault();
-  });
-}
 
-enableAssetProtection();

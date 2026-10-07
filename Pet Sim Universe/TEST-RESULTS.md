@@ -1,4 +1,11 @@
-# v128 verification
+# Public protection patch verification
+
+- 130 automated tests passed, including eight new protection checks. Public validation and build passed.
+- Ordinary right-click menus, image dragging/copying, inspect/console/source/save shortcuts are intercepted. Search/calculator input, redeem-code copying and normal app/navigation keys remain usable.
+- The public change is limited to public/app.js, the image rule in public/redesign.css, a new protection module and regenerated public HTML/bundles. Admin, data, assets, accounts, scripts and webhooks match v128 byte for byte.
+- ZIP integrity and final-source comparison passed. No live deployment or physical-browser/phone verification is claimed. Browser-owned commands can bypass page JavaScript.
+
+## Base v128 verification
 
 - 122 automated tests passed. External HTTP was mocked; SQLite state and transactions were real.
 - Public validation and build passed: 32 pets, 14 charms, 4 eggs, 8 items and 11 codes. All public/src files, generated public bundles, asset bytes and private-setup files match the v127 source archive.
