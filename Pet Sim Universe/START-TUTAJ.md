@@ -1,46 +1,47 @@
-# Pet Universe Values — v127
+# Pet Universe Values — v128
 
-Cały projekt, gotowy build oraz wszystkie grafiki są w tej paczce.
+Cały projekt, gotowy build, grafiki i nowy panel admina są w tej paczce.
 
-Usunięto z katalogu i prices.js: Exquisite Peacock, Imp, Shadow Dominus,
-Fishing Charm I, Fishing Charm II, Squeaky, Ball, Fish Hook oraz Worm.
-Dla trzech petów usunięto także Golden i Diamond.
-Golden Fish Hook, Universe Worm i Fishing Charm III zostają.
-Pozostałe wyceny z v126 są zachowane dokładnie.
+## Aktualizacja
 
-Admin ma dopracowany układ, filtry, sortowanie, licznik zmian i czytelniejszy
-edytor. Kliknij kartę → Delete card → Queue removal. Usunięcie trafia do
-podglądu zmian. Undo removal cofa je przed publikacją. Publish changes
-zapisuje całą paczkę dodawania, edycji i usuwania w jednym commicie.
+1. Rozpakuj ZIP do **osobnego folderu**.
+2. Otwórz znajdujący się w nim folder **Pet Sim Universe**.
+3. Uruchom **Start-Update.cmd** i poczekaj na komunikat GOTOWE.
 
-## Aktualizacja wszystkiego
+Domyślny dotychczasowy projekt: `C:\Users\zerqo\Desktop\Pet Sim Universe`.
+Skrypt aktualizuje admina i wysyła cały projekt, korzystając z aktualnego katalogu,
+cen oraz zdjęć z GitHuba. Zachowuje konta, token oraz prywatną konfigurację.
+Jeżeli lokalnego admin.json brakuje, odzyskuje konfigurację istniejącego panelu.
 
-Rozpakuj ZIP osobno. Otwórz PowerShell w jego folderze Pet Sim Universe:
+PowerShell z folderu nowej paczki:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\Update-Project.ps1
 ```
 
-Domyślny obecny projekt: C:\Users\zerqo\Desktop\Pet Sim Universe.
-Inny folder wskazujesz parametrem -ProjectPath:
+Inny folder obecnego projektu:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\Update-Project.ps1 -ProjectPath "C:\TwojFolder\Pet Sim Universe"
 ```
 
-Skrypt kopiuje kod do Twojego obecnego projektu, zachowując pozostałe lokalne ceny,
-grafiki, .cloudflare i private-setup. Usuwa lokalnie wskazane karty i zapisuje kopię
-danych w .cloudflare/v127-local-data-backup. Wdraża admina, sprawdza logowanie,
-katalog i zdjęcia, usuwa wskazane pozycje z aktualnych danych na GitHubie,
-a następnie wgrywa cały projekt z zachowaniem pozostałych zdalnych cen i grafik.
-Skrypt zachowuje istniejący token, konta oraz bazę panelu. Po zakończeniu
-poczekaj na udany build Pages i odśwież panel.
+Nie zastępuj swojego istniejącego projektu przez ręczne rozpakowanie ZIP-a na jego
+plikach danych. Aktualizator zachowuje aktualne dane i używa najnowszych danych
+z repozytorium podczas wysyłania.
 
-Panel: https://admin.petuniverse-values.pl.
-Instrukcja admina: README-ADMIN.md. Pierwsza instalacja: ADMIN-START.md.
-Projekt działa na Workers Free. Edytowalny plik cen to nadal public/data/prices.js.
+## Nowy admin
 
+Krótszy nagłówek, szerszy katalog, przyklejony pasek kategorii i filtrów,
+edytor z podglądem oraz zakładkami Values / Details / Artwork. Stały pasek
+Review / Publish, zapis szkiców na urządzeniu, wykrywanie konfliktów,
+galeria assetów i czytelniejsza historia. Status publikacji sprawdza GitHub,
+stronę oraz Discord osobno. Edytor na telefonie wypełnia ekran.
+
+Panel: https://admin.petuniverse-values.pl. Konta i hasła są te same.
+Edytowalny plik cen: **public/data/prices.js**. ??? i Null to Not Price.
+Główna strona oraz dane w paczce pozostają takie jak w v127.
+
+122 testy i build przechodzą. Testy sieciowe używają symulacji.
+Wdrożenie na Twoim koncie sprawdzają skrypty po uruchomieniu aktualizacji.
+Instrukcja panelu: README-ADMIN.md. Pierwsza instalacja: ADMIN-START.md.
 Cloudflare Pages: root Pet Sim Universe, build npm run build, output public.
-Kontrola lokalna: npm test i npm run build. 98 testów przechodzi.
-Publiczny wygląd z v126 jest zachowany. Testy HTTP korzystają z symulacji;
-wdrożenie sprawdzają skrypty na Twoim komputerze.

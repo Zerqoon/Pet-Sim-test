@@ -37,6 +37,7 @@ async function fixture(username='Zerqoon') {
     if(path.includes('/contents/'))return Response.json({type:'file',size:30000,encoding:'base64',content:Buffer.from(path.endsWith('catalog.js')?catalogSource:priceSource).toString('base64')});
     if(path.endsWith('/git/ref/heads/main'))return Response.json({object:{sha}});
     if(path.includes('/git/commits/') && !body)return Response.json({tree:{sha:'t'.repeat(40)},message});
+    if(path.includes('/git/trees/')&&!body)return Response.json({truncated:false,tree:Object.values(snapshot.catalog).flatMap(group=>Array.isArray(group)?group:[]).flatMap(item=>[item.image,...Object.values(item.variantImages||{})]).filter(Boolean).map(image=>({type:'blob',path:'Pet Sim Universe/public/'+image,size:123,sha:head}))});
     if(path.endsWith('/git/blobs')){blobs.push(body);return Response.json({sha:'c'.repeat(40)});}
     if(path.endsWith('/git/trees'))return Response.json({sha:'d'.repeat(40)});
     if(path.endsWith('/git/commits')&&body){message=body.message;return Response.json({sha:changedHead});}
@@ -315,4 +316,17 @@ test('a stale removal or mixed invalid batch makes no GitHub file writes',async(
     assert.equal((await f.send('publish',input)).status,409);assert.equal(f.blobs.length,0);
     f.setHead(changedHead);assert.equal((await f.send('publish',{...input,changes:[{category:'pets',id:'queen-bee',action:'delete'}]})).status,409);assert.equal(f.blobs.length,0);
   }finally{await f.close();}
+});
+
+test('asset library and publication checks require an authenticated session',async()=>{
+  const f=await fixture();try{assert.equal((await f.send('assets?ref='+head)).status,401);assert.equal((await f.send('publication?sha='+head)).status,401);assert.equal(f.calls.length,0);await f.login();assert.equal((await f.send('assets?ref=main')).status,400);assert.equal((await f.send('publication?sha=main')).status,400);assert.equal((await f.send('publication?sha='+head)).status,404);}finally{await f.close();}
+});
+test('publication history returns structured details without stored raw operation requests',async()=>{
+  const f=await fixture();try{await f.login();const result=await f.send('publish',{head,id:crypto.randomUUID(),changes:[edit()]});assert.equal(result.status,200);const activity=await(await f.send('activity')).json();assert.equal(activity.entries[0].details[0].prices[0].after,'20K');assert.equal(activity.entries[0].tracked,true);assert.equal(activity.entries[0].result,undefined);assert.ok(!JSON.stringify(activity).includes('private-github-token'));}finally{await f.close();}
+});
+test('multiple gallery choices use one inventory lookup and an atomic save',async()=>{
+  const f=await fixture();try{await f.login();const pets=snapshot.catalog.PETS.filter(item=>!item.supportsVariants&&item.image).slice(0,5);assert.equal(pets.length,5);const changes=pets.map((item,index)=>({category:'pets',id:item.id,metadata:{},assetPaths:{normal:pets[(index+1)%pets.length].image},prices:{normal:snapshot.prices.pets[item.id]}}));const result=await f.send('publish',{head,id:crypto.randomUUID(),changes});assert.equal(result.status,200);assert.equal(f.calls.filter(call=>call.url.includes('/git/trees/')&&call.options.method==='GET').length,1);assert.equal(f.calls.filter(call=>call.url.includes('/contents/')&&/\.png(?:\?|$)/i.test(call.url)).length,0);assert.equal(f.calls.filter(call=>call.url.endsWith('/git/commits')).length,1);}finally{await f.close();}
+});
+test('a missing PNG in a larger gallery batch fails before the repository is changed',async()=>{
+  const f=await fixture();try{await f.login();const pets=snapshot.catalog.PETS.filter(item=>!item.supportsVariants&&item.image).slice(0,5),changes=pets.map((item,index)=>({category:'pets',id:item.id,metadata:{},assetPaths:{normal:index===0?'assets/pets/nonexistent-pet.png':pets[(index+1)%pets.length].image},prices:{normal:snapshot.prices.pets[item.id]}}));assert.equal((await f.send('publish',{head,id:crypto.randomUUID(),changes})).status,400);assert.equal(f.calls.filter(call=>call.options.method==='POST').length,0);}finally{await f.close();}
 });

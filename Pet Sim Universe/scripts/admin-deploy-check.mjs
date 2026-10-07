@@ -5,7 +5,7 @@ export async function verifyFreeAdmin(url,{username,password},{fetcher=fetch,clo
   do {
     try {
       const response=await fetcher(new URL('/api/ready',origin),{redirect:'error',cache:'no-store',signal:AbortSignal.timeout(10000)});
-      const info=await response.json();ready=response.ok&&info.ready&&info.version===127&&info.hosting==='free';
+      const info=await response.json();ready=response.ok&&info.ready&&info.version===128&&info.hosting==='free';
     } catch {}
     if(ready) break;
     if(clock()-start>=timeout) throw new Error('New Free admin version was not confirmed. Wait for the address to activate, then rerun the admin update.');

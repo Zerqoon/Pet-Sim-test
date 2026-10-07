@@ -70,7 +70,7 @@ export async function editSnapshot(snapshot,input,now=new Date().toISOString(),s
     for(const [k,v] of Object.entries(change.metadata)) {
       if(!allowed.includes(k)) throw new Problem(400,'Unsupported entry field.');
       if(k==='bestPct') { if(v === null) delete item[k]; else {if(typeof v!=='number' || v<0 || v>100 || !Number.isFinite(v)) throw new Problem(400,'Best pet % must be 0–100.'); item[k]=v;} }
-      else item[k]=text(v,k==='description'?1000:k==='name'?180:200,['description','source','image'].includes(k));
+      else item[k]=text(v,k==='description'?1000:k==='name'?180:k==='image'?240:200,['description','source','image'].includes(k));
     }
     if(!item.name || !item.id) throw new Problem(400,'Name is required.');
     if(change.category==='codes') {
@@ -81,6 +81,14 @@ export async function editSnapshot(snapshot,input,now=new Date().toISOString(),s
       if(change.category==='items' && item.itemGroup && !['general','fishing'].includes(item.itemGroup)) throw new Problem(400,'Choose General or Fishing.');
       if(change.add && change.supportsVariants) { if(change.category!=='pets') throw new Problem(400,'Only pets support variants.'); item.supportsVariants=true; }
       if(change.images) throw new Problem(400,'Upload artwork separately before publishing.');
+      if(change.assetPaths!==undefined) {
+        if(!change.assetPaths||typeof change.assetPaths!=='object'||Array.isArray(change.assetPaths))throw new Problem(400,'Invalid asset selection.');
+        for(const [variant,path] of Object.entries(change.assetPaths)) {
+          if(!['normal','golden','diamond'].includes(variant)||variant!=='normal'&&!item.supportsVariants||!validImagePath(path)||change.artwork?.[variant])throw new Problem(400,'Invalid or conflicting asset selection.');
+          if(variant==='normal')item.image=path;
+          if(item.supportsVariants)item.variantImages={...item.variantImages,[variant]:path};
+        }
+      }
       if(change.artwork && Object.keys(change.artwork).length) {
         if(typeof change.artwork !== 'object' || Array.isArray(change.artwork)) throw new Problem(400,'Invalid artwork references.');
         for(const [variant,uploadId] of Object.entries(change.artwork)) {

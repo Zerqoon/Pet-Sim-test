@@ -31,28 +31,30 @@
       <section class="page-heading">
         <p class="eyebrow">PET UNIVERSE · ADMIN WORKSPACE</p>
         <h1>Catalog & Values</h1>
-        <p class="muted">Edit a card. Review the change. Publish when ready.</p>
-        <div class="heading-links"><a class="outline" href="https://petuniverse-values.pl" target="_blank" rel="noopener noreferrer">Open website ↗</a><a id="head-link" class="revision" target="_blank" rel="noopener noreferrer" hidden></a></div>
+        <p class="muted">Keep your collection current.</p>
+        <div class="heading-links"><span id="sync-label">Loading catalog…</span><a href="https://petuniverse-values.pl" target="_blank" rel="noopener noreferrer">Open website ↗</a></div>
       </section>
       <div id="message" class="notice" role="status" aria-live="polite" hidden></div>
       <section class="summary-strip" aria-label="Workspace summary">
-        <div><span>Catalog cards</span><strong id="stat-total">—</strong><small>Across all categories</small></div>
-        <div><span>Pending changes</span><strong id="stat-pending">0</strong><small id="stat-pending-label">Everything is up to date</small></div>
-        <div class="removal-stat"><span>Queued removals</span><strong id="stat-removals">0</strong><small>Review before publishing</small></div>
+        <div><span>Catalog cards</span><strong id="stat-total">—</strong></div>
+        <div><span>Pending changes</span><strong id="stat-pending">0</strong><small id="stat-pending-label">Up to date</small></div>
+        <div class="removal-stat"><span>Queued removals</span><strong id="stat-removals">0</strong></div>
       </section>
-      <section class="panel collection" aria-labelledby="collection-title">
+      <section id="restore-banner" class="draft-banner" hidden><div><strong>Pick up where you left off</strong><p id="restore-description"></p></div><div class="button-row"><button id="restore-draft" class="primary" type="button">Restore draft</button><button id="dismiss-draft" class="subtle" type="button">Discard</button></div></section>
+<section id="publication-banner" class="publication-banner" hidden><div><strong>Latest publication</strong><p id="publication-description"></p></div><div id="publication-states" class="publication-states"></div><button id="check-publication" class="outline" type="button">Check status</button></section>
+<section class="panel collection" aria-labelledby="collection-title">
         <div class="panel-heading">
           <div><p class="eyebrow">YOUR COLLECTION</p><h2 id="collection-title">Manage cards <span id="entry-count" class="collection-count">—</span></h2></div>
           <div class="collection-actions"><a id="review-jump" class="subtle" href="#review">Review changes</a><button id="reload" class="outline" type="button">↻ Refresh</button></div>
         </div>
-        <nav id="tabs" class="tabs" aria-label="Catalog categories"></nav>
+        <div class="catalog-toolbar"><div class="toolbar-upper"><nav id="tabs" class="tabs" aria-label="Catalog categories"></nav><button id="add-top" class="primary" type="button">＋ Add card</button></div>
         <div class="search-row">
           <label class="search-field"><span class="sr-only">Search this category</span><span class="search-icon" aria-hidden="true">⌕</span><input id="search" type="search" placeholder="Search pets…"></label>
           <select id="item-filter" aria-label="Item category" hidden><option value="all">All categories</option><option value="general">General</option><option value="fishing">Fishing</option></select>
           <select id="rarity-filter" aria-label="Filter by rarity"><option value="all">All rarities</option><option>Exclusive</option><option>Secret</option><option>Mythical</option><option>Legendary</option><option>Epic</option><option>Rare</option><option>Basic</option></select>
           <select id="sort" aria-label="Sort cards"><option value="catalog">Catalog order</option><option value="name">Name A–Z</option><option value="pending">Pending first</option></select>
         </div>
-        <div class="collection-caption"><span id="result-count">Loading catalog…</span><button id="reset-filters" class="text-button" type="button" hidden>Reset filters</button></div>
+        </div><div class="collection-caption"><span id="result-count">Loading catalog…</span><button id="reset-filters" class="text-button" type="button" hidden>Reset filters</button></div>
         <div id="catalog-list" class="catalog-list" aria-busy="true"></div>
         <div class="add-row"><button id="add" class="primary" type="button"><span aria-hidden="true">＋</span> Add card</button><span>Add pets, items, charms, eggs or reward codes.</span></div>
       </section>
@@ -61,42 +63,42 @@
           <div class="editor-header"><div><p id="entry-badge" class="eyebrow">EDIT CARD</p><h2 id="editor-title">Select a card</h2></div><button id="close-editor" type="button" class="close-button" aria-label="Close editor">✕</button></div>
           <p id="editor-empty" class="empty">Choose a card to edit, or add a new entry.</p>
           <div id="editor-message" class="notice" role="status" aria-live="polite" hidden></div>
-          <form id="entry-form" hidden>
+          <div class="editor-body"><aside class="card-preview" aria-label="Card preview"><p class="eyebrow">LIVE PREVIEW</p><div class="preview-card"><div class="preview-art"><img id="preview-image" alt=""><span id="preview-code" class="code-art" hidden>⌘</span><span id="preview-missing" class="image-missing" hidden>Image unavailable</span></div><p id="preview-rarity"></p><h3 id="preview-name">New card</h3><p id="preview-source"></p><strong id="preview-value">Not Price</strong><div id="preview-variants" class="preview-variants"></div></div><p class="preview-note">Save to review when ready.</p></aside><form id="entry-form" novalidate hidden>
+<nav class="editor-tabs" role="tablist" aria-label="Editor sections"><button type="button" role="tab" aria-controls="values-fields" data-editor-tab="values" aria-selected="true">Values</button><button type="button" role="tab" aria-controls="panel-details" data-editor-tab="details" aria-selected="false">Details</button><button type="button" role="tab" aria-controls="artwork-fields" data-editor-tab="artwork" aria-selected="false">Artwork</button></nav>
             <div id="delete-confirm" class="delete-confirm" hidden>
               <div class="delete-icon" aria-hidden="true">−</div><div><h3 id="delete-title">Remove this card?</h3><p id="delete-description"></p><div class="delete-confirm-actions"><button id="confirm-delete" type="button" class="danger">Queue removal</button><button id="cancel-delete" type="button" class="subtle">Keep card</button><button id="undo-delete" type="button" class="outline" hidden>Undo removal</button></div></div>
             </div>
             <fieldset id="editor-details">
-              <section class="editor-section">
+              <section id="panel-details" role="tabpanel" data-editor-panel="details" class="editor-section" hidden>
                 <div class="section-heading"><span class="section-number">01</span><div><h3>Card details</h3><p>Name, category and information shown on your website.</p></div></div>
                 <label id="new-category-label" hidden>Category<select id="new-category"><option value="pets">Pets</option><option value="charms">Charms</option><option value="eggs">Eggs</option><option value="items">Items</option><option value="codes">Codes</option></select></label>
-                <div class="field-pair"><label>Name<input name="name" maxlength="180" required></label><label>Identifier<input name="id" maxlength="80" required pattern="[a-z0-9][a-z0-9-]*"></label></div>
+                <label>Name<input name="name" maxlength="180" required></label><details class="image-path-details"><summary>Identifier</summary><label>Card ID<input name="id" maxlength="80" required pattern="[a-z0-9][a-z0-9-]*"></label></details>
                 <div class="metadata-row" id="metadata-row"><label>Rarity<select name="rarity"><option>Exclusive</option><option>Secret</option><option>Mythical</option><option>Legendary</option><option>Epic</option><option>Rare</option><option>Basic</option></select></label><label id="group-label">Item category<select name="itemGroup"><option value="general">General</option><option value="fishing">Fishing</option></select></label><label id="best-label">Best pet %<input name="bestPct" type="number" min="0" max="100" step="any" placeholder="Optional"></label></div>
                 <div id="code-fields" class="field-pair" hidden><label>Code<input name="code" maxlength="200"></label><label>Status<select name="status"><option value="active">Active</option><option value="expired">Expired</option></select></label></div>
                 <label>Source<input name="source" maxlength="200" placeholder="Gummy Egg, Fishing Merchant…"></label>
                 <label>Description<textarea name="description" maxlength="1000" rows="3" placeholder="A short description for this card."></textarea></label>
               </section>
-              <section id="values-fields" class="editor-section">
+              <section id="values-fields" role="tabpanel" data-editor-panel="values" class="editor-section">
                 <div class="section-heading"><span class="section-number">02</span><div><h3>Values</h3><p>Use a number, 25K, O/C or Not Price. ??? and Null become Not Price.</p></div><label id="variants-toggle" class="check"><input type="checkbox" name="supportsVariants">Golden & Diamond</label></div>
                 <div id="price-inputs" class="price-inputs"></div>
               </section>
-              <section id="artwork-fields" class="editor-section">
-                <div class="section-heading"><span class="section-number">03</span><div><h3>Artwork</h3><p>Choose a PNG. It will be prepared for you before publishing.</p></div></div>
+              <section id="artwork-fields" role="tabpanel" data-editor-panel="artwork" class="editor-section" hidden>
+                <div class="section-heading"><span class="section-number">03</span><div><h3>Artwork</h3><p>Upload a PNG or choose from your existing assets.</p></div></div>
                 <div id="artwork-inputs" class="artwork-inputs"></div>
-                <details class="image-path-details"><summary>Use an existing image path</summary><label>Image path<input name="image" maxlength="200" placeholder="assets/pets/new-pet.png"></label></details>
+                <details class="image-path-details"><summary>Use an existing image path</summary><label>Image path<input name="image" maxlength="240" placeholder="assets/pets/new-pet.png"></label></details>
               </section>
             </fieldset>
             <div class="form-actions"><button id="save-entry" class="primary" type="submit">Save to review →</button><button id="remove-draft" type="button" class="subtle" hidden>Discard edit</button><button id="delete-entry" type="button" class="danger-ghost">Delete card</button></div>
-          </form>
+          </form></div>
         </section>
       </dialog>
-      <section id="review" class="panel review" aria-labelledby="review-title">
-        <div class="panel-heading"><div><p class="eyebrow">CHECK BEFORE GOING LIVE</p><h2 id="review-title">Review changes <span id="draft-count" class="collection-count">0</span></h2><p id="review-summary" class="section-hint">No pending changes</p></div><div class="review-actions"><button id="clear-review" class="subtle" type="button" disabled>Clear review</button><button id="publish" class="primary" type="button" disabled>Publish changes ↗</button></div></div>
-        <div id="review-list" class="review-list"></div>
-        <div class="review-footnote"><span class="status-dot" aria-hidden="true"></span>One publication saves all changes together. Your website updates after deployment.</div>
-      </section>
-      <details class="panel activity"><summary><span>Recent updates & Discord</span><span class="summary-chevron" aria-hidden="true">⌄</span></summary><div class="panel-heading"><div><h2>Publication history</h2><p class="section-hint">Who changed the catalog and whether Discord received the update.</p></div><button id="discord-test" class="outline" type="button">Test Discord</button></div><div id="activity-list" class="activity-list"></div></details>
-      <footer><span>Pet Universe <span class="footer-dot">·</span> petuniverse-values.pl</span><span>Private workspace for Zerqoon & Pioterek</span></footer>
+<dialog id="review-dialog" aria-labelledby="review-title"><section id="review" class="review"><header class="editor-header"><div><p class="eyebrow">REVIEW BEFORE PUBLISHING</p><h2 id="review-title">Your changes <span id="draft-count" class="collection-count">0</span></h2><p id="review-summary" class="section-hint">No pending changes</p></div><button id="close-review" class="close-button" type="button" aria-label="Close review">✕</button></header><div id="review-list" class="review-list"></div><div class="review-actions"><button id="clear-review" class="subtle" type="button" disabled>Discard all</button><span class="review-footnote">Saved together in one publication.</span><button id="publish" class="primary" type="button" disabled>Publish →</button></div></section></dialog>
+<section class="panel activity"><div class="panel-heading"><div><h2>Recent updates</h2><p class="section-hint">Editor, changes and delivery status.</p></div><button id="discord-test" class="outline" type="button">Test Discord</button></div><div id="activity-list" class="activity-list"></div><button id="more-history" class="subtle" type="button" hidden>Show more</button></section>
+      <footer><span>Pet Universe <span class="footer-dot">·</span> petuniverse-values.pl</span><a id="head-link" class="revision" target="_blank" rel="noopener noreferrer" hidden></a></footer>
     </main>
   </div>
+<aside id="pending-dock" class="pending-dock" aria-label="Pending changes" hidden><div><strong id="dock-title"></strong><small id="draft-save-status">Draft saved on this device</small></div><div class="button-row"><button id="dock-review" class="outline" type="button">Review</button><button id="dock-publish" class="primary" type="button">Publish →</button></div></aside>
+<dialog id="gallery-dialog" aria-labelledby="gallery-title"><section class="gallery"><header class="editor-header"><div><p class="eyebrow">YOUR ASSET LIBRARY</p><h2 id="gallery-title">Choose artwork</h2></div><button id="close-gallery" class="close-button" type="button" aria-label="Close asset library">✕</button></header><div class="gallery-controls"><label><span class="sr-only">Search assets</span><input id="gallery-search" type="search" placeholder="Search asset names…"></label><select id="gallery-category" aria-label="Asset category"><option value="all">All assets</option><option value="pets">Pets</option><option value="charms">Charms</option><option value="eggs">Eggs</option><option value="items">Items</option><option value="sources">Sources</option></select></div><p id="gallery-status" class="section-hint" role="status"></p><div id="gallery-list" class="gallery-list"></div></section></dialog>
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 </body>
 </html>

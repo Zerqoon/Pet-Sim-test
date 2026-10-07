@@ -45,6 +45,13 @@ export function github(env,fetcher=fetch) {
     const asset=await request(`contents/${encodePath(root+'/public/'+path)}?ref=${sha}`);
     if(asset.type!=='file') throw new Problem(400,'The image does not exist in the repository. Upload a PNG first.');
   }
+  async function assets(sha) {
+    if(!validImageRef(sha))throw new Problem(400,'Invalid image revision.');
+    const commit=await request('git/commits/'+sha),tree=await request('git/trees/'+commit.tree.sha+'?recursive=1');
+    if(tree.truncated||!Array.isArray(tree.tree))throw new Problem(502,'The image library could not be loaded completely. Try again later.');
+    const prefix=root+'/public/';
+    return tree.tree.filter(item=>item.type==='blob'&&typeof item.path==='string'&&item.path.startsWith(prefix)&&validImagePath(item.path.slice(prefix.length))&&Number.isInteger(item.size)&&item.size>0&&item.size<=8388608).map(item=>({path:item.path.slice(prefix.length),size:item.size,sha:item.sha})).sort((a,b)=>a.path.localeCompare(b.path));
+  }
   async function upload(content) {return request('git/blobs','POST',{content,encoding:'base64'});}
   async function image(path,sha) {
     if(!validImagePath(path) || !validImageRef(sha))throw new Problem(400,'Invalid image request.');
@@ -56,5 +63,5 @@ export function github(env,fetcher=fetch) {
     if(size<8 || [137,80,78,71,13,10,26,10].some((v,i)=>bytes[i]!==v))throw new Problem(502,'Repository file is not a PNG image.');
     return bytes;
   }
-  return {snapshot,publish,head,request,assertAsset,upload,image};
+  return {snapshot,publish,head,request,assertAsset,assets,upload,image};
 }

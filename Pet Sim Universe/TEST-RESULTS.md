@@ -1,14 +1,11 @@
-# v127 verification
+# v128 verification
 
-- 98 automated tests passed. GitHub and Discord HTTP were mocked; SQLite state and transactions were real.
-- Public catalog validation and build passed: 32 pets, 14 charms, 4 eggs, 8 items, 11 codes; 76 price streams, including 67 numeric values.
-- Exactly nine requested cards and their prices were removed. All metadata and values of the other 58 priced entries match v126. Golden Fish Hook, Universe Worm and Fishing Charm III remain.
-- Only public/data/catalog.js, prices.js and price-updates.js changed in the public site. Other public/src files, artwork and private account files match v126 byte for byte.
-- Removal tests cover every category, all variants, code-only date preservation, malformed/mixed batches, authorization, CSRF, stale versions, one commit and attributed audit delivery.
-- Local cleanup preserves owner-edited values and owner-added cards, saves the original data files and makes no further changes when rerun.
-- Release cleanup tests cover preserving unrelated data, a lost response after a successful commit, persistent failure with safe resumption, stale-head refresh and a completed update remaining completed.
-- The existing image tests cover all remaining catalog, variant and source PNGs, spaced filenames, bounded fallback, authentication and oversized/non-PNG responses.
-- Admin HTML identifiers, form fields and JavaScript selectors were checked. JavaScript syntax and stylesheet brace balance were checked.
-- The complete ZIP passed archive integrity and source-file comparison checks.
+- 122 automated tests passed. External HTTP was mocked; SQLite state and transactions were real.
+- Public validation and build passed: 32 pets, 14 charms, 4 eggs, 8 items and 11 codes. All public/src files, generated public bundles, asset bytes and private-setup files match the v127 source archive.
+- The bundled prices, catalog and price timestamp were not edited for this admin release. The updater uses the latest GitHub catalog, prices and artwork when uploading.
+- New tests cover numeric/zero/unpriced comparisons; scoped draft storage, corruption, expiry and immutable publish recovery; per-card conflicts; variant gallery choices; bounded and complete asset inventory; exact catalog and price checks for Website live; failed checks; legacy activity; separate Discord states; structured history; authenticated endpoints; missing config recovery without remote writes; retained existing configs and rejected corrupt or conflicting configs.
+- Existing tests continue to cover public values, timestamps, monitor retries, authentication/CSRF, exact PNG paths and fallback, atomic publication, stale heads, attributed audit delivery and the v127 cleanup checkpoints.
+- Admin JavaScript syntax, HTML nesting, identifiers, selector/form references, editor panels and CSS delimiters were checked.
+- ZIP integrity, completeness and archived bytes were checked against the final source directory.
 
-Not performed: live authenticated GitHub/Cloudflare deployment, live Discord delivery, Windows PowerShell execution, or actual desktop/phone browser rendering. The owner-side updater checks live admin version, login, catalog and PNG delivery before applying the requested cleanup and uploading the project.
+Not performed: live authenticated GitHub/Cloudflare deployment, live Discord delivery, Windows PowerShell execution, or visual desktop/phone browser rendering. The browser preview timed out; no visual QA is claimed. Setup/update scripts perform live version, login, catalog and PNG checks on the owner's computer.

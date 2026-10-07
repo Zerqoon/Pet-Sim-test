@@ -1,4 +1,4 @@
-# Separate admin panel — v127
+# Separate admin panel — v128
 
 Main website pages, artwork, layout and existing values are unchanged. The new admin is a separate Cloudflare Worker with its own address and login page. It does not require enabling Pages Functions.
 
@@ -58,3 +58,5 @@ To replace passwords, run `node scripts/reset-admin-passwords.mjs` locally, then
 ## Checks
 
 All 98 tests passed. Run `npm test` and `npm run build` with Node.js 22.13 or newer. Tests use mocked GitHub/Discord HTTP and real SQLite for auth, sessions, locks, audits and retry state. They do not send messages to your Discord channel. Live login, catalog and PNG loading are confirmed by the setup/update scripts on your authenticated machine.
+
+For an existing installation, extract this ZIP separately and run Start-Update.cmd. The v128 editor uses Values / Details / Artwork tabs, a live preview, a searchable asset gallery, saved review drafts, a fixed publication bar and content-verified website status. Full instructions: README-ADMIN.md.

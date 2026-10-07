@@ -4,6 +4,8 @@ export {passwordHash} from './auth.js';
 import {github} from './github.js';
 import {discordUrl} from '../server/pricing.js';
 import {sendDiscord} from '../workers/discord-delivery.js';
+import {catalogFingerprint,changeDetails} from './history.js';
+import {publicationStatus} from './publication.js';
 
 export const SCHEMA=[
   'CREATE TABLE IF NOT EXISTS sessions (token TEXT PRIMARY KEY, username TEXT NOT NULL, csrf TEXT NOT NULL, version TEXT NOT NULL, expires INTEGER NOT NULL)',
@@ -76,7 +78,7 @@ export async function handle(request,env,ctx={waitUntil:()=>{}},fetcher=fetch) {
     if(url.pathname==='/api/ready' && request.method==='GET') {
       const accounts=JSON.parse(env.ADMIN_USERS);
       if(!env.GITHUB_TOKEN || !env.ADMIN_WEBHOOK_URL || !accounts.length || accounts.some(x=>x.scheme!=='random-hmac-v1')) throw new Problem(503,'Free admin secrets are not active yet.');
-      return json({ready:true,version:127,hosting:'free'});
+      return json({ready:true,version:128,hosting:'free'});
     }
     if(request.method!=='GET') {
       if(request.method!=='POST') throw new Problem(405,'Method is not allowed.');
@@ -104,6 +106,12 @@ export async function handle(request,env,ctx={waitUntil:()=>{}},fetcher=fetch) {
     if(url.pathname==='/api/session' && request.method==='GET') return json({username:user.username,csrf:user.csrf,expires:user.expires,site:env.SITE_URL||'https://petuniverse-values.pl'});
     if(url.pathname==='/api/logout' && request.method==='POST') {await db.prepare('DELETE FROM sessions WHERE token=?').bind(user.token).run(); return json({ok:true},200,{'set-cookie':'__Host-pu_admin=; Path=/; Secure; HttpOnly; SameSite=Strict; Max-Age=0'});}
     if(url.pathname==='/api/catalog' && request.method==='GET') return json(await github(env,fetcher).snapshot());
+    if(url.pathname==='/api/assets' && request.method==='GET') return json({assets:await github(env,fetcher).assets(url.searchParams.get('ref'))});
+    if(url.pathname==='/api/publication' && request.method==='GET') {
+      const sha=url.searchParams.get('sha');if(!/^[a-f0-9]{40}$/.test(sha||''))throw new Problem(400,'Invalid publication.');
+      const record=await db.prepare('SELECT a.sha,n.sent,n.status,o.result FROM audit a LEFT JOIN notifications n ON n.id=a.id LEFT JOIN operations o ON o.id=a.id WHERE a.sha=? ORDER BY a.created DESC LIMIT 1').bind(sha).first();
+      if(!record)throw new Problem(404,'Publication not found.');return json(await publicationStatus(env,record,fetcher));
+    }
     if(url.pathname==='/api/artwork' && request.method==='POST') {
       const input=await body(request,180000);
       if(!/^[0-9a-f-]{36}$/.test(input.id||'')) throw new Problem(400,'Invalid artwork upload.');
@@ -119,8 +127,8 @@ export async function handle(request,env,ctx={waitUntil:()=>{}},fetcher=fetch) {
       return json({id:input.id,sha:blob.sha});
     }
     if(url.pathname==='/api/activity' && request.method==='GET') {
-      const rows=await db.prepare('SELECT a.*,n.sent,n.status,n.attempts FROM audit a LEFT JOIN notifications n ON n.id=a.id ORDER BY a.created DESC LIMIT 30').all();
-      return json({entries:rows.results});
+      const rows=await db.prepare('SELECT a.*,n.sent,n.status,n.attempts,o.result FROM audit a LEFT JOIN notifications n ON n.id=a.id LEFT JOIN operations o ON o.id=a.id ORDER BY a.created DESC LIMIT 30').all();
+      return json({entries:rows.results.map(({result,...entry})=>{let saved;try{saved=JSON.parse(result);}catch{}return {...entry,details:saved?.details||[],tracked:!!saved?.catalogStamp};})});
     }
     if(url.pathname==='/api/discord-test' && request.method==='POST') {
       await rate(db,'discord-test:'+user.username);
@@ -162,13 +170,18 @@ export async function handle(request,env,ctx={waitUntil:()=>{}},fetcher=fetch) {
         }
         const edited=await editSnapshot(snapshot,input,undefined,staged);
         const uploads=new Set(edited.files.map(x=>x.path));
+        const imagePaths=new Set();
         for(const change of input.changes) {
           if(change.category==='codes' || change.action==='delete') continue;
           const item=edited.catalog[{pets:'PETS',charms:'CHARMS',eggs:'EGGS',items:'ITEMS'}[change.category]].find(x=>x.id===change.id);
           const old=snapshot.catalog[{pets:'PETS',charms:'CHARMS',eggs:'EGGS',items:'ITEMS'}[change.category]].find(x=>x.id===change.id);
-          if(item.image!==old?.image && !uploads.has('public/'+item.image)) await api.assertAsset(item.image,snapshot.head);
+          if(item.image!==old?.image&&item.image&&!uploads.has('public/'+item.image))imagePaths.add(item.image);
+          for(const variant of ['normal','golden','diamond'])if(item.variantImages?.[variant]&&item.variantImages[variant]!==old?.variantImages?.[variant]&&!uploads.has('public/'+item.variantImages[variant]))imagePaths.add(item.variantImages[variant]);
         }
-        const planned={summary:edited.summary,revision:edited.revision,requestHash,created:Date.now()};
+        // Verify larger batches in two requests to stay within Workers Free limits.
+        if(imagePaths.size>4){const available=new Set((await api.assets(snapshot.head)).map(item=>item.path));for(const path of imagePaths)if(!available.has(path))throw new Problem(400,'A selected PNG no longer exists in the repository. Choose the image again.');}
+        else for(const path of imagePaths)await api.assertAsset(path,snapshot.head);
+        const planned={summary:edited.summary,revision:edited.revision,catalogStamp:await catalogFingerprint(edited.catalog),details:changeDetails(snapshot,edited,input.changes),requestHash,created:Date.now()};
         if(!operation) await db.prepare("INSERT INTO operations(id,username,status,result,created) VALUES(?,?,'pending',?,?)").bind(input.id,user.username,JSON.stringify(planned),planned.created).run();
         const published=await api.publish(snapshot.head,edited.files,user.username,input.id);
         const result={...planned,...published}; await complete(db,input.id,user.username,result);

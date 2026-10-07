@@ -43,6 +43,7 @@ try {
   await writeFile(configPath,JSON.stringify(config,null,2)+'\n');
   const schemaPath=path.join(dir,'admin-schema.sql');await writeFile(schemaPath,SCHEMA.join(';\n')+';\n');
   await wrangler(['d1','execute',databaseName,'--remote','--file',schemaPath,'--config',configPath]);
+  await writeFile(path.join(root,'admin/public/price-core.js'),await readFile(path.join(root,'public/data/price-core.js')));
   const output=await wrangler(['deploy','--config',configPath]);
   const url=output.match(/https:\/\/[a-z0-9.-]+\.workers\.dev\b/i)?.[0];if(!url)throw new Error('Admin address was not returned by Cloudflare.');
   const deploySecrets=path.join(dir,'admin-deployment.private.json');

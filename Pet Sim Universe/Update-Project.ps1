@@ -5,8 +5,8 @@ param(
 $ErrorActionPreference = "Stop"
 $source = [IO.Path]::GetFullPath($PSScriptRoot).TrimEnd([IO.Path]::DirectorySeparatorChar)
 $destination = [IO.Path]::GetFullPath($ProjectPath).TrimEnd([IO.Path]::DirectorySeparatorChar)
-if (-not (Test-Path -LiteralPath (Join-Path $destination ".cloudflare\admin.json") -PathType Leaf)) {
-    throw "Nie znaleziono konfiguracji obecnego panelu w $destination. Uruchom ponownie z -ProjectPath i wskaz swoj istniejacy folder Pet Sim Universe."
+if (-not (Test-Path -LiteralPath (Join-Path $destination "package.json") -PathType Leaf)) {
+    throw "Nie znaleziono obecnego projektu w $destination. Uruchom ponownie z -ProjectPath i wskaz swoj istniejacy folder Pet Sim Universe."
 }
 if (-not [string]::Equals($source, $destination, [StringComparison]::OrdinalIgnoreCase)) {
     & robocopy $source $destination /E /XD .git node_modules .wrangler .cloudflare private-setup (Join-Path $source "public\data") (Join-Path $source "public\assets") /XF *.private.* .env .env.* .dev.vars .dev.vars.* /R:2 /W:1 /NFL /NDL /NJH /NJS /NP
@@ -15,6 +15,8 @@ if (-not [string]::Equals($source, $destination, [StringComparison]::OrdinalIgno
 Push-Location $destination
 try {
     if (-not (Get-Command node -ErrorAction SilentlyContinue)) { throw "Zainstaluj Node.js 22.13 lub nowszy z npm." }
+    & node scripts/recover-admin.mjs
+    if ($LASTEXITCODE -ne 0) { throw "Nie potwierdzono konfiguracji istniejacego admina. Sprawdz komunikat powyzej. Token GitHuba i konta sa zachowane." }
     & node scripts/prune-local-release.mjs
     if ($LASTEXITCODE -ne 0) { throw "Nie potwierdzono lokalnego usuniecia kart. Pozostale ceny nie zostaly zastapione paczka ZIP." }
     & powershell -NoProfile -ExecutionPolicy Bypass -File .\Upgrade-Admin.ps1 -AdminDomain $AdminDomain
