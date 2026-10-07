@@ -25,7 +25,7 @@ export const PRICES = {
     "gummy-frog": 10,
     "pop-cat": "30",
     "queen-bee": {
-      "normal": "635",
+      "normal": "675",
       "golden": null,
       "diamond": null
     },
@@ -35,7 +35,7 @@ export const PRICES = {
       "diamond": "5500"
     },
     "mossy-mushroom": {
-      "normal": "550",
+      "normal": "570",
       "golden": "1850",
       "diamond": "4500"
     },
