@@ -17,7 +17,7 @@ export const PRICES = {
     "gummy-penguin": "125",
     "sun-deer": 135,
     "spaceship-alien": "100",
-    "fallen-angel": "450",
+    "fallen-angel": "550",
     "job-cat": "200",
     "gummy-capybara": 25,
     "galaxy-bunny": 25,
@@ -25,12 +25,12 @@ export const PRICES = {
     "gummy-frog": 10,
     "pop-cat": "30",
     "queen-bee": {
-      "normal": "575",
+      "normal": "635",
       "golden": null,
       "diamond": null
     },
     "blaze-phoenix": {
-      "normal": "715",
+      "normal": "725",
       "golden": "2200",
       "diamond": "5500"
     },
@@ -45,9 +45,9 @@ export const PRICES = {
       "diamond": null
     },
     "ruby-majesty": {
-      "normal": "35",
-      "golden": "250",
-      "diamond": "900"
+      "normal": "40",
+      "golden": "225",
+      "diamond": "850"
     },
     "ember-monster": {
       "normal": "20",
@@ -60,24 +60,24 @@ export const PRICES = {
       "diamond": "350"
     },
     "blobfish": {
-      "normal": "50",
+      "normal": "45",
       "golden": null,
       "diamond": null
     },
     "sunken-eel": {
-      "normal": "75",
+      "normal": "60",
       "golden": "425",
       "diamond": "1800"
     }
   },
   "charms": {
-    "secret-charm": 450,
+    "secret-charm": "425",
     "lightning-charm": "500",
     "moon-charm": 60,
-    "rubies-charm-iv": "200",
+    "rubies-charm-iv": "175",
     "hatch-charm-iv": "125",
     "critical-charm-iv": "145",
-    "luck-charm-iv": "185",
+    "luck-charm-iv": "150",
     "coins-charm-iv": "115",
     "hatch-charm-iii": "15",
     "critical-charm-iii": "20",
@@ -95,10 +95,10 @@ export const PRICES = {
   "items": {
     "vip-voucher": 10,
     "universe-shard": "15",
-    "vip-key": 0.4,
+    "vip-key": "0.45",
     "globe": "15",
-    "1m-lucky-block": "13",
-    "canned-tuna": "10",
+    "1m-lucky-block": "25",
+    "canned-tuna": "5",
     "universeworm": null,
     "golden-fish-hook": 10
   }

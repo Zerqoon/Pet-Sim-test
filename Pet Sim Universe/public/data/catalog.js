@@ -778,7 +778,8 @@ export const ITEMS = [
     "rarity": "Legendary",
     "source": "Utility Item",
     "description": "VIP Key.",
-    "image": "assets/items/vip-key.png"
+    "image": "assets/items/vip-key.png",
+    "itemGroup": "general"
   },
   {
     "id": "1m-lucky-block",
