@@ -97,7 +97,7 @@ export const PRICES = {
     "universe-shard": "15",
     "vip-key": 0.4,
     "globe": "15",
-    "1m-lucky-block": "15",
+    "1m-lucky-block": "13",
     "canned-tuna": "10",
     "universeworm": null,
     "golden-fish-hook": 10
