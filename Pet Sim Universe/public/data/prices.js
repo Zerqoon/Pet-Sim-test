@@ -52,12 +52,12 @@ export const PRICES = {
     "ember-monster": {
       "normal": "20",
       "golden": "140",
-      "diamond": "625"
+      "diamond": "595"
     },
     "grove-seeker": {
       "normal": "15",
       "golden": "85",
-      "diamond": "350"
+      "diamond": "280"
     },
     "blobfish": {
       "normal": "45",
