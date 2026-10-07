@@ -100,6 +100,6 @@ export const PRICES = {
     "1m-lucky-block": "30",
     "canned-tuna": "5",
     "universeworm": null,
-    "golden-fish-hook": 10
+    "golden-fish-hook": "3"
   }
 };
