@@ -66,8 +66,8 @@ export const PRICES = {
     },
     "sunken-eel": {
       "normal": "60",
-      "golden": "425",
-      "diamond": "1800"
+      "golden": "250",
+      "diamond": "1200"
     }
   },
   "charms": {
