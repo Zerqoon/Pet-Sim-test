@@ -1,21 +1,21 @@
 // Single price source. Edited through the private admin panel.
 export const PRICES = {
   "pets": {
-    "rich-bee": "3.5k",
+    "rich-bee": "2.75K",
     "ruby-nebula-star": "19K",
     "universe-capybara": "25k",
     "gummy-bear": "16.5K",
     "alien-emperor": "5.5K",
     "kraken": "7K",
-    "agent-sheep": "180",
+    "agent-sheep": "175",
     "caaaaat": "5K",
-    "exquisite-cat": "2.25K",
-    "happy-cupcake": "2.5K",
-    "six-seven": "2.65K",
+    "exquisite-cat": "2.3K",
+    "happy-cupcake": "2.35K",
+    "six-seven": "2.6K",
     "void-owl": 450,
     "gummy-gubby": 375,
-    "gummy-penguin": "125",
-    "sun-deer": 135,
+    "gummy-penguin": "145",
+    "sun-deer": "175",
     "spaceship-alien": "100",
     "fallen-angel": "550",
     "job-cat": "200",
@@ -23,7 +23,7 @@ export const PRICES = {
     "galaxy-bunny": 25,
     "galaxy-cat": 15,
     "gummy-frog": 10,
-    "pop-cat": "30",
+    "pop-cat": "35",
     "queen-bee": {
       "normal": "600",
       "golden": null,
@@ -35,7 +35,7 @@ export const PRICES = {
       "diamond": "5500"
     },
     "mossy-mushroom": {
-      "normal": "550",
+      "normal": "580",
       "golden": "1850",
       "diamond": "4500"
     },
@@ -50,9 +50,9 @@ export const PRICES = {
       "diamond": "850"
     },
     "ember-monster": {
-      "normal": "20",
-      "golden": "140",
-      "diamond": "595"
+      "normal": "15",
+      "golden": "125",
+      "diamond": "450"
     },
     "grove-seeker": {
       "normal": "15",
@@ -61,8 +61,8 @@ export const PRICES = {
     },
     "blobfish": {
       "normal": "45",
-      "golden": null,
-      "diamond": null
+      "golden": "175",
+      "diamond": "950"
     },
     "sunken-eel": {
       "normal": "60",
@@ -71,26 +71,26 @@ export const PRICES = {
     }
   },
   "charms": {
-    "secret-charm": "425",
-    "lightning-charm": "500",
+    "secret-charm": "450",
+    "lightning-charm": "400",
     "moon-charm": 60,
     "rubies-charm-iv": "175",
     "hatch-charm-iv": "125",
     "critical-charm-iv": "145",
-    "luck-charm-iv": "150",
-    "coins-charm-iv": "115",
-    "hatch-charm-iii": "15",
+    "luck-charm-iv": "160",
+    "coins-charm-iv": "135",
+    "hatch-charm-iii": "12",
     "critical-charm-iii": "20",
-    "lucky-charm-iii": "25",
-    "rubies-charm-iii": "30",
-    "coins-charm-iii": "15",
+    "lucky-charm-iii": "20",
+    "rubies-charm-iii": "10",
+    "coins-charm-iii": "12",
     "fishing-charm-iii": "20"
   },
   "eggs": {
     "gummy-egg": 140,
     "alien-egg": 4,
     "party-egg": 1.5,
-    "galaxy-egg": 225
+    "galaxy-egg": "235"
   },
   "items": {
     "vip-voucher": 10,

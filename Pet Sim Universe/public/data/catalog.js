@@ -152,7 +152,7 @@ export const PETS = [
     "bestPct": 85,
     "source": "PlayTime Rewards",
     "hatchChance": "1 in 10K",
-    "description": "Exclusive pet from PlayTime Rewards.",
+    "description": "Exclusive pet from PlayTime Rewards. 1 in 10K",
     "image": "assets/pets/happy-cupcake.png",
     "dropSources": [
       {
