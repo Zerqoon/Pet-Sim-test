@@ -827,38 +827,6 @@ export const ITEMS = [
         "image": "assets/sources/FishingMerchant.png"
       }
     ]
-  },
-  {
-    "id": "golden-fish-hook",
-    "name": "Golden Fish Hook",
-    "itemGroup": "fishing",
-    "rarity": "Mythical",
-    "source": "Utility Item",
-    "description": "Fishing equipment available from the Fishing Merchant.",
-    "image": "assets/items/GoldenFishhook.png",
-    "dropSources": [
-      {
-        "id": "fishingmerchant",
-        "name": "Fishing Merchant",
-        "image": "assets/sources/FishingMerchant.png"
-      }
-    ]
-  },
-  {
-    "id": "universeworm",
-    "name": "Universe Worm",
-    "itemGroup": "fishing",
-    "rarity": "Exclusive",
-    "source": "Utility Item",
-    "description": "Fishing bait available from the Fishing Merchant.",
-    "image": "assets/items/Universeworm.png",
-    "dropSources": [
-      {
-        "id": "fishingmerchant",
-        "name": "Fishing Merchant",
-        "image": "assets/sources/FishingMerchant.png"
-      }
-    ]
   }
 ];
 

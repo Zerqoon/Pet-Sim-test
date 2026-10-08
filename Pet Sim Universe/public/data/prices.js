@@ -95,11 +95,9 @@ export const PRICES = {
   "items": {
     "vip-voucher": 10,
     "universe-shard": "15",
-    "vip-key": "0.45",
-    "globe": "15",
+    "vip-key": "0.5",
+    "globe": "10",
     "1m-lucky-block": "30",
-    "canned-tuna": "5",
-    "universeworm": null,
-    "golden-fish-hook": "3"
+    "canned-tuna": "5"
   }
 };
