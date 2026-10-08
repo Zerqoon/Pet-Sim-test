@@ -88,8 +88,8 @@ export const PRICES = {
   },
   "eggs": {
     "gummy-egg": 140,
-    "alien-egg": 4,
-    "party-egg": 1.5,
+    "alien-egg": "5",
+    "party-egg": "1.25",
     "galaxy-egg": "235"
   },
   "items": {
