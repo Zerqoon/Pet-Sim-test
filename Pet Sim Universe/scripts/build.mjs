@@ -5,6 +5,8 @@ import { updatePriceTime } from './update-price-time.mjs';
 const root = path.resolve(import.meta.dirname, '..');
 const publicRoot = path.join(root,'public');
 await updatePriceTime(root);
+const { buildValueApi } = await import('./build-api.mjs');
+await buildValueApi(root);
 let html = await readFile(path.join(root,'src/index.html'),'utf8');
 const hash = text => createHash('sha256').update(text).digest('hex').slice(0,14);
 const cssSources = [...html.matchAll(/<link rel="stylesheet" href="\.\/(.*?)"\s*\/>/g)].map(match=>match[1]);

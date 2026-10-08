@@ -7,7 +7,7 @@ import {decodeSnapshot,editSnapshot,decodePNG} from '../admin/data.js';
 import {readCatalog,writeCatalog,catalogGroups} from '../server/catalog-data.js';
 import {github} from '../admin/github.js';
 import {readDataModule,rowsFromPrices} from '../public/data/value-loader.js';
-import {selectPriceUpdate,priceRevision} from '../public/data/price-core.js';
+import {selectPriceUpdate,priceRevision,normalizePrice} from '../public/data/price-core.js';
 import {prepareFreeAccounts,adminConfig} from '../scripts/free-admin-config.mjs';
 import {mkdtemp,writeFile,rm} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
@@ -88,8 +88,9 @@ test('unknown inputs become null, zero stays priced and malformed inputs are rej
   for(const value of [-1,{},'2KK','Infinity','<script>'])await assert.rejects(()=>editSnapshot(snapshot,{changes:[edit({prices:{normal:value}})]}));
 });
 test('metadata-only and equivalent-price edits do not reset the price timestamp',async()=> {
-  const r=await editSnapshot(snapshot,{changes:[edit({prices:{normal:18000}})]});assert.ok(!r.files.some(x=>x.path.endsWith('price-updates.js')));
-  const r2=await editSnapshot(snapshot,{changes:[edit({prices:{normal:'18K'}})]});assert.ok(!r2.files.some(x=>x.path.endsWith('prices.js')));
+  const current=normalizePrice(snapshot.prices.pets['gummy-bear']);
+  const r=await editSnapshot(snapshot,{changes:[edit({prices:{normal:current.number}})]});assert.ok(!r.files.some(x=>x.path.endsWith('price-updates.js')));
+  const r2=await editSnapshot(snapshot,{changes:[edit({prices:{normal:current.label}})]});assert.ok(!r2.files.some(x=>x.path.endsWith('prices.js')));
 });
 test('every Fishing Charm with spaces in its filename remains editable without changing prices or paths',async()=> {
   const charms=snapshot.catalog.CHARMS.filter(item=>/^fishing-charm-/.test(item.id));assert.equal(charms.length,1);
@@ -99,9 +100,11 @@ test('every Fishing Charm with spaces in its filename remains editable without c
   assert.deepEqual(result.prices,structuredClone(snapshot.prices));assert.deepEqual(result.files.map(file=>file.path),['public/data/catalog.js']);
 });
 test('pets with artwork only in variantImages.normal can be edited without uploading a second image',async()=> {
-  const pets=snapshot.catalog.PETS.filter(item=>!item.image && item.variantImages?.normal);assert.ok(pets.length>0);
+  const variantOnly=structuredClone(snapshot);
+  for(const item of variantOnly.catalog.PETS)if(item.supportsVariants&&item.variantImages?.normal)delete item.image;
+  const pets=variantOnly.catalog.PETS.filter(item=>!item.image && item.variantImages?.normal);assert.ok(pets.length>0);
   const changes=pets.map(item=>({category:'pets',id:item.id,metadata:{description:item.description+' Updated.'},prices:snapshot.prices.pets[item.id]}));
-  const result=await editSnapshot(snapshot,{changes});
+  const result=await editSnapshot(variantOnly,{changes});
   for(const item of pets)assert.deepEqual(result.catalog.PETS.find(value=>value.id===item.id).variantImages,structuredClone(item.variantImages));
   assert.equal(result.revision,await priceRevision(rowsFromPrices(catalogGroups(snapshot.catalog),snapshot.prices)));
   assert.ok(!result.files.some(file=>file.path.endsWith('price-updates.js')),'Normalizing an unpriced spelling must not reset the price timestamp');
@@ -237,7 +240,10 @@ test('deployment verifies the actual Free login and catalog then revokes its set
   const f=await fixture();try {
     const result=await verifyFreeAdmin('https://admin.example',{username:'Zerqoon',password:'a-long-private-test-password'},{fetcher:(url,options)=>handle(new Request(url,options),f.env,{waitUntil:p=>f.pending.push(p)},f.fetcher)});
     assert.equal(result.confirmed,true);assert.equal(result.petCount,32);assert.equal(result.imageConfirmed,true);
-    assert.ok(f.calls.some(call=>call.url.includes('FishingCharm%20III.png') && call.options.headers.accept==='application/vnd.github.raw+json'));
+    const paths=['PETS','CHARMS','EGGS','ITEMS'].flatMap(key=>snapshot.catalog[key]).map(item=>item.image||item.variantImages?.normal).filter(Boolean);
+    const chosen=paths.find(path=>path.includes(' '))||paths[0];
+    const encoded=chosen.split('/').map(encodeURIComponent).join('/');
+    assert.ok(f.calls.some(call=>call.url.includes(encoded) && call.options.headers.accept==='application/vnd.github.raw+json'));
     assert.equal(f.db.sql.prepare('SELECT COUNT(*) n FROM sessions').get().n,0);
     assert.equal(f.calls.filter(x=>x.url.startsWith('https://discord.com')).length,0);
     assert.equal(f.calls.filter(x=>x.options.method==='POST').length,0,'setup check never changes repository contents');

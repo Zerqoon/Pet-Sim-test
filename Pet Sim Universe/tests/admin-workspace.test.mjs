@@ -8,7 +8,7 @@ import {github} from '../admin/github.js';
 import {valueDelta} from '../admin/public/value-math.js';
 import {baseline,draftConflicts,readDraft,writeDraft,storageKey} from '../admin/public/draft-store.js';
 import {writeCatalog,catalogGroups} from '../server/catalog-data.js';
-import {priceRevision} from '../public/data/price-core.js';
+import {priceRevision,normalizePrice} from '../public/data/price-core.js';
 import {rowsFromPrices} from '../public/data/value-loader.js';
 const catalog=await readFile(new URL('../public/data/catalog.js',import.meta.url),'utf8'),prices=await readFile(new URL('../public/data/prices.js',import.meta.url),'utf8');
 const snapshot=decodeSnapshot(catalog,prices),head='a'.repeat(40),id='10000000-1000-4000-8000-000000000001',upload='10000000-1000-4000-8000-000000000002';
@@ -52,7 +52,7 @@ test('website becomes live only when both catalog and price content match the pu
   const record=await publicationRecord();assert.equal((await publicationStatus({},record,sources())).website,'live');const updated=structuredClone(snapshot.catalog);updated.PETS[0].description+=' Edited.';assert.equal((await publicationStatus({},record,sources(writeCatalog(updated)))).website,'updating');const edited=await editSnapshot(snapshot,{changes:[edit()]});const price=edited.files.find(file=>file.path.endsWith('prices.js')).content;assert.equal((await publicationStatus({},record,sources(catalog,price))).website,'updating');
 });
 test('metadata-only publications receive a different catalog fingerprint at the same price revision',async()=>{
-  const edited=await editSnapshot(snapshot,{changes:[edit({prices:{normal:'18K'},metadata:{description:'A changed description.'}})]});assert.notEqual(await catalogFingerprint(edited.catalog),await catalogFingerprint(snapshot.catalog));assert.equal(edited.revision,JSON.parse((await publicationRecord()).result).revision);
+  const edited=await editSnapshot(snapshot,{changes:[edit({prices:{normal:snapshot.prices.pets['gummy-bear']},metadata:{description:'A changed description.'}})]});assert.notEqual(await catalogFingerprint(edited.catalog),await catalogFingerprint(snapshot.catalog));assert.equal(edited.revision,JSON.parse((await publicationRecord()).result).revision);
 });
 test('network errors, redirects, invalid code and oversized responses never report Website live',async()=>{
   const record=await publicationRecord();for(const fetcher of [async()=>{throw Error('Offline');},async()=>new Response(null,{status:302}),async()=>new Response('broken source'),async()=>new Response('x'.repeat(200001)),async()=>new Response('',{status:503})])assert.equal((await publicationStatus({},record,fetcher)).website,'unknown');
@@ -62,5 +62,5 @@ test('Discord status follows actual delivery independently of the website',async
   const record=await publicationRecord();assert.equal((await publicationStatus({},record,sources())).discord,'delivered');record.sent=null;record.status=429;const retry=await publicationStatus({},record,sources());assert.equal(retry.website,'live');assert.equal(retry.discord,'retry');record.status=null;assert.equal((await publicationStatus({},record,sources())).discord,'queued');
 });
 test('history records price deltas, metadata, variant changes and removals without raw requests',async()=>{
-  const item=snapshot.catalog.PETS.find(item=>item.supportsVariants),changes=[edit(),{category:'pets',id:item.id,metadata:{description:'Changed'},prices:{...snapshot.prices.pets[item.id],diamond:'300K'}}];const edited=await editSnapshot(snapshot,{changes});const details=changeDetails(snapshot,edited,changes);assert.equal(details[0].prices[0].before,'18K');assert.equal(details[0].prices[0].after,'20K');assert.ok(details[1].prices.some(value=>value.variant==='diamond'&&value.changed));assert.deepEqual(details[1].fields,['description']);const deleted=await editSnapshot(snapshot,{changes:[{category:'pets',id:item.id,action:'delete'}]});assert.equal(changeDetails(snapshot,deleted,[{category:'pets',id:item.id,action:'delete'}])[0].kind,'delete');assert.ok(!JSON.stringify(details).includes('requestHash'));
+  const item=snapshot.catalog.PETS.find(item=>item.supportsVariants),changes=[edit(),{category:'pets',id:item.id,metadata:{description:'Changed'},prices:{...snapshot.prices.pets[item.id],diamond:'300K'}}];const edited=await editSnapshot(snapshot,{changes});const details=changeDetails(snapshot,edited,changes);assert.equal(details[0].prices[0].before,normalizePrice(snapshot.prices.pets['gummy-bear']).label);assert.equal(details[0].prices[0].after,'20K');assert.ok(details[1].prices.some(value=>value.variant==='diamond'&&value.changed));assert.deepEqual(details[1].fields,['description']);const deleted=await editSnapshot(snapshot,{changes:[{category:'pets',id:item.id,action:'delete'}]});assert.equal(changeDetails(snapshot,deleted,[{category:'pets',id:item.id,action:'delete'}])[0].kind,'delete');assert.ok(!JSON.stringify(details).includes('requestHash'));
 });
