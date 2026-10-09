@@ -2,11 +2,11 @@
 export const PRICES = {
   "pets": {
     "rich-bee": "2.75K",
-    "ruby-nebula-star": "19K",
-    "universe-capybara": "25k",
+    "ruby-nebula-star": "20.5K",
+    "universe-capybara": "27.5K",
     "gummy-bear": "16.5K",
     "alien-emperor": "5.5K",
-    "kraken": "7K",
+    "kraken": "6.5K",
     "agent-sheep": "175",
     "caaaaat": "5K",
     "exquisite-cat": "2.3K",
@@ -30,12 +30,12 @@ export const PRICES = {
       "diamond": null
     },
     "blaze-phoenix": {
-      "normal": "700",
+      "normal": "650",
       "golden": "2200",
       "diamond": "5500"
     },
     "mossy-mushroom": {
-      "normal": "580",
+      "normal": "525",
       "golden": "1850",
       "diamond": "4500"
     },
