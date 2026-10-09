@@ -396,6 +396,34 @@ export const PETS = [
       "diamond": "assets/pets/grove-seeker-diamond.png"
     },
     "image": "assets/pets/grove-seeker.png"
+  },
+  {
+    "id": "cutie-creature",
+    "name": "Cutie Creature",
+    "source": "Sakura Egg 1 in 15M",
+    "description": "",
+    "rarity": "Secret",
+    "image": "assets/pets/cutie-creature.png",
+    "supportsVariants": true,
+    "variantImages": {
+      "normal": "assets/pets/cutie-creature.png",
+      "diamond": "assets/pets/cutie-creature-diamond.png",
+      "golden": "assets/pets/cutie-creature-golden.png"
+    }
+  },
+  {
+    "id": "secret-hampuff",
+    "name": "Secret Hampuff",
+    "source": "Universe Egg 1 in 10M",
+    "description": "",
+    "rarity": "Secret",
+    "image": "assets/pets/secret-hampuff.png",
+    "supportsVariants": true,
+    "variantImages": {
+      "normal": "assets/pets/secret-hampuff.png",
+      "golden": "assets/pets/secret-hampuff-golden.png",
+      "diamond": "assets/pets/secret-hampuff-diamond.png"
+    }
   }
 ];
 

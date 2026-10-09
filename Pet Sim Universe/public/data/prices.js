@@ -68,6 +68,16 @@ export const PRICES = {
       "normal": "60",
       "golden": "250",
       "diamond": "1200"
+    },
+    "cutie-creature": {
+      "normal": null,
+      "golden": null,
+      "diamond": null
+    },
+    "secret-hampuff": {
+      "normal": null,
+      "golden": null,
+      "diamond": null
     }
   },
   "charms": {
