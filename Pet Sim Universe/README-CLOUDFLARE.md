@@ -49,9 +49,15 @@ opening `index.html` as a local file does not support the price loader.
 | Build command | `npm run build` |
 | Output directory | `public` |
 | Optional price-history D1 binding | `VALUES_DB` |
+| Live viewer counter D1 binding | `VIEWERS_DB` (or existing `VALUES_DB`) |
 
 Prices work without Pages Functions. The optional history API returns a clear
 unavailable state when no history database is bound.
+
+Home also displays a live **Watching Value List** badge when a D1 database is
+bound. Multiple tabs share one anonymous browser ID. Hidden tabs stop their
+15-second heartbeat; sessions expire after 45 seconds. The counter is hidden
+when unavailable. Setup and verification: **LIVE-COUNTER-START-PL.md**.
 
 ## One editable price source
 

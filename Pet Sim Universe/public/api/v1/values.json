@@ -2,8 +2,8 @@
   "ok": true,
   "apiVersion": 1,
   "revision": "9868f63aacd2aed70ecb274247fa30ca633e5286008f0f3b064a1ab6fdaeecd8",
-  "updatedAt": "2026-10-08T21:46:02.984Z",
-  "dateSource": "admin",
+  "updatedAt": "2026-10-08T21:46:05.000Z",
+  "dateSource": "git",
   "source": "/data/prices.js",
   "total": 74,
   "items": [

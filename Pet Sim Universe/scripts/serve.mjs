@@ -7,21 +7,26 @@ import {onRequestPost as snapshot} from '../functions/api/snapshot.js';
 import {onRequest as values} from '../functions/api/v1/values.js';
 import {onRequest as value} from '../functions/api/v1/value.js';
 import {onRequest as search} from '../functions/api/v1/search.js';
+import {onRequest as viewers} from '../functions/api/viewers.js';
+import {createLocalViewersDatabase} from '../server/live-viewers-local.js';
 const root=path.resolve(import.meta.dirname,'../public');
 const port=Number(process.env.PORT || 4173);
+const viewersDb=createLocalViewersDatabase();
 const mime={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'text/javascript; charset=utf-8','.png':'image/png','.webp':'image/webp','.svg':'image/svg+xml','.ttf':'font/ttf','.woff2':'font/woff2','.json':'application/json'};
 const server=http.createServer(async(req,res)=>{
  try {
   const url=new URL(req.url,`http://127.0.0.1:${port}`);
   const handlers={'/api/history':history,'/api/health':health,'/api/snapshot':snapshot,
-    '/api/v1/values':values,'/api/v1/value':value,'/api/v1/search':search};
+    '/api/v1/values':values,'/api/v1/value':value,'/api/v1/search':search,'/api/viewers':viewers};
   if(handlers[url.pathname]){
    const fetcher=async input=>{
     const asset=new URL(input);
     if(asset.origin!==url.origin || !/^\/data\/(catalog|prices|price-updates)\.js$/.test(asset.pathname))return new Response(null,{status:404});
     try{return new Response(await readFile(path.join(root,asset.pathname.slice(1))),{headers:{'content-type':'text/javascript'}});}catch{return new Response(null,{status:404});}
    };
-   const response=await handlers[url.pathname]({request:new Request(url,{method:req.method}),env:{},fetcher});
+   const options={method:req.method,headers:req.headers};
+   if(!['GET','HEAD'].includes(req.method)){options.body=req;options.duplex='half';}
+   const response=await handlers[url.pathname]({request:new Request(url,options),env:{VIEWERS_DB:viewersDb},fetcher});
    res.writeHead(response.status,Object.fromEntries(response.headers));res.end(await response.text());return;
   }
   let file=path.resolve(root,decodeURIComponent(url.pathname).replace(/^\/+/, '') || 'index.html');

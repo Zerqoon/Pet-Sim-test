@@ -1,8 +1,10 @@
 # API Pet Universe — strona z przesłanego ZIP-a
 
-Do Twojej strony dodano API odczytu wartości. Wygląd, układ, karty, grafiki,
-katalog, ceny, timestamp oraz kod panelu admina zachowano z przesłanej paczki.
-Ta paczka nie wprowadza wyglądu v130. Cena ma jedno edytowalne źródło:
+Do Twojej strony dodano API odczytu wartości. Karty, grafiki, katalog, ceny,
+timestamp oraz kod panelu admina zachowano z przesłanej paczki.
+Ta paczka nie wprowadza wyglądu v130. Na Home dodano osobny licznik aktywnych
+odwiedzających; instrukcja podłączenia bazy: **LIVE-COUNTER-START-PL.md**.
+Cena ma jedno edytowalne źródło:
 `public/data/prices.js`. JSON API jest generowany automatycznie.
 
 ## Wdrożenie strony
@@ -92,7 +94,8 @@ udanego builda. Błąd API nie jest zastępowany nieoznaczoną starą ceną.
 
 ## Kontrola
 
-`npm test`: 146 testów, w tym 16 nowych scenariuszy API. Pięć testów ze starej
+Testy obejmują 146 dotychczasowych scenariuszy oraz nowe scenariusze licznika,
+w tym współdzielenie ID między kartami i wygasanie sesji. Pięć testów ze starej
 paczki miało nieaktualne założenia o cenie 18K i wybranej grafice; dopasowano ich
 dane testowe do aktualnego katalogu, zachowując kod strony i admina.
 `npm run build` generuje stronę i gotowy JSON. Lokalnie: `npm run dev`.

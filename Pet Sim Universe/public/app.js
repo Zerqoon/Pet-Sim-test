@@ -7,6 +7,7 @@ import { MONITOR } from './data/monitor-settings.js';
 import { normalizePrice, selectPriceUpdate, formatPriceAge, applyFeedPrices } from './data/price-core.js';
 import { loadCurrentPrices } from './data/value-loader.js';
 import { enablePublicProtection } from './data/public-protection.js';
+import { startLiveViewers } from './data/live-viewers.js';
 
 enablePublicProtection();
 
@@ -1623,6 +1624,7 @@ setCols(readSetting('pet-universe-cols'), false);
 
 refreshHomeUpdated();
 refreshPricesUpdated();
+startLiveViewers($('#homeWatching'));
 setInterval(() => {
   refreshHomeUpdated();
   if (!document.hidden) syncPublishedPrices();

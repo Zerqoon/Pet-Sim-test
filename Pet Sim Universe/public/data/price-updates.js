@@ -2,6 +2,6 @@
 export const PRICE_UPDATE = {
   "version": 1,
   "revision": "9868f63aacd2aed70ecb274247fa30ca633e5286008f0f3b064a1ab6fdaeecd8",
-  "updatedAt": "2026-10-08T21:46:02.984Z",
-  "source": "admin"
+  "updatedAt": "2026-10-08T21:46:05.000Z",
+  "source": "git"
 };

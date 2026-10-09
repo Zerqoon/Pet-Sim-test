@@ -16,8 +16,8 @@
   <link rel="icon" type="image/png" href="assets/ui/category-pets.png" />
   <link rel="preload" href="./assets/fonts/fredoka-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="./assets/fonts/nunito-latin.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="stylesheet" href="./bundle/styles-6de92df14bf4ba.css" />
-  <link rel="modulepreload" href="./bundle/app-3c10f204e305fc.js" />
+  <link rel="stylesheet" href="./bundle/styles-b780aeffdb3f8f.css" />
+  <link rel="modulepreload" href="./bundle/app-31190fa9103374.js" />
   <link rel="modulepreload" href="./data/catalog.js" />
 </head>
 <body data-view="home">
@@ -91,6 +91,12 @@
           <div class="home-menu-content">
             <h1 id="homeTitle">Pet Universe <span>Values</span></h1>
             <p class="home-updated" id="homeUpdated">Price update not recorded yet</p>
+            <div class="home-watching-row">
+              <p class="home-watching" id="homeWatching" hidden role="status" aria-live="polite" aria-atomic="true" title="Active visitors to the value website. Extra tabs in the same browser count once; inactive visitors expire after 45 seconds.">
+                <span class="home-watching-dot" aria-hidden="true"></span>
+                <strong data-viewer-count>—</strong><span>Watching Value List</span>
+              </p>
+            </div>
             <nav class="home-menu-actions" aria-label="Main menu">
               <button class="home-menu-button menu-values" type="button" data-view-target="values">
                 <img src="assets/optimized/value-ticket-ed249abc2d85.webp" alt="" srcset="assets/optimized/value-ticket-ed249abc2d85-64.webp 64w, assets/optimized/value-ticket-ed249abc2d85-128.webp 128w, assets/optimized/value-ticket-ed249abc2d85-256.webp 256w, assets/optimized/value-ticket-ed249abc2d85.webp 384w" sizes="24px" decoding="async" draggable="false" loading="eager" />
@@ -384,7 +390,7 @@
   </aside>
   <dialog class="settings-dialog" id="settingsDialog" aria-labelledby="settingsTitle"><div class="dialog-bar"><h2 id="settingsTitle">Display settings</h2><button type="button" id="closeSettings" aria-label="Close settings" autofocus>×</button></div><p>Control decorative motion and pet animations.</p><div id="mobileSettings"></div></dialog>
 
-  <script type="module" src="./bundle/app-3c10f204e305fc.js"></script>
+  <script type="module" src="./bundle/app-31190fa9103374.js"></script>
 <p id="exportStatus" class="export-status" role="status" hidden></p>
 <dialog id="tradeExportDialog" class="trade-export-dialog" aria-labelledby="tradeExportTitle">
   <div class="trade-export-heading"><div><h2 id="tradeExportTitle">Your Trade Snapshot</h2><p>Save the PNG and send it on Discord or anywhere you like.</p></div><button type="button" id="closeTradeExport" aria-label="Close image preview">×</button></div>
