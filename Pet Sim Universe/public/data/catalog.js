@@ -700,14 +700,6 @@ export const CODES = [
     "description": "Redeem this game code in Pet Universe."
   },
   {
-    "id": "code-1mvisits",
-    "name": "1mvisits",
-    "code": "1mvisits",
-    "status": "active",
-    "source": "Reward Code",
-    "description": "Redeem this game code in Pet Universe."
-  },
-  {
     "id": "code-smidl155",
     "name": "Smidl155",
     "code": "Smidl155",
