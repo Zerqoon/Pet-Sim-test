@@ -438,6 +438,15 @@ export const PETS = [
       "golden": "assets/pets/blossom-overlord-golden.png",
       "diamond": "assets/pets/blossom-overlord-diamond.png"
     }
+  },
+  {
+    "id": "king-ben",
+    "name": "King Ben",
+    "source": "Update PACK 4",
+    "description": "",
+    "rarity": "Exclusive",
+    "image": "assets/pets/king-ben.png",
+    "bestPct": 60
   }
 ];
 

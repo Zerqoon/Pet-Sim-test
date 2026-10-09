@@ -83,7 +83,8 @@ export const PRICES = {
       "normal": null,
       "golden": null,
       "diamond": null
-    }
+    },
+    "king-ben": null
   },
   "charms": {
     "secret-charm": "450",
