@@ -424,6 +424,20 @@ export const PETS = [
       "golden": "assets/pets/secret-hampuff-golden.png",
       "diamond": "assets/pets/secret-hampuff-diamond.png"
     }
+  },
+  {
+    "id": "blossom-overlord",
+    "name": "Blossom Overlord",
+    "source": "Sakura EGG",
+    "description": "",
+    "rarity": "Mythical",
+    "image": "assets/pets/blossom-overlord.png",
+    "supportsVariants": true,
+    "variantImages": {
+      "normal": "assets/pets/blossom-overlord.png",
+      "golden": "assets/pets/blossom-overlord-golden.png",
+      "diamond": "assets/pets/blossom-overlord-diamond.png"
+    }
   }
 ];
 

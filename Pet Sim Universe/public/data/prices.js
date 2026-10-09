@@ -78,6 +78,11 @@ export const PRICES = {
       "normal": null,
       "golden": null,
       "diamond": null
+    },
+    "blossom-overlord": {
+      "normal": null,
+      "golden": null,
+      "diamond": null
     }
   },
   "charms": {
