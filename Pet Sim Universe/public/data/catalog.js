@@ -366,38 +366,6 @@ export const PETS = [
     "image": "assets/pets/ruby-majesty-normal.png"
   },
   {
-    "id": "ember-monster",
-    "name": "Ember Monster",
-    "rarity": "Mythical",
-    "source": "Mythical Pet",
-    "description": "Mythical pet Ember Monster.",
-    "map": "Volcano Hollow [World 7]",
-    "hatchChance": "1 in 750K",
-    "supportsVariants": true,
-    "variantImages": {
-      "normal": "assets/pets/ember-monster.png",
-      "golden": "assets/pets/ember-monster-golden.png",
-      "diamond": "assets/pets/ember-monster-diamond.png"
-    },
-    "image": "assets/pets/ember-monster.png"
-  },
-  {
-    "id": "grove-seeker",
-    "name": "Grove Seeker",
-    "rarity": "Mythical",
-    "source": "Mythical Pet",
-    "description": "Mythical pet Grove Seeker.",
-    "map": "Enchanted Grove [World 6]",
-    "hatchChance": "Unknown",
-    "supportsVariants": true,
-    "variantImages": {
-      "normal": "assets/pets/grove-seeker.png",
-      "golden": "assets/pets/grove-seeker-golden.png",
-      "diamond": "assets/pets/grove-seeker-diamond.png"
-    },
-    "image": "assets/pets/grove-seeker.png"
-  },
-  {
     "id": "cutie-creature",
     "name": "Cutie Creature",
     "source": "Sakura Egg 1 in 15M",

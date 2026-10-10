@@ -6,7 +6,7 @@ export const PRICES = {
     "universe-capybara": "27.5K",
     "gummy-bear": "16.5K",
     "alien-emperor": "5.5K",
-    "kraken": "6.5K",
+    "kraken": "6K",
     "agent-sheep": "175",
     "caaaaat": "5K",
     "exquisite-cat": "2.3K",
@@ -31,8 +31,8 @@ export const PRICES = {
     },
     "blaze-phoenix": {
       "normal": "650",
-      "golden": "2200",
-      "diamond": "5500"
+      "golden": "1900",
+      "diamond": "5000"
     },
     "mossy-mushroom": {
       "normal": "525",
@@ -45,19 +45,9 @@ export const PRICES = {
       "diamond": null
     },
     "ruby-majesty": {
-      "normal": "30",
+      "normal": "25",
       "golden": "225",
       "diamond": "850"
-    },
-    "ember-monster": {
-      "normal": "15",
-      "golden": "125",
-      "diamond": "450"
-    },
-    "grove-seeker": {
-      "normal": "15",
-      "golden": "85",
-      "diamond": "280"
     },
     "blobfish": {
       "normal": "45",
@@ -70,7 +60,7 @@ export const PRICES = {
       "diamond": "1200"
     },
     "cutie-creature": {
-      "normal": null,
+      "normal": "1000",
       "golden": null,
       "diamond": null
     },
@@ -80,7 +70,7 @@ export const PRICES = {
       "diamond": null
     },
     "blossom-overlord": {
-      "normal": null,
+      "normal": "75",
       "golden": null,
       "diamond": null
     },
