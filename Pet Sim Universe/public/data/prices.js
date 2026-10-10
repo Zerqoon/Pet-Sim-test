@@ -35,9 +35,9 @@ export const PRICES = {
       "diamond": "5000"
     },
     "mossy-mushroom": {
-      "normal": "525",
-      "golden": "1850",
-      "diamond": "4500"
+      "normal": "500",
+      "golden": "1750",
+      "diamond": "4200"
     },
     "throne-dragon": {
       "normal": "400",
