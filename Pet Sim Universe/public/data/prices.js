@@ -80,7 +80,7 @@ export const PRICES = {
     "secret-charm": "450",
     "lightning-charm": "400",
     "moon-charm": 60,
-    "rubies-charm-iv": "155",
+    "rubies-charm-iv": "180",
     "hatch-charm-iv": "125",
     "critical-charm-iv": "135",
     "luck-charm-iv": "145",
