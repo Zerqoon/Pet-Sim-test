@@ -65,7 +65,7 @@ export const PRICES = {
       "diamond": null
     },
     "secret-hampuff": {
-      "normal": null,
+      "normal": "2200",
       "golden": null,
       "diamond": null
     },
