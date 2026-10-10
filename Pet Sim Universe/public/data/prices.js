@@ -96,7 +96,7 @@ export const PRICES = {
     "gummy-egg": 140,
     "alien-egg": "5",
     "party-egg": "1.25",
-    "galaxy-egg": "235"
+    "galaxy-egg": "300"
   },
   "items": {
     "vip-voucher": 10,
